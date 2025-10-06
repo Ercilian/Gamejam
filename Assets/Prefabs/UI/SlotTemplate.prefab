@@ -555,7 +555,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000045776367}
+  m_AnchoredPosition: {x: 0, y: -0.000061035156}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6240414298745325991
@@ -651,6 +651,11 @@ MonoBehaviour:
   idleState: {fileID: 82996938144402487}
   joinedState: {fileID: 3734246090394220132}
   playerText: {fileID: 0}
+  defaultCharacterPrefab: {fileID: 1813536838263918369, guid: f9f546d49774f1d4a91dbdfba531b3a0, type: 3}
+  worldPreviewAnchor: {fileID: 0}
+  previewLocalPosition: {x: 0, y: 0, z: 0}
+  previewLocalEuler: {x: 0, y: 180, z: 0}
+  previewScale: 1
   debugLogs: 1
 --- !u!1 &6931156405887048344
 GameObject:

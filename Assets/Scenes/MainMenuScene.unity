@@ -555,7 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad67aa730c257a44db24b2612ebc426e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSelectionManager
-  playerInputManager: {fileID: 0}
+  playerInputManager: {fileID: 268937671}
   playerSlots:
   - {fileID: 1182653794}
   - {fileID: 1929620804}
@@ -767,6 +767,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1418664045}
     m_Modifications:
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: worldPreviewAnchor
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3980157597735122981, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000061035156
+      objectReference: {fileID: 0}
     - target: {fileID: 6240414298745325991, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: m_Name
       value: SlotTemplate (2)
@@ -864,6 +872,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1418664045}
     m_Modifications:
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: previewScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: worldPreviewAnchor
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: defaultCharacterPrefab
+      value: 
+      objectReference: {fileID: 1813536838263918369, guid: 6e85334f9892c124395ed85c585b9bf7, type: 3}
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: availableCharacters.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: 'availableCharacters.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1813536838263918369, guid: 223f5f76561555a40bf8149cc8e9bc5b, type: 3}
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: 'availableCharacters.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1813536838263918369, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+    - target: {fileID: 3980157597735122981, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000061035156
+      objectReference: {fileID: 0}
     - target: {fileID: 6240414298745325991, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: m_Name
       value: SlotTemplate (1)
@@ -1105,6 +1141,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1418664045}
     m_Modifications:
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: worldPreviewAnchor
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: defaultCharacterPrefab
+      value: 
+      objectReference: {fileID: 1813536838263918369, guid: 6e85334f9892c124395ed85c585b9bf7, type: 3}
+    - target: {fileID: 3980157597735122981, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000061035156
+      objectReference: {fileID: 0}
     - target: {fileID: 6240414298745325991, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: m_Name
       value: SlotTemplate (3)
@@ -1465,7 +1513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e780ddb0e74c0479ea0067db89f63e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSelectionSetup
-  inputActions: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 305dd72312fd94447a43b236b4cdccce, type: 3}
 --- !u!4 &1641888829
 Transform:
   m_ObjectHideFlags: 0
