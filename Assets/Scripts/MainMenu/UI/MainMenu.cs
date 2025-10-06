@@ -7,6 +7,8 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject SettingsPanel;
     public GameObject SelectCharacterPanel;
+
+    
     void Start()
     {
         mainMenuPanel.SetActive(true);
