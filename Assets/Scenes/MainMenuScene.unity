@@ -2227,6 +2227,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1418664045}
     m_Modifications:
+    - target: {fileID: 82996938144402487, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3734246090394220132, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6240414298745325991, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: m_Name
       value: SlotTemplate
