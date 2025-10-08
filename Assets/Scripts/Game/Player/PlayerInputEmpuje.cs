@@ -1,29 +1,57 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInputEmpuje : MonoBehaviour
 {
     public bool controlActivo = true;
+    
+    [Header("Debug")]
+    public bool showDebugLogs = true;
+    
     private Transform objetivoASeguir = null;
     private float velocidadSeguir = 0f;
     private PlayerController playerController;
-
-    // Referencia opcional al script real de movimiento
-    // [SerializeField] private PlayerMovement playerMovement;
+    private bool estoyEmpujandoActualmente = false;
+    
+    // Input System variables
+    private PlayerInput playerInput;
+    private InputAction interactAction;
 
     void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        playerInput = GetComponent<PlayerInput>();
+        
+        if (playerInput != null)
+        {
+            // Usar la acción estándar "Interact" del Input System
+            interactAction = playerInput.actions["Interact"];
+            
+            if (interactAction != null)
+            {
+                if (showDebugLogs)
+                    Debug.Log($"[PlayerInputEmpuje] {gameObject.name} configurado con acción 'Interact' estándar");
+            }
+            else
+            {
+                Debug.LogWarning($"[PlayerInputEmpuje] {gameObject.name} - No se encontró acción 'Interact' en el Input Actions");
+            }
+        }
+        else
+        {
+            Debug.LogError($"[PlayerInputEmpuje] {gameObject.name} no tiene PlayerInput component!");
+        }
     }
 
-    // Llama esto desde MovCarro para desactivar el control
     public void DesactivarControl()
     {
         if (controlActivo)
         {
             controlActivo = false;
             if (playerController != null) playerController.controlActivo = false;
-            // Desactiva aquí tu script de movimiento real
-            // if (playerMovement != null) playerMovement.enabled = false;
+            
+            if (showDebugLogs)
+                Debug.Log($"[PlayerInputEmpuje] {gameObject.name} control desactivado");
         }
     }
 
@@ -33,9 +61,11 @@ public class PlayerInputEmpuje : MonoBehaviour
         {
             controlActivo = true;
             objetivoASeguir = null;
+            estoyEmpujandoActualmente = false;
             if (playerController != null) playerController.controlActivo = true;
-            // Activa aquí tu script de movimiento real
-            // if (playerMovement != null) playerMovement.enabled = true;
+            
+            if (showDebugLogs)
+                Debug.Log($"[PlayerInputEmpuje] {gameObject.name} control activado");
         }
     }
 
@@ -45,35 +75,64 @@ public class PlayerInputEmpuje : MonoBehaviour
         velocidadSeguir = velocidad;
     }
 
-    public bool EstaEmpujando(KeyCode teclaEmpujar)
+    public bool EstaEmpujando()
     {
-        bool pulsando = Input.GetKey(teclaEmpujar);
-        if (pulsando)
-            Debug.Log("[PlayerInputEmpuje] Pulsando tecla de empujar");
+        if (interactAction == null) return false;
+        
+        bool pulsando = interactAction.IsPressed();
+        
+        if (pulsando && showDebugLogs)
+            Debug.Log($"[PlayerInputEmpuje] {gameObject.name} empujando via acción 'Interact'");
+        
         return pulsando;
+    }
+
+    public bool EstoyEmpujandoYo()
+    {
+        return estoyEmpujandoActualmente;
     }
 
     void Update()
     {
-        // Si está siguiendo el coche y pulsando la tecla de empujar, desactiva el control
-        if (objetivoASeguir != null && Input.GetKey(KeyCode.E))
+        if (objetivoASeguir != null)
         {
-            DesactivarControl();
+            bool quieroEmpujar = EstaEmpujando();
+            
+            if (quieroEmpujar && !estoyEmpujandoActualmente)
+            {
+                estoyEmpujandoActualmente = true;
+                DesactivarControl();
+                
+                if (showDebugLogs)
+                    Debug.Log($"[PlayerInputEmpuje] 🚗 {gameObject.name} comenzó a empujar");
+            }
+            else if (!quieroEmpujar && estoyEmpujandoActualmente)
+            {
+                estoyEmpujandoActualmente = false;
+                ActivarControl();
+                
+                if (showDebugLogs)
+                    Debug.Log($"[PlayerInputEmpuje] ❌ {gameObject.name} dejó de empujar");
+            }
         }
         else
         {
-            ActivarControl();
+            if (estoyEmpujandoActualmente)
+            {
+                estoyEmpujandoActualmente = false;
+                ActivarControl();
+            }
         }
 
-        if (!controlActivo && objetivoASeguir != null)
+        // Mover hacia el carro solo si YO estoy empujando
+        if (!controlActivo && objetivoASeguir != null && estoyEmpujandoActualmente)
         {
-            // Calcula el destino detrás del coche
             Vector3 destino = objetivoASeguir.position - objetivoASeguir.forward * 1.2f;
-            destino.y = transform.position.y; // Mantener la altura del jugador
-            destino.z = transform.position.z; // Mantener la posición Z del jugador (no moverse en Z)
+            destino.y = transform.position.y;
+            destino.z = transform.position.z;
 
             Vector3 direccion = (destino - transform.position).normalized;
-            // Solo mover si hay distancia en X (evita división por cero)
+            
             if (Mathf.Abs(destino.x - transform.position.x) > 0.01f)
             {
                 transform.position += direccion * velocidadSeguir * Time.deltaTime;

@@ -12,14 +12,24 @@ public class CollectibleData : ScriptableObject
     public enum ItemType
     {
         Diesel,
-        Gold,
+        Scrap,
         Moss
     }
     
-    [Header("Propiedades")]
-    public int dieselValue = 10; // Cuánto diesel da al carro
-    public float collectRange = 2f; // Distancia para recogerlo
+    [Header("Propiedades Diesel")]
+    public int dieselValue; // Cuánto diesel da al carro
+    public float collectRange; // Distancia para recogerlo
     public string collectPrompt = "Presiona E para recoger diesel";
+
+    [Header("Propiedades Scrap")]
+    public int scrapValue; // Cuánto scrap da al carro
+    public float scrapCollectRange; // Distancia para recogerlo
+    public string scrapCollectPrompt = "Presiona E para recoger scrap";
+
+    [Header("Propiedades Moss")]
+    public int mossValue; // Cuánto moss da al carro
+    public float mossCollectRange; // Distancia para recogerlo
+    public string mossCollectPrompt = "Presiona E para recoger moss";
 
     [Header("Audio")]
     public AudioClip collectSound;

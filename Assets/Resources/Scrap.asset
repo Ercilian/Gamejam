@@ -10,15 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ce8325118af7f341a1d2b8e2c468aac, type: 3}
-  m_Name: Gold
+  m_Name: Scrap
   m_EditorClassIdentifier: Assembly-CSharp::CollectibleData
-  itemName: Gold
-  itemID: gold
+  itemName: Scrap
+  itemID: scrap
   itemIcon: {fileID: 0}
   itemPrefab: {fileID: 5219421215397009677, guid: 3df252fd5914c414cbd1b785305c6696, type: 3}
   type: 1
-  dieselValue: 10
-  collectRange: 2
-  collectPrompt: Presiona E para recoger diesel
+  dieselValue: 0
+  collectRange: 0
+  collectPrompt: 0
+  scrapValue: 5
+  scrapCollectRange: 2
+  scrapCollectPrompt: Presiona E para recoger scrap
+  mossValue: 0
+  mossCollectRange: 0
+  mossCollectPrompt: 0
   collectSound: {fileID: 0}
   depositSound: {fileID: 0}

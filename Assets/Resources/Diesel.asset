@@ -16,8 +16,15 @@ MonoBehaviour:
   itemID: diesel
   itemIcon: {fileID: 0}
   itemPrefab: {fileID: 5219421215397009677, guid: 93c524a2c72611749b474dff8449254f, type: 3}
-  dieselValue: 10
+  type: 0
+  dieselValue: 20
   collectRange: 2
   collectPrompt: Presiona E para recoger diesel
+  scrapValue: 0
+  scrapCollectRange: 0
+  scrapCollectPrompt: 0
+  mossValue: 0
+  mossCollectRange: 0
+  mossCollectPrompt: 0
   collectSound: {fileID: 0}
   depositSound: {fileID: 0}

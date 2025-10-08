@@ -1,6 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine.InputSystem;
 
 public class WorldCollectible : MonoBehaviour
 {
@@ -9,6 +8,8 @@ public class WorldCollectible : MonoBehaviour
     
     [Header("Efectos")]
     public ParticleSystem collectEffect;
+    public float bobSpeed = 1f;
+    public float bobHeight = 0.5f;
     
     [Header("Debug")]
     public bool showDebugLogs = true;
@@ -16,12 +17,12 @@ public class WorldCollectible : MonoBehaviour
     private Vector3 startPosition;
     private bool playerInRange = false;
     private PlayerInventory nearbyPlayer;
+    private PlayerInput nearbyPlayerInput; // Referencia al Input System
 
     void Start()
     {
         startPosition = transform.position;
         
-        // Verificar que tenemos los datos necesarios
         if (!collectibleData)
         {
             Debug.LogError($"[WorldCollectible] {gameObject.name} no tiene CollectibleData asignado!");
@@ -33,42 +34,51 @@ public class WorldCollectible : MonoBehaviour
 
     void Update()
     {
-
+        // Efecto de flotación
+        FloatAnimation();
         
-        // Detectar input de recolección
-        if (playerInRange && nearbyPlayer && Input.GetKeyDown(KeyCode.E))
+        // Detectar input de recolección usando Input System
+        if (playerInRange && nearbyPlayer && nearbyPlayerInput)
         {
-            CollectItem();
+            var interactAction = nearbyPlayerInput.actions["Interact"];
+            if (interactAction != null && interactAction.WasPressedThisFrame())
+            {
+                CollectItem();
+            }
         }
         
-        // Debug en pantalla (opcional)
-        if (playerInRange && showDebugLogs)
+        // Mostrar prompt en consola (temporal hasta que tengas UI)
+        if (playerInRange && showDebugLogs && collectibleData)
         {
-            Debug.Log($"[WorldCollectible] 💡 Presiona E para recoger {(collectibleData ? collectibleData.itemName : "item")}");
+            if (Time.frameCount % 120 == 0) // Cada 2 segundos aprox
+            {
+                Debug.Log($"[WorldCollectible] 💡 {collectibleData.collectPrompt}");
+            }
         }
     }
 
+    void FloatAnimation()
+    {
+        float newY = startPosition.y + Mathf.Sin(Time.time * bobSpeed) * bobHeight;
+        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        // VERIFICACIÓN SEGURA: Verificar que other no es null
         if (!other)
         {
             Debug.LogWarning("[WorldCollectible] OnTriggerEnter recibió un Collider null!");
             return;
         }
         
-        // VERIFICACIÓN SEGURA: Verificar que other.gameObject existe
         if (!other.gameObject)
         {
             Debug.LogWarning("[WorldCollectible] El Collider no tiene GameObject asociado!");
             return;
         }
         
-        // VERIFICACIÓN SEGURA: Intentar obtener PlayerInventory
+        // Buscar PlayerInventory
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
-        
-        // Si no tiene PlayerInventory, no es un jugador
         if (!playerInventory)
         {
             if (showDebugLogs)
@@ -76,7 +86,22 @@ public class WorldCollectible : MonoBehaviour
             return;
         }
         
-        // VERIFICACIÓN SEGURA: Verificar que collectibleData existe
+        // Buscar PlayerInput para el Input System
+        PlayerInput playerInput = other.GetComponent<PlayerInput>();
+        if (!playerInput)
+        {
+            Debug.LogWarning($"[WorldCollectible] {other.gameObject.name} no tiene PlayerInput component!");
+            return;
+        }
+        
+        // Verificar que tiene la acción Interact
+        var interactAction = playerInput.actions["Interact"];
+        if (interactAction == null)
+        {
+            Debug.LogWarning($"[WorldCollectible] {other.gameObject.name} no tiene acción 'Interact' configurada!");
+            return;
+        }
+        
         if (!collectibleData)
         {
             Debug.LogError($"[WorldCollectible] {gameObject.name} no puede ser recogido: falta CollectibleData!");
@@ -94,6 +119,7 @@ public class WorldCollectible : MonoBehaviour
         // ¡Todo bien! El jugador está en rango
         playerInRange = true;
         nearbyPlayer = playerInventory;
+        nearbyPlayerInput = playerInput;
         
         if (showDebugLogs)
             Debug.Log($"[WorldCollectible] 🎯 {other.gameObject.name} en rango de {collectibleData.itemName}");
@@ -101,7 +127,6 @@ public class WorldCollectible : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        // VERIFICACIÓN SEGURA
         if (!other || !other.gameObject)
             return;
             
@@ -110,6 +135,7 @@ public class WorldCollectible : MonoBehaviour
         {
             playerInRange = false;
             nearbyPlayer = null;
+            nearbyPlayerInput = null;
             
             if (showDebugLogs)
                 Debug.Log($"[WorldCollectible] ❌ {other.gameObject.name} salió del rango");

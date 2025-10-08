@@ -5,27 +5,34 @@ using System.Collections.Generic;
 public class MovCarro : MonoBehaviour
 {
     [Header("Movimiento")]
-    public Vector3 direccion = Vector3.forward; // Dirección del movimiento
-    public float velocidad = 1f; // Velocidad del cubo
-    public float velocidadAumentada = 2f; // Velocidad cuando queda poco combustible
-    public float velocidadLenta = 0.5f; // Velocidad cuando hay mucho combustible
+    public Vector3 direccion = Vector3.forward;
+    public float velocidad = 1f;
+    public float velocidadAumentada = 2f;
+    public float velocidadLenta = 0.5f;
     
     [Header("Consumo de Combustible")]
-    public float consumoPorSegundo = 1f; // Diesel que consume por segundo
+    public float consumoPorSegundo = 1f;
     public bool consumirCombustible = true;
     
     [Header("Empujar")]
-    public float velocidadEmpuje = 0.3f; // Velocidad al empujar
-    public KeyCode botonEmpujar = KeyCode.E; // Botón para empujar
-
+    public float velocidadEmpuje = 0.5f; // Velocidad base con 1 jugador
+    public float velocidadEmpujeDos = 0.85f; // Velocidad con 2 jugadores
+    
     private CarFuelSystem fuelSystem;
     private bool enMovimiento = false;
     private Coroutine corrutinaConsumo;
     private bool empujando = false;
+    private int jugadoresEmpujandoCount = 0; // Contador de jugadores empujando
+
+    // Getters públicos para otros scripts
+    public bool EstáMoviéndose() => enMovimiento;
+    public float GetVelocidadActualPublic() => GetVelocidadActual();
+    public int GetJugadoresEmpujandoCount() => jugadoresEmpujandoCount; // NUEVO: Para debug/UI
+
 
     void Start()
     {
-        //  Buscar CarFuelSystem en este GameObject Y en los hijos
+        // Buscar CarFuelSystem en este GameObject Y en los hijos
         fuelSystem = GetComponent<CarFuelSystem>();
         if (!fuelSystem)
         {
@@ -58,64 +65,96 @@ public class MovCarro : MonoBehaviour
 
             // Obtener jugadores en la zona de empuje desde CarFuelSystem
             var jugadoresEmpujando = fuelSystem.GetJugadoresEmpujando();
+            jugadoresEmpujandoCount = 0; // Reset contador
+            
             if (jugadoresEmpujando.Count > 0)
             {
-                bool alguienEmpuja = false;
                 foreach (var jugador in jugadoresEmpujando)
                 {
                     if (jugador != null)
                     {
                         var input = jugador.GetComponent<PlayerInputEmpuje>();
-                        if (input != null && input.EstaEmpujando(botonEmpujar))
+                        if (input != null)
                         {
-                            if (!empujando)
-                                Debug.Log($"[MovCarro] {jugador.name} ha comenzado a empujar el coche.");
-                            alguienEmpuja = true;
-                            input.DesactivarControl();
-                            input.SeguirObjeto(transform, velocidadEmpuje);
-                        }
-                        else
-                        {
-                            if (empujando)
-                                Debug.Log($"[MovCarro] {jugador.name} ha dejado de empujar el coche.");
-                            input?.ActivarControl();
+                            input.SeguirObjeto(transform, GetVelocidadEmpuje(1)); // Velocidad base para seguir
+                            
+                            // Verificar si ESTE jugador específico está empujando
+                            if (input.EstoyEmpujandoYo())
+                            {
+                                jugadoresEmpujandoCount++; // Incrementar contador
+                            }
                         }
                     }
                 }
-                if (alguienEmpuja)
+                
+                // Mover el carro solo si al menos uno está empujando
+                if (jugadoresEmpujandoCount > 0)
                 {
                     if (!empujando)
-                        Debug.Log("[MovCarro] El coche está siendo empujado.");
-                    empujando = true;
-                    transform.Translate(direccion.normalized * velocidadEmpuje * Time.deltaTime, Space.World);
+                    {
+                        Debug.Log($"[MovCarro] El coche está siendo empujado por {jugadoresEmpujandoCount} jugador(es).");
+                        empujando = true;
+                    }
+                    
+                    // NUEVO: Velocidad basada en el número de jugadores empujando
+                    float velocidadActualEmpuje = GetVelocidadEmpuje(jugadoresEmpujandoCount);
+                    transform.Translate(direccion.normalized * velocidadActualEmpuje * Time.deltaTime, Space.World);
+                    
+                    // Log solo cuando cambia el número de jugadores
+                    if (Time.frameCount % 60 == 0) // Log cada segundo aprox
+                    {
+                        Debug.Log($"[MovCarro] {jugadoresEmpujandoCount} jugador(es) empujando - Velocidad: {velocidadActualEmpuje:F2}");
+                    }
                 }
                 else
                 {
                     if (empujando)
+                    {
                         Debug.Log("[MovCarro] El coche ha dejado de ser empujado.");
-                    empujando = false;
+                        empujando = false;
+                    }
                 }
             }
             else
             {
                 if (empujando)
+                {
                     Debug.Log("[MovCarro] No hay jugadores en la zona de empuje.");
-                empujando = false;
+                    empujando = false;
+                }
+                jugadoresEmpujandoCount = 0;
             }
             return; // Si no hay diesel, no mover el carro normalmente
         }
 
         // Mover el objeto si hay combustible
-        enMovimiento = true;
+        enMovimiento = true;  
         empujando = false;
-        // Obtener jugadores en la zona de empuje desde CarFuelSystem
+        jugadoresEmpujandoCount = 0;
+        
+        // Reactivar control de todos los jugadores cuando hay combustible
         var jugadoresEmpujandoConCombustible = fuelSystem.GetJugadoresEmpujando();
         foreach (var jugador in jugadoresEmpujandoConCombustible)
         {
             jugador?.GetComponent<PlayerInputEmpuje>()?.ActivarControl();
         }
+        
         float velocidadActual = GetVelocidadActual();
         transform.Translate(direccion.normalized * velocidadActual * Time.deltaTime, Space.World);
+    }
+
+    // NUEVO: Método para calcular velocidad basada en número de jugadores empujando
+    private float GetVelocidadEmpuje(int numJugadores)
+    {
+        switch (numJugadores)
+        {
+            case 1:
+                return velocidadEmpuje; // Velocidad base
+            case 2:
+                return velocidadEmpujeDos; // Un poco más rápido
+            default:
+                return velocidadEmpuje; // Fallback
+        }
     }
 
     private float GetVelocidadActual()
@@ -151,7 +190,7 @@ public class MovCarro : MonoBehaviour
         }
 
         Debug.Log("[MovCarro] ¡Se acabó el diesel! El carro se ha detenido.");
-        corrutinaConsumo = null; // <- Añade esto para saber que la corrutina terminó
+        corrutinaConsumo = null;
     }
 
     // Método llamado por CarFuelSystem cuando cambia el combustible
@@ -168,7 +207,7 @@ public class MovCarro : MonoBehaviour
 
         if (fuelPercentage < 0.2f && fuelPercentage > 0f)
         {
-            Debug.Log("[MovCarro] ¡Combustible bajo! Velocidad auementada.");
+            Debug.Log("[MovCarro] ¡Combustible bajo! Velocidad aumentada.");
         }
         if (fuelPercentage >= 0.8f)
         {
@@ -190,7 +229,4 @@ public class MovCarro : MonoBehaviour
         }
     }
 
-    // Getters públicos para otros scripts
-    public bool EstáMoviéndose() => enMovimiento;
-    public float GetVelocidadActualPublic() => GetVelocidadActual();
 }
