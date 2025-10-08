@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -22,6 +23,9 @@ public class CarFuelSystem : MonoBehaviour
     
     // Variables para controlar el logging de consumo
     private float lastLoggedDiesel;
+
+    // Jugadores en la zona de empuje
+    private List<GameObject> jugadoresEmpuje = new List<GameObject>();
     
     void Start()
     {
@@ -62,6 +66,12 @@ public class CarFuelSystem : MonoBehaviour
                 Debug.Log($"[CarFuelSystem] 💡 {depositPrompt}");
             }
         }
+
+        // Empuje: añadir jugador si tiene el tag Player
+        if (other.CompareTag("Player") && !jugadoresEmpuje.Contains(other.gameObject))
+        {
+            jugadoresEmpuje.Add(other.gameObject);
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -74,6 +84,12 @@ public class CarFuelSystem : MonoBehaviour
             
             if (showDebugLogs)
                 Debug.Log("[CarFuelSystem] ❌ Jugador salió del rango de depósito");
+        }
+
+        // Empuje: quitar jugador si sale
+        if (other.CompareTag("Player") && jugadoresEmpuje.Contains(other.gameObject))
+        {
+            jugadoresEmpuje.Remove(other.gameObject);
         }
     }
 
@@ -145,4 +161,10 @@ public class CarFuelSystem : MonoBehaviour
     public float GetMaxDiesel() => maxDiesel;
     public float GetDieselPercentage() => maxDiesel > 0 ? currentDiesel / maxDiesel : 0f;
     public bool HasFuel() => currentDiesel > 0f;
+
+    // Getter para MovCarro
+    public List<GameObject> GetJugadoresEmpujando()
+    {
+        return jugadoresEmpuje;
+    }
 }

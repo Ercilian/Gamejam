@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MovCarro : MonoBehaviour
 {
@@ -13,9 +14,14 @@ public class MovCarro : MonoBehaviour
     public float consumoPorSegundo = 1f; // Diesel que consume por segundo
     public bool consumirCombustible = true;
     
+    [Header("Empujar")]
+    public float velocidadEmpuje = 0.3f; // Velocidad al empujar
+    public KeyCode botonEmpujar = KeyCode.E; // Botón para empujar
+
     private CarFuelSystem fuelSystem;
     private bool enMovimiento = false;
     private Coroutine corrutinaConsumo;
+    private bool empujando = false;
 
     void Start()
     {
@@ -49,11 +55,65 @@ public class MovCarro : MonoBehaviour
         if (!fuelSystem || !fuelSystem.HasFuel())
         {
             enMovimiento = false;
-            return; // Si no hay diesel, no mover el carro
+
+            // Obtener jugadores en la zona de empuje desde CarFuelSystem
+            var jugadoresEmpujando = fuelSystem.GetJugadoresEmpujando();
+            if (jugadoresEmpujando.Count > 0)
+            {
+                bool alguienEmpuja = false;
+                foreach (var jugador in jugadoresEmpujando)
+                {
+                    if (jugador != null)
+                    {
+                        var input = jugador.GetComponent<PlayerInputEmpuje>();
+                        if (input != null && input.EstaEmpujando(botonEmpujar))
+                        {
+                            if (!empujando)
+                                Debug.Log($"[MovCarro] {jugador.name} ha comenzado a empujar el coche.");
+                            alguienEmpuja = true;
+                            input.DesactivarControl();
+                            input.SeguirObjeto(transform, velocidadEmpuje);
+                        }
+                        else
+                        {
+                            if (empujando)
+                                Debug.Log($"[MovCarro] {jugador.name} ha dejado de empujar el coche.");
+                            input?.ActivarControl();
+                        }
+                    }
+                }
+                if (alguienEmpuja)
+                {
+                    if (!empujando)
+                        Debug.Log("[MovCarro] El coche está siendo empujado.");
+                    empujando = true;
+                    transform.Translate(direccion.normalized * velocidadEmpuje * Time.deltaTime, Space.World);
+                }
+                else
+                {
+                    if (empujando)
+                        Debug.Log("[MovCarro] El coche ha dejado de ser empujado.");
+                    empujando = false;
+                }
+            }
+            else
+            {
+                if (empujando)
+                    Debug.Log("[MovCarro] No hay jugadores en la zona de empuje.");
+                empujando = false;
+            }
+            return; // Si no hay diesel, no mover el carro normalmente
         }
 
         // Mover el objeto si hay combustible
         enMovimiento = true;
+        empujando = false;
+        // Obtener jugadores en la zona de empuje desde CarFuelSystem
+        var jugadoresEmpujandoConCombustible = fuelSystem.GetJugadoresEmpujando();
+        foreach (var jugador in jugadoresEmpujandoConCombustible)
+        {
+            jugador?.GetComponent<PlayerInputEmpuje>()?.ActivarControl();
+        }
         float velocidadActual = GetVelocidadActual();
         transform.Translate(direccion.normalized * velocidadActual * Time.deltaTime, Space.World);
     }
@@ -82,22 +142,30 @@ public class MovCarro : MonoBehaviour
         while (fuelSystem && fuelSystem.HasFuel())
         {
             yield return new WaitForSeconds(1f);
-            
+
             // Solo consumir si el carro se está moviendo
             if (enMovimiento && fuelSystem.HasFuel())
             {
                 fuelSystem.ConsumeDiesel(consumoPorSegundo);
             }
         }
-        
+
         Debug.Log("[MovCarro] ¡Se acabó el diesel! El carro se ha detenido.");
+        corrutinaConsumo = null; // <- Añade esto para saber que la corrutina terminó
     }
 
     // Método llamado por CarFuelSystem cuando cambia el combustible
     public void OnFuelChanged(float currentFuel, float maxFuel)
     {
         float fuelPercentage = currentFuel / maxFuel;
-        
+
+        // Si el combustible acaba de pasar de 0 a >0, reiniciar la corrutina de consumo
+        if (currentFuel > 0f && corrutinaConsumo == null && consumirCombustible)
+        {
+            Debug.Log("[MovCarro] Combustible repuesto, reanudando consumo.");
+            corrutinaConsumo = StartCoroutine(ConsumoCombustible());
+        }
+
         if (fuelPercentage < 0.2f && fuelPercentage > 0f)
         {
             Debug.Log("[MovCarro] ¡Combustible bajo! Velocidad auementada.");

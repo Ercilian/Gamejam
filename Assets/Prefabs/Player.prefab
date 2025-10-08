@@ -13,12 +13,13 @@ GameObject:
   - component: {fileID: 7222824160162284086}
   - component: {fileID: -2229003457756849490}
   - component: {fileID: 268196344557052032}
+  - component: {fileID: 1945218576087875795}
   - component: {fileID: 458908605971134653}
   - component: {fileID: 6783460188252569597}
   - component: {fileID: 3199202718284467957}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -143,6 +144,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1945218576087875795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87af22a4dac3200409c22f0700de5655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputEmpuje
+  controlActivo: 1
 --- !u!114 &458908605971134653
 MonoBehaviour:
   m_ObjectHideFlags: 0
