@@ -24,7 +24,10 @@ public class PlayerInventory : MonoBehaviour
 
     public bool CanCarryItem(CollectibleData item)
     {
-        return carriedItems.Count < maxCarryCapacity;
+        // Si no llevas nada, puedes recoger cualquier tipo
+        if (carriedItems.Count == 0) return true;
+        // Si llevas algo, solo puedes recoger del mismo tipo y no superar la capacidad máxima
+        return carriedItems.Count < maxCarryCapacity && item.type == carriedItems[0].type;
     }
 
     public void PickupItem(CollectibleData item)
@@ -59,27 +62,33 @@ public class PlayerInventory : MonoBehaviour
         visualItems.Add(visualItem);
     }
 
-    public bool DepositItems(CarFuelSystem carFuelSystem) // Cambio: CarController -> CarFuelSystem
+    public bool DepositItems(CarFuelSystem carFuelSystem)
     {
         if (carriedItems.Count == 0) return false;
-        
+
         int totalDieselValue = 0;
-        
-        // Calcular valor total
-        foreach (var item in carriedItems)
+        // Recorre de atrás hacia adelante para eliminar correctamente
+        for (int i = carriedItems.Count - 1; i >= 0; i--)
         {
-            totalDieselValue += item.dieselValue;
+            if (carriedItems[i].type == CollectibleData.ItemType.Diesel)
+            {
+                totalDieselValue += carriedItems[i].dieselValue;
+                // Elimina el objeto visual correspondiente
+                if (visualItems.Count > i && visualItems[i] != null)
+                    Destroy(visualItems[i]);
+                if (visualItems.Count > i)
+                    visualItems.RemoveAt(i);
+                carriedItems.RemoveAt(i);
+            }
         }
-        
-        // Depositar en el carro
-        carFuelSystem.AddDiesel(totalDieselValue);
-        
-        // Limpiar inventario
-        ClearInventory();
-        
-        Debug.Log($"[PlayerInventory] Depositados {carriedItems.Count} items por {totalDieselValue} diesel");
-        
-        return true;
+
+        if (totalDieselValue > 0)
+        {
+            carFuelSystem.AddDiesel(totalDieselValue);
+            UpdateUI();
+            return true;
+        }
+        return false;
     }
 
     void ClearInventory()

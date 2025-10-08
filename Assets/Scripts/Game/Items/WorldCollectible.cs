@@ -9,8 +9,6 @@ public class WorldCollectible : MonoBehaviour
     
     [Header("Efectos")]
     public ParticleSystem collectEffect;
-    public float bobSpeed = 1f; // Velocidad de flotación
-    public float bobHeight = 0.5f; // Altura de flotación
     
     [Header("Debug")]
     public bool showDebugLogs = true;
@@ -35,8 +33,7 @@ public class WorldCollectible : MonoBehaviour
 
     void Update()
     {
-        // Efecto de flotación
-        FloatAnimation();
+
         
         // Detectar input de recolección
         if (playerInRange && nearbyPlayer && Input.GetKeyDown(KeyCode.E))
@@ -51,11 +48,6 @@ public class WorldCollectible : MonoBehaviour
         }
     }
 
-    void FloatAnimation()
-    {
-        float newY = startPosition.y + Mathf.Sin(Time.time * bobSpeed) * bobHeight;
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
-    }
 
     void OnTriggerEnter(Collider other)
     {
