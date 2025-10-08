@@ -8,8 +8,6 @@ public class WorldCollectible : MonoBehaviour
     
     [Header("Efectos")]
     public ParticleSystem collectEffect;
-    public float bobSpeed = 1f;
-    public float bobHeight = 0.5f;
     
     [Header("Debug")]
     public bool showDebugLogs = true;
@@ -34,8 +32,6 @@ public class WorldCollectible : MonoBehaviour
 
     void Update()
     {
-        // Efecto de flotación
-        FloatAnimation();
         
         // Detectar input de recolección usando Input System
         if (playerInRange && nearbyPlayer && nearbyPlayerInput)
@@ -57,11 +53,6 @@ public class WorldCollectible : MonoBehaviour
         }
     }
 
-    void FloatAnimation()
-    {
-        float newY = startPosition.y + Mathf.Sin(Time.time * bobSpeed) * bobHeight;
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
-    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -168,7 +159,10 @@ public class WorldCollectible : MonoBehaviour
             }
             
             if (showDebugLogs)
-                Debug.Log($"[WorldCollectible] ✅ {nearbyPlayer.gameObject.name} recogió {collectibleData.itemName}");
+            {
+                string itemTypeText = collectibleData.type == CollectibleData.ItemType.Scrap ? "💰" : "⛽";
+                Debug.Log($"[WorldCollectible] ✅ {nearbyPlayer.gameObject.name} recogió {itemTypeText} {collectibleData.itemName}");
+            }
             
             // Destruir el objeto después de un pequeño delay
             Destroy(gameObject, collectEffect ? 0.5f : 0.1f);

@@ -515,6 +515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 939585289}
   - component: {fileID: 939585290}
+  - component: {fileID: 939585291}
   m_Layer: 0
   m_Name: GoldDepositZone
   m_TagString: Untagged
@@ -558,6 +559,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &939585291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939585288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67cc73b3237e2914682d4a664342aed2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarScrapSystem
+  currentScrap: 0
+  maxScrap: 9999
+  scrapDepositPoint: {fileID: 939585289}
+  scrapDepositPrompt: Presiona Clic Izquierdo para depositar scrap
+  showDebugLogs: 1
 --- !u!1 &951660721
 GameObject:
   m_ObjectHideFlags: 0

@@ -125,4 +125,58 @@ public class PlayerInventory : MonoBehaviour
 
     public int GetCarriedItemCount() => carriedItems.Count;
     public bool HasItems() => carriedItems.Count > 0;
+
+    public bool HasScrapItems()
+    {
+        foreach (var item in carriedItems)
+        {
+            if (item != null && item.type == CollectibleData.ItemType.Scrap)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int GetCarriedScrapCount()
+    {
+        int count = 0;
+        foreach (var item in carriedItems)
+        {
+            if (item != null && item.type == CollectibleData.ItemType.Scrap)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public bool DepositScrapItems(CarScrapSystem scrapSystem)
+    {
+        if (carriedItems.Count == 0) return false;
+
+        int totalScrapValue = 0;
+        // Recorre de atrás hacia adelante para eliminar correctamente
+        for (int i = carriedItems.Count - 1; i >= 0; i--)
+        {
+            if (carriedItems[i].type == CollectibleData.ItemType.Scrap)
+            {
+                totalScrapValue += carriedItems[i].scrapValue;
+                // Elimina el objeto visual correspondiente
+                if (visualItems.Count > i && visualItems[i] != null)
+                    Destroy(visualItems[i]);
+                if (visualItems.Count > i)
+                    visualItems.RemoveAt(i);
+                carriedItems.RemoveAt(i);
+            }
+        }
+
+        if (totalScrapValue > 0)
+        {
+            scrapSystem.AddScrap(totalScrapValue);
+            UpdateUI();
+            return true;
+        }
+        return false;
+    }
 }
