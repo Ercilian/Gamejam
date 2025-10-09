@@ -3,16 +3,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputEmpuje : MonoBehaviour
 {
-    public bool controlActivo = true;
     
     [Header("Debug")]
     public bool showDebugLogs = true;
     
-    private Transform objetivoASeguir = null;
-    private float velocidadSeguir = 0f;
+    [Header("Variables to follow the car")]
+    private Transform targetToFollow = null;
+    private float followSpeed = 0f;
     private PlayerController playerController;
-    private bool estoyEmpujandoActualmente = false;
-    
+    private bool isPushingNow = false;
+    public bool activeControl = true;
+
     // Input System variables
     private PlayerInput playerInput;
     private InputAction interactAction;
@@ -21,121 +22,94 @@ public class PlayerInputEmpuje : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         playerInput = GetComponent<PlayerInput>();
-        
+
         if (playerInput != null)
         {
-            // Usar la acción estándar "Interact" del Input System
-            interactAction = playerInput.actions["Interact"];
-            
-            if (interactAction != null)
-            {
-                if (showDebugLogs)
-                    Debug.Log($"[PlayerInputEmpuje] {gameObject.name} configurado con acción 'Interact' estándar");
-            }
-            else
-            {
-                Debug.LogWarning($"[PlayerInputEmpuje] {gameObject.name} - No se encontró acción 'Interact' en el Input Actions");
-            }
-        }
-        else
-        {
-            Debug.LogError($"[PlayerInputEmpuje] {gameObject.name} no tiene PlayerInput component!");
+            interactAction = playerInput.actions["Interact"]; // Ensure this matches your Input Action name
         }
     }
 
-    public void DesactivarControl()
+    public void DeactivateControl() // Allow external scripts to disable control (MovCarro)
     {
-        if (controlActivo)
+        if (activeControl)
         {
-            controlActivo = false;
-            if (playerController != null) playerController.controlActivo = false;
-            
-            if (showDebugLogs)
-                Debug.Log($"[PlayerInputEmpuje] {gameObject.name} control desactivado");
+            activeControl = false;
+            if (playerController != null) playerController.activeControl = false; // Disable player control
         }
     }
 
-    public void ActivarControl()
+    public void ActivateControl() // Allow external scripts to enable control (MovCarro)
     {
-        if (!controlActivo)
+        if (!activeControl)
         {
-            controlActivo = true;
-            objetivoASeguir = null;
-            estoyEmpujandoActualmente = false;
-            if (playerController != null) playerController.controlActivo = true;
-            
-            if (showDebugLogs)
-                Debug.Log($"[PlayerInputEmpuje] {gameObject.name} control activado");
+            activeControl = true;
+            targetToFollow = null;
+            isPushingNow = false;
+            if (playerController != null) playerController.activeControl = true; // Return control to player
         }
     }
 
-    public void SeguirObjeto(Transform objetivo, float velocidad)
+    public void FollowObject(Transform target, float speed) // Allow external scripts to set the target to follow (MovCarro)
     {
-        objetivoASeguir = objetivo;
-        velocidadSeguir = velocidad;
+        targetToFollow = target;
+        followSpeed = speed;
     }
 
-    public bool EstaEmpujando()
+    public bool IsPushing() // Check if the player is currently pressing the "Interact" button
     {
         if (interactAction == null) return false;
-        
-        bool pulsando = interactAction.IsPressed();
-        
-        if (pulsando && showDebugLogs)
-            Debug.Log($"[PlayerInputEmpuje] {gameObject.name} empujando via acción 'Interact'");
-        
+        bool pulsando = interactAction.IsPressed();        
         return pulsando;
     }
 
-    public bool EstoyEmpujandoYo()
+    public bool ImPushing()
     {
-        return estoyEmpujandoActualmente;
+        return isPushingNow;
     }
 
     void Update()
     {
-        if (objetivoASeguir != null)
+        if (targetToFollow != null)
         {
-            bool quieroEmpujar = EstaEmpujando();
+            bool wantsToPush = IsPushing();
             
-            if (quieroEmpujar && !estoyEmpujandoActualmente)
+            if (wantsToPush && !isPushingNow) // Start pushing
             {
-                estoyEmpujandoActualmente = true;
-                DesactivarControl();
+                isPushingNow = true;
+                DeactivateControl();
                 
                 if (showDebugLogs)
-                    Debug.Log($"[PlayerInputEmpuje] 🚗 {gameObject.name} comenzó a empujar");
+                    Debug.Log($"[PlayerInputEmpuje] 🚗 {gameObject.name} start to push");
             }
-            else if (!quieroEmpujar && estoyEmpujandoActualmente)
+            else if (!wantsToPush && isPushingNow) // Stop pushing
             {
-                estoyEmpujandoActualmente = false;
-                ActivarControl();
+                isPushingNow = false;
+                ActivateControl();
                 
                 if (showDebugLogs)
-                    Debug.Log($"[PlayerInputEmpuje] ❌ {gameObject.name} dejó de empujar");
+                    Debug.Log($"[PlayerInputEmpuje] ❌ {gameObject.name} stop pushing");
             }
         }
         else
         {
-            if (estoyEmpujandoActualmente)
+            if (isPushingNow)
             {
-                estoyEmpujandoActualmente = false;
-                ActivarControl();
+                isPushingNow = false;
+                ActivateControl();
             }
         }
 
-        // Mover hacia el carro solo si YO estoy empujando
-        if (!controlActivo && objetivoASeguir != null && estoyEmpujandoActualmente)
+        if (!activeControl && targetToFollow != null && isPushingNow) // Move towards the car only if I am the one pushing
         {
-            Vector3 destino = objetivoASeguir.position - objetivoASeguir.forward * 1.2f;
-            destino.y = transform.position.y;
-            destino.z = transform.position.z;
+            Vector3 targetPosition = targetToFollow.position - targetToFollow.forward * 1.2f; // Offset behind the car
+            targetPosition.y = transform.position.y;
+            targetPosition.z = transform.position.z;
 
-            Vector3 direccion = (destino - transform.position).normalized;
+            Vector3 direction = (targetPosition - transform.position).normalized;
             
-            if (Mathf.Abs(destino.x - transform.position.x) > 0.01f)
+            if (Mathf.Abs(targetPosition.x - transform.position.x) > 0.01f)
             {
-                transform.position += direccion * velocidadSeguir * Time.deltaTime;
+                transform.position += direction * followSpeed * Time.deltaTime;
             }
         }
     }

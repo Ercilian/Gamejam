@@ -7,17 +7,17 @@ public class PlayerController : MonoBehaviour
     public float speed = 5;
     private Vector2 movementInput;
 
-    // Permite que otros scripts activen/desactiven el control
-    [HideInInspector] public bool controlActivo = true;
+    
+    [HideInInspector] public bool activeControl = true; // Allow external scripts (like PlayerInputEmpuje) to enable/disable control
 
     private void Update()
     {
-        if (controlActivo)
+        if (activeControl)
         {
-            transform.Translate(new Vector3(movementInput.x, 0, movementInput.y) * speed * Time.deltaTime);
+            transform.Translate(new Vector3(movementInput.x, 0, movementInput.y) * speed * Time.deltaTime); // Move the player based on input
         }
     }
     
-    public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>();
+    public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
 
 }

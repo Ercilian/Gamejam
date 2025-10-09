@@ -76,10 +76,10 @@ public class MovCarro : MonoBehaviour
                         var input = jugador.GetComponent<PlayerInputEmpuje>();
                         if (input != null)
                         {
-                            input.SeguirObjeto(transform, GetVelocidadEmpuje(1)); // Velocidad base para seguir
+                            input.FollowObject(transform, GetVelocidadEmpuje(1)); // Velocidad base para seguir
                             
                             // Verificar si ESTE jugador específico está empujando
-                            if (input.EstoyEmpujandoYo())
+                            if (input.ImPushing())
                             {
                                 jugadoresEmpujandoCount++; // Incrementar contador
                             }
@@ -136,7 +136,7 @@ public class MovCarro : MonoBehaviour
         var jugadoresEmpujandoConCombustible = fuelSystem.GetJugadoresEmpujando();
         foreach (var jugador in jugadoresEmpujandoConCombustible)
         {
-            jugador?.GetComponent<PlayerInputEmpuje>()?.ActivarControl();
+            jugador?.GetComponent<PlayerInputEmpuje>()?.ActivateControl();
         }
         
         float velocidadActual = GetVelocidadActual();

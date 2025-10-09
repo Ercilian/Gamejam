@@ -10,7 +10,7 @@ public class CarFuelSystem : MonoBehaviour
     
     [Header("Depósito de Items")]
     public Transform depositPoint;
-    public string depositPrompt = "Presiona Clic Izquierdo para depositar items";
+    public string depositPrompt = "Presiona Attack para depositar items";
     
     [Header("Debug")]
     public bool showDebugLogs = true;
@@ -47,7 +47,20 @@ public class CarFuelSystem : MonoBehaviour
             var attackAction = nearbyPlayerInput.actions["Attack"];
             if (attackAction != null && attackAction.WasPressedThisFrame())
             {
-                DepositItems();
+                // Llama directamente al método del inventario
+                if (nearbyPlayerInventory.DepositDieselItems(this))
+                {
+                    if (showDebugLogs)
+                    {
+                        Debug.Log($"[CarFuelSystem] ✅ Items de diesel depositados!");
+                        Debug.Log($"[CarFuelSystem] ⛽ Diesel: {currentDiesel:F1}/{maxDiesel:F1}");
+                    }
+                    
+                    // Limpiar estado después de depositar
+                    playerInDepositRange = false;
+                    nearbyPlayerInventory = null;
+                    nearbyPlayerInput = null;
+                }
             }
         }
         
@@ -135,28 +148,6 @@ public class CarFuelSystem : MonoBehaviour
             
             if (showDebugLogs)
                 Debug.Log($"[CarFuelSystem] 📦 {other.gameObject.name} salió del rango de depósito");
-        }
-    }
-
-    void DepositItems()
-    {
-        if (!nearbyPlayerInventory) return;
-        
-        int itemCount = nearbyPlayerInventory.GetCarriedItemCount();
-        
-        if (nearbyPlayerInventory.DepositItems(this))
-        {
-            if (showDebugLogs)
-            {
-                Debug.Log($"[CarFuelSystem] ✅ {itemCount} items depositados con Attack!");
-                Debug.Log($"[CarFuelSystem] ⛽ Diesel: {currentDiesel:F1}/{maxDiesel:F1}");
-                Debug.Log($"[CarFuelSystem] 📊 Nivel: {(GetDieselPercentage() * 100):F0}%");
-            }
-            
-            // Limpiar estado de depósito después de depositar
-            playerInDepositRange = false;
-            nearbyPlayerInventory = null;
-            nearbyPlayerInput = null;
         }
     }
 

@@ -91,6 +91,59 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
+    // Método genérico para depositar por tipo
+    private bool DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int> onDeposit)
+    {
+        if (carriedItems.Count == 0) return false;
+
+        int totalValue = 0;
+        for (int i = carriedItems.Count - 1; i >= 0; i--)
+        {
+            if (carriedItems[i].type == itemType)
+            {
+                totalValue += GetItemValue(carriedItems[i]);
+                // Elimina visual y item
+                if (visualItems.Count > i && visualItems[i] != null)
+                    Destroy(visualItems[i]);
+                if (visualItems.Count > i)
+                    visualItems.RemoveAt(i);
+                carriedItems.RemoveAt(i);
+            }
+        }
+
+        if (totalValue > 0)
+        {
+            onDeposit(totalValue);
+            UpdateUI();
+            return true;
+        }
+        return false;
+    }
+
+    private int GetItemValue(CollectibleData item)
+    {
+        return item.type switch
+        {
+            CollectibleData.ItemType.Diesel => item.dieselValue,
+            CollectibleData.ItemType.Scrap => item.scrapValue,
+            CollectibleData.ItemType.Moss => item.mossValue,
+            _ => 0
+        };
+    }
+
+    // Métodos públicos específicos para cada sistema
+    public bool DepositDieselItems(CarFuelSystem carFuelSystem)
+    {
+        return DepositItemsByType(CollectibleData.ItemType.Diesel, 
+            value => carFuelSystem.AddDiesel(value));
+    }
+
+    public bool DepositScrapItems(CarScrapSystem carScrapSystem)
+    {
+        return DepositItemsByType(CollectibleData.ItemType.Scrap, 
+            value => carScrapSystem.AddScrap(value));
+    }
+
     void ClearInventory()
     {
         carriedItems.Clear();
@@ -149,34 +202,5 @@ public class PlayerInventory : MonoBehaviour
             }
         }
         return count;
-    }
-
-    public bool DepositScrapItems(CarScrapSystem scrapSystem)
-    {
-        if (carriedItems.Count == 0) return false;
-
-        int totalScrapValue = 0;
-        // Recorre de atrás hacia adelante para eliminar correctamente
-        for (int i = carriedItems.Count - 1; i >= 0; i--)
-        {
-            if (carriedItems[i].type == CollectibleData.ItemType.Scrap)
-            {
-                totalScrapValue += carriedItems[i].scrapValue;
-                // Elimina el objeto visual correspondiente
-                if (visualItems.Count > i && visualItems[i] != null)
-                    Destroy(visualItems[i]);
-                if (visualItems.Count > i)
-                    visualItems.RemoveAt(i);
-                carriedItems.RemoveAt(i);
-            }
-        }
-
-        if (totalScrapValue > 0)
-        {
-            scrapSystem.AddScrap(totalScrapValue);
-            UpdateUI();
-            return true;
-        }
-        return false;
     }
 }

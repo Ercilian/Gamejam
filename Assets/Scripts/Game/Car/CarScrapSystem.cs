@@ -10,7 +10,7 @@ public class CarScrapSystem : MonoBehaviour
     
     [Header("Depósito de Scrap")]
     public Transform scrapDepositPoint;
-    public string scrapDepositPrompt = "Presiona Clic Izquierdo para depositar scrap";
+    public string scrapDepositPrompt = "Presiona Attack para depositar scrap";
     
     [Header("Debug")]
     public bool showDebugLogs = true;
@@ -33,7 +33,16 @@ public class CarScrapSystem : MonoBehaviour
             var attackAction = nearbyPlayerInput.actions["Attack"];
             if (attackAction != null && attackAction.WasPressedThisFrame())
             {
-                DepositScrap();
+                if (nearbyPlayerInventory.DepositScrapItems(this))
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"[CarScrapSystem] ✅ Scrap depositado! Total: {currentScrap}");
+                    
+                    // Limpiar estado después de depositar
+                    playerInScrapRange = false;
+                    nearbyPlayerInventory = null;
+                    nearbyPlayerInput = null;
+                }
             }
         }
         
