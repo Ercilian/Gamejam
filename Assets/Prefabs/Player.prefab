@@ -157,8 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87af22a4dac3200409c22f0700de5655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputEmpuje
-  controlActivo: 1
   showDebugLogs: 1
+  activeControl: 1
 --- !u!114 &458908605971134653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  controlActivo: 1
+  activeControl: 1
 --- !u!114 &3199202718284467957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,8 +339,56 @@ MonoBehaviour:
   sectorAngleDeg: 90
   sectorHeight: 1.5
   sectorGizmoSteps: 50
-  comboHitboxes: []
+  boomerangDistance: 4
+  boomerangSpeed: 12
+  boomerangPauseTime: 1
+  boomerangAimMode: 1
+  boomerangDirection: {x: -1, y: 0, z: 0}
+  boomerangTargetWorld: {x: 0, y: 0, z: 0}
+  comboHitboxes:
+  - offset: {x: 0.12, y: 0.56, z: 0}
+    euler: {x: 0, y: -90, z: 0}
+    shape: 3
+    boxSize: {x: 0, y: 0, z: 0}
+    boxScale: {x: 0, y: 0, z: 0}
+    sphereRadius: 0
+    capsuleHeight: 0
+    capsuleRadius: 0
+    sectorRadius: 2
+    sectorAngleDeg: 90
+    sectorHeight: 1.5
+    sectorGizmoSteps: 10
+    damageOverride: 0
+  - offset: {x: 0.13, y: 0.56, z: 0}
+    euler: {x: 0, y: -90, z: 0}
+    shape: 3
+    boxSize: {x: 0, y: 0, z: 0}
+    boxScale: {x: 0, y: 0, z: 0}
+    sphereRadius: 0
+    capsuleHeight: 0
+    capsuleRadius: 0
+    sectorRadius: 2
+    sectorAngleDeg: 90
+    sectorHeight: 1.5
+    sectorGizmoSteps: 10
+    damageOverride: 0
+  - offset: {x: -0.32, y: 0.45, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    shape: 0
+    boxSize: {x: 1, y: 0.5, z: 1}
+    boxScale: {x: 1, y: 1, z: 1}
+    sphereRadius: 0
+    capsuleHeight: 0
+    capsuleRadius: 0
+    sectorRadius: 0
+    sectorAngleDeg: 0
+    sectorHeight: 0
+    sectorGizmoSteps: 0
+    damageOverride: 0
   gizmoPreviewStep: 0
+  previewBoomerangGizmos: 1
+  showGizmosInGameView: 1
+  showRuntimeBoomerangHitbox: 1
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
