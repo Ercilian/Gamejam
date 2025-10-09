@@ -6,121 +6,77 @@ using System.Collections.Generic;
 public class PlayerInventory : MonoBehaviour
 {
     [Header("Configuración")]
-    public int maxCarryCapacity = 3; // Máximo número de items que puede cargar
-    public Transform itemHoldPoint; // Donde aparecen visualmente los items cargados
-    public float itemStackOffset = 0.3f; // Separación entre items apilados
+    public int maxCarryCapacity = 3;
+    public Transform itemHoldPoint; //Empty where items are visually held on the players (need to change to the hands)
+    public float itemStackOffset = 0.3f; // Offset to objects in the stack
     
-    [Header("UI")]
-    public TextMeshProUGUI itemCountText; // UI que muestra "Madera: 2/3"
-    public Image itemIcon;
-    
-    private List<CollectibleData> carriedItems = new List<CollectibleData>();
-    private List<GameObject> visualItems = new List<GameObject>(); // Items visuales en la espalda
+    private List<CollectibleData> carriedItems = new List<CollectibleData>(); //List of carried items
+    private List<GameObject> visualItems = new List<GameObject>(); // List of instantiated visual items
 
-    void Start()
+
+
+
+    // ================================================= Methods =================================================
+
+
+
+
+    public bool CanCarryItem(CollectibleData item) // Boolean to check if the player can carry the item
     {
-        UpdateUI();
+        if (carriedItems.Count == 0) return true; // if no items, can carry any item
+        return carriedItems.Count < maxCarryCapacity && item.type == carriedItems[0].type; // if has items, can only carry same type and not exceed capacity
     }
 
-    public bool CanCarryItem(CollectibleData item)
+    public void PickupItem(CollectibleData item) // Method to pick up an item
     {
-        // Si no llevas nada, puedes recoger cualquier tipo
-        if (carriedItems.Count == 0) return true;
-        // Si llevas algo, solo puedes recoger del mismo tipo y no superar la capacidad máxima
-        return carriedItems.Count < maxCarryCapacity && item.type == carriedItems[0].type;
-    }
-
-    public void PickupItem(CollectibleData item)
-    {
-        if (!CanCarryItem(item)) return;
-        
-        carriedItems.Add(item);
-        CreateVisualItem(item);
-        UpdateUI();
+        if (!CanCarryItem(item)) return; // Check if can carry the item
+        carriedItems.Add(item); // Add item to the carried list
+        CreateVisualItem(item); // Create the visual representation of the item
         
         Debug.Log($"[PlayerInventory] Recogido {item.itemName}. Total: {carriedItems.Count}/{maxCarryCapacity}");
     }
 
-    void CreateVisualItem(CollectibleData item)
+    void CreateVisualItem(CollectibleData item) // Method to create the visual representation of the item
     {
-        if (!item.itemPrefab || !itemHoldPoint) return;
-        
-        GameObject visualItem = Instantiate(item.itemPrefab, itemHoldPoint);
-        
-        // Posicionar el item en la "pila"
-        Vector3 stackPosition = Vector3.up * (visualItems.Count * itemStackOffset);
+        if (!item.itemPrefab || !itemHoldPoint) return; // Check if prefab and hold point are assigned
+        GameObject visualItem = Instantiate(item.itemPrefab, itemHoldPoint); // Instantiate the item prefab
+        Vector3 stackPosition = Vector3.up * (visualItems.Count * itemStackOffset); // Put the item in the stack
         visualItem.transform.localPosition = stackPosition;
         
-        // Desactivar colisiones/triggers del item visual
-        Collider itemCollider = visualItem.GetComponent<Collider>();
+        Collider itemCollider = visualItem.GetComponent<Collider>(); // Desactivating collider
         if (itemCollider) itemCollider.enabled = false;
         
-        // Remover scripts que no necesitamos en el item visual
-        WorldCollectible worldScript = visualItem.GetComponent<WorldCollectible>();
+        WorldCollectible worldScript = visualItem.GetComponent<WorldCollectible>(); // Remove WorldCollectible script to avoid conflicts
         if (worldScript) Destroy(worldScript);
         
-        visualItems.Add(visualItem);
+        visualItems.Add(visualItem); // Add to the visual items list
     }
 
-    public bool DepositItems(CarFuelSystem carFuelSystem)
+    private bool DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int> onDeposit) // Generic method to deposit items of a specific type
     {
-        if (carriedItems.Count == 0) return false;
-
-        int totalDieselValue = 0;
-        // Recorre de atrás hacia adelante para eliminar correctamente
-        for (int i = carriedItems.Count - 1; i >= 0; i--)
-        {
-            if (carriedItems[i].type == CollectibleData.ItemType.Diesel)
-            {
-                totalDieselValue += carriedItems[i].dieselValue;
-                // Elimina el objeto visual correspondiente
-                if (visualItems.Count > i && visualItems[i] != null)
-                    Destroy(visualItems[i]);
-                if (visualItems.Count > i)
-                    visualItems.RemoveAt(i);
-                carriedItems.RemoveAt(i);
-            }
-        }
-
-        if (totalDieselValue > 0)
-        {
-            carFuelSystem.AddDiesel(totalDieselValue);
-            UpdateUI();
-            return true;
-        }
-        return false;
-    }
-
-    // Método genérico para depositar por tipo
-    private bool DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int> onDeposit)
-    {
-        if (carriedItems.Count == 0) return false;
-
+        if (carriedItems.Count == 0) return false; // No items to deposit
         int totalValue = 0;
-        for (int i = carriedItems.Count - 1; i >= 0; i--)
+        for (int i = carriedItems.Count - 1; i >= 0; i--) // Iterate backwards to safely remove items
         {
-            if (carriedItems[i].type == itemType)
+            if (carriedItems[i].type == itemType) // Check if the item is of the specified type
             {
-                totalValue += GetItemValue(carriedItems[i]);
-                // Elimina visual y item
-                if (visualItems.Count > i && visualItems[i] != null)
+                totalValue += GetItemValue(carriedItems[i]); // Accumulate the value
+                if (visualItems.Count > i && visualItems[i] != null) //Destroy visual item if exists
                     Destroy(visualItems[i]);
                 if (visualItems.Count > i)
                     visualItems.RemoveAt(i);
-                carriedItems.RemoveAt(i);
+                carriedItems.RemoveAt(i); // Remove item from the carried list
             }
         }
-
-        if (totalValue > 0)
+        if (totalValue > 0) // If any items were deposited
         {
-            onDeposit(totalValue);
-            UpdateUI();
+            onDeposit(totalValue); // Call the provided action with the total value
             return true;
         }
         return false;
     }
 
-    private int GetItemValue(CollectibleData item)
+    private int GetItemValue(CollectibleData item) // Get the value of a specific item based on its type
     {
         return item.type switch
         {
@@ -131,76 +87,34 @@ public class PlayerInventory : MonoBehaviour
         };
     }
 
-    // Métodos públicos específicos para cada sistema
-    public bool DepositDieselItems(CarFuelSystem carFuelSystem)
+    public bool DepositDieselItems(CarFuelSystem carFuelSystem) // Specific method to deposit diesel items
     {
         return DepositItemsByType(CollectibleData.ItemType.Diesel, 
             value => carFuelSystem.AddDiesel(value));
     }
 
-    public bool DepositScrapItems(CarScrapSystem carScrapSystem)
+    public bool DepositScrapItems(CarScrapSystem carScrapSystem) // Specific method to deposit scrap items
     {
         return DepositItemsByType(CollectibleData.ItemType.Scrap, 
             value => carScrapSystem.AddScrap(value));
     }
 
-    void ClearInventory()
+    void ClearInventory() // Method to clear the inventory (used on player death or similar) (NEED TO CHANGE THIS)
     {
         carriedItems.Clear();
-        
-        // Destruir items visuales
         foreach (var visualItem in visualItems)
         {
             if (visualItem) Destroy(visualItem);
         }
         visualItems.Clear();
-        
-        UpdateUI();
     }
 
-    void UpdateUI()
+
+    public int GetCarriedItemCount() => carriedItems.Count; // Get the number of carried items
+    public bool HasItems() => carriedItems.Count > 0; // Check if the player has any items
+    public CollectibleData.ItemType GetFirstItemType() // Get the type of the first item (all items are the same type)
     {
-        if (itemCountText)
-        {
-            if (carriedItems.Count > 0)
-            {
-                itemCountText.text = $"{carriedItems[0].itemName}: {carriedItems.Count}/{maxCarryCapacity}";
-                if (itemIcon && carriedItems[0].itemIcon) 
-                    itemIcon.sprite = carriedItems[0].itemIcon;
-            }
-            else
-            {
-                itemCountText.text = "";
-                if (itemIcon) itemIcon.sprite = null;
-            }
-        }
+        return carriedItems.Count > 0 ? carriedItems[0].type : CollectibleData.ItemType.Diesel;
     }
 
-    public int GetCarriedItemCount() => carriedItems.Count;
-    public bool HasItems() => carriedItems.Count > 0;
-
-    public bool HasScrapItems()
-    {
-        foreach (var item in carriedItems)
-        {
-            if (item != null && item.type == CollectibleData.ItemType.Scrap)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int GetCarriedScrapCount()
-    {
-        int count = 0;
-        foreach (var item in carriedItems)
-        {
-            if (item != null && item.type == CollectibleData.ItemType.Scrap)
-            {
-                count++;
-            }
-        }
-        return count;
-    }
 }

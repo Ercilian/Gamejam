@@ -18,6 +18,14 @@ public class PlayerInputEmpuje : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction interactAction;
 
+
+
+
+    // ================================================= Methods =================================================
+
+
+
+
     void Awake()
     {
         playerController = GetComponent<PlayerController>();

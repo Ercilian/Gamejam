@@ -6,7 +6,7 @@ public class CarScrapSystem : MonoBehaviour
 {
     [Header("Scrap (Moneda)")]
     public int currentScrap = 0;
-    public int maxScrap = 9999; // Límite máximo (opcional)
+    public int maxScrap = 9999;
     
     [Header("Depósito de Scrap")]
     public Transform scrapDepositPoint;
@@ -46,12 +46,14 @@ public class CarScrapSystem : MonoBehaviour
             }
         }
         
-        // Mostrar prompt en consola solo si tiene scrap
-        if (playerInScrapRange && showDebugLogs && nearbyPlayerInventory && nearbyPlayerInventory.HasScrapItems())
+        // CAMBIO: Usar métodos genéricos
+        if (playerInScrapRange && showDebugLogs && nearbyPlayerInventory && 
+            nearbyPlayerInventory.HasItems() && 
+            nearbyPlayerInventory.GetFirstItemType() == CollectibleData.ItemType.Scrap)
         {
             if (Time.frameCount % 120 == 0) // Cada 2 segundos aprox
             {
-                int scrapCount = nearbyPlayerInventory.GetCarriedScrapCount();
+                int scrapCount = nearbyPlayerInventory.GetCarriedItemCount(); // CAMBIO: Método genérico
                 Debug.Log($"[CarScrapSystem] 💡 {scrapDepositPrompt} ({scrapCount} scrap)");
             }
         }
@@ -68,8 +70,8 @@ public class CarScrapSystem : MonoBehaviour
             return;
         }
         
-        // Solo configurar depósito si tiene scrap
-        if (playerInventory.HasScrapItems())
+        // CAMBIO: Verificar con métodos genéricos
+        if (playerInventory.HasItems() && playerInventory.GetFirstItemType() == CollectibleData.ItemType.Scrap)
         {
             // Buscar PlayerInput para el Input System
             PlayerInput playerInput = other.GetComponent<PlayerInput>();
@@ -94,7 +96,9 @@ public class CarScrapSystem : MonoBehaviour
             
             if (showDebugLogs)
             {
-                Debug.Log($"[CarScrapSystem] 🔩 {other.gameObject.name} listo para depositar {playerInventory.GetCarriedScrapCount()} scrap");
+                // CAMBIO: Usar método genérico
+                int scrapCount = playerInventory.GetCarriedItemCount();
+                Debug.Log($"[CarScrapSystem] 🔩 {other.gameObject.name} listo para depositar {scrapCount} scrap");
             }
         }
         else if (showDebugLogs)
@@ -118,27 +122,6 @@ public class CarScrapSystem : MonoBehaviour
         }
     }
 
-    void DepositScrap()
-    {
-        if (!nearbyPlayerInventory) return;
-        
-        int scrapCount = nearbyPlayerInventory.GetCarriedScrapCount();
-        
-        if (nearbyPlayerInventory.DepositScrapItems(this))
-        {
-            if (showDebugLogs)
-            {
-                Debug.Log($"[CarScrapSystem] ✅ {scrapCount} scrap depositado!");
-                Debug.Log($"[CarScrapSystem] 💰 Scrap total: {currentScrap}");
-            }
-            
-            // Limpiar estado de depósito después de depositar
-            playerInScrapRange = false;
-            nearbyPlayerInventory = null;
-            nearbyPlayerInput = null;
-        }
-    }
-
     public void AddScrap(int amount)
     {
         int prevScrap = currentScrap;
@@ -147,7 +130,6 @@ public class CarScrapSystem : MonoBehaviour
         if (showDebugLogs)
             Debug.Log($"[CarScrapSystem] 💰 +{amount} scrap ({prevScrap} → {currentScrap})");
         
-        // Aquí puedes triggear eventos de UI, sonidos, etc.
         OnScrapChanged?.Invoke(currentScrap);
     }
 

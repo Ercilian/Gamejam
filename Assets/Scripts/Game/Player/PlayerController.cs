@@ -6,9 +6,15 @@ public class PlayerController : MonoBehaviour
 
     public float speed = 5;
     private Vector2 movementInput;
-
-    
     [HideInInspector] public bool activeControl = true; // Allow external scripts (like PlayerInputEmpuje) to enable/disable control
+
+
+
+
+    // ================================================= Methods =================================================
+
+
+
 
     private void Update()
     {

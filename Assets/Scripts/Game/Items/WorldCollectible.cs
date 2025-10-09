@@ -25,9 +25,6 @@ public class WorldCollectible : MonoBehaviour
         {
             Debug.LogError($"[WorldCollectible] {gameObject.name} no tiene CollectibleData asignado!");
         }
-        
-        if (showDebugLogs)
-            Debug.Log($"[WorldCollectible] {gameObject.name} inicializado con {(collectibleData ? collectibleData.itemName : "SIN DATOS")}");
     }
 
     void Update()
