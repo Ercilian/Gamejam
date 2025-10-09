@@ -306,8 +306,6 @@ MonoBehaviour:
   maxCarryCapacity: 3
   itemHoldPoint: {fileID: 1372787198678267909}
   itemStackOffset: 0.3
-  itemCountText: {fileID: 0}
-  itemIcon: {fileID: 0}
 --- !u!114 &1128500900022400354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,7 +397,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1372787198678267909}
   m_Layer: 0
-  m_Name: ItenHoldPoint
+  m_Name: ItemHoldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
