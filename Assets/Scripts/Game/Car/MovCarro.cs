@@ -30,6 +30,13 @@ public class MovCarro : MonoBehaviour
     public int GetPlayersPushingCount() => playersPushingCount;
 
 
+
+
+    // ================================================= Methods =================================================
+
+
+
+
     void Start()
     {
         fuelSystem = GetComponent<CarFuelSystem>(); // Get CarFuelSystem on this GameObject
@@ -41,7 +48,7 @@ public class MovCarro : MonoBehaviour
         
         if (isFuelConsumed) // Start fuel consumption if enabled
         {
-            consumeCoroutine = StartCoroutine(ConsumoCombustible());
+            consumeCoroutine = StartCoroutine(ConsumeFuel());
         }
     }
 
@@ -50,161 +57,111 @@ public class MovCarro : MonoBehaviour
         if (!fuelSystem || !fuelSystem.HasFuel()) // If no fuel, stop moving normally
         {
             ismoving = false;
+            var playersPushing = fuelSystem.GetPlayersPushing(); // Get players in push zone
+            playersPushingCount = 0; // Reset counter
 
-            // Obtener jugadores en la zona de empuje desde CarFuelSystem
-            var jugadoresEmpujando = fuelSystem.GetJugadoresEmpujando();
-            playersPushingCount = 0; // Reset contador
-            
-            if (jugadoresEmpujando.Count > 0)
+            if (playersPushing.Count > 0) // If there are players in the push zone, handle pushing
             {
-                foreach (var jugador in jugadoresEmpujando)
+                foreach (var player in playersPushing) // Set them to follow the car
                 {
-                    if (jugador != null)
+                    if (player != null)
                     {
-                        var input = jugador.GetComponent<PlayerInputEmpuje>();
+                        var input = player.GetComponent<PlayerInputEmpuje>(); // Get their push input component
                         if (input != null)
                         {
-                            input.FollowObject(transform, GetVelocidadEmpuje(1)); // Velocidad base para seguir
-                            
-                            // Verificar si ESTE jugador específico está empujando
-                            if (input.ImPushing())
+                            input.FollowObject(transform, GetPushSpeed(1)); // Make them follow the car at push speed
+                            if (input.ImPushing()) // Check if they are pushing
                             {
-                                playersPushingCount++; // Incrementar contador
+                                playersPushingCount++; // Increment counter
                             }
                         }
                     }
                 }
                 
-                // Mover el carro solo si al menos uno está empujando
-                if (playersPushingCount > 0)
+                if (playersPushingCount > 0) // If at least one player is pushing, move the car
                 {
                     if (!isPushing)
                     {
                         Debug.Log($"[MovCarro] El coche está siendo empujado por {playersPushingCount} jugador(es).");
                         isPushing = true;
                     }
-                    
-                    // NUEVO: Velocidad basada en el número de jugadores empujando
-                    float velocidadActualEmpuje = GetVelocidadEmpuje(playersPushingCount);
-                    transform.Translate(direction.normalized * velocidadActualEmpuje * Time.deltaTime, Space.World);
-                    
-                    // Log solo cuando cambia el número de jugadores
-                    if (Time.frameCount % 60 == 0) // Log cada segundo aprox
-                    {
-                        Debug.Log($"[MovCarro] {playersPushingCount} jugador(es) empujando - Velocidad: {velocidadActualEmpuje:F2}");
-                    }
-                }
-                else
-                {
-                    if (isPushing)
-                    {
-                        Debug.Log("[MovCarro] El coche ha dejado de ser empujado.");
-                        isPushing = false;
-                    }
+                    float currentPushSpeed = GetPushSpeed(playersPushingCount); // Get push speed based on number of players
+                    transform.Translate(direction.normalized * currentPushSpeed * Time.deltaTime, Space.World);
                 }
             }
             else
             {
-                if (isPushing)
-                {
-                    Debug.Log("[MovCarro] No hay jugadores en la zona de empuje.");
-                    isPushing = false;
-                }
                 playersPushingCount = 0;
             }
-            return; // Si no hay diesel, no mover el carro normalmente
+            return;
         }
-
-        // Mover el objeto si hay combustible
+        // Move normally if there is fuel
         ismoving = true;  
         isPushing = false;
         playersPushingCount = 0;
-        
-        // Reactivar control de todos los jugadores cuando hay combustible
-        var jugadoresEmpujandoConCombustible = fuelSystem.GetJugadoresEmpujando();
-        foreach (var jugador in jugadoresEmpujandoConCombustible)
+
+        // Reactive control for all players when there is fuel
+        var playersPushingWithFuel = fuelSystem.GetPlayersPushing();
+        foreach (var player in playersPushingWithFuel)
         {
-            jugador?.GetComponent<PlayerInputEmpuje>()?.ActivateControl();
+            player?.GetComponent<PlayerInputEmpuje>()?.ActivateControl();
         }
         
-        float velocidadActual = GetCurrentSpeed();
-        transform.Translate(direction.normalized * velocidadActual * Time.deltaTime, Space.World);
+        float currentSpeed = GetCurrentSpeed();
+        transform.Translate(direction.normalized * currentSpeed * Time.deltaTime, Space.World);
     }
 
-    // NUEVO: Método para calcular velocidad basada en número de jugadores empujando
-    private float GetVelocidadEmpuje(int numJugadores)
+    private float GetPushSpeed(int numPlayers) // Method to determine push speed based on number of players
     {
-        switch (numJugadores)
+        switch (numPlayers)
         {
             case 1:
-                return pushSpeed; // Velocidad base
+                return pushSpeed; // Base speed
             case 2:
-                return pushSpeedTwo; // Un poco más rápido
+                return pushSpeedTwo; // Slightly faster
             default:
                 return pushSpeed; // Fallback
         }
     }
 
-    private float GetCurrentSpeed()
+    private float GetCurrentSpeed() // Method to determine current speed based on fuel level
     {
-        if (!fuelSystem) return 0f;
+        if (!fuelSystem) return 0f; // Safety check
         
-        float porcentajeCombustible = fuelSystem.GetDieselPercentage();
-        
-        // Aumentar velocidad si queda poco combustible
-        if (porcentajeCombustible < 0.2f) // Menos del 20%
+        float dieselPercentage = fuelSystem.GetDieselPercentage(); // Get current fuel percentage
+        if (dieselPercentage < 0.2f) // Increase speed if below 20%
         {
             return fastspeed;
         }
-        if (porcentajeCombustible >= 0.8f) // Más del 80%
+        if (dieselPercentage >= 0.8f) // Decrease speed if above 80%
         {
-            return slowspeed; // Velocidad reducida
+            return slowspeed;
         }
-        
         return speed;
     }
 
-    private IEnumerator ConsumoCombustible()
+    private IEnumerator ConsumeFuel() // Coroutine to consume fuel over time
     {
-        while (fuelSystem && fuelSystem.HasFuel())
+        while (fuelSystem && fuelSystem.HasFuel()) // While there is fuel
         {
             yield return new WaitForSeconds(1f);
 
-            // Solo consumir si el carro se está moviendo
-            if (ismoving && fuelSystem.HasFuel())
+            if (ismoving && fuelSystem.HasFuel()) // Only consume fuel if moving
             {
                 fuelSystem.ConsumeDiesel(fuelConsumptionPerSecond);
             }
         }
-
-        Debug.Log("[MovCarro] ¡Se acabó el diesel! El carro se ha detenido.");
         consumeCoroutine = null;
     }
 
-    // Método llamado por CarFuelSystem cuando cambia el combustible
-    public void OnFuelChanged(float currentFuel, float maxFuel)
+    public void OnFuelChanged(float currentFuel, float maxFuel) // Method called by CarFuelSystem when fuel changes
     {
         float fuelPercentage = currentFuel / maxFuel;
 
-        // Si el combustible acaba de pasar de 0 a >0, reiniciar la corrutina de consumo
-        if (currentFuel > 0f && consumeCoroutine == null && isFuelConsumed)
+        if (currentFuel > 0f && consumeCoroutine == null && isFuelConsumed) // Restart consumption if fuel is added from zero
         {
             Debug.Log("[MovCarro] Combustible repuesto, reanudando consumo.");
-            consumeCoroutine = StartCoroutine(ConsumoCombustible());
-        }
-
-        if (fuelPercentage < 0.2f && fuelPercentage > 0f)
-        {
-            Debug.Log("[MovCarro] ¡Combustible bajo! Velocidad aumentada.");
-        }
-        if (fuelPercentage >= 0.8f)
-        {
-            Debug.Log("[MovCarro] Combustible alto. Velocidad lenta.");
-        }
-        else if (currentFuel <= 0f)
-        {
-            Debug.Log("[MovCarro] ¡Sin combustible! Carro detenido.");
-            ismoving = false;
+            consumeCoroutine = StartCoroutine(ConsumeFuel());
         }
     }
 

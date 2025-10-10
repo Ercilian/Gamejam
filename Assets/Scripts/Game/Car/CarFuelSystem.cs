@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public class CarFuelSystem : MonoBehaviour
 {
-    [Header("Combustible")]
+    [Header("Fuel (Diesel)")]
     public float currentDiesel = 20f;
     public float maxDiesel = 100f;
     
-    [Header("Depósito de Items")]
+    [Header("Item Deposition")]
     public Transform depositPoint;
-    public string depositPrompt = "Presiona Attack para depositar items";
-    
+    public string depositPrompt = "Press Attack to deposit items";
+
     [Header("Debug")]
     public bool showDebugLogs = true;
     public float logConsumptionEvery = 5f;
@@ -21,166 +21,106 @@ public class CarFuelSystem : MonoBehaviour
     private PlayerInput nearbyPlayerInput;
     private MovCarro movCarro;
     private float lastLoggedDiesel;
-    private List<GameObject> jugadoresEmpuje = new List<GameObject>();
+    private List<GameObject> pushingPlayers = new List<GameObject>();
+
+
+
+
+    // ================================================= Methods =================================================
+
+
+
 
     void Start()
     {
-        movCarro = GetComponentInParent<MovCarro>();
-        
-        if (!movCarro)
-        {
-            Debug.LogError("[CarFuelSystem] No se encontró MovCarro en el GameObject padre!");
-        }
-        
-        // CORREGIDO: lastLoggedDiesal → lastLoggedDiesel
-        lastLoggedDiesel = currentDiesel;
-        
-        if (showDebugLogs)
-            Debug.Log($"[CarFuelSystem] Inicializado con {currentDiesel} diesel");
+        movCarro = GetComponentInParent<MovCarro>(); // Check parent for MovCarro        
+        lastLoggedDiesel = currentDiesel; // Inicializar el último diesel registrado
     }
 
     void Update()
     {
-        // Detectar input de depósito usando acción "Attack"
-        if (playerInDepositRange && nearbyPlayerInventory && nearbyPlayerInput)
+        if (playerInDepositRange && nearbyPlayerInventory && nearbyPlayerInput) // Check if player is in range and has inventory
         {
-            var attackAction = nearbyPlayerInput.actions["Attack"];
-            if (attackAction != null && attackAction.WasPressedThisFrame())
+            var attackAction = nearbyPlayerInput.actions["Attack"]; // Get the Attack action
+            if (attackAction != null && attackAction.WasPressedThisFrame()) // Check if Attack was pressed
             {
-                // Llama directamente al método del inventario
-                if (nearbyPlayerInventory.DepositDieselItems(this))
+                if (nearbyPlayerInventory.DepositDieselItems(this)) // Attempt to deposit diesel items
                 {
                     if (showDebugLogs)
                     {
-                        Debug.Log($"[CarFuelSystem] ✅ Items de diesel depositados!");
                         Debug.Log($"[CarFuelSystem] ⛽ Diesel: {currentDiesel:F1}/{maxDiesel:F1}");
                     }
-                    
-                    // Limpiar estado después de depositar
+                    // Clean up state after depositing
                     playerInDepositRange = false;
                     nearbyPlayerInventory = null;
                     nearbyPlayerInput = null;
                 }
             }
         }
-        
-        // Mostrar prompt en consola solo si tiene items
-        if (playerInDepositRange && showDebugLogs && nearbyPlayerInventory && nearbyPlayerInventory.HasItems())
-        {
-            if (Time.frameCount % 120 == 0) // Cada 2 segundos aprox
-            {
-                Debug.Log($"[CarFuelSystem] 💡 {depositPrompt} ({nearbyPlayerInventory.GetCarriedItemCount()} items)");
-            }
-        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // Buscar PlayerInventory
-        PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
-        if (!playerInventory)
+        PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if the collider has a PlayerInventory
+        
+        if (playerInventory == null) return; // If no inventory, exit
+        if (!pushingPlayers.Contains(other.gameObject)) // Add to pushing players list
         {
-            if (showDebugLogs)
-                Debug.Log($"[CarFuelSystem] {other.gameObject.name} no es un jugador (sin PlayerInventory)");
-            return;
+            pushingPlayers.Add(other.gameObject); // Add player to pushing list
         }
         
-        // CAMBIO CLAVE: Añadir a la lista de empuje SIEMPRE
-        if (!jugadoresEmpuje.Contains(other.gameObject))
+        if (playerInventory.HasItems()) // Only allow deposit if the player has items
         {
-            jugadoresEmpuje.Add(other.gameObject);
-            if (showDebugLogs)
-                Debug.Log($"[CarFuelSystem] 🎯 {other.gameObject.name} entró en zona de empuje");
-        }
-        
-        // Solo configurar depósito si tiene items
-        if (playerInventory.HasItems())
-        {
-            // Buscar PlayerInput para el Input System
-            PlayerInput playerInput = other.GetComponent<PlayerInput>();
-            if (!playerInput)
-            {
-                Debug.LogWarning($"[CarFuelSystem] {other.gameObject.name} no tiene PlayerInput component!");
-                return;
-            }
-            
-            // Verificar que tiene la acción Attack
-            var attackAction = playerInput.actions["Attack"];
-            if (attackAction == null)
-            {
-                Debug.LogWarning($"[CarFuelSystem] {other.gameObject.name} no tiene acción 'Attack' configurada!");
-                return;
-            }
-            
-            // Configurar para depósito
+            PlayerInput playerInput = other.GetComponent<PlayerInput>(); // Get PlayerInput component
+            if (playerInput == null) return;
+            var attackAction = playerInput.actions["Attack"]; // Get the Attack action
+            if (attackAction == null) return;
+
+            // Set state to allow depositing
             playerInDepositRange = true;
             nearbyPlayerInventory = playerInventory;
             nearbyPlayerInput = playerInput;
-            
-            if (showDebugLogs)
-            {
-                Debug.Log($"[CarFuelSystem] 🎒 {other.gameObject.name} listo para depositar {playerInventory.GetCarriedItemCount()} items");
-            }
-        }
-        else if (showDebugLogs)
-        {
-            Debug.Log($"[CarFuelSystem] {other.gameObject.name} en zona de empuje (sin items para depositar)");
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        // Remover de la lista de empuje
-        if (jugadoresEmpuje.Contains(other.gameObject))
+        if (pushingPlayers.Contains(other.gameObject)) // Remove from pushing players list
         {
-            jugadoresEmpuje.Remove(other.gameObject);
-            if (showDebugLogs)
-                Debug.Log($"[CarFuelSystem] ❌ {other.gameObject.name} salió de la zona de empuje");
+            pushingPlayers.Remove(other.gameObject);
         }
         
-        // Limpiar depósito si es el jugador que se va
+        // Clean up deposit state if the player leaves
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory != null && playerInventory == nearbyPlayerInventory)
         {
             playerInDepositRange = false;
             nearbyPlayerInventory = null;
             nearbyPlayerInput = null;
-            
-            if (showDebugLogs)
-                Debug.Log($"[CarFuelSystem] 📦 {other.gameObject.name} salió del rango de depósito");
         }
     }
 
-    public void AddDiesel(float amount)
+    public void AddDiesel(float amount) // Method to add diesel to the car
     {
-        float prevDiesel = currentDiesel;
-        currentDiesel = Mathf.Min(currentDiesel + amount, maxDiesel);
+        float prevDiesel = currentDiesel; // Store previous diesel amount
+        currentDiesel = Mathf.Min(currentDiesel + amount, maxDiesel); // Add diesel but not exceed max
         
-        if (movCarro) movCarro.OnFuelChanged(currentDiesel, maxDiesel);
-        
+        if (movCarro) movCarro.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCarro of fuel change
         lastLoggedDiesel = currentDiesel;
         
         if (showDebugLogs)
             Debug.Log($"[CarFuelSystem] ⛽ +{amount} diesel ({prevDiesel:F1} → {currentDiesel:F1})");
     }
 
-    public void ConsumeDiesel(float amount)
+    public void ConsumeDiesel(float amount) // Method to consume diesel when the car is moving
     {
-        float prevDiesel = currentDiesel;
-        currentDiesel = Mathf.Max(currentDiesel - amount, 0f);
-        
-        if (movCarro) movCarro.OnFuelChanged(currentDiesel, maxDiesel);
-        
+        float prevDiesel = currentDiesel; // Store previous diesel amount
+        currentDiesel = Mathf.Max(currentDiesel - amount, 0f); // Subtract diesel but not go below 0
+
+        if (movCarro) movCarro.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCarro of fuel change
         if (showDebugLogs)
         {
-            float dieselConsumed = lastLoggedDiesel - currentDiesel;
-            
-            if (dieselConsumed >= logConsumptionEvery)
-            {
-                Debug.Log($"[CarFuelSystem] 🔥 -{dieselConsumed:F1} diesel ({lastLoggedDiesel:F1} → {currentDiesel:F1})");
-                lastLoggedDiesel = currentDiesel;
-            }
-            
+            float dieselConsumed = lastLoggedDiesel - currentDiesel;            
             if (currentDiesel <= 0f)
             {
                 Debug.Log("[CarFuelSystem] ⚠️ ¡SIN COMBUSTIBLE!");
@@ -198,5 +138,5 @@ public class CarFuelSystem : MonoBehaviour
     public float GetMaxDiesel() => maxDiesel;
     public float GetDieselPercentage() => maxDiesel > 0 ? currentDiesel / maxDiesel : 0f;
     public bool HasFuel() => currentDiesel > 0f;
-    public List<GameObject> GetJugadoresEmpujando() => jugadoresEmpuje;
+    public List<GameObject> GetPlayersPushing() => pushingPlayers;
 }

@@ -69,9 +69,6 @@ public class WorldCollectible : MonoBehaviour
         playerInRange = true;
         nearbyPlayer = playerInventory;
         nearbyPlayerInput = playerInput;
-        
-        if (showDebugLogs)
-            Debug.Log($"[WorldCollectible] 🎯 {other.gameObject.name} en rango de {collectibleData.itemName}");
     }
 
     void OnTriggerExit(Collider other) // To disable the posibility to collect when leaving the area
@@ -102,13 +99,7 @@ public class WorldCollectible : MonoBehaviour
             if (collectibleData.collectSound) 
             {
                 AudioSource.PlayClipAtPoint(collectibleData.collectSound, transform.position);
-            }
-            if (showDebugLogs)
-            {
-                string itemTypeText = collectibleData.type == CollectibleData.ItemType.Scrap ? "💰" : "⛽";
-                Debug.Log($"[WorldCollectible] ✅ {nearbyPlayer.gameObject.name} recogió {itemTypeText} {collectibleData.itemName}");
-            }
-            
+            }            
             Destroy(gameObject, collectEffect ? 0.5f : 0.1f); // Destroy the item after a short delay to allow effects to play
         }
         else
