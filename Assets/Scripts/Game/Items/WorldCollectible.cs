@@ -19,54 +19,24 @@ public class WorldCollectible : MonoBehaviour
 
     void Start()
     {
-        startPosition = transform.position;
-        
-        if (!collectibleData)
-        {
-            Debug.LogError($"[WorldCollectible] {gameObject.name} no tiene CollectibleData asignado!");
-        }
+        startPosition = transform.position; // Save the initial position
     }
 
     void Update()
     {
-        
-        // Detectar input de recolección usando Input System
-        if (playerInRange && nearbyPlayer && nearbyPlayerInput)
+        if (playerInRange && nearbyPlayer && nearbyPlayerInput) // Both player and input must be valid
         {
-            var interactAction = nearbyPlayerInput.actions["Interact"];
-            if (interactAction != null && interactAction.WasPressedThisFrame())
+            var interactAction = nearbyPlayerInput.actions["Interact"]; // Ensure this matches your Input Action name
+            if (interactAction != null && interactAction.WasPressedThisFrame()) // Check if the action was pressed this frame
             {
                 CollectItem();
             }
         }
-        
-        // Mostrar prompt en consola (temporal hasta que tengas UI)
-        if (playerInRange && showDebugLogs && collectibleData)
-        {
-            if (Time.frameCount % 120 == 0) // Cada 2 segundos aprox
-            {
-                Debug.Log($"[WorldCollectible] 💡 {collectibleData.collectPrompt}");
-            }
-        }
     }
-
 
     void OnTriggerEnter(Collider other)
     {
-        if (!other)
-        {
-            Debug.LogWarning("[WorldCollectible] OnTriggerEnter recibió un Collider null!");
-            return;
-        }
-        
-        if (!other.gameObject)
-        {
-            Debug.LogWarning("[WorldCollectible] El Collider no tiene GameObject asociado!");
-            return;
-        }
-        
-        // Buscar PlayerInventory
-        PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
+        PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if entering object has PlayerInventory
         if (!playerInventory)
         {
             if (showDebugLogs)
@@ -74,37 +44,28 @@ public class WorldCollectible : MonoBehaviour
             return;
         }
         
-        // Buscar PlayerInput para el Input System
-        PlayerInput playerInput = other.GetComponent<PlayerInput>();
+        PlayerInput playerInput = other.GetComponent<PlayerInput>(); // Check for PlayerInput
         if (!playerInput)
         {
             Debug.LogWarning($"[WorldCollectible] {other.gameObject.name} no tiene PlayerInput component!");
             return;
         }
         
-        // Verificar que tiene la acción Interact
-        var interactAction = playerInput.actions["Interact"];
+        var interactAction = playerInput.actions["Interact"]; // Check for Interact action
         if (interactAction == null)
         {
             Debug.LogWarning($"[WorldCollectible] {other.gameObject.name} no tiene acción 'Interact' configurada!");
             return;
         }
         
-        if (!collectibleData)
-        {
-            Debug.LogError($"[WorldCollectible] {gameObject.name} no puede ser recogido: falta CollectibleData!");
-            return;
-        }
-        
-        // Verificar si el jugador puede cargar más items
-        if (!playerInventory.CanCarryItem(collectibleData))
+        if (!playerInventory.CanCarryItem(collectibleData)) // Check if the player can carry more items
         {
             if (showDebugLogs)
                 Debug.Log($"[WorldCollectible] {other.gameObject.name} no puede cargar más items");
             return;
         }
         
-        // ¡Todo bien! El jugador está en rango
+        // If all checks pass, set the player in range to be able to carry the item
         playerInRange = true;
         nearbyPlayer = playerInventory;
         nearbyPlayerInput = playerInput;
@@ -113,56 +74,42 @@ public class WorldCollectible : MonoBehaviour
             Debug.Log($"[WorldCollectible] 🎯 {other.gameObject.name} en rango de {collectibleData.itemName}");
     }
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other) // To disable the posibility to collect when leaving the area
     {
-        if (!other || !other.gameObject)
+        if (!other || !other.gameObject) // Null check
             return;
             
-        PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
-        if (playerInventory && playerInventory == nearbyPlayer)
+        PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if exiting object has PlayerInventory
+        if (playerInventory && playerInventory == nearbyPlayer) // Only clear if it's the same player
         {
             playerInRange = false;
             nearbyPlayer = null;
             nearbyPlayerInput = null;
-            
-            if (showDebugLogs)
-                Debug.Log($"[WorldCollectible] ❌ {other.gameObject.name} salió del rango");
         }
     }
 
-    void CollectItem()
-    {
-        if (!nearbyPlayer || !collectibleData)
+    void CollectItem() // Method to collect the item
+    {       
+        if (nearbyPlayer.CanCarryItem(collectibleData)) // Double-check if the player can carry the item
         {
-            Debug.LogWarning("[WorldCollectible] No se puede recoger: nearbyPlayer o collectibleData es null");
-            return;
-        }
-        
-        // Verificar nuevamente que el jugador puede cargar el item
-        if (nearbyPlayer.CanCarryItem(collectibleData))
-        {
-            // Dar el item al jugador
-            nearbyPlayer.PickupItem(collectibleData);
+            nearbyPlayer.PickupItem(collectibleData); // Add item to the player's inventory
             
-            // Efectos
+            // Effects
             if (collectEffect) 
             {
                 collectEffect.Play();
             }
-            
             if (collectibleData.collectSound) 
             {
                 AudioSource.PlayClipAtPoint(collectibleData.collectSound, transform.position);
             }
-            
             if (showDebugLogs)
             {
                 string itemTypeText = collectibleData.type == CollectibleData.ItemType.Scrap ? "💰" : "⛽";
                 Debug.Log($"[WorldCollectible] ✅ {nearbyPlayer.gameObject.name} recogió {itemTypeText} {collectibleData.itemName}");
             }
             
-            // Destruir el objeto después de un pequeño delay
-            Destroy(gameObject, collectEffect ? 0.5f : 0.1f);
+            Destroy(gameObject, collectEffect ? 0.5f : 0.1f); // Destroy the item after a short delay to allow effects to play
         }
         else
         {

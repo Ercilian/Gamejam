@@ -688,6 +688,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1063169014
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2657.7178
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.33034426
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.408348
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.84462327
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.46193978
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.19134173
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.19134173
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: m_Name
+      value: Plant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
 --- !u!1 &1316442589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,14 +1178,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c712ba37de636304caa8ace392e0186b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direccion: {x: 1, y: 0, z: 0}
-  velocidad: 1
-  velocidadAumentada: 2
-  velocidadLenta: 0.5
-  consumoPorSegundo: 1
-  consumirCombustible: 1
-  velocidadEmpuje: 0.5
-  velocidadEmpujeDos: 0.85
+  direction: {x: 1, y: 0, z: 0}
+  speed: 1
+  fastspeed: 2
+  slowspeed: 0.5
+  fuelConsumptionPerSecond: 1
+  isFuelConsumed: 1
+  pushSpeed: 0.5
+  pushSpeedTwo: 0.85
 --- !u!1 &2139318379
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,3 +1310,4 @@ SceneRoots:
   - {fileID: 718849633}
   - {fileID: 1789582898}
   - {fileID: 1617449873}
+  - {fileID: 1063169014}

@@ -17,18 +17,18 @@ public class CollectibleData : ScriptableObject
     }
     
     [Header("Propiedades Diesel")]
-    public int dieselValue; // Cuánto diesel da al carro
-    public float collectRange; // Distancia para recogerlo
+    public int dieselValue;
+    public float collectRange;
     public string collectPrompt = "Presiona E para recoger diesel";
 
     [Header("Propiedades Scrap")]
-    public int scrapValue; // Cuánto scrap da al carro
-    public float scrapCollectRange; // Distancia para recogerlo
+    public int scrapValue;
+    public float scrapCollectRange;
     public string scrapCollectPrompt = "Presiona E para recoger scrap";
 
     [Header("Propiedades Moss")]
-    public int mossValue; // Cuánto moss da al carro
-    public float mossCollectRange; // Distancia para recogerlo
+    public int mossValue;
+    public float mossCollectRange;
     public string mossCollectPrompt = "Presiona E para recoger moss";
 
     [Header("Audio")]
