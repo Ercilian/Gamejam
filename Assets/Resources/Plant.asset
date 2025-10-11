@@ -23,7 +23,7 @@ MonoBehaviour:
   scrapValue: 0
   scrapCollectRange: 0
   scrapCollectPrompt: Presiona E para recoger scrap
-  mossValue: 5
+  mossValue: 1
   mossCollectRange: 2
   mossCollectPrompt: Presiona E para recoger moss
   collectSound: {fileID: 0}

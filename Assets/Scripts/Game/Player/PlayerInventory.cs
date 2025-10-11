@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour
@@ -12,14 +13,73 @@ public class PlayerInventory : MonoBehaviour
     
     private List<CollectibleData> carriedItems = new List<CollectibleData>(); //List of carried items
     private List<GameObject> visualItems = new List<GameObject>(); // List of instantiated visual items
+    private PlayerInput playerInput; // Reference to PlayerInput component
+    private WorldCollectible nearbyCollectible; // Reference to nearby collectible
 
 
 
 
     // ================================================= Methods =================================================
 
+    void Start()
+    {
+        playerInput = GetComponent<PlayerInput>(); // Get PlayerInput reference
+        
+        // Subscribe to the Crouch action event
+        if (playerInput != null)
+        {
+            var crouchAction = playerInput.actions["Crouch"];
+            if (crouchAction != null)
+            {
+                crouchAction.performed += OnCrouchPressed;
+            }
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from events to prevent memory leaks
+        if (playerInput != null)
+        {
+            var crouchAction = playerInput.actions["Crouch"];
+            if (crouchAction != null)
+            {
+                crouchAction.performed -= OnCrouchPressed;
+            }
+        }
+    }
+
+    void Update()
+    {
+        // Handle interact manually (reliable method)
+        if (playerInput != null && nearbyCollectible != null)
+        {
+            var interactAction = playerInput.actions["Interact"];
+            if (interactAction != null && interactAction.WasPressedThisFrame())
+            {
+                nearbyCollectible.CollectItem();
+            }
+        }
+    }
 
 
+
+    void OnCrouchPressed(InputAction.CallbackContext context)
+    {
+        Debug.Log($"[PlayerInventory] 🐅 OnCrouchPressed called! carriedItems.Count: {carriedItems.Count}");
+        
+        if (carriedItems.Count > 0)
+        {
+            DropItems();
+        }
+    }
+
+
+
+    public void SetNearbyCollectible(WorldCollectible collectible)
+    {
+        nearbyCollectible = collectible;
+    }
 
     public bool CanCarryItem(CollectibleData item) // Boolean to check if the player can carry the item
     {
@@ -99,6 +159,71 @@ public class PlayerInventory : MonoBehaviour
             value => carScrapSystem.AddScrap(value));
     }
 
+    public bool DepositPlantItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit plant/moss items
+    {
+        return DepositItemsByType(CollectibleData.ItemType.Moss, 
+            value => carPotionsSystem.AddPlants(value));
+    }
+
+    public bool DepositFuelItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit fuel items for potions
+    {
+        return DepositItemsByType(CollectibleData.ItemType.Diesel, 
+            value => carPotionsSystem.AddFuel(value));
+    }
+
+    public void DropItems() // Method to drop all carried items to the ground
+    {
+        Debug.Log($"[PlayerInventory] DropItems called! carriedItems.Count: {carriedItems.Count}");
+        if (carriedItems.Count == 0) 
+        {
+            Debug.Log("[PlayerInventory] No items to drop!");
+            return;
+        }
+
+        Vector3 dropPosition = transform.position + transform.forward * 1.5f; // Drop items in front of player
+        
+        for (int i = 0; i < carriedItems.Count; i++)
+        {
+            CollectibleData item = carriedItems[i];
+            
+            // Create world collectible object
+            if (item.itemPrefab != null)
+            {
+                Vector3 randomOffset = new Vector3(
+                    Random.Range(-0.8f, 0.8f), 
+                    0.1f, 
+                    Random.Range(-0.8f, 0.8f)
+                ); // Add some randomness to avoid stacking
+                
+                GameObject droppedItem = Instantiate(item.itemPrefab, dropPosition + randomOffset, Quaternion.identity);
+                
+                // Ensure the dropped item has a WorldCollectible component
+                WorldCollectible worldCollectible = droppedItem.GetComponent<WorldCollectible>();
+                if (worldCollectible == null)
+                {
+                    worldCollectible = droppedItem.AddComponent<WorldCollectible>();
+                }
+                worldCollectible.collectibleData = item;
+                
+                // Enable collider for pickup
+                Collider itemCollider = droppedItem.GetComponent<Collider>();
+                if (itemCollider) itemCollider.enabled = true;
+            }
+            
+            // Destroy visual item
+            if (i < visualItems.Count && visualItems[i] != null)
+            {
+                Destroy(visualItems[i]);
+            }
+        }
+        
+        // Clear inventory
+        carriedItems.Clear();
+        visualItems.Clear();
+        
+        Debug.Log($"[PlayerInventory] Items dropped to the ground!");
+    }
+
     void ClearInventory() // Method to clear the inventory (used on player death or similar) (NEED TO CHANGE THIS)
     {
         carriedItems.Clear();
@@ -116,5 +241,7 @@ public class PlayerInventory : MonoBehaviour
     {
         return carriedItems.Count > 0 ? carriedItems[0].type : CollectibleData.ItemType.Diesel;
     }
+
+
 
 }

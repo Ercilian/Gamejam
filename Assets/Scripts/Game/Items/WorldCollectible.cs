@@ -13,25 +13,12 @@ public class WorldCollectible : MonoBehaviour
     public bool showDebugLogs = true;
     
     private Vector3 startPosition;
-    private bool playerInRange = false;
     private PlayerInventory nearbyPlayer;
     private PlayerInput nearbyPlayerInput; // Referencia al Input System
 
     void Start()
     {
         startPosition = transform.position; // Save the initial position
-    }
-
-    void Update()
-    {
-        if (playerInRange && nearbyPlayer && nearbyPlayerInput) // Both player and input must be valid
-        {
-            var interactAction = nearbyPlayerInput.actions["Interact"]; // Ensure this matches your Input Action name
-            if (interactAction != null && interactAction.WasPressedThisFrame()) // Check if the action was pressed this frame
-            {
-                CollectItem();
-            }
-        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -51,13 +38,6 @@ public class WorldCollectible : MonoBehaviour
             return;
         }
         
-        var interactAction = playerInput.actions["Interact"]; // Check for Interact action
-        if (interactAction == null)
-        {
-            Debug.LogWarning($"[WorldCollectible] {other.gameObject.name} no tiene acción 'Interact' configurada!");
-            return;
-        }
-        
         if (!playerInventory.CanCarryItem(collectibleData)) // Check if the player can carry more items
         {
             if (showDebugLogs)
@@ -65,10 +45,12 @@ public class WorldCollectible : MonoBehaviour
             return;
         }
         
-        // If all checks pass, set the player in range to be able to carry the item
-        playerInRange = true;
+        // If all checks pass, set the player reference
         nearbyPlayer = playerInventory;
         nearbyPlayerInput = playerInput;
+        
+        // Add the collectible reference to the player's inventory for interaction
+        playerInventory.SetNearbyCollectible(this);
     }
 
     void OnTriggerExit(Collider other) // To disable the posibility to collect when leaving the area
@@ -79,13 +61,15 @@ public class WorldCollectible : MonoBehaviour
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if exiting object has PlayerInventory
         if (playerInventory && playerInventory == nearbyPlayer) // Only clear if it's the same player
         {
-            playerInRange = false;
             nearbyPlayer = null;
             nearbyPlayerInput = null;
+            
+            // Remove the collectible reference from the player's inventory
+            playerInventory.SetNearbyCollectible(null);
         }
     }
 
-    void CollectItem() // Method to collect the item
+    public void CollectItem() // Method to collect the item (now public)
     {       
         if (nearbyPlayer.CanCarryItem(collectibleData)) // Double-check if the player can carry the item
         {

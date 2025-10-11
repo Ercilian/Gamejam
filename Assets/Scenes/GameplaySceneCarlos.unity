@@ -1876,14 +1876,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c712ba37de636304caa8ace392e0186b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direccion: {x: 1, y: 0, z: 0}
-  velocidad: 0.1
-  velocidadAumentada: 0.1
-  velocidadLenta: 0.1
-  consumoPorSegundo: 1
-  consumirCombustible: 1
-  velocidadEmpuje: 0.3
-  velocidadEmpujeDos: 0.85
+  direction: {x: 1, y: 0, z: 0}
+  speed: 1
+  fastspeed: 2
+  slowspeed: 0.5
+  fuelConsumptionPerSecond: 1
+  isFuelConsumed: 1
+  pushSpeed: 0.5
+  pushSpeedTwo: 0.85
 --- !u!1001 &390199614115369119
 PrefabInstance:
   m_ObjectHideFlags: 0
