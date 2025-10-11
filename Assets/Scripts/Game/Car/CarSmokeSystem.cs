@@ -4,6 +4,7 @@ public class CarSmokeSystem : MonoBehaviour
 {
     [Header("Smoke System Configuration")]
     public ParticleSystem smokeParticleSystem;
+    public CarFuelSystem manualFuelSystemReference; // Referencia manual opcional
     
     [Header("Movement-Based Settings")]
     [Range(0f, 50f)]
@@ -34,6 +35,15 @@ public class CarSmokeSystem : MonoBehaviour
     [Range(0f, 1f)]
     public float expansionStartTime = 0.4f; // Cuándo empieza la expansión (0-1)
     
+    [Header("Low Fuel Effect")]
+    [Range(0f, 50f)]
+    public float lowFuelThreshold = 20f; // Porcentaje de combustible para activar el efecto
+    
+    [Header("Sputter Timing (Random Ranges)")]
+    public Vector2 sputterOnTimeRange = new Vector2(0.2f, 0.8f); // Rango tiempo encendido (min, max)
+    public Vector2 sputterOffTimeRange = new Vector2(0.4f, 2.0f); // Rango tiempo apagado (min, max)
+    public Vector2 lowFuelIntensityRange = new Vector2(0.2f, 0.6f); // Rango intensidad humo (min, max)
+    
     [Header("Lifetime Settings")]
     [Range(1f, 10f)]
     public float smokeLifetime = 3f; // Tiempo de vida del humo
@@ -50,6 +60,21 @@ public class CarSmokeSystem : MonoBehaviour
     private AnimationCurve windForceCurve;
     private AnimationCurve expansionCurve;
     
+    // Variables para el efecto de bajo combustible
+    private CarFuelSystem fuelSystem;
+    private bool isLowFuel = false;
+    private bool isSputtering = false;
+    private float sputterTimer = 0f;
+    private bool engineCurrentlyOn = true;
+    
+    // Valores aleatorios actuales para el efecto de bajo combustible
+    private float currentSputterOnTime = 0.3f;
+    private float currentSputterOffTime = 1.2f;
+    private float currentLowFuelIntensity = 0.4f;
+    
+    // Curvas para cuando está parado (sin viento horizontal)
+    private AnimationCurve stoppedHorizontalCurve;
+    
     void Start()
     {
         // Obtener referencia al MovCarro
@@ -61,6 +86,42 @@ public class CarSmokeSystem : MonoBehaviour
         {
             Debug.LogError("CarSmokeSystem: No se encontró MovCarro component!");
             return;
+        }
+        
+        // Obtener referencia al CarFuelSystem - primero comprobar referencia manual
+        fuelSystem = manualFuelSystemReference;
+        
+        // Si no hay referencia manual, buscar automáticamente
+        if (!fuelSystem)
+            fuelSystem = GetComponentInParent<CarFuelSystem>();
+        if (!fuelSystem)
+            fuelSystem = GetComponent<CarFuelSystem>();
+        if (!fuelSystem)
+            fuelSystem = GetComponentInChildren<CarFuelSystem>();
+        if (!fuelSystem && transform.parent != null)
+        {
+            // Buscar en hermanos (mismo nivel de jerarquía)
+            fuelSystem = transform.parent.GetComponentInChildren<CarFuelSystem>();
+        }
+        if (!fuelSystem)
+        {
+            // Buscar en toda la jerarquía del carro
+            Transform carRoot = transform;
+            while (carRoot.parent != null && carRoot.parent.name.ToLower().Contains("car"))
+            {
+                carRoot = carRoot.parent;
+            }
+            fuelSystem = carRoot.GetComponentInChildren<CarFuelSystem>();
+        }
+            
+        if (!fuelSystem)
+        {
+            Debug.LogWarning("🛢️ CarSmokeSystem: No se encontró CarFuelSystem - efecto de bajo combustible desactivado");
+            Debug.LogWarning($"🛢️ Buscando desde: {gameObject.name} (Parent: {(transform.parent ? transform.parent.name : "None")})");
+        }
+        else
+        {
+            Debug.Log($"🛢️ CarFuelSystem encontrado en: {fuelSystem.gameObject.name}");
         }
         
         // Si no se asignó manualmente, buscar el ParticleSystem
@@ -150,6 +211,11 @@ public class CarSmokeSystem : MonoBehaviour
         expansionCurve.AddKey(0.8f, finalSmokeSize);                   // Expansión principal al tamaño final
         expansionCurve.AddKey(1f, finalSmokeSize);                     // Mantiene el tamaño final
         
+        // Curva horizontal para coche parado: sin movimiento horizontal
+        stoppedHorizontalCurve = new AnimationCurve();
+        stoppedHorizontalCurve.AddKey(0f, 0f);    // Sin movimiento horizontal
+        stoppedHorizontalCurve.AddKey(1f, 0f);    // Sin movimiento horizontal
+        
         Debug.Log("🚂 Curvas creadas - Fuerza: " + initialUpwardForce + ", Expansión: " + initialSmokeSize + " → " + finalSmokeSize);
     }
     
@@ -223,7 +289,103 @@ public class CarSmokeSystem : MonoBehaviour
         if (!carMovement || !smokeParticleSystem)
             return;
             
-        UpdateSmokeBasedOnMovement();
+        // Actualizar estado de combustible y efecto de motor tosiendo
+        UpdateLowFuelEffect();
+        
+        // Actualizar humo solo si el motor está "encendido" o no hay efecto de bajo combustible
+        if (engineCurrentlyOn || !isSputtering)
+        {
+            UpdateSmokeBasedOnMovement();
+        }
+        else
+        {
+            // Motor "apagado" - reducir drasticamente o parar el humo
+            emission.rateOverTime = 0f;
+        }
+    }
+    
+    void UpdateLowFuelEffect()
+    {
+        if (!fuelSystem) return;
+        
+        // Verificar si el combustible está bajo
+        float fuelPercentage = fuelSystem.GetDieselPercentage() * 100f;
+        bool shouldBeLowFuel = fuelPercentage <= lowFuelThreshold && fuelPercentage > 0f;
+        
+        // Activar/desactivar efecto de bajo combustible
+        if (shouldBeLowFuel && !isLowFuel)
+        {
+            // Combustible se volvió bajo - activar efecto
+            isLowFuel = true;
+            isSputtering = true;
+            sputterTimer = 0f;
+            engineCurrentlyOn = true;
+            // Generar valores aleatorios iniciales
+            GenerateRandomSputterValues();
+            Debug.Log($"🛢️ COMBUSTIBLE BAJO ({fuelPercentage:F1}%) - Motor empezando a fallar aleatoriamente!");
+        }
+        else if (!shouldBeLowFuel && isLowFuel)
+        {
+            // Combustible ya no está bajo - desactivar efecto
+            isLowFuel = false;
+            isSputtering = false;
+            engineCurrentlyOn = true;
+            Debug.Log("🛢️ Combustible OK - Motor funcionando normalmente");
+        }
+        
+        // Si no hay combustible, motor completamente apagado
+        if (fuelPercentage <= 0f)
+        {
+            isLowFuel = false;
+            isSputtering = false;
+            engineCurrentlyOn = false;
+            return;
+        }
+        
+        // Gestionar el ciclo de encendido/apagado del motor
+        if (isSputtering)
+        {
+            sputterTimer += Time.deltaTime;
+            
+            if (engineCurrentlyOn)
+            {
+                // Motor encendido - verificar si debe apagarse
+                if (sputterTimer >= currentSputterOnTime)
+                {
+                    engineCurrentlyOn = false;
+                    sputterTimer = 0f;
+                    // Generar nuevo tiempo aleatorio para estar apagado
+                    GenerateRandomSputterValues();
+                    Debug.Log($"💨 Motor se apaga por {currentSputterOffTime:F2}s - humo se detiene");
+                }
+            }
+            else
+            {
+                // Motor apagado - verificar si debe encenderse
+                if (sputterTimer >= currentSputterOffTime)
+                {
+                    engineCurrentlyOn = true;
+                    sputterTimer = 0f;
+                    // Generar nuevo tiempo aleatorio para estar encendido
+                    GenerateRandomSputterValues();
+                    Debug.Log($"🔥 Motor se enciende por {currentSputterOnTime:F2}s - intensidad: {currentLowFuelIntensity:F2}");
+                }
+            }
+        }
+    }
+    
+    void GenerateRandomSputterValues()
+    {
+        // Generar valores aleatorios dentro de los rangos especificados
+        currentSputterOnTime = Random.Range(sputterOnTimeRange.x, sputterOnTimeRange.y);
+        currentSputterOffTime = Random.Range(sputterOffTimeRange.x, sputterOffTimeRange.y);
+        currentLowFuelIntensity = Random.Range(lowFuelIntensityRange.x, lowFuelIntensityRange.y);
+        
+        // Debug opcional
+        if (Time.frameCount % 300 == 0) // Solo ocasionalmente para no spam
+        {
+            Debug.Log($"🎲 Nuevos valores aleatorios - On: {currentSputterOnTime:F2}s, Off: {currentSputterOffTime:F2}s, Intensidad: {currentLowFuelIntensity:F2}");
+        }
     }
     
     void UpdateSmokeBasedOnMovement()
@@ -240,6 +402,12 @@ public class CarSmokeSystem : MonoBehaviour
             targetEmissionRate += currentSpeed * 5f; // Multiplicador para hacer más visible el efecto
         }
         
+        // Aplicar reducción si el combustible está bajo
+        if (isLowFuel && engineCurrentlyOn)
+        {
+            targetEmissionRate *= currentLowFuelIntensity; // Usar intensidad aleatoria actual
+        }
+        
         emission.rateOverTime = targetEmissionRate;
         
         // Actualizar las curvas de velocidad con efecto de tren de vapor
@@ -248,6 +416,12 @@ public class CarSmokeSystem : MonoBehaviour
     
     void UpdateSteamTrainEffect(bool isMoving, float currentSpeed)
     {
+        // Verificar que las curvas estén creadas
+        if (upwardForceCurve == null || stoppedHorizontalCurve == null)
+        {
+            CreateSteamTrainCurves();
+        }
+        
         // Configurar velocidad Y (vertical) - siempre tiene la fuerza inicial hacia arriba
         ParticleSystem.MinMaxCurve yVelocity = new ParticleSystem.MinMaxCurve();
         yVelocity.mode = ParticleSystemCurveMode.Curve;
@@ -255,13 +429,14 @@ public class CarSmokeSystem : MonoBehaviour
         yVelocity.curveMultiplier = initialUpwardForce;
         velocityOverLifetime.y = yVelocity;
         
-        // Configurar velocidad X y Z (horizontal) - efecto del viento
-        Vector3 effectiveWindDirection = windDirection;
-        float effectiveWindStrength = windStrength;
-        
+        // Configurar velocidad X y Z (horizontal) - depende del movimiento
         if (isMoving)
         {
-            // Calcular dirección opuesta al movimiento del carro para mayor realismo
+            // COCHE EN MOVIMIENTO: Humo va hacia atrás por el viento del movimiento
+            Vector3 effectiveWindDirection = windDirection;
+            float effectiveWindStrength = windStrength;
+            
+            // Calcular dirección opuesta al movimiento del carro
             Vector3 carVelocity = transform.parent.GetComponent<Rigidbody>()?.linearVelocity ?? Vector3.zero;
             if (carVelocity.magnitude > 0.1f)
             {
@@ -269,25 +444,42 @@ public class CarSmokeSystem : MonoBehaviour
                 effectiveWindDirection = (oppositeDirection * velocityInfluence + windDirection).normalized;
                 effectiveWindStrength = windStrength + currentSpeed * 0.5f;
             }
+            
+            // Aplicar viento horizontal cuando se mueve
+            ParticleSystem.MinMaxCurve xVelocity = new ParticleSystem.MinMaxCurve();
+            xVelocity.mode = ParticleSystemCurveMode.Curve;
+            xVelocity.curve = windForceCurve;
+            xVelocity.curveMultiplier = effectiveWindDirection.x * effectiveWindStrength;
+            velocityOverLifetime.x = xVelocity;
+            
+            ParticleSystem.MinMaxCurve zVelocity = new ParticleSystem.MinMaxCurve();
+            zVelocity.mode = ParticleSystemCurveMode.Curve;
+            zVelocity.curve = windForceCurve;
+            zVelocity.curveMultiplier = effectiveWindDirection.z * effectiveWindStrength;
+            velocityOverLifetime.z = zVelocity;
+        }
+        else
+        {
+            // COCHE PARADO: Humo sube verticalmente (sin viento horizontal)
+            // Usar curvas para mantener consistencia en el modo
+            ParticleSystem.MinMaxCurve xVelocity = new ParticleSystem.MinMaxCurve();
+            xVelocity.mode = ParticleSystemCurveMode.Curve;
+            xVelocity.curve = stoppedHorizontalCurve;
+            xVelocity.curveMultiplier = 0f; // Sin movimiento horizontal
+            velocityOverLifetime.x = xVelocity;
+            
+            ParticleSystem.MinMaxCurve zVelocity = new ParticleSystem.MinMaxCurve();
+            zVelocity.mode = ParticleSystemCurveMode.Curve;
+            zVelocity.curve = stoppedHorizontalCurve;
+            zVelocity.curveMultiplier = 0f; // Sin movimiento horizontal
+            velocityOverLifetime.z = zVelocity;
         }
         
-        // Configurar curvas para X y Z con efecto del viento
-        ParticleSystem.MinMaxCurve xVelocity = new ParticleSystem.MinMaxCurve();
-        xVelocity.mode = ParticleSystemCurveMode.Curve;
-        xVelocity.curve = windForceCurve;
-        xVelocity.curveMultiplier = effectiveWindDirection.x * effectiveWindStrength;
-        velocityOverLifetime.x = xVelocity;
-        
-        ParticleSystem.MinMaxCurve zVelocity = new ParticleSystem.MinMaxCurve();
-        zVelocity.mode = ParticleSystemCurveMode.Curve;
-        zVelocity.curve = windForceCurve;
-        zVelocity.curveMultiplier = effectiveWindDirection.z * effectiveWindStrength;
-        velocityOverLifetime.z = zVelocity;
-        
         // Debug para verificar que está funcionando
-        if (Time.frameCount % 60 == 0) // Solo cada 60 frames para no spam
+        if (Time.frameCount % 120 == 0) // Solo cada 120 frames para no spam
         {
-            Debug.Log($"🚂 Vapor actualizado - Fuerza arriba: {initialUpwardForce}, Viento: {effectiveWindStrength}, Movimiento: {isMoving}");
+            string movement = isMoving ? "MOVIMIENTO" : "PARADO";
+            Debug.Log($"🚂 Humo actualizado - {movement} - Fuerza arriba: {initialUpwardForce}");
         }
     }
     
@@ -311,100 +503,16 @@ public class CarSmokeSystem : MonoBehaviour
             emission.rateOverTime = baseEmissionRate * intensity;
         }
     }
-    
-    // Método para probar el efecto de vapor en el editor
-    [ContextMenu("Test Steam Effect")]
-    public void TestSteamEffect()
+
+    // Método público para otros scripts
+    public bool IsEngineRunning()
     {
-        if (!smokeParticleSystem)
-        {
-            Debug.LogError("🚂 No hay ParticleSystem asignado!");
-            return;
-        }
-        
-        if (!Application.isPlaying)
-        {
-            Debug.LogWarning("🚂 El juego debe estar ejecutándose para probar el efecto");
-            return;
-        }
-        
-        Debug.Log("🚂 Probando efecto de vapor...");
-        
-        // Forzar valores altos para prueba
-        initialSmokeSize = 3f;
-        baseEmissionRate = 40f;
-        movingEmissionRate = 70f;
-        
-        // Reinicializar completamente
-        SetupParticleSystem();
-        
-        // Forzar emisión alta para ver el efecto
-        if (emission.enabled)
-        {
-            emission.rateOverTime = movingEmissionRate;
-            Debug.Log("🚂 PRUEBA - Tamaño: " + initialSmokeSize + ", Emisión: " + movingEmissionRate);
-        }
+        return engineCurrentlyOn;
     }
     
-    // Método para ajustar parámetros en tiempo real
-    public void UpdateSteamParameters(float upwardForce, float windStrength, float upwardDuration)
+    public bool IsLowOnFuel()
     {
-        initialUpwardForce = upwardForce;
-        this.windStrength = windStrength;
-        upwardForceDuration = upwardDuration;
-        
-        if (Application.isPlaying)
-        {
-            CreateSteamTrainCurves();
-            SetupVelocityOverLifetime();
-        }
-        
-        Debug.Log($"🚂 Parámetros actualizados - Fuerza: {upwardForce}, Viento: {windStrength}, Duración: {upwardDuration}");
-    }
-    
-    // Método para ajustar la intensidad visual rápidamente
-    [ContextMenu("Increase Smoke Thickness")]
-    public void IncreaseSmokeThickness()
-    {
-        initialSmokeSize = Mathf.Min(initialSmokeSize + 0.2f, 3f);
-        if (Application.isPlaying)
-        {
-            mainModule.startSize = initialSmokeSize;
-            CreateSteamTrainCurves();
-            SetupSmokeExpansion();
-        }
-        Debug.Log($"🌪️ Grosor aumentado a: {initialSmokeSize}");
-    }
-    
-    [ContextMenu("Decrease Smoke Thickness")]
-    public void DecreaseSmokeThickness()
-    {
-        initialSmokeSize = Mathf.Max(initialSmokeSize - 0.2f, 0.5f);
-        if (Application.isPlaying)
-        {
-            mainModule.startSize = initialSmokeSize;
-            CreateSteamTrainCurves();
-            SetupSmokeExpansion();
-        }
-        Debug.Log($"🌪️ Grosor reducido a: {initialSmokeSize}");
-    }
-    
-    [ContextMenu("Make Smoke VERY Thick")]
-    public void MakeSmokeVeryThick()
-    {
-        initialSmokeSize = 3.5f;
-        finalSmokeSize = 8f;
-        baseEmissionRate = 40f;
-        movingEmissionRate = 70f;
-        
-        if (Application.isPlaying)
-        {
-            mainModule.startSize = initialSmokeSize;
-            emission.rateOverTime = baseEmissionRate;
-            CreateSteamTrainCurves();
-            SetupSmokeExpansion();
-        }
-        Debug.Log($"🔥 HUMO MUY GRUESO - Tamaño: {initialSmokeSize}, Emisión: {baseEmissionRate}");
+        return isLowFuel;
     }
     
     void OnValidate()

@@ -4969,17 +4969,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarSmokeSystem
   smokeParticleSystem: {fileID: 185626517}
-  baseEmissionRate: 50
+  manualFuelSystemReference: {fileID: 1316442591}
+  baseEmissionRate: 3
   movingEmissionRate: 50
   velocityInfluence: 3
   initialUpwardForce: 8
-  upwardForceDuration: 0.3
+  upwardForceDuration: 0.7
   windDirection: {x: -1, y: 0, z: 0}
   windStrength: 8
   windStartTime: 0.2
-  initialSmokeSize: 3
-  finalSmokeSize: 5
+  initialSmokeSize: 1
+  finalSmokeSize: 2.5
   expansionStartTime: 0.2
+  lowFuelThreshold: 10
+  sputterOnTimeRange: {x: 1, y: 3}
+  sputterOffTimeRange: {x: 0.2, y: 0.8}
+  lowFuelIntensityRange: {x: 0.2, y: 0.6}
   smokeLifetime: 4
 --- !u!1 &330585543
 GameObject:
@@ -5652,7 +5657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f613465d97d982498eba1f4d9f9d5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarFuelSystem
-  currentDiesel: 999
+  currentDiesel: 50
   maxDiesel: 100
   depositPoint: {fileID: 1316442590}
   depositPrompt: Presiona F para depositar madera
@@ -6271,12 +6276,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 1, y: 0, z: 0}
   speed: 1
-  fastspeed: 2
-  slowspeed: 0.5
+  fastspeed: 1.5
+  slowspeed: 0.8
   fuelConsumptionPerSecond: 1
   isFuelConsumed: 1
   pushSpeed: 0.5
-  pushSpeedTwo: 0.85
+  pushSpeedTwo: 0.8
 --- !u!1 &2139318379
 GameObject:
   m_ObjectHideFlags: 0
