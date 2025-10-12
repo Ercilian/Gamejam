@@ -342,7 +342,7 @@ MonoBehaviour:
   boomerangSpeed: 12
   boomerangPauseTime: 1
   boomerangAimMode: 1
-  boomerangDirection: {x: -1, y: 0, z: 0}
+  boomerangDirection: {x: 0, y: 0, z: 0}
   boomerangTargetWorld: {x: 0, y: 0, z: 0}
   comboHitboxes:
   - offset: {x: 0.12, y: 0.56, z: 0}

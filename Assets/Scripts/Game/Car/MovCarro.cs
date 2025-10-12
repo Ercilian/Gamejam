@@ -13,6 +13,16 @@ public class MovCarro : MonoBehaviour
     [Header("Speed Transition")]
     public float speedTransitionRate = 2f; // Velocidad de transición entre velocidades
     
+    [Header("Path Following System (Future Implementation)")]
+    [Tooltip("Enable this when you have your map ready with waypoints")]
+    public bool usePathFollowing = false;
+    [Tooltip("Drag GameObjects here to mark the path (3-5 key points in curves)")]
+    public Transform[] pathPoints;
+    [Tooltip("Distance to consider a waypoint 'reached' (2-4 recommended)")]
+    public float reachDistance = 3f;
+    [Tooltip("How smooth the curves are (1=sharp, 3=very smooth)")]
+    public float pathSmoothness = 2f;
+    
     [Header("Combustible Consumption")]
     public float fuelConsumptionPerSecond = 1f;
     public bool isFuelConsumed = true;
@@ -21,12 +31,20 @@ public class MovCarro : MonoBehaviour
     public float pushSpeed = 0.5f;
     public float pushSpeedTwo = 0.85f;
     
+    [Header("Rotation Settings")]
+    [Tooltip("How fast the car rotates to face movement direction")]
+    public float rotationSpeed = 5f;
+    
     private CarFuelSystem fuelSystem;
     private bool ismoving = false;
     private Coroutine consumeCoroutine;
     private bool isPushing = false;
     private int playersPushingCount = 0;
     private float currentActualSpeed = 0f; // Velocidad actual interpolada
+
+    // ===== PATH FOLLOWING VARIABLES (FOR FUTURE USE) =====
+    private int currentPathIndex = 0;
+    private Vector3 currentTarget;
 
     // Getters públicos para otros scripts
     public bool IsMoving() => ismoving;
@@ -54,11 +72,17 @@ public class MovCarro : MonoBehaviour
         {
             consumeCoroutine = StartCoroutine(ConsumeFuel());
         }
+        
+        // ===== PATH FOLLOWING INITIALIZATION (FOR FUTURE USE) =====
+        InitializePathFollowing();
     }
 
     void Update()
     {
         float targetSpeed = 0f; // Velocidad objetivo
+        
+        // ===== GET MOVEMENT DIRECTION (DYNAMIC BASED ON PATH/FIXED) =====
+        Vector3 moveDirection = GetMovementDirection();
         
         if (!fuelSystem || !fuelSystem.HasFuel()) // If no fuel, stop moving normally
         {
@@ -120,12 +144,87 @@ public class MovCarro : MonoBehaviour
         // Interpolar suavemente hacia la velocidad objetivo
         currentActualSpeed = Mathf.MoveTowards(currentActualSpeed, targetSpeed, speedTransitionRate * Time.deltaTime);
         
-        // Mover el coche con la velocidad interpolada
+        // Mover el coche con la velocidad interpolada Y dirección dinámica
         if (currentActualSpeed > 0.01f) // Solo mover si hay velocidad significativa
         {
-            transform.Translate(direction.normalized * currentActualSpeed * Time.deltaTime, Space.World);
+            // ===== ROTATE CAR TO FACE MOVEMENT DIRECTION =====
+            RotateCarTowardsDirection(moveDirection);
+            
+            transform.Translate(moveDirection * currentActualSpeed * Time.deltaTime, Space.World);
         }
     }
+
+    // ===== PATH FOLLOWING METHODS (READY FOR FUTURE USE) =====
+    
+    private void InitializePathFollowing()
+    {
+        if (usePathFollowing && pathPoints != null && pathPoints.Length > 0)
+        {
+            currentTarget = pathPoints[0].position;
+            Debug.Log("[MovCarro] Path Following initialized with " + pathPoints.Length + " waypoints.");
+        }
+        else
+        {
+            currentTarget = Vector3.zero; // Asegurar que esté en cero
+            Debug.Log("[MovCarro] Path Following NOT initialized - using fixed direction");
+        }
+    }
+    
+    private Vector3 GetMovementDirection()
+    {
+        // If path following is disabled, use fixed direction
+        if (!usePathFollowing)
+        {
+            Debug.Log("[MovCarro] Using fixed direction: " + direction.normalized);
+            return direction.normalized;
+        }
+        
+        // Path following is enabled - check if we have waypoints
+        if (pathPoints == null || pathPoints.Length == 0)
+        {
+            Debug.Log("[MovCarro] Path following enabled but no waypoints - using fixed direction");
+            return direction.normalized;
+        }
+        
+        // Update waypoint progress
+        UpdateWaypointProgress();
+        
+        // Calculate smooth direction towards current target
+        return CalculateSmoothDirection();
+    }
+    
+    private void UpdateWaypointProgress()
+    {
+        if (currentPathIndex < pathPoints.Length)
+        {
+            float distanceToTarget = Vector3.Distance(transform.position, currentTarget);
+            
+            if (distanceToTarget <= reachDistance)
+            {
+                currentPathIndex++;
+                if (currentPathIndex < pathPoints.Length)
+                {
+                    currentTarget = pathPoints[currentPathIndex].position;
+                    Debug.Log($"[MovCarro] Reached waypoint {currentPathIndex - 1}, moving to waypoint {currentPathIndex}");
+                }
+                else
+                {
+                    Debug.Log("[MovCarro] Reached final waypoint!");
+                }
+            }
+        }
+    }
+    
+    private Vector3 CalculateSmoothDirection()
+    {
+        // Calculate direction towards current target
+        Vector3 targetDirection = (currentTarget - transform.position).normalized;
+                
+        // Usar directamente la dirección (sin suavizado por ahora para debug)
+        return targetDirection;
+    }
+
+    // ===== ORIGINAL METHODS (UNCHANGED) =====
 
     private float GetPushSpeed(int numPlayers) // Method to determine push speed based on number of players
     {
@@ -190,4 +289,66 @@ public class MovCarro : MonoBehaviour
         }
     }
 
+    // ===== DEBUG/UTILITY METHODS (FOR FUTURE USE) =====
+    
+    public Vector3 GetCurrentTarget()
+    {
+        return currentTarget;
+    }
+    
+    public int GetCurrentWaypointIndex()
+    {
+        return currentPathIndex;
+    }
+    
+    void OnDrawGizmos()
+    {
+        // Only draw gizmos if path following is enabled
+        if (!usePathFollowing || pathPoints == null) return;
+        
+        // Draw waypoints and connections
+        Gizmos.color = Color.cyan;
+        for (int i = 0; i < pathPoints.Length; i++)
+        {
+            if (pathPoints[i] != null)
+            {
+                // Draw waypoint sphere
+                Gizmos.DrawWireSphere(pathPoints[i].position, reachDistance);
+                
+                // Draw line to next waypoint
+                if (i > 0 && pathPoints[i-1] != null)
+                {
+                    Gizmos.DrawLine(pathPoints[i-1].position, pathPoints[i].position);
+                }
+            }
+        }
+        
+        // Highlight current target in play mode
+        if (Application.isPlaying && usePathFollowing)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(currentTarget, reachDistance * 1.2f);
+            
+            // Draw line from car to current target
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, currentTarget);
+        }
+    }
+
+    // ===== NEW METHOD: CAR ROTATION =====
+    private void RotateCarTowardsDirection(Vector3 moveDirection)
+    {
+        if (moveDirection != Vector3.zero)
+        {
+            // Calcular la rotación objetivo
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            
+            // COMPENSAR los 90 grados de rotación inicial
+            targetRotation *= Quaternion.Euler(0, -90, 0); // Ajusta según tu carro
+            
+            // Interpolar suavemente hacia la rotación objetivo
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 
+                rotationSpeed * Time.deltaTime);
+        }
+    }
 }

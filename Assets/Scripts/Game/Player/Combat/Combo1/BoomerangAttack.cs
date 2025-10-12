@@ -86,15 +86,25 @@ namespace Game.Combat
             switch (aimMode)
             {
                 case AimMode.DirectionVector:
-                    dir = directionWorld; break;
+                    dir = directionWorld; 
+                    break;
                 case AimMode.WorldTarget:
-                    dir = targetWorld - from; break;
+                    dir = targetWorld - from; 
+                    break;
                 case AimMode.Forward:
                 default:
-                    dir = origin.forward; break;
+                    // COMPENSAR la rotación del personaje
+                    dir = origin.forward;
+                    // Si el personaje está rotado +90° en Y, rotar la dirección -90°
+                    dir = Quaternion.Euler(0, -90, 0) * dir;
+                    break;
             }
             dir.y = 0f;
-            if (dir.sqrMagnitude < 0.0001f) dir = origin.forward;
+            if (dir.sqrMagnitude < 0.0001f) 
+            {
+                // Fallback también compensado
+                dir = Quaternion.Euler(0, -90, 0) * origin.forward;
+            }
             return dir.normalized;
         }
 

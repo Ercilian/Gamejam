@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-public class CarPotionsSystem : MonoBehaviour
+public class CarPotionsSystem : MonoBehaviour, ISwappable
 {
     [Header("Materials Required")]
     public int plantsRequired = 4;
@@ -34,16 +34,17 @@ public class CarPotionsSystem : MonoBehaviour
     private bool playerInFuelRange = false;
     private PlayerInventory nearbyPlayerInventory;
     private PlayerInput nearbyPlayerInput;
-
-
-
+    private bool isSwapping = false;
 
     // ================================================= Methods =================================================
 
     void Update()
     {
-        HandlePlayerInput();
-        CheckForAutoBrewing();
+        if (!isSwapping)
+        {
+            HandlePlayerInput();
+            CheckForAutoBrewing();
+        }
     }
 
     void HandlePlayerInput()
@@ -92,6 +93,8 @@ public class CarPotionsSystem : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (isSwapping) return;
+        
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory == null || !playerInventory.HasItems()) return;
 
@@ -134,6 +137,18 @@ public class CarPotionsSystem : MonoBehaviour
         playerInFuelRange = false;
         nearbyPlayerInventory = null;
         nearbyPlayerInput = null;
+    }
+
+    // ============== ISwappable Implementation ==============
+    public void OnSwapStarted()
+    {
+        isSwapping = true;
+        ClearPlayerInteraction();
+    }
+
+    public void OnSwapCompleted()
+    {
+        isSwapping = false;
     }
 
     public void AddPlants(int amount)
@@ -194,11 +209,9 @@ public class CarPotionsSystem : MonoBehaviour
     public bool IsBrewing() => isBrewing;
     public float GetBrewingProgress()
     {
-        // This would need to be implemented with a timer if you want real-time progress
         return isBrewing ? 0.5f : 0f; // Placeholder
     }
 
     // Events
     public System.Action<int> OnPotionBrewed;
-
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
-public class CarScrapSystem : MonoBehaviour
+public class CarScrapSystem : MonoBehaviour, ISwappable
 {
     [Header("Scrap)")]
     public int currentScrap = 0;
@@ -18,18 +18,13 @@ public class CarScrapSystem : MonoBehaviour
     private bool playerInScrapRange = false;
     private PlayerInventory nearbyPlayerInventory;
     private PlayerInput nearbyPlayerInput;
-
-
-    
+    private bool isSwapping = false;
 
     // ================================================= Methods =================================================
 
-
-
-
     void Update()
     {
-        if (playerInScrapRange && nearbyPlayerInventory && nearbyPlayerInput)
+        if (playerInScrapRange && nearbyPlayerInventory && nearbyPlayerInput && !isSwapping)
         {
             var attackAction = nearbyPlayerInput.actions["Attack"];
             if (attackAction != null && attackAction.WasPressedThisFrame())
@@ -39,17 +34,16 @@ public class CarScrapSystem : MonoBehaviour
                     if (showDebugLogs)
                         Debug.Log($"[CarScrapSystem] ✅ Scrap depositado! Total: {currentScrap}");
                     
-                    playerInScrapRange = false;
-                    nearbyPlayerInventory = null;
-                    nearbyPlayerInput = null;
+                    ClearPlayerInteraction();
                 }
             }
         }
-
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if (isSwapping) return;
+        
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory == null) return;
         if (playerInventory.HasItems() && playerInventory.GetFirstItemType() == CollectibleData.ItemType.Scrap)
@@ -70,10 +64,27 @@ public class CarScrapSystem : MonoBehaviour
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory != null && playerInventory == nearbyPlayerInventory)
         {
-            playerInScrapRange = false;
-            nearbyPlayerInventory = null;
-            nearbyPlayerInput = null;
+            ClearPlayerInteraction();
         }
+    }
+
+    void ClearPlayerInteraction()
+    {
+        playerInScrapRange = false;
+        nearbyPlayerInventory = null;
+        nearbyPlayerInput = null;
+    }
+
+    // ============== ISwappable Implementation ==============
+    public void OnSwapStarted()
+    {
+        isSwapping = true;
+        ClearPlayerInteraction();
+    }
+
+    public void OnSwapCompleted()
+    {
+        isSwapping = false;
     }
 
     public void AddScrap(int amount)
