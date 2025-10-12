@@ -10,6 +10,9 @@ public class MovCarro : MonoBehaviour
     public float fastspeed = 2f;
     public float slowspeed = 0.5f;
     
+    [Header("Speed Transition")]
+    public float speedTransitionRate = 2f; // Velocidad de transición entre velocidades
+    
     [Header("Combustible Consumption")]
     public float fuelConsumptionPerSecond = 1f;
     public bool isFuelConsumed = true;
@@ -23,10 +26,11 @@ public class MovCarro : MonoBehaviour
     private Coroutine consumeCoroutine;
     private bool isPushing = false;
     private int playersPushingCount = 0;
+    private float currentActualSpeed = 0f; // Velocidad actual interpolada
 
     // Getters públicos para otros scripts
     public bool IsMoving() => ismoving;
-    public float GetCurrentSpeedPublic() => GetCurrentSpeed();
+    public float GetCurrentSpeedPublic() => currentActualSpeed; // Devuelve la velocidad interpolada actual
     public int GetPlayersPushingCount() => playersPushingCount;
 
 
@@ -54,9 +58,12 @@ public class MovCarro : MonoBehaviour
 
     void Update()
     {
+        float targetSpeed = 0f; // Velocidad objetivo
+        
         if (!fuelSystem || !fuelSystem.HasFuel()) // If no fuel, stop moving normally
         {
             ismoving = false;
+            targetSpeed = 0f; // Objetivo es detenerse
             var playersPushing = fuelSystem.GetPlayersPushing(); // Get players in push zone
             playersPushingCount = 0; // Reset counter
 
@@ -85,30 +92,39 @@ public class MovCarro : MonoBehaviour
                         Debug.Log($"[MovCarro] El coche está siendo empujado por {playersPushingCount} jugador(es).");
                         isPushing = true;
                     }
-                    float currentPushSpeed = GetPushSpeed(playersPushingCount); // Get push speed based on number of players
-                    transform.Translate(direction.normalized * currentPushSpeed * Time.deltaTime, Space.World);
+                    targetSpeed = GetPushSpeed(playersPushingCount); // Objetivo es velocidad de empuje
                 }
             }
             else
             {
                 playersPushingCount = 0;
             }
-            return;
         }
-        // Move normally if there is fuel
-        ismoving = true;  
-        isPushing = false;
-        playersPushingCount = 0;
-
-        // Reactive control for all players when there is fuel
-        var playersPushingWithFuel = fuelSystem.GetPlayersPushing();
-        foreach (var player in playersPushingWithFuel)
+        else
         {
-            player?.GetComponent<PlayerInputEmpuje>()?.ActivateControl();
+            // Move normally if there is fuel
+            ismoving = true;  
+            isPushing = false;
+            playersPushingCount = 0;
+
+            // Reactive control for all players when there is fuel
+            var playersPushingWithFuel = fuelSystem.GetPlayersPushing();
+            foreach (var player in playersPushingWithFuel)
+            {
+                player?.GetComponent<PlayerInputEmpuje>()?.ActivateControl();
+            }
+            
+            targetSpeed = GetCurrentSpeed(); // Objetivo es velocidad basada en combustible
         }
         
-        float currentSpeed = GetCurrentSpeed();
-        transform.Translate(direction.normalized * currentSpeed * Time.deltaTime, Space.World);
+        // Interpolar suavemente hacia la velocidad objetivo
+        currentActualSpeed = Mathf.MoveTowards(currentActualSpeed, targetSpeed, speedTransitionRate * Time.deltaTime);
+        
+        // Mover el coche con la velocidad interpolada
+        if (currentActualSpeed > 0.01f) // Solo mover si hay velocidad significativa
+        {
+            transform.Translate(direction.normalized * currentActualSpeed * Time.deltaTime, Space.World);
+        }
     }
 
     private float GetPushSpeed(int numPlayers) // Method to determine push speed based on number of players

@@ -36,7 +36,7 @@ public class CarSmokeSystem : MonoBehaviour
     public float expansionStartTime = 0.4f; // Cuándo empieza la expansión (0-1)
     
     [Header("Low Fuel Effect")]
-    [Range(0f, 50f)]
+    [Range(0f, 100f)]
     public float lowFuelThreshold = 20f; // Porcentaje de combustible para activar el efecto
     
     [Header("Sputter Timing (Random Ranges)")]
@@ -305,7 +305,6 @@ public class CarSmokeSystem : MonoBehaviour
             engineCurrentlyOn = true;
             // Generar valores aleatorios iniciales
             GenerateRandomSputterValues();
-            Debug.Log($"🛢️ COMBUSTIBLE BAJO ({fuelPercentage:F1}%) - Motor empezando a fallar aleatoriamente!");
         }
         else if (!shouldBeLowFuel && isLowFuel)
         {
@@ -313,7 +312,6 @@ public class CarSmokeSystem : MonoBehaviour
             isLowFuel = false;
             isSputtering = false;
             engineCurrentlyOn = true;
-            Debug.Log("🛢️ Combustible OK - Motor funcionando normalmente");
         }
         
         // Si no hay combustible, motor completamente apagado
@@ -339,7 +337,6 @@ public class CarSmokeSystem : MonoBehaviour
                     sputterTimer = 0f;
                     // Generar nuevo tiempo aleatorio para estar apagado
                     GenerateRandomSputterValues();
-                    Debug.Log($"💨 Motor se apaga por {currentSputterOffTime:F2}s - humo se detiene");
                 }
             }
             else
@@ -351,7 +348,6 @@ public class CarSmokeSystem : MonoBehaviour
                     sputterTimer = 0f;
                     // Generar nuevo tiempo aleatorio para estar encendido
                     GenerateRandomSputterValues();
-                    Debug.Log($"🔥 Motor se enciende por {currentSputterOnTime:F2}s - intensidad: {currentLowFuelIntensity:F2}");
                 }
             }
         }
