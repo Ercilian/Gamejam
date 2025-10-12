@@ -26,8 +26,6 @@ public class WorldCollectible : MonoBehaviour
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if entering object has PlayerInventory
         if (!playerInventory)
         {
-            if (showDebugLogs)
-                Debug.Log($"[WorldCollectible] {other.gameObject.name} no es un jugador (sin PlayerInventory)");
             return;
         }
         

@@ -113,16 +113,6 @@ public class CarSmokeSystem : MonoBehaviour
             }
             fuelSystem = carRoot.GetComponentInChildren<CarFuelSystem>();
         }
-            
-        if (!fuelSystem)
-        {
-            Debug.LogWarning("🛢️ CarSmokeSystem: No se encontró CarFuelSystem - efecto de bajo combustible desactivado");
-            Debug.LogWarning($"🛢️ Buscando desde: {gameObject.name} (Parent: {(transform.parent ? transform.parent.name : "None")})");
-        }
-        else
-        {
-            Debug.Log($"🛢️ CarFuelSystem encontrado en: {fuelSystem.gameObject.name}");
-        }
         
         // Si no se asignó manualmente, buscar el ParticleSystem
         if (!smokeParticleSystem)
@@ -185,7 +175,6 @@ public class CarSmokeSystem : MonoBehaviour
         // Configurar expansión del humo
         SetupSmokeExpansion();
         
-        Debug.Log("🚂 ParticleSystem configurado correctamente");
     }
     
     void CreateSteamTrainCurves()
@@ -215,8 +204,6 @@ public class CarSmokeSystem : MonoBehaviour
         stoppedHorizontalCurve = new AnimationCurve();
         stoppedHorizontalCurve.AddKey(0f, 0f);    // Sin movimiento horizontal
         stoppedHorizontalCurve.AddKey(1f, 0f);    // Sin movimiento horizontal
-        
-        Debug.Log("🚂 Curvas creadas - Fuerza: " + initialUpwardForce + ", Expansión: " + initialSmokeSize + " → " + finalSmokeSize);
     }
     
     void SetupVelocityOverLifetime()
@@ -240,9 +227,7 @@ public class CarSmokeSystem : MonoBehaviour
             yVelocity.mode = ParticleSystemCurveMode.Curve;
             yVelocity.curve = upwardForceCurve;
             yVelocity.curveMultiplier = initialUpwardForce;
-            velocityOverLifetime.y = yVelocity;
-            
-            Debug.Log("🚂 Configuración inicial completa - Velocidad Y configurada con curva");
+            velocityOverLifetime.y = yVelocity;            
         }
         catch (System.Exception e)
         {
@@ -275,8 +260,6 @@ public class CarSmokeSystem : MonoBehaviour
             
             // Aplicar la curva al tamaño
             sizeOverLifetime.size = sizeCurve;
-            
-            Debug.Log("🌪️ Expansión ABSOLUTA configurada - Inicial: " + initialSmokeSize + ", Final: " + finalSmokeSize);
         }
         catch (System.Exception e)
         {
@@ -473,13 +456,6 @@ public class CarSmokeSystem : MonoBehaviour
             zVelocity.curve = stoppedHorizontalCurve;
             zVelocity.curveMultiplier = 0f; // Sin movimiento horizontal
             velocityOverLifetime.z = zVelocity;
-        }
-        
-        // Debug para verificar que está funcionando
-        if (Time.frameCount % 120 == 0) // Solo cada 120 frames para no spam
-        {
-            string movement = isMoving ? "MOVIMIENTO" : "PARADO";
-            Debug.Log($"🚂 Humo actualizado - {movement} - Fuerza arriba: {initialUpwardForce}");
         }
     }
     
