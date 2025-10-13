@@ -415,13 +415,43 @@ public class CarSmokeSystem : MonoBehaviour
             Vector3 effectiveWindDirection = windDirection;
             float effectiveWindStrength = windStrength;
             
-            // Calcular dirección opuesta al movimiento del carro
-            Vector3 carVelocity = transform.parent.GetComponent<Rigidbody>()?.linearVelocity ?? Vector3.zero;
-            if (carVelocity.magnitude > 0.1f)
+            // ===== BUSCAR EL RIGIDBODY DEL CARRO CORRECTAMENTE =====
+            Rigidbody carRigidbody = null;
+            
+            // Opción 1: Buscar en el MovCarro que ya tenemos
+            if (carMovement != null)
             {
-                Vector3 oppositeDirection = -carVelocity.normalized;
+                carRigidbody = carMovement.GetComponent<Rigidbody>();
+            }
+            
+            // Opción 2: Si no se encuentra, buscar en los padres
+            if (carRigidbody == null)
+            {
+                Transform current = transform;
+                while (current != null && carRigidbody == null)
+                {
+                    carRigidbody = current.GetComponent<Rigidbody>();
+                    current = current.parent;
+                }
+            }
+            
+            // Calcular dirección opuesta al movimiento del carro
+            if (carRigidbody != null && carRigidbody.linearVelocity.magnitude > 0.1f)
+            {
+                Vector3 oppositeDirection = -carRigidbody.linearVelocity.normalized;
                 effectiveWindDirection = (oppositeDirection * velocityInfluence + windDirection).normalized;
                 effectiveWindStrength = windStrength + currentSpeed * 0.5f;
+            }
+            else
+            {
+                // Si no hay Rigidbody o no se mueve, usar dirección del transform del carro
+                if (carMovement != null)
+                {
+                    Vector3 carForward = carMovement.transform.forward;
+                    Vector3 oppositeDirection = -carForward;
+                    effectiveWindDirection = (oppositeDirection * velocityInfluence + windDirection).normalized;
+                    effectiveWindStrength = windStrength + currentSpeed * 0.5f;
+                }
             }
             
             // Aplicar viento horizontal cuando se mueve
