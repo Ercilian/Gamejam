@@ -14,7 +14,7 @@ public class DifficultyManager : MonoBehaviour
         public float triggerProgress = 0.25f; // 0 a 1 (25% = 0.25)
     }
     
-    public DifficultyLevel[] difficultyLevels = {
+        public DifficultyLevel[] difficultyLevels = {
         new DifficultyLevel { name = "Easy", triggerProgress = 0f },
         new DifficultyLevel { name = "Medium", triggerProgress = 0.25f },
         new DifficultyLevel { name = "Hard", triggerProgress = 0.6f },
@@ -24,12 +24,14 @@ public class DifficultyManager : MonoBehaviour
     [Header("Runtime Info")]
     [SerializeField] private int currentDifficultyIndex = 0;
     [SerializeField] private string currentDifficultyName = "Easy";
+    public EnemySpawner enemyspawner;
     
     // Events
     public static event Action<DifficultyLevel, int> OnDifficultyChanged;
 
     void Start()
     {
+        enemyspawner.StartSpawning();
         if (difficultyBar == null)
             difficultyBar = FindFirstObjectByType<DifficultyBarScroll>();
             

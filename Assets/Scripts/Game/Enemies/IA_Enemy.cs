@@ -64,7 +64,6 @@ public class IA_Enemy : MonoBehaviour
             if (camionObj != null)
             {
                 camion = camionObj.transform;
-                if (mostrarDebug) Debug.Log($"[{name}] Camión encontrado por tag '{camionTag}': {camion.name}");
             }
             else if (mostrarDebug)
             {
