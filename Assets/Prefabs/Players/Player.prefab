@@ -357,7 +357,12 @@ MonoBehaviour:
     sectorAngleDeg: 90
     sectorHeight: 1.5
     sectorGizmoSteps: 10
-    damageOverride: 0
+    damageOverride: 10
+    damageMultiplier: 1
+    damageType: 0
+    effects: -1
+    knockbackForce: 5
+    knockbackDirection: {x: 0, y: 0, z: 0}
   - offset: {x: 0.13, y: 0.56, z: 0}
     euler: {x: 0, y: -90, z: 0}
     shape: 3
@@ -370,7 +375,12 @@ MonoBehaviour:
     sectorAngleDeg: 90
     sectorHeight: 1.5
     sectorGizmoSteps: 10
-    damageOverride: 0
+    damageOverride: 20
+    damageMultiplier: 1
+    damageType: 0
+    effects: 1
+    knockbackForce: 5
+    knockbackDirection: {x: 0, y: 0, z: 0}
   - offset: {x: -0.32, y: 0.45, z: 0}
     euler: {x: 0, y: 0, z: 0}
     shape: 0
@@ -383,8 +393,13 @@ MonoBehaviour:
     sectorAngleDeg: 0
     sectorHeight: 0
     sectorGizmoSteps: 0
-    damageOverride: 0
-  gizmoPreviewStep: 2
+    damageOverride: 30
+    damageMultiplier: 1
+    damageType: 0
+    effects: 1
+    knockbackForce: 5
+    knockbackDirection: {x: 0, y: 0, z: 0}
+  gizmoPreviewStep: 0
   previewBoomerangGizmos: 1
   showGizmosInGameView: 1
   showRuntimeBoomerangHitbox: 1

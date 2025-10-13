@@ -122,9 +122,10 @@ public class MeleeBase : MonoBehaviour
 
         // Ataque instantáneo
         var hits = HitboxDetector.Detect(cfg, transform, enemyLayer);
+        int finalDamage = cfg.damageOverride >= 0 ? cfg.damageOverride : attackDamage;
         foreach (var h in hits)
         {
-            DamageApplier.ApplyDamage(h, cfg.damageOverride >= 0 ? cfg.damageOverride : attackDamage);
+            DamageApplier.ApplyDamage(h, finalDamage, cfg, transform, step);
         }
     }
 
@@ -271,7 +272,9 @@ public class MeleeBase : MonoBehaviour
     void OnBoomerangHit(Collider h)
     {
         if (h == null) return;
-    DamageApplier.ApplyDamage(h, boomerangCfgRuntime != null && boomerangCfgRuntime.damageOverride >= 0 ? boomerangCfgRuntime.damageOverride : attackDamage);
+        int finalDamage = boomerangCfgRuntime != null && boomerangCfgRuntime.damageOverride >= 0 ? 
+                         boomerangCfgRuntime.damageOverride : attackDamage;
+        DamageApplier.ApplyDamage(h, finalDamage, boomerangCfgRuntime ?? DefaultConfig(), transform, 2); // Paso 2 = tercer ataque
     }
 
     HitboxConfig CloneConfig(HitboxConfig c)
@@ -290,7 +293,12 @@ public class MeleeBase : MonoBehaviour
             sectorAngleDeg = c.sectorAngleDeg,
             sectorHeight = c.sectorHeight,
             sectorGizmoSteps = c.sectorGizmoSteps,
-            damageOverride = c.damageOverride
+            damageOverride = c.damageOverride,
+            damageMultiplier = c.damageMultiplier,
+            damageType = c.damageType,
+            effects = c.effects,
+            knockbackForce = c.knockbackForce,
+            knockbackDirection = c.knockbackDirection
         };
     }
 
