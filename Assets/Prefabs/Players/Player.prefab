@@ -341,7 +341,7 @@ MonoBehaviour:
   boomerangDistance: 4
   boomerangSpeed: 12
   boomerangPauseTime: 1
-  boomerangAimMode: 1
+  boomerangAimMode: 0
   boomerangDirection: {x: 0, y: 0, z: 0}
   boomerangTargetWorld: {x: 0, y: 0, z: 0}
   comboHitboxes:
@@ -384,7 +384,7 @@ MonoBehaviour:
     sectorHeight: 0
     sectorGizmoSteps: 0
     damageOverride: 0
-  gizmoPreviewStep: 0
+  gizmoPreviewStep: 2
   previewBoomerangGizmos: 1
   showGizmosInGameView: 1
   showRuntimeBoomerangHitbox: 1

@@ -23,16 +23,23 @@ namespace Game.Combat
             System.Action<Vector3, Quaternion> onTick = null)
         {
             Vector3 startCenter = origin.TransformPoint(cfg.offset);
-            Vector3 dir = GetDirection(origin, startCenter);
-            Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
-            Vector3 maxCenter = startCenter + dir * distance;
-
+            
             HashSet<Collider> hitSet = new HashSet<Collider>();
 
             // Out
             Vector3 cur = startCenter;
+            
+
+            
+            // ===== CALCULAR DIRECCIÓN JUSTO AHORA (FRAME ACTUAL) =====
+            Vector3 dir = GetDirection(origin, startCenter);
+            Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
+            Vector3 maxCenter = startCenter + dir * distance;
+            
             while ((maxCenter - cur).sqrMagnitude > 0.0004f)
             {
+
+                
                 float step = speed * Time.deltaTime;
                 cur = Vector3.MoveTowards(cur, maxCenter, step);
                 var hits = HitboxDetector.DetectAt(cfg, cur, rotation, enemyLayer);
@@ -93,16 +100,16 @@ namespace Game.Combat
                     break;
                 case AimMode.Forward:
                 default:
-                    // COMPENSAR la rotación del personaje
-                    dir = origin.forward;
-                    // Si el personaje está rotado +90° en Y, rotar la dirección -90°
+                    // USAR LA DIRECCIÓN ACTUAL DEL PERSONAJE EN ESTE MOMENTO
+                    dir = origin.forward; // Esto se calcula AHORA, no cuando se presionó el botón
+                    // Compensar la rotación del personaje
                     dir = Quaternion.Euler(0, -90, 0) * dir;
                     break;
             }
             dir.y = 0f;
             if (dir.sqrMagnitude < 0.0001f) 
             {
-                // Fallback también compensado
+                // Fallback también usa dirección actual
                 dir = Quaternion.Euler(0, -90, 0) * origin.forward;
             }
             return dir.normalized;

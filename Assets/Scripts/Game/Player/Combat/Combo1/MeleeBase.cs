@@ -69,6 +69,8 @@ public class MeleeBase : MonoBehaviour
     private Quaternion boomerangRotation;
     private HitboxConfig boomerangCfgRuntime;
 
+    private bool isBoomerangActive = false; // Nueva variable de estado
+
     void Awake()
     {
         combo = GetComponent<MeleeComboController>();
@@ -100,6 +102,12 @@ public class MeleeBase : MonoBehaviour
 
     void TryAttack()
     {
+        // ===== PREVENIR ATAQUES SI BOOMERANG ESTÁ ACTIVO =====
+        if (isBoomerangActive)
+        {
+            return;
+        }
+        
         int step = combo.StartAttackAndGetStep();
         if (step < 0) return; // aún en cooldown
 
@@ -227,6 +235,9 @@ public class MeleeBase : MonoBehaviour
 
     IEnumerator DoBoomerangAttack(HitboxConfig cfg)
     {
+        // ===== MARCAR COMO ACTIVO =====
+        isBoomerangActive = true;
+        
         var boomer = gameObject.GetComponent<BoomerangAttack>();
         if (boomer == null) boomer = gameObject.AddComponent<BoomerangAttack>();
         boomer.distance = boomerangDistance;
@@ -251,6 +262,8 @@ public class MeleeBase : MonoBehaviour
             (pos, rot) => { boomerangCurCenter = pos; boomerangRotation = rot; }
         ));
 
+        // ===== DESMARCAR COMO ACTIVO =====
+        isBoomerangActive = false;
         boomerangActive = false;
         boomerangCfgRuntime = null;
     }
@@ -295,10 +308,17 @@ public class MeleeBase : MonoBehaviour
             case BoomerangAttack.AimMode.Forward:
             default:
                 dir = transform.forward;
+                // ===== AÑADIR COMPENSACIÓN IGUAL QUE EN BoomerangAttack.cs =====
+                dir = Quaternion.Euler(0, -90, 0) * dir;
                 break;
         }
         dir.y = 0f;
-        if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
+        if (dir.sqrMagnitude < 0.0001f) 
+        {
+            dir = transform.forward;
+            // ===== COMPENSACIÓN TAMBIÉN EN EL FALLBACK =====
+            dir = Quaternion.Euler(0, -90, 0) * dir;
+        }
         return dir.normalized;
     }
 }
