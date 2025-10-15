@@ -88,10 +88,15 @@ public class ItemDropSystem : MonoBehaviour
 
     // ================================================= Unity Methods =================================================
 
-
-
-
-
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     public void DropFromNormalEnemy(Vector3 position) // Called by normal enemy scripts on death
     {

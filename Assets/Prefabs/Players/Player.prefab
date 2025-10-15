@@ -319,9 +319,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3934a204bd8919848aa067d6ea7e9c65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeBase
-  attackCooldown: 0.6
+  attackCooldown: 0.3
   comboCount: 3
-  comboResetTime: 1
+  comboResetTime: 0.5
   attackDamage: 10
   enemyLayer:
     serializedVersion: 2
