@@ -18,14 +18,13 @@ public class CarModuleSwapper : MonoBehaviour
     private bool playerInRange = false;
     private PlayerInput nearbyPlayerInput;
 
-    void Awake()
+    void Awake() // Cache all ISwappable components on this GameObject
     {
-        // Encuentra todos los componentes que implementan ISwappable
         var swappables = GetComponents<ISwappable>();
         swappableComponents.AddRange(swappables);
     }
 
-    void Update()
+    void Update() // Check for player input to swap modules
     {
         if (playerInRange && nearbyPlayerInput && !isSwapping)
         {
@@ -37,7 +36,7 @@ public class CarModuleSwapper : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other) // Detect player entering the swap area
     {
         PlayerInput playerInput = other.GetComponent<PlayerInput>();
         if (playerInput != null)
@@ -47,7 +46,7 @@ public class CarModuleSwapper : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other) // Detect player leaving the swap area
     {
         PlayerInput playerInput = other.GetComponent<PlayerInput>();
         if (playerInput != null && playerInput == nearbyPlayerInput)
@@ -57,37 +56,34 @@ public class CarModuleSwapper : MonoBehaviour
         }
     }
 
-    IEnumerator SwapModules()
+    IEnumerator SwapModules() // Coroutine to handle the swap process
     {
         isSwapping = true;
         
         if (showDebugLogs)
             Debug.Log("[CarModuleSwapper] 🔄 Intercambiando módulos...");
         
-        // Notifica a todos los componentes que se va a hacer el swap
-        foreach (var swappable in swappableComponents)
+        foreach (var swappable in swappableComponents) // Notify all components that the swap is starting
         {
             swappable.OnSwapStarted();
         }
-        
-        // Desactiva temporalmente los colliders durante la animación
+
+        // Deactivate colliders during the swap animation
         scrapCollider.enabled = false;
         plantCollider.enabled = false;
+
+        yield return new WaitForSeconds(swapAnimationTime); // Wait for the swap animation duration
         
-        // Espera a que termine la animación
-        yield return new WaitForSeconds(swapAnimationTime);
-        
-        // Intercambia las posiciones de los colliders
+        // Swap the positions of the colliders
         Vector3 tempPosition = scrapCollider.transform.position;
         scrapCollider.transform.position = plantCollider.transform.position;
         plantCollider.transform.position = tempPosition;
-        
-        // Reactiva los colliders
+
+        // Reactivate colliders
         scrapCollider.enabled = true;
         plantCollider.enabled = true;
-        
-        // Notifica a todos los componentes que el swap terminó
-        foreach (var swappable in swappableComponents)
+
+        foreach (var swappable in swappableComponents) // Notify all components that the swap has completed
         {
             swappable.OnSwapCompleted();
         }

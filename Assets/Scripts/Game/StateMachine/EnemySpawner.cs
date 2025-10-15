@@ -44,8 +44,6 @@ public class EnemySpawner : MonoBehaviour
     
     void Awake()
     {
-        // ===== MOVER LA INICIALIZACIÓN AQUÍ =====
-        // Awake() se ejecuta antes que cualquier Start()
         ApplyDifficulty(0);
         Debug.Log("[EnemySpawner] Initialized in Awake");
     }
