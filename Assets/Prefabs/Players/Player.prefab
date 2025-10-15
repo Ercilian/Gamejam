@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3559229165855641145}
   - component: {fileID: 6285957382928256622}
   - component: {fileID: 7222824160162284086}
+  - component: {fileID: 6483319625748928582}
   - component: {fileID: -2229003457756849490}
   - component: {fileID: 268196344557052032}
   - component: {fileID: 1945218576087875795}
@@ -97,6 +98,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6483319625748928582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10fddf73500dc304485465f8e65a25c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HabilidadPajaro
+  duracionGiro: 2
+  intervaloTick: 0.2
+  "radioDa\xF1o": 2
+  damageConfig:
+    "da\xF1oPorTick": 10
+    knockbackForce: 50
+    damageType: 1
+    layerEnemigos:
+      serializedVersion: 2
+      m_Bits: 64
+    teclaHabilidad: 113
 --- !u!54 &-2229003457756849490
 Rigidbody:
   m_ObjectHideFlags: 0
