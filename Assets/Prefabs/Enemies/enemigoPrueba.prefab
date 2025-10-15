@@ -149,6 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Enemies.EnemyHealth
   maxHealth: 100
   showDebugLogs: 1
+  isElite: 0
   normalResistance: 0
   criticoResistance: 0
   fuegoResistance: 0

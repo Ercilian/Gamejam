@@ -107,7 +107,9 @@ namespace Game.Enemies
                 Vector3 knockbackDir = damageInfo.knockbackDirection.normalized;
                 if (knockbackDir == Vector3.zero)
                     knockbackDir = (transform.position - damageInfo.attacker.position).normalized;
-                
+                // Proyectar knockback solo en XZ
+                knockbackDir.y = 0f;
+                knockbackDir = knockbackDir.normalized;
                 rb.AddForce(knockbackDir * damageInfo.knockbackForce, ForceMode.Impulse);
                 
                 if (showDebugLogs)

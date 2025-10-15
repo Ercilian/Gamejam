@@ -361,7 +361,7 @@ MonoBehaviour:
     damageMultiplier: 1
     damageType: 2
     effects: -1
-    knockbackForce: 5
+    knockbackForce: 100
     knockbackDirection: {x: 0, y: 0, z: 0}
   - offset: {x: 0.13, y: 0.56, z: 0}
     euler: {x: 0, y: -90, z: 0}
@@ -379,7 +379,7 @@ MonoBehaviour:
     damageMultiplier: 1
     damageType: 2
     effects: 1
-    knockbackForce: 5
+    knockbackForce: 100
     knockbackDirection: {x: 0, y: 0, z: 0}
   - offset: {x: -0.32, y: 0.45, z: 0}
     euler: {x: 0, y: 0, z: 0}
@@ -397,7 +397,7 @@ MonoBehaviour:
     damageMultiplier: 1
     damageType: 2
     effects: 1
-    knockbackForce: 5
+    knockbackForce: 100
     knockbackDirection: {x: 0, y: 0, z: 0}
   gizmoPreviewStep: 0
   previewBoomerangGizmos: 1
