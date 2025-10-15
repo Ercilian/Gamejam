@@ -113,7 +113,6 @@ public class IA_Enemy : MonoBehaviour
             tiempoUltimaDeteccion = Time.time;
             
             if (mostrarDebug)
-                Debug.Log($"[{name}] ¡Jugador detectado! Cambiando a persecución: {jugadorCercano.name}");
             return;
         }
         
@@ -137,7 +136,6 @@ public class IA_Enemy : MonoBehaviour
             // Jugador desapareció, volver al camión
             estadoActual = EstadoIA.IrAlCamion;
             if (mostrarDebug)
-                Debug.Log($"[{name}] Jugador objetivo perdido, volviendo al camión");
             return;
         }
         
@@ -147,8 +145,6 @@ public class IA_Enemy : MonoBehaviour
         if (distanciaAJugador > rangoPerdida)
         {
             // Perder al jugador y volver al camión
-            if (mostrarDebug)
-                Debug.Log($"[{name}] Jugador muy lejos ({distanciaAJugador:F1}m), volviendo al camión");
             
             jugadorObjetivo = null;
             estadoActual = EstadoIA.IrAlCamion;

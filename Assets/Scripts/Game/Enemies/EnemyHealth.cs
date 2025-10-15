@@ -8,6 +8,7 @@ namespace Game.Enemies
         [Header("Configuración de Vida")]
         public int maxHealth = 100;
         public bool showDebugLogs = true;
+        public bool isElite = false;
         
         [Header("Resistencias por Tipo de Daño")]
         [Range(0f, 1f)] public float normalResistance = 0f;      // 0 = sin resistencia, 1 = inmune
@@ -30,6 +31,8 @@ namespace Game.Enemies
         public System.Action<DamageInfo> OnDamageTaken;
         public System.Action<int> OnHealthChanged;
         public System.Action OnDeath;
+
+        
         
         void Awake()
         {
@@ -139,11 +142,21 @@ namespace Game.Enemies
             {
                 Debug.Log($"[{name}] Murió por {finalDamage.damageType} del combo paso {finalDamage.comboStep + 1}");
             }
-            
+
             OnDeath?.Invoke();
-            
-            // Aquí puedes añadir efectos de muerte, drop de items, etc.
+
+            // Dropear items según el tipo de enemigo
+            if (isElite)
+            {
+                ItemDropSystem.Instance.DropFromEliteEnemy(transform.position);
+            }
+            else
+            {
+                ItemDropSystem.Instance.DropFromNormalEnemy(transform.position);
+            }
+
             Destroy(gameObject);
+            
         }
         
         // Métodos de utilidad

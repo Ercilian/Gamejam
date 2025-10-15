@@ -42,15 +42,20 @@ public class EnemySpawner : MonoBehaviour
     
     private DifficultySettings currentSettings;
     
+    void Awake()
+    {
+        // ===== MOVER LA INICIALIZACIÓN AQUÍ =====
+        // Awake() se ejecuta antes que cualquier Start()
+        ApplyDifficulty(0);
+        Debug.Log("[EnemySpawner] Initialized in Awake");
+    }
+    
     void Start()
     {
         // Suscribirse al cambio de dificultad
         DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
         
-        // Configurar dificultad inicial
-        ApplyDifficulty(0);
-        
-        Debug.Log("[EnemySpawner] Initialized");
+        Debug.Log("[EnemySpawner] Event subscription completed");
     }
     
     void OnDestroy()
@@ -85,6 +90,13 @@ public class EnemySpawner : MonoBehaviour
             Debug.Log($"[EnemySpawner] Applied settings - Interval: {currentSettings.spawnInterval}s, " +
                      $"Health: x{currentSettings.healthMultiplier}, Elite: {currentSettings.elitePercentage}%");
         }
+        else
+        {
+            // ===== FALLBACK PARA ÍNDICES INVÁLIDOS =====
+            Debug.LogError($"[EnemySpawner] Invalid difficulty index: {difficultyIndex}, using index 0");
+            currentDifficulty = 0;
+            currentSettings = difficultyConfigs[0];
+        }
     }
     
     void SpawnEnemy()
@@ -115,6 +127,13 @@ public class EnemySpawner : MonoBehaviour
     
     void ScheduleNextSpawn()
     {
+        // ===== VALIDAR QUE CURRENTSSETTINGS NO SEA NULL =====
+        if (currentSettings == null)
+        {
+            Debug.LogWarning("[EnemySpawner] CurrentSettings is null, applying default difficulty");
+            ApplyDifficulty(0); // Aplicar configuración por defecto
+        }
+        
         nextSpawnTime = Time.time + currentSettings.spawnInterval;
     }
     
@@ -122,6 +141,13 @@ public class EnemySpawner : MonoBehaviour
     
     public void StartSpawning()
     {
+        // ===== VALIDAR CONFIGURACIÓN ANTES DE EMPEZAR =====
+        if (currentSettings == null)
+        {
+            Debug.LogWarning("[EnemySpawner] Starting spawning but no settings applied, using default");
+            ApplyDifficulty(0);
+        }
+        
         isSpawning = true;
         ScheduleNextSpawn();
         Debug.Log("[EnemySpawner] Spawning started!");

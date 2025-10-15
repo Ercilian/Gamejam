@@ -185,7 +185,7 @@ Transform:
   m_GameObject: {fileID: 212697893}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.69, y: 0, z: 16.58}
+  m_LocalPosition: {x: 32.69, y: 3.44, z: 16.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5083,7 +5083,7 @@ Transform:
   m_GameObject: {fileID: 300589057}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -32.69, y: 0, z: 16.58}
+  m_LocalPosition: {x: -32.69, y: 3.44, z: 16.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5298,7 +5298,7 @@ Transform:
   m_GameObject: {fileID: 331187823}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -32.69, y: 0, z: -16.58}
+  m_LocalPosition: {x: -32.69, y: 3.44, z: -16.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10385,6 +10385,7 @@ GameObject:
   - component: {fileID: 458190338}
   - component: {fileID: 458190337}
   - component: {fileID: 458190339}
+  - component: {fileID: 458190340}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -10467,6 +10468,71 @@ MonoBehaviour:
   currentDifficulty: 0
   nextSpawnTime: 0
   isSpawning: 0
+--- !u!114 &458190340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458190336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f2884a707685954792688e934d36e3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDropSystem
+  availableItems:
+  - itemName: Scrap
+    prefab: {fileID: 5219421215397009677, guid: 3df252fd5914c414cbd1b785305c6696, type: 3}
+    minQuantity: 1
+    maxQuantity: 3
+  - itemName: Diesel
+    prefab: {fileID: 5219421215397009677, guid: 93c524a2c72611749b474dff8449254f, type: 3}
+    minQuantity: 1
+    maxQuantity: 3
+  - itemName: Plant
+    prefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+    minQuantity: 1
+    maxQuantity: 3
+  dropTables:
+  - sourceName: NormalEnemy
+    possibleDrops:
+    - itemIndex: 0
+      dropChance: 75
+    - itemIndex: 1
+      dropChance: 15
+    - itemIndex: 2
+      dropChance: 5
+  - sourceName: EliteEnemy
+    possibleDrops:
+    - itemIndex: 0
+      dropChance: 80
+    - itemIndex: 1
+      dropChance: 40
+    - itemIndex: 2
+      dropChance: 20
+  - sourceName: DestructibleObjectDiesel
+    possibleDrops:
+    - itemIndex: 0
+      dropChance: 30
+    - itemIndex: 1
+      dropChance: 10
+  - sourceName: DestructibleObjectPlant
+    possibleDrops:
+    - itemIndex: 0
+      dropChance: 50
+    - itemIndex: 1
+      dropChance: 20
+  probDrop1: 0.65
+  probDrop2: 0.25
+  probDrop3: 0.1
+  dropForce: 1.5
+  dropRadius: 2
+  upwardForce: 1.5
+  spawnHeightOffset: 0.5
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  showDebugLogs: 1
 --- !u!1 &487059974
 GameObject:
   m_ObjectHideFlags: 0
@@ -10885,7 +10951,7 @@ GameObject:
   - component: {fileID: 951660724}
   - component: {fileID: 951660723}
   - component: {fileID: 951660722}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10979,7 +11045,7 @@ Transform:
   m_GameObject: {fileID: 951660721}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -102.8, y: 0, z: 0}
   m_LocalScale: {x: 537.0371, y: 1, z: 6.92}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11085,7 +11151,7 @@ Transform:
   m_GameObject: {fileID: 1074491258}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.69, y: 0, z: -16.58}
+  m_LocalPosition: {x: 32.69, y: 3.44, z: -16.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
