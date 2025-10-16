@@ -241,12 +241,13 @@ public class MeleeBase : MonoBehaviour
         
         var boomer = gameObject.GetComponent<BoomerangAttack>();
         if (boomer == null) boomer = gameObject.AddComponent<BoomerangAttack>();
-        boomer.distance = boomerangDistance;
-        boomer.speed = boomerangSpeed;
-        boomer.pauseTime = boomerangPauseTime;
-        boomer.aimMode = boomerangAimMode;
-        boomer.directionWorld = boomerangDirection;
-        boomer.targetWorld = boomerangTargetWorld;
+    boomer.distance = boomerangDistance;
+    boomer.pauseTime = boomerangPauseTime;
+    boomer.aimMode = boomerangAimMode;
+    boomer.directionWorld = boomerangDirection;
+    boomer.targetWorld = boomerangTargetWorld;
+    // Adaptar velocidad clásica a ticks
+    boomer.tickDistance = boomerangSpeed * boomer.tickInterval;
 
         boomerangActive = true;
         boomerangCfgRuntime = CloneConfig(cfg);

@@ -8,9 +8,10 @@ namespace Game.Combat
     {
         public enum AimMode { Forward, DirectionVector, WorldTarget }
 
-        public float distance = 5f;
-        public float speed = 10f;
-        public float pauseTime = 1f;
+    public float distance = 5f;
+    public float tickDistance = 0.5f; // Distancia que avanza por tick
+    public float tickInterval = 0.1f; // Tiempo entre ticks (segundos)
+    public float pauseTime = 1f;
         public AimMode aimMode = AimMode.Forward;
         public Vector3 directionWorld = Vector3.forward;
         public Vector3 targetWorld = Vector3.zero;
@@ -38,10 +39,7 @@ namespace Game.Combat
             
             while ((maxCenter - cur).sqrMagnitude > 0.0004f)
             {
-
-                
-                float step = speed * Time.deltaTime;
-                cur = Vector3.MoveTowards(cur, maxCenter, step);
+                cur = Vector3.MoveTowards(cur, maxCenter, tickDistance);
                 var hits = HitboxDetector.DetectAt(cfg, cur, rotation, enemyLayer);
                 foreach (var h in hits)
                 {
@@ -50,14 +48,13 @@ namespace Game.Combat
                     onHit?.Invoke(h);
                 }
                 onTick?.Invoke(cur, rotation);
-                yield return null;
+                yield return new WaitForSeconds(tickInterval);
             }
 
             // Pause
             float t = 0f;
             while (t < pauseTime)
             {
-                t += Time.deltaTime;
                 var hits = HitboxDetector.DetectAt(cfg, cur, rotation, enemyLayer);
                 foreach (var h in hits)
                 {
@@ -66,15 +63,15 @@ namespace Game.Combat
                     onHit?.Invoke(h);
                 }
                 onTick?.Invoke(cur, rotation);
-                yield return null;
+                yield return new WaitForSeconds(tickInterval);
+                t += tickInterval;
             }
 
             // Back
             while ((startCenter - cur).sqrMagnitude > 0.0004f)
             {
                 startCenter = origin.TransformPoint(cfg.offset);
-                float step = speed * Time.deltaTime;
-                cur = Vector3.MoveTowards(cur, startCenter, step);
+                cur = Vector3.MoveTowards(cur, startCenter, tickDistance);
                 var hits = HitboxDetector.DetectAt(cfg, cur, rotation, enemyLayer);
                 foreach (var h in hits)
                 {
@@ -83,7 +80,7 @@ namespace Game.Combat
                     onHit?.Invoke(h);
                 }
                 onTick?.Invoke(cur, rotation);
-                yield return null;
+                yield return new WaitForSeconds(tickInterval);
             }
         }
 
