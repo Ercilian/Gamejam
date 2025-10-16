@@ -10668,11 +10668,11 @@ MonoBehaviour:
   - sourceName: NormalEnemy
     possibleDrops:
     - itemIndex: 0
-      dropChance: 75
+      dropChance: 20
     - itemIndex: 1
-      dropChance: 15
+      dropChance: 10
     - itemIndex: 2
-      dropChance: 5
+      dropChance: 0
   - sourceName: EliteEnemy
     possibleDrops:
     - itemIndex: 0
@@ -10693,9 +10693,9 @@ MonoBehaviour:
       dropChance: 50
     - itemIndex: 1
       dropChance: 20
-  probDrop1: 0.65
-  probDrop2: 0.25
-  probDrop3: 0.1
+  probDrop1: 0.2
+  probDrop2: 0.15
+  probDrop3: 0.05
   dropForce: 1.5
   dropRadius: 2
   upwardForce: 1.5
