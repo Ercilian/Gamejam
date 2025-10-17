@@ -129,6 +129,7 @@ MonoBehaviour:
   collectibleData: {fileID: 11400000, guid: 99c4dcacd1a62764987a4f24b7826e39, type: 2}
   collectEffect: {fileID: 0}
   showDebugLogs: 1
+  rigidbodyDestroyDelay: 2
 --- !u!54 &3301779316852844059
 Rigidbody:
   m_ObjectHideFlags: 0
