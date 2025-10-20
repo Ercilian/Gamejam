@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraGameplay : MonoBehaviour
+public class CameraMovement : MonoBehaviour
 {
     public Transform target; // Reference to the car
     public Vector3 offset = new Vector3(-10f, 10f, -10f); // Camera position relative to the car
