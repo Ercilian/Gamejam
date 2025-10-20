@@ -129,7 +129,6 @@ MonoBehaviour:
   collectibleData: {fileID: 11400000, guid: 6c3d02152d04a1046a04a21e589d35f9, type: 2}
   collectEffect: {fileID: 0}
   showDebugLogs: 1
-  rigidbodyDestroyDelay: 2
 --- !u!54 &-3269392371273482521
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -167,10 +166,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 119
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

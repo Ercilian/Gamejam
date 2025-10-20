@@ -96,20 +96,31 @@ public class PlayerInventory : MonoBehaviour
         Debug.Log($"[PlayerInventory] Recogido {item.itemName}. Total: {carriedItems.Count}/{maxCarryCapacity}");
     }
 
-    void CreateVisualItem(CollectibleData item) // Method to create the visual representation of the item
+    void CreateVisualItem(CollectibleData item)
     {
-        if (!item.itemPrefab || !itemHoldPoint) return; // Check if prefab and hold point are assigned
-        GameObject visualItem = Instantiate(item.itemPrefab, itemHoldPoint); // Instantiate the item prefab
-        Vector3 stackPosition = Vector3.up * (visualItems.Count * itemStackOffset); // Put the item in the stack
-        visualItem.transform.localPosition = stackPosition;
-        
-        Collider itemCollider = visualItem.GetComponent<Collider>(); // Desactivating collider
+        if (!item.itemPrefab || !itemHoldPoint) return;
+        GameObject visualItem = Instantiate(item.itemPrefab);
+
+        // Desactivar collider ANTES de hacer parenting o mover el objeto
+        Collider itemCollider = visualItem.GetComponent<Collider>();
         if (itemCollider) itemCollider.enabled = false;
-        
-        WorldCollectible worldScript = visualItem.GetComponent<WorldCollectible>(); // Remove WorldCollectible script to avoid conflicts
+
+        visualItem.transform.SetParent(itemHoldPoint);
+        Vector3 stackPosition = Vector3.up * (visualItems.Count * itemStackOffset);
+        visualItem.transform.localPosition = stackPosition;
+
+        // Desactivar física mientras lo llevas
+        Rigidbody rb = visualItem.GetComponent<Rigidbody>();
+        if (rb)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
+        WorldCollectible worldScript = visualItem.GetComponent<WorldCollectible>();
         if (worldScript) Destroy(worldScript);
-        
-        visualItems.Add(visualItem); // Add to the visual items list
+
+        visualItems.Add(visualItem);
     }
 
     private bool DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int> onDeposit) // Generic method to deposit items of a specific type
@@ -171,56 +182,59 @@ public class PlayerInventory : MonoBehaviour
             value => carPotionsSystem.AddFuel(value));
     }
 
-    public void DropItems() // Method to drop all carried items to the ground
+    public void DropItems()
     {
         Debug.Log($"[PlayerInventory] DropItems called! carriedItems.Count: {carriedItems.Count}");
-        if (carriedItems.Count == 0) 
+        if (carriedItems.Count == 0)
         {
             Debug.Log("[PlayerInventory] No items to drop!");
             return;
         }
 
-        Vector3 dropPosition = transform.position + transform.forward * 1.5f; // Drop items in front of player
-        
+        Vector3 dropPosition = transform.position + transform.forward * 1.5f;
+
         for (int i = 0; i < carriedItems.Count; i++)
         {
             CollectibleData item = carriedItems[i];
-            
-            // Create world collectible object
+
             if (item.itemPrefab != null)
             {
                 Vector3 randomOffset = new Vector3(
-                    Random.Range(-0.8f, 0.8f), 
-                    0.1f, 
+                    Random.Range(-0.8f, 0.8f),
+                    0.1f,
                     Random.Range(-0.8f, 0.8f)
-                ); // Add some randomness to avoid stacking
-                
+                );
+
                 GameObject droppedItem = Instantiate(item.itemPrefab, dropPosition + randomOffset, Quaternion.identity);
-                
-                // Ensure the dropped item has a WorldCollectible component
+
+                // Activar física al soltar
+                Rigidbody rb = droppedItem.GetComponent<Rigidbody>();
+                if (rb)
+                {
+                    rb.isKinematic = false;
+                    rb.useGravity = true;
+                }
+
                 WorldCollectible worldCollectible = droppedItem.GetComponent<WorldCollectible>();
                 if (worldCollectible == null)
                 {
                     worldCollectible = droppedItem.AddComponent<WorldCollectible>();
                 }
                 worldCollectible.collectibleData = item;
-                
-                // Enable collider for pickup
+
                 Collider itemCollider = droppedItem.GetComponent<Collider>();
                 if (itemCollider) itemCollider.enabled = true;
             }
-            
-            // Destroy visual item
+
             if (i < visualItems.Count && visualItems[i] != null)
             {
                 Destroy(visualItems[i]);
             }
         }
-        
-        // Clear inventory
+
         carriedItems.Clear();
         visualItems.Clear();
-        
+
         Debug.Log($"[PlayerInventory] Items dropped to the ground!");
     }
 

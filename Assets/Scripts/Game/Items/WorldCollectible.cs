@@ -67,27 +67,28 @@ public class WorldCollectible : MonoBehaviour
         }
     }
 
-    public void CollectItem() // Method to collect the item (now public)
-    {       
-        if (nearbyPlayer.CanCarryItem(collectibleData)) // Double-check if the player can carry the item
+    public void CollectItem()
+    {
+        // Desactivar física y collider antes de recoger
+        Collider col = GetComponent<Collider>();
+        if (col) col.enabled = false;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb)
         {
-            nearbyPlayer.PickupItem(collectibleData); // Add item to the player's inventory
-            
-            // Effects
-            if (collectEffect) 
-            {
-                collectEffect.Play();
-            }
-            if (collectibleData.collectSound) 
-            {
-                AudioSource.PlayClipAtPoint(collectibleData.collectSound, transform.position);
-            }            
-            Destroy(gameObject, collectEffect ? 0.5f : 0.1f); // Destroy the item after a short delay to allow effects to play
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
-        else
-        {
-            if (showDebugLogs)
-                Debug.Log("[WorldCollectible] ⚠️ El jugador no puede cargar más items");
-        }
+
+        // Ignorar colisión con el jugador (opcional, si tienes referencia)
+        // Physics.IgnoreCollision(col, playerCollider);
+
+        // Ahora sí, añadir al inventario
+        FindObjectOfType<PlayerInventory>().PickupItem(collectibleData);
+
+        // Destruir el objeto del mundo si ya no se necesita
+        Destroy(gameObject);
     }
 }
