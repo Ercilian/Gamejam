@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputEmpuje : MonoBehaviour
+public class PlayerInputPush : MonoBehaviour
 {
     
     [Header("Debug")]
@@ -10,7 +10,7 @@ public class PlayerInputEmpuje : MonoBehaviour
     [Header("Variables to follow the car")]
     private Transform targetToFollow = null;
     private float followSpeed = 0f;
-    private PlayerController playerController;
+    private Player playerController;
     private bool isPushingNow = false;
     public bool activeControl = true;
 
@@ -28,7 +28,7 @@ public class PlayerInputEmpuje : MonoBehaviour
 
     void Awake()
     {
-        playerController = GetComponent<PlayerController>();
+        playerController = GetComponent<Player>();
         playerInput = GetComponent<PlayerInput>();
 
         if (playerInput != null)

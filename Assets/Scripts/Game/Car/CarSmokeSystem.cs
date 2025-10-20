@@ -47,8 +47,8 @@ public class CarSmokeSystem : MonoBehaviour
     [Header("Lifetime Settings")]
     [Range(1f, 10f)]
     public float smokeLifetime = 3f; // Tiempo de vida del humo
-    
-    private MovCarro carMovement;
+
+    private MovCar carMovement;
     private ParticleSystem.EmissionModule emission;
     private ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime;
     private ParticleSystem.MainModule mainModule;
@@ -77,14 +77,14 @@ public class CarSmokeSystem : MonoBehaviour
     
     void Start()
     {
-        // Obtener referencia al MovCarro
-        carMovement = GetComponentInParent<MovCarro>();
+        // Obtener referencia al MovCar
+        carMovement = GetComponentInParent<MovCar>();
         if (!carMovement)
-            carMovement = GetComponent<MovCarro>();
-            
+            carMovement = GetComponent<MovCar>();
+
         if (!carMovement)
         {
-            Debug.LogError("CarSmokeSystem: No se encontró MovCarro component!");
+            Debug.LogError("CarSmokeSystem: No se encontró MovCar component!");
             return;
         }
         

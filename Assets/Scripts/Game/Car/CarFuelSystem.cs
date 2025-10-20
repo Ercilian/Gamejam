@@ -19,7 +19,7 @@ public class CarFuelSystem : MonoBehaviour
     private bool playerInDepositRange = false;
     private PlayerInventory nearbyPlayerInventory;
     private PlayerInput nearbyPlayerInput;
-    private MovCarro movCarro;
+    private MovCar movCar;
     private float lastLoggedDiesel;
     private List<GameObject> pushingPlayers = new List<GameObject>();
 
@@ -33,7 +33,7 @@ public class CarFuelSystem : MonoBehaviour
 
     void Start()
     {
-        movCarro = GetComponentInParent<MovCarro>(); // Check parent for MovCarro        
+        movCar = GetComponentInParent<MovCar>(); // Check parent for MovCar
         lastLoggedDiesel = currentDiesel; // Inicializar el último diesel registrado
     }
 
@@ -104,8 +104,8 @@ public class CarFuelSystem : MonoBehaviour
     {
         float prevDiesel = currentDiesel; // Store previous diesel amount
         currentDiesel = Mathf.Min(currentDiesel + amount, maxDiesel); // Add diesel but not exceed max
-        
-        if (movCarro) movCarro.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCarro of fuel change
+
+        if (movCar) movCar.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCar of fuel change
         lastLoggedDiesel = currentDiesel;
         
         if (showDebugLogs)
@@ -117,7 +117,7 @@ public class CarFuelSystem : MonoBehaviour
         float prevDiesel = currentDiesel; // Store previous diesel amount
         currentDiesel = Mathf.Max(currentDiesel - amount, 0f); // Subtract diesel but not go below 0
 
-        if (movCarro) movCarro.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCarro of fuel change
+        if (movCar) movCar.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCar of fuel change
         if (showDebugLogs)
         {
             float dieselConsumed = lastLoggedDiesel - currentDiesel;            

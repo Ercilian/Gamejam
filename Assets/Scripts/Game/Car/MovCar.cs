@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MovCarro : MonoBehaviour
+public class MovCar : MonoBehaviour
 {
     [Header("Movement Settings")]
     public Vector3 direction = Vector3.forward;
@@ -97,7 +97,7 @@ public class MovCarro : MonoBehaviour
                 {
                     if (player != null)
                     {
-                        var input = player.GetComponent<PlayerInputEmpuje>(); // Get their push input component
+                        var input = player.GetComponent<PlayerInputPush>(); // Get their push input component
                         if (input != null)
                         {
                             input.FollowObject(transform, GetPushSpeed(1)); // Make them follow the car at push speed
@@ -135,7 +135,7 @@ public class MovCarro : MonoBehaviour
             var playersPushingWithFuel = fuelSystem.GetPlayersPushing();
             foreach (var player in playersPushingWithFuel)
             {
-                player?.GetComponent<PlayerInputEmpuje>()?.ActivateControl();
+                player?.GetComponent<PlayerInputPush>()?.ActivateControl();
             }
             
             targetSpeed = GetCurrentSpeed(); // Objetivo es velocidad basada en combustible

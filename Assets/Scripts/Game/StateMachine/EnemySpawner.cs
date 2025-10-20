@@ -114,7 +114,7 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemy = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
         
         // Aplicar multiplicador de vida
-        EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
+        Enemy enemyHealth = enemy.GetComponent<Enemy>();
         if (enemyHealth != null)
         {
             enemyHealth.maxHealth = Mathf.RoundToInt(enemyHealth.maxHealth * currentSettings.healthMultiplier);

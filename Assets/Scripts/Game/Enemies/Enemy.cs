@@ -3,7 +3,7 @@ using Game.Combat;
 
 namespace Game.Enemies
 {
-    public class EnemyHealth : MonoBehaviour, IDamageable
+    public class Enemy : MonoBehaviour, IDamageable
     {
         [Header("Configuración de Vida")]
         public int maxHealth = 100;
