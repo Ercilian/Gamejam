@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 6783460188252569597}
   - component: {fileID: 3199202718284467957}
   - component: {fileID: 1128500900022400354}
+  - component: {fileID: 6450105935060270702}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -427,6 +428,25 @@ MonoBehaviour:
   previewBoomerangGizmos: 1
   showGizmosInGameView: 1
   showRuntimeBoomerangHitbox: 1
+--- !u!114 &6450105935060270702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ca9486d50fbcd74982052ca7b5d005a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Instakill
+  radius: 10
+  angle: 180
+  damageAmount: 999999
+  activateKey: 120
+  hitLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
