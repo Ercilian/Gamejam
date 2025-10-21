@@ -11889,7 +11889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f613465d97d982498eba1f4d9f9d5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarFuelSystem
-  currentDiesel: 10
+  currentDiesel: 50
   maxDiesel: 100
   depositPoint: {fileID: 1316442590}
   depositPrompt: Presiona F para depositar madera
@@ -28139,9 +28139,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 1, y: 0, z: 0}
-  speed: 1
-  fastspeed: 1.5
-  slowspeed: 0.8
+  speed: 0.8
+  fastspeed: 1
+  slowspeed: 0.4
   speedTransitionRate: 1
   usePathFollowing: 1
   pathPoints:
@@ -28154,8 +28154,8 @@ MonoBehaviour:
   pathSmoothness: 2
   fuelConsumptionPerSecond: 1
   isFuelConsumed: 1
-  pushSpeed: 0.5
-  pushSpeedTwo: 0.8
+  pushSpeed: 0.2
+  pushSpeedTwo: 0.4
   rotationSpeed: 0.5
 --- !u!65 &2070441883
 BoxCollider:
