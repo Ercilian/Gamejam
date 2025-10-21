@@ -10,11 +10,17 @@ public class PlayerInventory : MonoBehaviour
     public int maxCarryCapacity = 3;
     public Transform itemHoldPoint; //Empty where items are visually held on the players (need to change to the hands)
     public float itemStackOffset = 0.3f; // Offset to objects in the stack
-    
+
     private List<CollectibleData> carriedItems = new List<CollectibleData>(); //List of carried items
     private List<GameObject> visualItems = new List<GameObject>(); // List of instantiated visual items
     private PlayerInput playerInput; // Reference to PlayerInput component
     private WorldCollectible nearbyCollectible; // Reference to nearby collectible
+
+    [Header("Pociones")]
+    public int maxPotions = 2;
+    public int currentPotions = 2;
+    public int potionHealthRestore = 25;
+
 
 
 
@@ -24,7 +30,7 @@ public class PlayerInventory : MonoBehaviour
     void Start()
     {
         playerInput = GetComponent<PlayerInput>(); // Get PlayerInput reference
-        
+
         // Subscribe to the Crouch action event
         if (playerInput != null)
         {
@@ -67,7 +73,7 @@ public class PlayerInventory : MonoBehaviour
     void OnCrouchPressed(InputAction.CallbackContext context)
     {
         Debug.Log($"[PlayerInventory] 🐅 OnCrouchPressed called! carriedItems.Count: {carriedItems.Count}");
-        
+
         if (carriedItems.Count > 0)
         {
             DropItems();
@@ -92,7 +98,7 @@ public class PlayerInventory : MonoBehaviour
         if (!CanCarryItem(item)) return; // Check if can carry the item
         carriedItems.Add(item); // Add item to the carried list
         CreateVisualItem(item); // Create the visual representation of the item
-        
+
         Debug.Log($"[PlayerInventory] Recogido {item.itemName}. Total: {carriedItems.Count}/{maxCarryCapacity}");
     }
 
@@ -160,25 +166,25 @@ public class PlayerInventory : MonoBehaviour
 
     public bool DepositDieselItems(CarFuelSystem carFuelSystem) // Specific method to deposit diesel items
     {
-        return DepositItemsByType(CollectibleData.ItemType.Diesel, 
+        return DepositItemsByType(CollectibleData.ItemType.Diesel,
             value => carFuelSystem.AddDiesel(value));
     }
 
     public bool DepositScrapItems(CarScrapSystem carScrapSystem) // Specific method to deposit scrap items
     {
-        return DepositItemsByType(CollectibleData.ItemType.Scrap, 
+        return DepositItemsByType(CollectibleData.ItemType.Scrap,
             value => carScrapSystem.AddScrap(value));
     }
 
     public bool DepositPlantItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit plant/moss items
     {
-        return DepositItemsByType(CollectibleData.ItemType.Moss, 
+        return DepositItemsByType(CollectibleData.ItemType.Moss,
             value => carPotionsSystem.AddPlants(value));
     }
 
     public bool DepositFuelItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit fuel items for potions
     {
-        return DepositItemsByType(CollectibleData.ItemType.Diesel, 
+        return DepositItemsByType(CollectibleData.ItemType.Diesel,
             value => carPotionsSystem.AddFuel(value));
     }
 
@@ -256,6 +262,30 @@ public class PlayerInventory : MonoBehaviour
         return carriedItems.Count > 0 ? carriedItems[0].type : CollectibleData.ItemType.Diesel;
     }
 
+
+    public bool AddPotion() // Method to add a potion
+    {
+        if (currentPotions >= maxPotions)
+        {
+            Debug.Log("[PlayerInventory] No puedes llevar más pociones.");
+            return false;
+        }
+        currentPotions++;
+        Debug.Log($"[PlayerInventory] Poción añadida. Pociones actuales: {currentPotions}/{maxPotions}");
+        return true;
+    }
+
+    public bool UsePotion() // Method to use a potion
+    {
+        if (currentPotions <= 0)
+        {
+            Debug.Log("[PlayerInventory] No tienes pociones para usar.");
+            return false;
+        }
+        currentPotions--;
+        Debug.Log($"[PlayerInventory] Poción usada. Pociones restantes: {currentPotions}/{maxPotions}");
+        return true;
+    }
 
 
 }

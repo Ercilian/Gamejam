@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    private PlayerInventory playerInventory;
+    private PlayerInput playerInput;
+    private InputAction healAction;
 
     public float speed = 5;
     public float rotationSpeed = 10f; // Velocidad de rotación del jugador
@@ -16,6 +19,14 @@ public class Player : MonoBehaviour
 
 
 
+
+    private void Awake()
+    {
+        playerInventory = GetComponent<PlayerInventory>();
+        playerInput = GetComponent<PlayerInput>();
+        if (playerInput != null)
+            healAction = playerInput.actions["Heal"];
+    }
 
     private void Update()
     {
@@ -34,6 +45,11 @@ public class Player : MonoBehaviour
                 targetRotation *= Quaternion.Euler(0, 90, 0); // Cambia el 90 por el valor que necesites
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
+        }
+
+        if (healAction != null && healAction.WasPressedThisFrame())
+        {
+            playerInventory.UsePotion();
         }
     }
     
