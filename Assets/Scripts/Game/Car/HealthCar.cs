@@ -1,16 +1,18 @@
 using UnityEngine;
+using Game.Combat;
 
-public class HealthCar : MonoBehaviour
+public class HealthCar : EntityStats
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    public override void Die(DamageInfo finalDamage)
     {
-        
+        base.Die(finalDamage);
+        // Aquí puedes añadir explosión, game over, etc.
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void TakeDamage(int amount)
     {
-        
+        base.TakeDamage(amount);
+        // Feedback visual, sonido, etc.
     }
 }

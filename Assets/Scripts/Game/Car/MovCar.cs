@@ -161,7 +161,6 @@ public class MovCar : MonoBehaviour
         if (usePathFollowing && pathPoints != null && pathPoints.Length > 0)
         {
             currentTarget = pathPoints[0].position;
-            Debug.Log("[MovCarro] Path Following initialized with " + pathPoints.Length + " waypoints.");
         }
         else
         {
@@ -205,7 +204,6 @@ public class MovCar : MonoBehaviour
                 if (currentPathIndex < pathPoints.Length)
                 {
                     currentTarget = pathPoints[currentPathIndex].position;
-                    Debug.Log($"[MovCarro] Reached waypoint {currentPathIndex - 1}, moving to waypoint {currentPathIndex}");
                 }
                 else
                 {

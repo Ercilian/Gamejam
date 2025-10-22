@@ -314,7 +314,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd5a28f069060445b605f033eeaa673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHP: 100
+  curHP: 100
   speed: 5
+  onTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  onDie:
+    m_PersistentCalls:
+      m_Calls: []
   rotationSpeed: 10
   activeControl: 1
 --- !u!114 &3199202718284467957
@@ -332,6 +340,9 @@ MonoBehaviour:
   maxCarryCapacity: 3
   itemHoldPoint: {fileID: 1372787198678267909}
   itemStackOffset: 0.3
+  maxPotions: 2
+  currentPotions: 2
+  potionHealthRestore: 25
 --- !u!114 &1128500900022400354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,7 +446,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813536838263918369}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ca9486d50fbcd74982052ca7b5d005a, type: 3}
   m_Name: 

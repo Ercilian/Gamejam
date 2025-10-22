@@ -3,10 +3,9 @@ using Game.Combat;
 
 namespace Game.Enemies
 {
-    public class Enemy : MonoBehaviour, IDamageable
+    public class Enemy : EntityStats
     {
         [Header("Configuración de Vida")]
-        public int maxHealth = 100;
         public bool showDebugLogs = true;
         public bool isElite = false;
         
@@ -22,7 +21,6 @@ namespace Game.Enemies
         public bool canTakeKnockback = true;
         public float stunDuration = 0.5f;
         
-        private int currentHealth;
         private bool isStunned = false;
         private float stunTimer = 0f;
         private Rigidbody rb;
@@ -32,11 +30,11 @@ namespace Game.Enemies
         public System.Action<int> OnHealthChanged;
         public System.Action OnDeath;
 
-        
-        
-        void Awake()
+
+
+        protected override void Awake()
         {
-            currentHealth = maxHealth;
+            base.Awake();
             rb = GetComponent<Rigidbody>();
         }
         
@@ -53,9 +51,9 @@ namespace Game.Enemies
             }
         }
         
-        public void TakeDamage(DamageInfo damageInfo)
+        public override void TakeDamage(DamageInfo damageInfo)
         {
-            if (currentHealth <= 0) return; // Ya está muerto
+            if (curHP <= 0) return; // Ya está muerto
             
             // Calcular resistencia
             float resistance = GetResistanceFor(damageInfo.damageType);
@@ -63,12 +61,11 @@ namespace Game.Enemies
             
             // Aplicar daño
             int damage = Mathf.RoundToInt(finalDamage);
-            currentHealth = Mathf.Max(0, currentHealth - damage);
+            curHP = Mathf.Max(0, curHP - damage);
             
             if (showDebugLogs)
             {
-                Debug.Log($"[{name}] Recibió {damage} daño ({damageInfo.damageType}) del combo paso {damageInfo.comboStep + 1}. " +
-                         $"Vida: {currentHealth}/{maxHealth}. Efectos: {damageInfo.effects}");
+                Debug.Log($"[{name}] Recibió {damage} daño. Vida antes: {curHP + damage}, después: {curHP}");
             }
             
             // Aplicar efectos
@@ -76,10 +73,10 @@ namespace Game.Enemies
             
             // Disparar eventos
             OnDamageTaken?.Invoke(damageInfo);
-            OnHealthChanged?.Invoke(currentHealth);
-            
+            OnHealthChanged?.Invoke(curHP);
+
             // Verificar muerte
-            if (currentHealth <= 0)
+            if (curHP <= 0)
             {
                 Die(damageInfo);
             }
@@ -138,7 +135,7 @@ namespace Game.Enemies
             }
         }
         
-        private void Die(DamageInfo finalDamage)
+        public override void Die(DamageInfo finalDamage)
         {
             if (showDebugLogs)
             {
@@ -162,26 +159,14 @@ namespace Game.Enemies
         }
         
         // Métodos de utilidad
-        public bool IsAlive() => currentHealth > 0;
         public bool IsStunned() => isStunned;
-        public float HealthPercentage() => (float)currentHealth / maxHealth;
         
-        // Método para curar
-        public void Heal(int amount)
-        {
-            if (currentHealth <= 0) return; // No curar si está muerto
-            
-            currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
-            OnHealthChanged?.Invoke(currentHealth);
-            
-            if (showDebugLogs)
-                Debug.Log($"[{name}] Curado {amount}. Vida: {currentHealth}/{maxHealth}");
-        }
+
         
         #if UNITY_EDITOR
         void OnValidate()
         {
-            if (maxHealth < 1) maxHealth = 1;
+            if (maxHP < 1) maxHP = 1;
         }
         #endif
     }

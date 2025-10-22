@@ -2,21 +2,25 @@ using UnityEngine;
 
 namespace Game.Combat
 {
+    public enum DamageType { Normal, Crítico, Fuego, Hielo, Eléctrico, Perforante }
+    [System.Flags]
+    public enum DamageEffects { None = 0, Knockback = 1, Stun = 2, Burn = 4, Freeze = 8 }
+
     [System.Serializable]
     public struct DamageInfo
     {
-        public int baseDamage;              // Daño base
-        public float finalDamage;           // Daño final después de multiplicadores
-        public DamageType damageType;       // Tipo de daño
-        public DamageEffects effects;       // Efectos aplicados
-        public Vector3 hitPoint;            // Punto de impacto
-        public Vector3 hitDirection;        // Dirección del golpe
-        public float knockbackForce;        // Fuerza del knockback
-        public Vector3 knockbackDirection;  // Dirección del knockback
-        public Transform attacker;          // Quien atacó
-        public int comboStep;               // Paso del combo (0, 1, 2...)
-        
-        public static DamageInfo Create(int baseDamage, HitboxConfig config, Vector3 hitPoint, 
+        public int baseDamage;
+        public float finalDamage;
+        public DamageType damageType;
+        public DamageEffects effects;
+        public Vector3 hitPoint;
+        public Vector3 hitDirection;
+        public float knockbackForce;
+        public Vector3 knockbackDirection;
+        public Transform attacker;
+        public int comboStep;
+
+        public static DamageInfo Create(int baseDamage, HitboxConfig config, Vector3 hitPoint,
                                       Vector3 hitDirection, Transform attacker, int comboStep)
         {
             return new DamageInfo
@@ -35,29 +39,6 @@ namespace Game.Combat
         }
     }
     
-    public interface IDamageable
-    {
-        void TakeDamage(DamageInfo damageInfo);
-        
-        // Método de compatibilidad hacia atrás
-        void TakeDamage(int amount, Vector3 hitPoint, Vector3 hitNormal)
-        {
-            DamageInfo info = new DamageInfo
-            {
-                baseDamage = amount,
-                finalDamage = amount,
-                damageType = DamageType.Normal,
-                effects = DamageEffects.None,
-                hitPoint = hitPoint,
-                hitDirection = hitNormal,
-                knockbackForce = 0f,
-                knockbackDirection = Vector3.zero,
-                attacker = null,
-                comboStep = 0
-            };
-            TakeDamage(info);
-        }
-    }
 
     public static class DamageApplier
     {

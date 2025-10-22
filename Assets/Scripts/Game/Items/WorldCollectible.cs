@@ -86,7 +86,7 @@ public class WorldCollectible : MonoBehaviour
         // Physics.IgnoreCollision(col, playerCollider);
 
         // Ahora sí, añadir al inventario
-        FindObjectOfType<PlayerInventory>().PickupItem(collectibleData);
+        FindFirstObjectByType<PlayerInventory>().PickupItem(collectibleData);
 
         // Destruir el objeto del mundo si ya no se necesita
         Destroy(gameObject);

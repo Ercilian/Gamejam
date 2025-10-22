@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Game.Combat; // ← Añade esto
 
 /// <summary>
 /// Base class for all damageable entities.
 /// Provides basic HP, speed and hooks for damage and death.
 /// Inherit and override TakeDamage/Die when custom behaviour is needed.
 /// </summary>
-public class EntityStats : MonoBehaviour
+public class EntityStats : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
 
@@ -16,7 +17,6 @@ public class EntityStats : MonoBehaviour
 
     [SerializeField] protected float speed = 5f;
 
-
     [Header("Events")]
 
     public UnityEvent<int> onTakeDamage;
@@ -25,7 +25,11 @@ public class EntityStats : MonoBehaviour
 
     public int CurrentHP => curHP;
 
-    public int MaxHP => maxHP;
+    public int MaxHP
+    {
+        get => maxHP;
+        set => maxHP = value;
+    }
 
     public float Speed
     {
@@ -63,7 +67,16 @@ public class EntityStats : MonoBehaviour
 
         if (curHP <= 0)
         {
-            Die();
+            Die(new DamageInfo { finalDamage = amount });
+        }
+    }
+
+    public virtual void TakeDamage(DamageInfo damageInfo)
+    {
+        curHP = Mathf.Max(0, curHP - Mathf.RoundToInt(damageInfo.finalDamage));
+        if (curHP <= 0)
+        {
+            Die(damageInfo);
         }
     }
 
@@ -80,13 +93,11 @@ public class EntityStats : MonoBehaviour
     /// (animations, dropping loot, disabling components). Base implementation invokes the
     /// onDie UnityEvent and disables the GameObject.
     /// </summary>
-    public virtual void Die()
-    {
-        // Invoke listeners attached in inspector/scripts
-        onDie?.Invoke();
 
-        // Default behaviour: deactivate the GameObject
-        // Derived classes can call base.Die() if they still want this behaviour.
-        gameObject.SetActive(false);
+
+    public virtual void Die(DamageInfo finalDamage)
+    {
+        onDie?.Invoke();
+        Destroy(gameObject);
     }
 }

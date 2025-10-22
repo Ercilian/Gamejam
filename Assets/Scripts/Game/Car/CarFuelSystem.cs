@@ -46,10 +46,7 @@ public class CarFuelSystem : MonoBehaviour
             {
                 if (nearbyPlayerInventory.DepositDieselItems(this)) // Attempt to deposit diesel items
                 {
-                    if (showDebugLogs)
-                    {
-                        Debug.Log($"[CarFuelSystem] ⛽ Diesel: {currentDiesel:F1}/{maxDiesel:F1}");
-                    }
+
                     // Clean up state after depositing
                     playerInDepositRange = false;
                     nearbyPlayerInventory = null;

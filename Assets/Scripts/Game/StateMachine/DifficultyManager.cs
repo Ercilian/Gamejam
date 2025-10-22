@@ -44,7 +44,6 @@ public class DifficultyManager : MonoBehaviour
         // Establecer dificultad inicial
         ApplyDifficulty(0);
         
-        Debug.Log($"[DifficultyManager] Initialized - listening to progress changes");
     }
     
     void OnDestroy()

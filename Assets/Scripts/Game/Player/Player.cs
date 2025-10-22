@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Game.Combat;
 
-public class Player : MonoBehaviour
+public class Player : EntityStats
 {
     private PlayerInventory playerInventory;
     private PlayerInput playerInput;
     private InputAction healAction;
 
-    public float speed = 5;
     public float rotationSpeed = 10f; // Velocidad de rotación del jugador
     private Vector2 movementInput;
     [HideInInspector] public bool activeControl = true; // Allow external scripts (like PlayerInputEmpuje) to enable/disable control
@@ -20,8 +20,9 @@ public class Player : MonoBehaviour
 
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerInventory = GetComponent<PlayerInventory>();
         playerInput = GetComponent<PlayerInput>();
         if (playerInput != null)
@@ -32,7 +33,7 @@ public class Player : MonoBehaviour
     {
         if (activeControl)
         {
-            // Movimiento en espacio mundial
+            // Movimiento en espacio mundial usando la variable 'speed' heredada de EntityStats
             Vector3 movement = new Vector3(movementInput.x, 0, movementInput.y) * speed * Time.deltaTime;
             transform.position += movement;
             
@@ -55,4 +56,17 @@ public class Player : MonoBehaviour
     
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
 
+    // Si necesitas lógica especial al morir:
+    public override void Die(DamageInfo finalDamage)
+    {
+        base.Die(finalDamage); // Llama a la lógica base (desactivar GameObject y eventos)
+        // Aquí puedes añadir animaciones, sonidos, respawn, etc.
+    }
+
+    // Si necesitas lógica especial al recibir daño:
+    public override void TakeDamage(int amount)
+    {
+        base.TakeDamage(amount);
+        // Aquí puedes añadir feedback visual, sonido, etc.
+    }
 }

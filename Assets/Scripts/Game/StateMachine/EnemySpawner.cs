@@ -45,7 +45,6 @@ public class EnemySpawner : MonoBehaviour
     void Awake()
     {
         ApplyDifficulty(0);
-        Debug.Log("[EnemySpawner] Initialized in Awake");
     }
     
     void Start()
@@ -53,7 +52,6 @@ public class EnemySpawner : MonoBehaviour
         // Suscribirse al cambio de dificultad
         DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
         
-        Debug.Log("[EnemySpawner] Event subscription completed");
     }
     
     void OnDestroy()
@@ -117,7 +115,7 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemyHealth = enemy.GetComponent<Enemy>();
         if (enemyHealth != null)
         {
-            enemyHealth.maxHealth = Mathf.RoundToInt(enemyHealth.maxHealth * currentSettings.healthMultiplier);
+            enemyHealth.MaxHP = Mathf.RoundToInt(enemyHealth.MaxHP * currentSettings.healthMultiplier);
         }
         
         string enemyType = spawnElite ? "Elite" : "Normal";

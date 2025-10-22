@@ -1,30 +1,11 @@
 using UnityEngine;
+using Game.Combat; // ← Añade esto si no está
 
 namespace Game.Combat
 {
     public enum HitboxShape { Box, Sphere, Capsule, Sector }
     
-    public enum DamageType 
-    { 
-        Normal,     // Daño normal
-        Crítico,    // Daño crítico (más efectos visuales/sonoros)
-        Fuego,      // Daño de fuego
-        Hielo,      // Daño de hielo
-        Eléctrico,  // Daño eléctrico
-        Perforante  // Daño que atraviesa armadura
-    }
-    
-    [System.Flags]
-    public enum DamageEffects
-    {
-        None = 0,
-        Knockback = 1 << 0,      // Empuja al enemigo
-        Stun = 1 << 1,           // Aturde temporalmente
-        Burn = 1 << 2,           // Daño por tiempo (fuego)
-        Freeze = 1 << 3,         // Ralentiza movimiento
-        Electrify = 1 << 4,      // Paraliza brevemente
-        ArmorBreak = 1 << 5      // Reduce defensa
-    }
+       
 
     [System.Serializable]
     public class HitboxConfig
