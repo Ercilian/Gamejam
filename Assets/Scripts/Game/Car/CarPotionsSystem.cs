@@ -7,39 +7,49 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
     [Header("Materials Required")]
     public int plantsRequired = 4;
     public int fuelRequired = 1;
-    
+
     [Header("Current Materials")]
     public int currentPlants = 0;
     public int currentFuel = 0;
-    
+
     [Header("Potions")]
     public int currentPotions = 0;
     public int maxPotions = 1;
-    
+
     [Header("Brewing")]
     public float brewingTime = 10f;
     public bool isBrewing = false;
-    
+
     [Header("Deposit Points")]
     public Transform plantDepositPoint;
     public Transform fuelDepositPoint;
     public string plantDepositPrompt = "Press 'Attack' to deposit plants";
     public string fuelDepositPrompt = "Press 'Attack' to deposit fuel";
     public string brewingPrompt = "Brewing potion...";
-    
-    [Header("Debug")]
-    public bool showDebugLogs = true;
 
+    // ===== PRIVATE FIELDS =====
     private bool playerInPlantRange = false;
     private bool playerInFuelRange = false;
     private PlayerInventory nearbyPlayerInventory;
     private PlayerInput nearbyPlayerInput;
     private bool isSwapping = false;
 
+    // ===== PUBLIC GETTERS =====
+    public int GetCurrentPlants() => currentPlants;
+    public int GetCurrentFuel() => currentFuel;
+    public int GetCurrentPotions() => currentPotions;
+    public int GetMaxPotions() => maxPotions;
+    public bool IsBrewing() => isBrewing;
+    public float GetBrewingProgress() => isBrewing ? 0.5f : 0f; // Placeholder
+
+    // Events
+    public System.Action<int> OnPotionBrewed;
+
     // ================================================= Methods =================================================
 
     void Update()
     {
+        // Handle player input and auto brewing if not swapping
         if (!isSwapping)
         {
             HandlePlayerInput();
@@ -47,8 +57,9 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
         }
     }
 
-    void HandlePlayerInput()
+    private void HandlePlayerInput()
     {
+        // Check if player is nearby and presses the deposit button
         if (nearbyPlayerInventory == null || nearbyPlayerInput == null) return;
 
         var attackAction = nearbyPlayerInput.actions["Attack"];
@@ -56,24 +67,22 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
 
         bool deposited = false;
 
-        // Handle plant deposits
+        // Deposit plants
         if (playerInPlantRange && nearbyPlayerInventory.GetFirstItemType() == CollectibleData.ItemType.Moss)
         {
             if (nearbyPlayerInventory.DepositPlantItems(this))
             {
                 deposited = true;
-                if (showDebugLogs)
-                    Debug.Log($"[CarPotionsSystem] 🌿 Plants deposited! Current: {currentPlants}/{plantsRequired}");
+                Debug.Log($"[CarPotionsSystem] 🌿 Plants deposited! Current: {currentPlants}/{plantsRequired}");
             }
         }
-        // Handle fuel deposits
+        // Deposit fuel
         else if (playerInFuelRange && nearbyPlayerInventory.GetFirstItemType() == CollectibleData.ItemType.Diesel)
         {
             if (nearbyPlayerInventory.DepositFuelItems(this))
             {
                 deposited = true;
-                if (showDebugLogs)
-                    Debug.Log($"[CarPotionsSystem] ⛽ Fuel deposited! Current: {currentFuel}/{fuelRequired}");
+                Debug.Log($"[CarPotionsSystem] ⛽ Fuel deposited! Current: {currentFuel}/{fuelRequired}");
             }
         }
 
@@ -83,8 +92,9 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
         }
     }
 
-    void CheckForAutoBrewing()
+    private void CheckForAutoBrewing()
     {
+        // Automatically start brewing if possible
         if (!isBrewing && CanBrewPotion())
         {
             StartCoroutine(BrewPotion());
@@ -94,26 +104,26 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
     void OnTriggerEnter(Collider other)
     {
         if (isSwapping) return;
-        
+
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory == null || !playerInventory.HasItems()) return;
 
         PlayerInput playerInput = other.GetComponent<PlayerInput>();
         if (playerInput == null) return;
-        
+
         var attackAction = playerInput.actions["Attack"];
         if (attackAction == null) return;
 
         var itemType = playerInventory.GetFirstItemType();
-        
-        // Check if player has plants (moss) and we need plants
+
+        // Check if player has plants and they are needed
         if (itemType == CollectibleData.ItemType.Moss && currentPlants < plantsRequired)
         {
             playerInPlantRange = true;
             nearbyPlayerInventory = playerInventory;
             nearbyPlayerInput = playerInput;
         }
-        // Check if player has fuel and we need fuel
+        // Check if player has fuel and it is needed
         else if (itemType == CollectibleData.ItemType.Diesel && currentFuel < fuelRequired)
         {
             playerInFuelRange = true;
@@ -131,8 +141,9 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
         }
     }
 
-    void ClearPlayerInteraction()
+    private void ClearPlayerInteraction()
     {
+        // Clear player interaction state
         playerInPlantRange = false;
         playerInFuelRange = false;
         nearbyPlayerInventory = null;
@@ -155,63 +166,42 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
     {
         int prevPlants = currentPlants;
         currentPlants = Mathf.Min(currentPlants + amount, plantsRequired);
-        
-        if (showDebugLogs)
-            Debug.Log($"[CarPotionsSystem] 🌿 +{amount} plants ({prevPlants} → {currentPlants})");
     }
 
     public void AddFuel(int amount)
     {
         int prevFuel = currentFuel;
         currentFuel = Mathf.Min(currentFuel + amount, fuelRequired);
-        
-        if (showDebugLogs)
-            Debug.Log($"[CarPotionsSystem] ⛽ +{amount} fuel ({prevFuel} → {currentFuel})");
     }
 
-    bool CanBrewPotion()
+    private bool CanBrewPotion()
     {
-        return currentPlants >= plantsRequired && 
-               currentFuel >= fuelRequired && 
+        // Check if there are enough materials and space for a potion
+        return currentPlants >= plantsRequired &&
+               currentFuel >= fuelRequired &&
                currentPotions < maxPotions;
     }
 
-    IEnumerator BrewPotion()
+    private IEnumerator BrewPotion()
     {
         if (!CanBrewPotion()) yield break;
 
         isBrewing = true;
-        
+
         // Consume materials
         currentPlants -= plantsRequired;
         currentFuel -= fuelRequired;
-        
-        if (showDebugLogs)
-            Debug.Log($"[CarPotionsSystem] 🧪 Started brewing potion! Time: {brewingTime}s");
-        
+
+        Debug.Log($"[CarPotionsSystem] 🧪 Started brewing potion! Time: {brewingTime}s");
+
         yield return new WaitForSeconds(brewingTime);
-        
+
         // Create potion
         currentPotions++;
         isBrewing = false;
-        
-        if (showDebugLogs)
-            Debug.Log($"[CarPotionsSystem] ✅ Potion brewed! Total potions: {currentPotions}");
-        
+
+        Debug.Log($"[CarPotionsSystem] ✅ Potion brewed! Total potions: {currentPotions}");
+
         OnPotionBrewed?.Invoke(currentPotions);
     }
-
-    // Public getters
-    public int GetCurrentPlants() => currentPlants;
-    public int GetCurrentFuel() => currentFuel;
-    public int GetCurrentPotions() => currentPotions;
-    public int GetMaxPotions() => maxPotions;
-    public bool IsBrewing() => isBrewing;
-    public float GetBrewingProgress()
-    {
-        return isBrewing ? 0.5f : 0f; // Placeholder
-    }
-
-    // Events
-    public System.Action<int> OnPotionBrewed;
 }

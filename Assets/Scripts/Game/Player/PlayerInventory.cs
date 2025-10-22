@@ -99,7 +99,6 @@ public class PlayerInventory : MonoBehaviour
         carriedItems.Add(item); // Add item to the carried list
         CreateVisualItem(item); // Create the visual representation of the item
 
-        Debug.Log($"[PlayerInventory] Recogido {item.itemName}. Total: {carriedItems.Count}/{maxCarryCapacity}");
     }
 
     void CreateVisualItem(CollectibleData item)

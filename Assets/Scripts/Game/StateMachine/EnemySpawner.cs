@@ -97,28 +97,33 @@ public class EnemySpawner : MonoBehaviour
     
     void SpawnEnemy()
     {
-        if (spawnPoints.Length == 0) return;
-        
+        // Filtrar solo los spawnPoints válidos (no destruidos)
+        List<Transform> validSpawnPoints = new List<Transform>();
+        foreach (var sp in spawnPoints)
+        {
+            if (sp != null)
+                validSpawnPoints.Add(sp);
+        }
+        if (validSpawnPoints.Count == 0) return;
+
         // Elegir punto de spawn aleatorio
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        
+        Transform spawnPoint = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)];
+
         // Decidir si spawnar elite o normal
         bool spawnElite = Random.Range(0f, 100f) < currentSettings.elitePercentage;
         GameObject prefabToSpawn = spawnElite ? eliteEnemyPrefab : normalEnemyPrefab;
-        
+
         if (prefabToSpawn == null) return;
-        
+
         // Spawnear enemigo
         GameObject enemy = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
-        
+
         // Aplicar multiplicador de vida
         Enemy enemyHealth = enemy.GetComponent<Enemy>();
         if (enemyHealth != null)
         {
             enemyHealth.MaxHP = Mathf.RoundToInt(enemyHealth.MaxHP * currentSettings.healthMultiplier);
         }
-        
-        string enemyType = spawnElite ? "Elite" : "Normal";
     }
     
     void ScheduleNextSpawn()

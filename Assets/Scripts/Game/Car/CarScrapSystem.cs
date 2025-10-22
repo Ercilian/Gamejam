@@ -4,26 +4,36 @@ using System.Collections.Generic;
 
 public class CarScrapSystem : MonoBehaviour, ISwappable
 {
-    [Header("Scrap)")]
+    [Header("Scrap")]
     public int currentScrap = 0;
     public int maxScrap = 9999;
-    
+
     [Header("Scrap Deposit Point")]
     public Transform scrapDepositPoint;
     public string scrapDepositPrompt = "Press 'Attack' to deposit scrap";
-    
+
     [Header("Debug")]
     public bool showDebugLogs = true;
-    
+
+    // ===== PRIVATE FIELDS =====
     private bool playerInScrapRange = false;
     private PlayerInventory nearbyPlayerInventory;
     private PlayerInput nearbyPlayerInput;
     private bool isSwapping = false;
 
+    // ===== PUBLIC GETTERS =====
+    public int GetCurrentScrap() => currentScrap;
+    public int GetMaxScrap() => maxScrap;
+    public float GetScrapPercentage() => maxScrap > 0 ? (float)currentScrap / maxScrap : 0f;
+
+    // Evento para notificar cambios de scrap (útil para UI)
+    public System.Action<int> OnScrapChanged;
+
     // ================================================= Methods =================================================
 
     void Update()
     {
+        // Check if player is in range, has inventory and input, and not swapping
         if (playerInScrapRange && nearbyPlayerInventory && nearbyPlayerInput && !isSwapping)
         {
             var attackAction = nearbyPlayerInput.actions["Attack"];
@@ -32,8 +42,8 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
                 if (nearbyPlayerInventory.DepositScrapItems(this))
                 {
                     if (showDebugLogs)
-                        Debug.Log($"[CarScrapSystem] ✅ Scrap depositado! Total: {currentScrap}");
-                    
+                        Debug.Log($"[CarScrapSystem] ✅ Scrap deposited! Total: {currentScrap}");
+
                     ClearPlayerInteraction();
                 }
             }
@@ -43,7 +53,7 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
     void OnTriggerEnter(Collider other)
     {
         if (isSwapping) return;
-        
+
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory == null) return;
         if (playerInventory.HasItems() && playerInventory.GetFirstItemType() == CollectibleData.ItemType.Scrap)
@@ -68,7 +78,7 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
         }
     }
 
-    void ClearPlayerInteraction()
+    private void ClearPlayerInteraction()
     {
         playerInScrapRange = false;
         nearbyPlayerInventory = null;
@@ -91,10 +101,10 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
     {
         int prevScrap = currentScrap;
         currentScrap = Mathf.Min(currentScrap + amount, maxScrap);
-        
+
         if (showDebugLogs)
             Debug.Log($"[CarScrapSystem] 💰 +{amount} scrap ({prevScrap} → {currentScrap})");
-        
+
         OnScrapChanged?.Invoke(currentScrap);
     }
 
@@ -109,26 +119,18 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
         {
             int prevScrap = currentScrap;
             currentScrap -= amount;
-            
+
             if (showDebugLogs)
                 Debug.Log($"[CarScrapSystem] 💸 -{amount} scrap ({prevScrap} → {currentScrap})");
-                
+
             OnScrapChanged?.Invoke(currentScrap);
             return true;
         }
         else
         {
             if (showDebugLogs)
-                Debug.Log($"[CarScrapSystem] ❌ No tienes suficiente scrap! (Necesitas {amount}, tienes {currentScrap})");
+                Debug.Log($"[CarScrapSystem] ❌ Not enough scrap! (Need {amount}, have {currentScrap})");
             return false;
         }
     }
-
-    // Getters públicos
-    public int GetCurrentScrap() => currentScrap;
-    public int GetMaxScrap() => maxScrap;
-    public float GetScrapPercentage() => maxScrap > 0 ? (float)currentScrap / maxScrap : 0f;
-
-    // Evento para notificar cambios de scrap (útil para UI)
-    public System.Action<int> OnScrapChanged;
 }

@@ -64,9 +64,9 @@ public class Player : EntityStats
     }
 
     // Si necesitas lógica especial al recibir daño:
-    public override void TakeDamage(int amount)
+    public override void TakeDamage(DamageInfo damageInfo)
     {
-        base.TakeDamage(amount);
+        base.TakeDamage(damageInfo);
         // Aquí puedes añadir feedback visual, sonido, etc.
     }
 }

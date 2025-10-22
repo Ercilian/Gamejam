@@ -1,103 +1,55 @@
 using UnityEngine;
 using UnityEngine.Events;
-using Game.Combat; // ← Añade esto
+using Game.Combat;
 
-/// <summary>
-/// Base class for all damageable entities.
-/// Provides basic HP, speed and hooks for damage and death.
-/// Inherit and override TakeDamage/Die when custom behaviour is needed.
-/// </summary>
-public class EntityStats : MonoBehaviour, IDamageable
+
+public class EntityStats : MonoBehaviour, IDamageable // Use the interface to ensure it can take damage
 {
-    [Header("Stats")]
 
+    [Header("Stats")]
     [SerializeField] protected int maxHP = 100;
 
     [SerializeField] protected int curHP = 100;
 
     [SerializeField] protected float speed = 5f;
 
-    [Header("Events")]
-
-    public UnityEvent<int> onTakeDamage;
-
-    public UnityEvent onDie;
 
     public int CurrentHP => curHP;
-
     public int MaxHP
     {
         get => maxHP;
         set => maxHP = value;
     }
-
     public float Speed
     {
         get => speed;
         set => speed = value;
     }
 
-    protected virtual void Reset()
-    {
-        // Initialize current HP to max on add/reset in editor
-        curHP = maxHP;
-    }
-
     protected virtual void Awake()
     {
-        // Ensure curHP is within valid range at start
-        curHP = Mathf.Clamp(curHP, 0, maxHP);
+        curHP = maxHP; // Start with full health when created
     }
 
-    /// <summary>
-    /// Apply damage to this entity. This method is virtual so derived classes
-    /// can override to add armor, damage types, feedback, etc.
-    /// Negative damage will heal the entity.
-    /// </summary> 
-
-    public virtual void TakeDamage(int amount)
+    public virtual void TakeDamage(DamageInfo damageInfo) // Method to take damage
     {
-        if (amount == 0 || !IsAlive()) return;
-
-        // If negative, treat as heal
-        curHP = Mathf.Clamp(curHP - amount, 0, maxHP);
-
-        // Fire damage event (listeners can react in inspector)
-        onTakeDamage?.Invoke(amount);
+        curHP = Mathf.Max(0, curHP - Mathf.RoundToInt(damageInfo.finalDamage)); // Reduce health but not below 0
 
         if (curHP <= 0)
         {
-            Die(new DamageInfo { finalDamage = amount });
+            Die(damageInfo); // If health is 0 or less, die
         }
     }
 
-    public virtual void TakeDamage(DamageInfo damageInfo)
-    {
-        curHP = Mathf.Max(0, curHP - Mathf.RoundToInt(damageInfo.finalDamage));
-        if (curHP <= 0)
-        {
-            Die(damageInfo);
-        }
-    }
 
-    /// <summary>
-    /// Returns true if the entity has more than 0 HP.
-    /// </summary>
-    public virtual bool IsAlive()
+    public virtual bool IsAlive() // Method to check if entity is alive
     {
         return curHP > 0;
     }
 
-    /// <summary>
-    /// Called when the entity reaches 0 HP. Override to implement custom death behaviour
-    /// (animations, dropping loot, disabling components). Base implementation invokes the
-    /// onDie UnityEvent and disables the GameObject.
-    /// </summary>
 
-
-    public virtual void Die(DamageInfo finalDamage)
+    public virtual void Die(DamageInfo finalDamage) // Method to handle death
     {
-        onDie?.Invoke();
         Destroy(gameObject);
     }
 }

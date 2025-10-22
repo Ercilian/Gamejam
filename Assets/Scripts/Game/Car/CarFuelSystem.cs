@@ -4,18 +4,15 @@ using System.Collections.Generic;
 
 public class CarFuelSystem : MonoBehaviour
 {
-    [Header("Fuel (Diesel)")]
-    public float currentDiesel = 20f;
-    public float maxDiesel = 100f;
+    [Header("Diesel Settings")]
+    public float cur_Diesel = 20f;
+    public float max_Diesel = 100f;
     
     [Header("Item Deposition")]
     public Transform depositPoint;
     public string depositPrompt = "Press Attack to deposit items";
-
-    [Header("Debug")]
-    public bool showDebugLogs = true;
-    public float logConsumptionEvery = 5f;
     
+    // ===== PRIVATE FIELDS =====
     private bool playerInDepositRange = false;
     private PlayerInventory nearbyPlayerInventory;
     private PlayerInput nearbyPlayerInput;
@@ -23,6 +20,12 @@ public class CarFuelSystem : MonoBehaviour
     private float lastLoggedDiesel;
     private List<GameObject> pushingPlayers = new List<GameObject>();
 
+    // ===== PUBLIC GETTERS =====
+    public float GetCurrentDiesel() => cur_Diesel;
+    public float GetMaxDiesel() => max_Diesel;
+    public float GetDieselPercentage() => max_Diesel > 0 ? cur_Diesel / max_Diesel : 0f;
+    public bool HasFuel() => cur_Diesel > 0f;
+    public List<GameObject> GetPlayersPushing() => pushingPlayers;
 
 
 
@@ -34,7 +37,7 @@ public class CarFuelSystem : MonoBehaviour
     void Start()
     {
         movCar = GetComponentInParent<MovCar>(); // Check parent for MovCar
-        lastLoggedDiesel = currentDiesel; // Inicializar el último diesel registrado
+        lastLoggedDiesel = cur_Diesel;
     }
 
     void Update()
@@ -61,10 +64,7 @@ public class CarFuelSystem : MonoBehaviour
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if the collider has a PlayerInventory
         
         if (playerInventory == null) return; // If no inventory, exit
-        if (!pushingPlayers.Contains(other.gameObject)) // Add to pushing players list
-        {
-            pushingPlayers.Add(other.gameObject); // Add player to pushing list
-        }
+
         
         if (playerInventory.HasItems()) // Only allow deposit if the player has items
         {
@@ -77,6 +77,11 @@ public class CarFuelSystem : MonoBehaviour
             playerInDepositRange = true;
             nearbyPlayerInventory = playerInventory;
             nearbyPlayerInput = playerInput;
+            
+            if (!pushingPlayers.Contains(other.gameObject)) // Add to pushing players list
+            {
+                pushingPlayers.Add(other.gameObject); // Add player to pushing list
+            }
         }
     }
 
@@ -99,41 +104,34 @@ public class CarFuelSystem : MonoBehaviour
 
     public void AddDiesel(float amount) // Method to add diesel to the car
     {
-        float prevDiesel = currentDiesel; // Store previous diesel amount
-        currentDiesel = Mathf.Min(currentDiesel + amount, maxDiesel); // Add diesel but not exceed max
+        float prevDiesel = cur_Diesel; // Store previous diesel amount
+        cur_Diesel = Mathf.Min(cur_Diesel + amount, max_Diesel); // Add diesel but not exceed max
 
-        if (movCar) movCar.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCar of fuel change
-        lastLoggedDiesel = currentDiesel;
+        if (movCar) movCar.OnFuelChanged(cur_Diesel, max_Diesel); // Notify MovCar of fuel change
+        lastLoggedDiesel = cur_Diesel;
         
-        if (showDebugLogs)
-            Debug.Log($"[CarFuelSystem] ⛽ +{amount} diesel ({prevDiesel:F1} → {currentDiesel:F1})");
+            Debug.Log($"[CarFuelSystem] ⛽ +{amount} diesel ({prevDiesel:F1} → {cur_Diesel:F1})");
     }
 
     public void ConsumeDiesel(float amount) // Method to consume diesel when the car is moving
     {
-        float prevDiesel = currentDiesel; // Store previous diesel amount
-        currentDiesel = Mathf.Max(currentDiesel - amount, 0f); // Subtract diesel but not go below 0
+        float prevDiesel = cur_Diesel; // Store previous diesel amount
+        cur_Diesel = Mathf.Max(cur_Diesel - amount, 0f); // Subtract diesel but not go below 0
 
-        if (movCar) movCar.OnFuelChanged(currentDiesel, maxDiesel); // Notify MovCar of fuel change
-        if (showDebugLogs)
+        if (movCar) movCar.OnFuelChanged(cur_Diesel, max_Diesel); // Notify MovCar of fuel change
         {
-            float dieselConsumed = lastLoggedDiesel - currentDiesel;            
-            if (currentDiesel <= 0f)
+            float dieselConsumed = lastLoggedDiesel - cur_Diesel;            
+            if (cur_Diesel <= 0f)
             {
                 Debug.Log("[CarFuelSystem] ⚠️ ¡SIN COMBUSTIBLE!");
-                lastLoggedDiesel = currentDiesel;
+                lastLoggedDiesel = cur_Diesel;
             }
-            else if (GetDieselPercentage() < 0.2f && prevDiesel >= maxDiesel * 0.2f)
+            else if (GetDieselPercentage() < 0.2f && prevDiesel >= max_Diesel * 0.2f)
             {
                 Debug.Log("[CarFuelSystem] ⚠️ ¡Combustible bajo!");
             }
         }
     }
 
-    // Getters públicos
-    public float GetCurrentDiesel() => currentDiesel;
-    public float GetMaxDiesel() => maxDiesel;
-    public float GetDieselPercentage() => maxDiesel > 0 ? currentDiesel / maxDiesel : 0f;
-    public bool HasFuel() => currentDiesel > 0f;
-    public List<GameObject> GetPlayersPushing() => pushingPlayers;
+
 }
