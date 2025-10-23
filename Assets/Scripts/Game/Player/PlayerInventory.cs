@@ -91,7 +91,6 @@ public class PlayerInventory : MonoBehaviour
 
     void OnCrouchPressed(InputAction.CallbackContext context)
     {
-        Debug.Log($"[PlayerInventory] 🐅 OnCrouchPressed called! carriedItems.Count: {carriedItems.Count}");
 
         if (carriedItems.Count > 0)
         {
@@ -118,7 +117,6 @@ public class PlayerInventory : MonoBehaviour
         carriedItems.Add(item); // Add item to the carried list
         CreateVisualItem(item); // Create the visual representation of the item
 
-        Debug.Log($"[PlayerInventory] Recogido {item.itemName}. Total: {carriedItems.Count}/{maxCarryCapacity}");
     }
 
     void CreateVisualItem(CollectibleData item)
@@ -209,7 +207,6 @@ public class PlayerInventory : MonoBehaviour
 
     public void DropItems()
     {
-        Debug.Log($"[PlayerInventory] DropItems called! carriedItems.Count: {carriedItems.Count}");
         if (carriedItems.Count == 0)
         {
             Debug.Log("[PlayerInventory] No items to drop!");
@@ -260,7 +257,6 @@ public class PlayerInventory : MonoBehaviour
         carriedItems.Clear();
         visualItems.Clear();
 
-        Debug.Log($"[PlayerInventory] Items dropped to the ground!");
     }
 
     void ClearInventory() // Method to clear the inventory (used on player death or similar) (NEED TO CHANGE THIS)

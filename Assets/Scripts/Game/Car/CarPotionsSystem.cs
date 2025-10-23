@@ -5,7 +5,7 @@ using System.Collections;
 public class CarPotionsSystem : MonoBehaviour, ISwappable
 {
     [Header("Materials Required")]
-    public int plantsRequired = 4;
+    public int plantsRequired = 2;
     public int fuelRequired = 1;
 
     [Header("Current Materials")]
@@ -16,9 +16,7 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
     public int currentPotions = 0;
     public int maxPotions = 1;
 
-    [Header("Brewing")]
-    public float brewingTime = 10f;
-    public bool isBrewing = false;
+
 
     [Header("Deposit Points")]
     public Transform plantDepositPoint;
@@ -27,6 +25,12 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
     public string fuelDepositPrompt = "Press 'Attack' to deposit fuel";
     public string brewingPrompt = "Brewing potion...";
 
+    [Header("Potion Creation")]
+    public float brewingTime = 10f;
+    public bool isBrewing = false;
+    public PotionData healPotionData; // ScriptableObject de la poción de curación
+    public Transform potionSpawnPoint; // Punto donde aparecerá la poción
+    
     // ===== PRIVATE FIELDS =====
     private bool playerInPlantRange = false;
     private bool playerInFuelRange = false;
@@ -187,8 +191,6 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
         if (!CanBrewPotion()) yield break;
 
         isBrewing = true;
-
-        // Consume materials
         currentPlants -= plantsRequired;
         currentFuel -= fuelRequired;
 
@@ -196,11 +198,16 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
 
         yield return new WaitForSeconds(brewingTime);
 
-        // Create potion
-        currentPotions++;
-        isBrewing = false;
+        // Asigna la poción al WorldCollectible de la mesa
+        var collectible = GetComponent<WorldCollectible>();
+        if (collectible && healPotionData)
+        {
+            collectible.potionData = healPotionData;
+            collectible.collectibleData = null; // Opcional, para evitar conflictos
+        }
 
-        Debug.Log($"[CarPotionsSystem] ✅ Potion brewed! Total potions: {currentPotions}");
+        isBrewing = false;
+        Debug.Log($"[CarPotionsSystem] ✅ Potion brewed and ready to collect!");
 
         OnPotionBrewed?.Invoke(currentPotions);
     }

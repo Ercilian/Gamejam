@@ -28206,6 +28206,7 @@ MonoBehaviour:
   maxHP: 100
   curHP: 0
   speed: 5
+  shield: 0
 --- !u!1 &2072344557
 GameObject:
   m_ObjectHideFlags: 0
@@ -28528,6 +28529,7 @@ GameObject:
   - component: {fileID: 2139318380}
   - component: {fileID: 2139318381}
   - component: {fileID: 2139318382}
+  - component: {fileID: 2139318383}
   m_Layer: 0
   m_Name: PotionDepositZone
   m_TagString: Untagged
@@ -28583,19 +28585,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ed596cea2f59e4c997f5006b4b5d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarPotionsSystem
-  plantsRequired: 4
+  plantsRequired: 2
   fuelRequired: 1
   currentPlants: 0
   currentFuel: 0
   currentPotions: 0
   maxPotions: 1
-  brewingTime: 10
-  isBrewing: 0
   plantDepositPoint: {fileID: 2139318380}
   fuelDepositPoint: {fileID: 2139318380}
   plantDepositPrompt: Press 'Attack' to deposit plants
   fuelDepositPrompt: Press 'Attack' to deposit fuel
   brewingPrompt: Brewing potion...
+  brewingTime: 10
+  isBrewing: 0
+  healPotionData: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
+  potionSpawnPoint: {fileID: 2139318380}
+--- !u!114 &2139318383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139318379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc2001f79cdf7cc4d9e7ffcfb35a71cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldCollectible
+  collectibleData: {fileID: 0}
+  potionData: {fileID: 0}
+  collectEffect: {fileID: 0}
+  showDebugLogs: 1
 --- !u!1001 &390199614115369119
 PrefabInstance:
   m_ObjectHideFlags: 0

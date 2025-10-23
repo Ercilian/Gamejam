@@ -5,6 +5,7 @@ public class WorldCollectible : MonoBehaviour
 {
     [Header("Configuración")]
     public CollectibleData collectibleData;
+    public PotionData potionData; // Nueva línea añadida
     
     [Header("Efectos")]
     public ParticleSystem collectEffect;
@@ -25,9 +26,8 @@ public class WorldCollectible : MonoBehaviour
     {
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if entering object has PlayerInventory
         if (!playerInventory)
-        {
             return;
-        }
+        
         
         PlayerInput playerInput = other.GetComponent<PlayerInput>(); // Check for PlayerInput
         if (!playerInput)
@@ -35,8 +35,19 @@ public class WorldCollectible : MonoBehaviour
             Debug.LogWarning($"[WorldCollectible] {other.gameObject.name} no tiene PlayerInput component!");
             return;
         }
-        
-        if (!playerInventory.CanCarryItem(collectibleData)) // Check if the player can carry more items
+
+        // --- NUEVO: Comprobación según el tipo de objeto ---
+        bool canCollect = false;
+        if (potionData != null)
+        {
+            canCollect = playerInventory.potions.Count < playerInventory.maxPotions;
+        }
+        else if (collectibleData != null)
+        {
+            canCollect = playerInventory.CanCarryItem(collectibleData);
+        }
+
+        if (!canCollect)
         {
             if (showDebugLogs)
                 Debug.Log($"[WorldCollectible] {other.gameObject.name} no puede cargar más items");
@@ -76,17 +87,30 @@ public class WorldCollectible : MonoBehaviour
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb)
         {
-            rb.isKinematic = true;
-            rb.useGravity = false;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            rb.useGravity = false;
         }
 
         // Ignorar colisión con el jugador (opcional, si tienes referencia)
         // Physics.IgnoreCollision(col, playerCollider);
 
         // Ahora sí, añadir al inventario
-        FindFirstObjectByType<PlayerInventory>().PickupItem(collectibleData);
+        if (nearbyPlayer != null)
+        {
+            if (potionData != null)
+            {
+                nearbyPlayer.AddPotion(potionData);
+                potionData = null; // Limpia el slot para que no se pueda recoger de nuevo
+                // Opcional: actualiza la UI de la mesa para mostrar que está vacía
+            }
+            else if (collectibleData != null)
+            {
+                nearbyPlayer.PickupItem(collectibleData);
+                collectibleData = null;
+            }
+        }
 
         // Destruir el objeto del mundo si ya no se necesita
         Destroy(gameObject);
