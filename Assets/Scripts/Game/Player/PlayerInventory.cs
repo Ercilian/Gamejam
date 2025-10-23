@@ -18,14 +18,24 @@ public class PlayerInventory : MonoBehaviour
 
     [Header("Pociones")]
     public int maxPotions = 2;
-    public int currentPotions = 2;
-    public int potionHealthRestore = 25;
+    public List<PotionData> potions = new List<PotionData>(); // Las pociones que tienes
+    public PotionData defaultHealPotion; // <-- Asigna aquí tu poción de curación en el inspector
 
+    public EntityStats entityStats; // Asigna en el inspector
 
 
 
 
     // ================================================= Methods =================================================
+
+
+
+
+    private void Awake()
+    {
+        if (entityStats == null)
+            entityStats = GetComponent<EntityStats>();
+    }
 
     void Start()
     {
@@ -39,6 +49,15 @@ public class PlayerInventory : MonoBehaviour
             {
                 crouchAction.performed += OnCrouchPressed;
             }
+        }
+
+        if (potions.Count == 0 && defaultHealPotion != null)
+        {
+            for (int i = 0; i < maxPotions; i++)
+            {
+                potions.Add(defaultHealPotion);
+            }
+            UpdatePotionUI();
         }
     }
 
@@ -99,6 +118,7 @@ public class PlayerInventory : MonoBehaviour
         carriedItems.Add(item); // Add item to the carried list
         CreateVisualItem(item); // Create the visual representation of the item
 
+        Debug.Log($"[PlayerInventory] Recogido {item.itemName}. Total: {carriedItems.Count}/{maxCarryCapacity}");
     }
 
     void CreateVisualItem(CollectibleData item)
@@ -262,29 +282,48 @@ public class PlayerInventory : MonoBehaviour
     }
 
 
-    public bool AddPotion() // Method to add a potion
+    public bool AddPotion(PotionData potion) // Method to add a potion
     {
-        if (currentPotions >= maxPotions)
+        if (potions.Count < maxPotions)
         {
-            Debug.Log("[PlayerInventory] No puedes llevar más pociones.");
-            return false;
+            potions.Add(potion);
+            UpdatePotionUI();
+            return true;
         }
-        currentPotions++;
-        Debug.Log($"[PlayerInventory] Poción añadida. Pociones actuales: {currentPotions}/{maxPotions}");
-        return true;
+        return false;
     }
 
     public bool UsePotion() // Method to use a potion
     {
-        if (currentPotions <= 0)
-        {
-            Debug.Log("[PlayerInventory] No tienes pociones para usar.");
-            return false;
-        }
-        currentPotions--;
-        Debug.Log($"[PlayerInventory] Poción usada. Pociones restantes: {currentPotions}/{maxPotions}");
+        if (potions.Count == 0) return false;
+
+        PotionData potion = potions[0];
+        potions.RemoveAt(0);
+
+        ApplyPotionEffect(potion);
+        UpdatePotionUI();
         return true;
     }
 
+    // Aplica el efecto de la poción
+    private void ApplyPotionEffect(PotionData potion)
+    {
+        switch (potion.effectType)
+        {
+            case PotionEffectType.Heal:
+                entityStats.Heal(potion.effectAmount);
+                break;
+            case PotionEffectType.Shield:
+                entityStats.AddShield(potion.effectAmount); // Implementa este método en EntityStats
+                break;
+            case PotionEffectType.DamageBoost:
+                StartCoroutine(entityStats.DamageBoost(potion.effectAmount, potion.duration)); // Implementa este método en EntityStats
+                break;
+        }
+    }
 
+    public void UpdatePotionUI()
+    {
+        // Actualiza la interfaz según potions.Count
+    }
 }

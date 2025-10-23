@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using Game.Combat;
+using System.Collections;
 
 
 public class EntityStats : MonoBehaviour, IDamageable // Use the interface to ensure it can take damage
@@ -12,6 +13,8 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
     [SerializeField] protected int curHP = 100;
 
     [SerializeField] protected float speed = 5f;
+
+    [SerializeField] protected int shield = 0;
 
 
     public int CurrentHP => curHP;
@@ -51,5 +54,26 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
     public virtual void Die(DamageInfo finalDamage) // Method to handle death
     {
         Destroy(gameObject);
+    }
+
+    public void Heal(int amount)
+    {
+        curHP = Mathf.Min(curHP + amount, maxHP);
+        // Actualiza la UI de vida si tienes
+    }
+
+    public void AddShield(int amount)
+    {
+        shield += amount;
+        // Actualiza la UI de escudo si tienes
+    }
+
+    public IEnumerator DamageBoost(int amount, float duration)
+    {
+        // Aplica el boost de daño aquí
+        // Por ejemplo, damage += amount;
+        yield return new WaitForSeconds(duration);
+        // Revertir el boost de daño aquí
+        // damage -= amount;
     }
 }

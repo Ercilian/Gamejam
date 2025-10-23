@@ -8,7 +8,7 @@ public class Player : EntityStats
     private PlayerInput playerInput;
     private InputAction healAction;
 
-    public float rotationSpeed = 10f; // Velocidad de rotación del jugador
+    private float rotationSpeed = 10f; // Velocidad de rotación del jugador
     private Vector2 movementInput;
     [HideInInspector] public bool activeControl = true; // Allow external scripts (like PlayerInputEmpuje) to enable/disable control
 

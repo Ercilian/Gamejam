@@ -28203,7 +28203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc5acc1c6e9db14ab93371ca1fcaa64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Car
-  maxHP: 20
+  maxHP: 100
   curHP: 0
   speed: 5
 --- !u!1 &2072344557

@@ -317,13 +317,7 @@ MonoBehaviour:
   maxHP: 100
   curHP: 100
   speed: 5
-  onTakeDamage:
-    m_PersistentCalls:
-      m_Calls: []
-  onDie:
-    m_PersistentCalls:
-      m_Calls: []
-  rotationSpeed: 10
+  shield: 0
   activeControl: 1
 --- !u!114 &3199202718284467957
 MonoBehaviour:
@@ -341,8 +335,9 @@ MonoBehaviour:
   itemHoldPoint: {fileID: 1372787198678267909}
   itemStackOffset: 0.3
   maxPotions: 2
-  currentPotions: 2
-  potionHealthRestore: 25
+  potions: []
+  defaultHealPotion: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
+  entityStats: {fileID: 0}
 --- !u!114 &1128500900022400354
 MonoBehaviour:
   m_ObjectHideFlags: 0
