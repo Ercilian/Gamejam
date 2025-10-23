@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2fee0ccbc9d147e409d8ad446cb893a3, type: 3}
-  m_Name: HealPotion
+  m_Name: Shield+DamagePotion
   m_EditorClassIdentifier: Assembly-CSharp::PotionData
-  potionName: Heal Potion
-  icon: {fileID: 21300000, guid: f6ad3921478e83b4a844bbefc7efef09, type: 3}
-  effectType: 0
-  effectType2: 3
-  effectAmount: 25
-  effectAmount2: 0
+  potionName: 
+  icon: {fileID: 0}
+  effectType: 1
+  effectType2: 2
+  effectAmount: 15
+  effectAmount2: 10
   duration: 0

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CarPotionsSystem : MonoBehaviour, ISwappable
 {
@@ -11,12 +12,16 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
     [Header("Current Materials")]
     public int currentPlants = 0;
     public int currentFuel = 0;
+    public int currentGreen = 0;
+    public int currentBlue = 0;
+    public int currentDiesel = 0;
 
     [Header("Potions")]
     public int currentPotions = 0;
     public int maxPotions = 1;
 
-
+    [Header("Potion Recipes")]
+    public List<PotionRecipe> potionRecipes = new List<PotionRecipe>(); // Lista de recetas de pociones
 
     [Header("Deposit Points")]
     public Transform plantDepositPoint;
@@ -191,24 +196,44 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
         if (!CanBrewPotion()) yield break;
 
         isBrewing = true;
-        currentPlants -= plantsRequired;
-        currentFuel -= fuelRequired;
+        currentDiesel -= 1; // O los que pida la receta
+        currentGreen -= 1;
+        currentBlue -= 0;
 
         Debug.Log($"[CarPotionsSystem] 🧪 Started brewing potion! Time: {brewingTime}s");
 
         yield return new WaitForSeconds(brewingTime);
 
-        // Asigna la poción al WorldCollectible de la mesa
         var collectible = GetComponent<WorldCollectible>();
-        if (collectible && healPotionData)
+        var potion = GetPotionFromIngredients();
+        if (collectible && potion)
         {
-            collectible.potionData = healPotionData;
-            collectible.collectibleData = null; // Opcional, para evitar conflictos
+            collectible.potionData = potion;
+            collectible.collectibleData = null;
         }
+
+        // Limpia los ingredientes usados
+        currentDiesel = 0;
+        currentGreen = 0;
+        currentBlue = 0;
 
         isBrewing = false;
         Debug.Log($"[CarPotionsSystem] ✅ Potion brewed and ready to collect!");
 
         OnPotionBrewed?.Invoke(currentPotions);
+    }
+
+    private PotionData GetPotionFromIngredients()
+    {
+        foreach (var recipe in potionRecipes)
+        {
+            if (currentDiesel == recipe.requiredDiesel &&
+                currentGreen == recipe.requiredGreen &&
+                currentBlue == recipe.requiredBlue)
+            {
+                return recipe.resultPotion;
+            }
+        }
+        return null; // No hay receta válida
     }
 }
