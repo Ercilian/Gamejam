@@ -13,7 +13,9 @@ public class CollectibleData : ScriptableObject
     {
         Diesel,
         Scrap,
-        Moss
+        PlantRed,
+        PlantGreen,
+        PlantBlue
     }
     
     [Header("Propiedades Diesel")]

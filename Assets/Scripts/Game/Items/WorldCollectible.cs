@@ -50,7 +50,6 @@ public class WorldCollectible : MonoBehaviour
         if (!canCollect)
         {
             if (showDebugLogs)
-                Debug.Log($"[WorldCollectible] {other.gameObject.name} no puede cargar más items");
             return;
         }
         

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ce8325118af7f341a1d2b8e2c468aac, type: 3}
+  m_Name: PlantRed
+  m_EditorClassIdentifier: Assembly-CSharp::CollectibleData
+  itemName: PlantRed
+  itemID: plantred
+  itemIcon: {fileID: 0}
+  itemPrefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+  type: 2
+  dieselValue: 0
+  collectRange: 0
+  collectPrompt: Presiona E para recoger diesel
+  scrapValue: 0
+  scrapCollectRange: 0
+  scrapCollectPrompt: Presiona E para recoger scrap
+  mossValue: 1
+  mossCollectRange: 2
+  mossCollectPrompt: Presiona E para recoger moss
+  collectSound: {fileID: 0}
+  depositSound: {fileID: 0}

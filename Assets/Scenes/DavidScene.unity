@@ -11360,6 +11360,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 578312270}
     m_Modifications:
+    - target: {fileID: -1580470793009994636, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: collectibleData
+      value: 
+      objectReference: {fileID: 11400000, guid: 64b221417e7f8f5408f3d59c6363b54b, type: 2}
     - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.38702232
@@ -11927,6 +11931,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 578312270}
     m_Modifications:
+    - target: {fileID: -1580470793009994636, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: collectibleData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ea4a8524d4f954409218811f467bf1b, type: 2}
     - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.38702232
@@ -17026,6 +17034,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 578312270}
     m_Modifications:
+    - target: {fileID: -1580470793009994636, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: collectibleData
+      value: 
+      objectReference: {fileID: 11400000, guid: 64b221417e7f8f5408f3d59c6363b54b, type: 2}
     - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.38702232
@@ -22679,6 +22691,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 578312270}
     m_Modifications:
+    - target: {fileID: -1580470793009994636, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+      propertyPath: collectibleData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ea4a8524d4f954409218811f467bf1b, type: 2}
     - target: {fileID: 4863481286000995630, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.38702232
@@ -28587,10 +28603,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarPotionsSystem
   plantsRequired: 2
   fuelRequired: 1
-  currentPlants: 0
-  currentFuel: 0
+  currentGreen: 0
+  currentRed: 0
+  currentBlue: 0
+  currentDiesel: 0
   currentPotions: 0
   maxPotions: 1
+  potionRecipes:
+  - requiredDiesel: 1
+    requiredGreen: 2
+    requiredBlue: 0
+    requiredRed: 0
+    resultPotion: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
+  - requiredDiesel: 1
+    requiredGreen: 0
+    requiredBlue: 2
+    requiredRed: 0
+    resultPotion: {fileID: 11400000, guid: b467dfc03ad08d74f86642c95c9b4398, type: 2}
+  - requiredDiesel: 1
+    requiredGreen: 0
+    requiredBlue: 0
+    requiredRed: 2
+    resultPotion: {fileID: 11400000, guid: b6c0c242078496b47a7130b59b524f60, type: 2}
+  - requiredDiesel: 1
+    requiredGreen: 1
+    requiredBlue: 1
+    requiredRed: 0
+    resultPotion: {fileID: 11400000, guid: 3d9e0c37d3acdb64b9fd3b7e838fb3fd, type: 2}
+  - requiredDiesel: 1
+    requiredGreen: 1
+    requiredBlue: 0
+    requiredRed: 1
+    resultPotion: {fileID: 11400000, guid: baad356e43e71f543a62daa8ae0fae08, type: 2}
+  - requiredDiesel: 1
+    requiredGreen: 1
+    requiredBlue: 0
+    requiredRed: 1
+    resultPotion: {fileID: 11400000, guid: baad356e43e71f543a62daa8ae0fae08, type: 2}
   plantDepositPoint: {fileID: 2139318380}
   fuelDepositPoint: {fileID: 2139318380}
   plantDepositPrompt: Press 'Attack' to deposit plants

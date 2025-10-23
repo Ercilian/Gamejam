@@ -146,7 +146,8 @@ public class PlayerInventory : MonoBehaviour
         visualItems.Add(visualItem);
     }
 
-    private bool DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int> onDeposit) // Generic method to deposit items of a specific type
+    private bool 
+    DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int> onDeposit) // Generic method to deposit items of a specific type
     {
         if (carriedItems.Count == 0) return false; // No items to deposit
         int totalValue = 0;
@@ -176,7 +177,9 @@ public class PlayerInventory : MonoBehaviour
         {
             CollectibleData.ItemType.Diesel => item.dieselValue,
             CollectibleData.ItemType.Scrap => item.scrapValue,
-            CollectibleData.ItemType.Moss => item.mossValue,
+            CollectibleData.ItemType.PlantRed => item.mossValue,
+            CollectibleData.ItemType.PlantGreen => item.mossValue,
+            CollectibleData.ItemType.PlantBlue => item.mossValue,
             _ => 0
         };
     }
@@ -195,8 +198,37 @@ public class PlayerInventory : MonoBehaviour
 
     public bool DepositPlantItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit plant/moss items
     {
-        return DepositItemsByType(CollectibleData.ItemType.Moss,
-            value => carPotionsSystem.AddPlants(value));
+        if (carriedItems.Count == 0) return false;
+
+        // Contadores para cada tipo
+        int red = 0, green = 0, blue = 0;
+
+        // Cuenta y elimina cada tipo de planta
+        for (int i = carriedItems.Count - 1; i >= 0; i--)
+        {
+            var type = carriedItems[i].type;
+            if (type == CollectibleData.ItemType.PlantRed ||
+                type == CollectibleData.ItemType.PlantGreen ||
+                type == CollectibleData.ItemType.PlantBlue)
+            {
+                if (type == CollectibleData.ItemType.PlantRed) red += GetItemValue(carriedItems[i]);
+                if (type == CollectibleData.ItemType.PlantGreen) green += GetItemValue(carriedItems[i]);
+                if (type == CollectibleData.ItemType.PlantBlue) blue += GetItemValue(carriedItems[i]);
+
+                if (visualItems.Count > i && visualItems[i] != null)
+                    Destroy(visualItems[i]);
+                if (visualItems.Count > i)
+                    visualItems.RemoveAt(i);
+                carriedItems.RemoveAt(i);
+            }
+        }
+
+        // Deposita cada tipo por separado
+        if (red > 0) carPotionsSystem.AddIngredient(CollectibleData.ItemType.PlantRed, red);
+        if (green > 0) carPotionsSystem.AddIngredient(CollectibleData.ItemType.PlantGreen, green);
+        if (blue > 0) carPotionsSystem.AddIngredient(CollectibleData.ItemType.PlantBlue, blue);
+
+        return (red + green + blue) > 0;
     }
 
     public bool DepositFuelItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit fuel items for potions
@@ -321,5 +353,34 @@ public class PlayerInventory : MonoBehaviour
     public void UpdatePotionUI()
     {
         // Actualiza la interfaz según potions.Count
+    }
+
+    // Método para depositar varios tipos de ítems a la vez (por ejemplo, todas las plantas)
+    private bool DepositItemsByTypes(CollectibleData.ItemType[] itemTypes, System.Action<int> onDeposit)
+    {
+        if (carriedItems.Count == 0) return false;
+        int totalValue = 0;
+        for (int i = carriedItems.Count - 1; i >= 0; i--)
+        {
+            foreach (var type in itemTypes)
+            {
+                if (carriedItems[i].type == type)
+                {
+                    totalValue += GetItemValue(carriedItems[i]);
+                    if (visualItems.Count > i && visualItems[i] != null)
+                        Destroy(visualItems[i]);
+                    if (visualItems.Count > i)
+                        visualItems.RemoveAt(i);
+                    carriedItems.RemoveAt(i);
+                    break; // Sale del foreach para evitar doble eliminación
+                }
+            }
+        }
+        if (totalValue > 0)
+        {
+            onDeposit(totalValue);
+            return true;
+        }
+        return false;
     }
 }
