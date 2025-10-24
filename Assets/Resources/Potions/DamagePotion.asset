@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fee0ccbc9d147e409d8ad446cb893a3, type: 3}
   m_Name: DamagePotion
   m_EditorClassIdentifier: Assembly-CSharp::PotionData
-  potionName: 
+  potionName: DamagePotion
   icon: {fileID: 0}
   effectType: 2
   effectType2: 3

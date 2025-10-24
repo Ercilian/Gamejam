@@ -337,17 +337,35 @@ public class PlayerInventory : MonoBehaviour
     // Aplica el efecto de la poción
     private void ApplyPotionEffect(PotionData potion)
     {
+        // Primer efecto
         switch (potion.effectType)
         {
             case PotionEffectType.Heal:
                 entityStats.Heal(potion.effectAmount);
                 break;
             case PotionEffectType.Shield:
-                entityStats.AddShield(potion.effectAmount); // Implementa este método en EntityStats
+                entityStats.AddShield(potion.effectAmount);
                 break;
             case PotionEffectType.DamageBoost:
-                StartCoroutine(entityStats.DamageBoost(potion.effectAmount, potion.duration)); // Implementa este método en EntityStats
+                StartCoroutine(entityStats.DamageBoost(potion.effectAmount, potion.duration));
                 break;
+        }
+
+        // Segundo efecto (si no es None)
+        if (potion.effectType2 != PotionEffectType.None)
+        {
+            switch (potion.effectType2)
+            {
+                case PotionEffectType.Heal:
+                    entityStats.Heal(potion.effectAmount2);
+                    break;
+                case PotionEffectType.Shield:
+                    entityStats.AddShield(potion.effectAmount2);
+                    break;
+                case PotionEffectType.DamageBoost:
+                    StartCoroutine(entityStats.DamageBoost(potion.effectAmount2, potion.duration));
+                    break;
+            }
         }
     }
 
