@@ -28645,7 +28645,7 @@ MonoBehaviour:
   plantDepositPrompt: Press 'Attack' to deposit plants
   fuelDepositPrompt: Press 'Attack' to deposit fuel
   brewingPrompt: Brewing potion...
-  brewingTime: 10
+  brewingTime: 2
   isBrewing: 0
   healPotionData: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
   potionSpawnPoint: {fileID: 2139318380}

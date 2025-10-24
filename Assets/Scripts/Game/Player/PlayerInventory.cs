@@ -316,6 +316,7 @@ public class PlayerInventory : MonoBehaviour
         {
             potions.Add(potion);
             UpdatePotionUI();
+            Debug.Log($"[PlayerInventory] Potion added: {potion.potionName}");
             return true;
         }
         return false;

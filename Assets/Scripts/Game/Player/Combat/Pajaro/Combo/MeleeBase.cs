@@ -102,6 +102,14 @@ public class MeleeBase : MonoBehaviour
 
     void TryAttack()
     {
+        // Prevent attack if player has a collectible in hands
+        var inventory = GetComponent<PlayerInventory>();
+        if (inventory != null && inventory.HasItems())
+        {
+            Debug.Log("No puedes atacar mientras llevas un coleccionable.");
+            return;
+        }
+
         // ===== PREVENIR ATAQUES SI BOOMERANG ESTÁ ACTIVO =====
         if (isBoomerangActive)
         {
