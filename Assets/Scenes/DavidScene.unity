@@ -10801,8 +10801,6 @@ MonoBehaviour:
   dropTables:
   - sourceName: NormalEnemy
     possibleDrops:
-    - itemIndex: 0
-      dropChance: 75
     - itemIndex: 1
       dropChance: 15
     - itemIndex: 2
@@ -10827,9 +10825,9 @@ MonoBehaviour:
       dropChance: 50
     - itemIndex: 1
       dropChance: 20
-  probDrop1: 0.65
-  probDrop2: 0.25
-  probDrop3: 0.1
+  probDrop1: 0.2
+  probDrop2: 0.1
+  probDrop3: 0.05
   dropForce: 1.5
   dropRadius: 2
   upwardForce: 1.5
