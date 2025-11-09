@@ -14,7 +14,8 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
 
     [SerializeField] protected float speed = 5f;
 
-    [SerializeField] protected int shield = 0;
+    [SerializeField] protected int curShield = 0;
+    [SerializeField] protected int maxShield = 50;
 
 
     public int CurrentHP => curHP;
@@ -28,6 +29,8 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
         get => speed;
         set => speed = value;
     }
+    public int CurrentShield => curShield;
+    public int MaxShield => maxShield;
 
     protected virtual void Awake()
     {
@@ -64,7 +67,7 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
 
     public void AddShield(int amount)
     {
-        shield += amount;
+        curShield += amount;
         // Actualiza la UI de escudo si tienes
     }
 

@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 3199202718284467957}
   - component: {fileID: 1128500900022400354}
   - component: {fileID: 6450105935060270702}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 100
-  curHP: 100
+  curHP: 20
   speed: 5
   shield: 0
   activeControl: 1
@@ -338,6 +338,7 @@ MonoBehaviour:
   potions: []
   defaultHealPotion: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
   entityStats: {fileID: 0}
+  potionPoolPrefab: {fileID: 2858892124577212541, guid: 72b6290cfdb7f9548b63662d507a01b2, type: 3}
 --- !u!114 &1128500900022400354
 MonoBehaviour:
   m_ObjectHideFlags: 0

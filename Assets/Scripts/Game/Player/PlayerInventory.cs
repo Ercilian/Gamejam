@@ -23,6 +23,8 @@ public class PlayerInventory : MonoBehaviour
 
     public EntityStats entityStats; // Asigna en el inspector
 
+    public GameObject potionPoolPrefab; // Asigna el prefab en el inspector
+
 
 
 
@@ -337,36 +339,20 @@ public class PlayerInventory : MonoBehaviour
     // Aplica el efecto de la poción
     private void ApplyPotionEffect(PotionData potion)
     {
-        // Primer efecto
-        switch (potion.effectType)
+        // Instancia el charco en el suelo si la poción tiene Heal o Shield
+        if (potionPoolPrefab != null && 
+            (potion.effectType == PotionEffectType.Heal || potion.effectType == PotionEffectType.Shield ||
+             potion.effectType2 == PotionEffectType.Heal || potion.effectType2 == PotionEffectType.Shield))
         {
-            case PotionEffectType.Heal:
-                entityStats.Heal(potion.effectAmount);
-                break;
-            case PotionEffectType.Shield:
-                entityStats.AddShield(potion.effectAmount);
-                break;
-            case PotionEffectType.DamageBoost:
-                StartCoroutine(entityStats.DamageBoost(potion.effectAmount, potion.duration));
-                break;
+            var pool = Instantiate(potionPoolPrefab, transform.position, Quaternion.identity).GetComponent<PotionPool>();
+            pool.Setup(potion);
         }
 
-        // Segundo efecto (si no es None)
-        if (potion.effectType2 != PotionEffectType.None)
-        {
-            switch (potion.effectType2)
-            {
-                case PotionEffectType.Heal:
-                    entityStats.Heal(potion.effectAmount2);
-                    break;
-                case PotionEffectType.Shield:
-                    entityStats.AddShield(potion.effectAmount2);
-                    break;
-                case PotionEffectType.DamageBoost:
-                    StartCoroutine(entityStats.DamageBoost(potion.effectAmount2, potion.duration));
-                    break;
-            }
-        }
+        // Otros efectos directos (por ejemplo, DamageBoost)
+        if (potion.effectType == PotionEffectType.DamageBoost)
+            StartCoroutine(entityStats.DamageBoost(potion.effectAmount, potion.duration));
+        if (potion.effectType2 == PotionEffectType.DamageBoost)
+            StartCoroutine(entityStats.DamageBoost(potion.effectAmount2, potion.duration));
     }
 
     public void UpdatePotionUI()
