@@ -5400,6 +5400,7 @@ GameObject:
   - component: {fileID: 349664124}
   - component: {fileID: 349664126}
   - component: {fileID: 349664125}
+  - component: {fileID: 349664127}
   m_Layer: 0
   m_Name: ScrapDepositZone
   m_TagString: Untagged
@@ -5460,6 +5461,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0751953, y: 1.6947682, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &349664127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349664123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b40043bf2ab529449965c13e05d3e69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarModuleSwapper
+  scrapCollider: {fileID: 349664126}
+  plantCollider: {fileID: 2139318381}
+  swapAnimationTime: 2
 --- !u!1 &361660840
 GameObject:
   m_ObjectHideFlags: 0
@@ -28024,7 +28040,6 @@ GameObject:
   - component: {fileID: 2070441883}
   - component: {fileID: 2070441885}
   - component: {fileID: 2070441882}
-  - component: {fileID: 2070441884}
   m_Layer: 0
   m_Name: Car
   m_TagString: Car
@@ -28190,21 +28205,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.4999995, y: 4, z: 2.5500002}
   m_Center: {x: 0.5472243, y: 2.0687795, z: -0.032310784}
---- !u!114 &2070441884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070441876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b40043bf2ab529449965c13e05d3e69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarModuleSwapper
-  scrapCollider: {fileID: 349664126}
-  plantCollider: {fileID: 2139318381}
-  swapAnimationTime: 2
 --- !u!114 &2070441885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28220,7 +28220,11 @@ MonoBehaviour:
   maxHP: 100
   curHP: 0
   speed: 5
-  shield: 0
+  curShield: 0
+  maxShield: 50
+  attackDamage: 20
+  defense: 10
+  statsData: {fileID: 0}
 --- !u!1 &2072344557
 GameObject:
   m_ObjectHideFlags: 0
@@ -28544,6 +28548,7 @@ GameObject:
   - component: {fileID: 2139318381}
   - component: {fileID: 2139318382}
   - component: {fileID: 2139318383}
+  - component: {fileID: 2139318384}
   m_Layer: 0
   m_Name: PotionDepositZone
   m_TagString: Untagged
@@ -28663,6 +28668,21 @@ MonoBehaviour:
   potionData: {fileID: 0}
   collectEffect: {fileID: 0}
   showDebugLogs: 1
+--- !u!114 &2139318384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139318379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b40043bf2ab529449965c13e05d3e69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarModuleSwapper
+  scrapCollider: {fileID: 349664126}
+  plantCollider: {fileID: 2139318381}
+  swapAnimationTime: 2
 --- !u!1001 &390199614115369119
 PrefabInstance:
   m_ObjectHideFlags: 0
