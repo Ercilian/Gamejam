@@ -317,7 +317,11 @@ MonoBehaviour:
   maxHP: 100
   curHP: 20
   speed: 5
-  shield: 0
+  curShield: 0
+  maxShield: 50
+  attackDamage: 20
+  defense: 10
+  statsData: {fileID: 11400000, guid: 45bc7567054e03344b1d2ef8296eea8b, type: 2}
   activeControl: 1
 --- !u!114 &3199202718284467957
 MonoBehaviour:

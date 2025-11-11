@@ -65,7 +65,7 @@ public class CarFuelSystem : MonoBehaviour
         
         if (playerInventory == null) return; // If no inventory, exit
 
-        
+        // Handle depositing (only if player has items)
         if (playerInventory.HasItems()) // Only allow deposit if the player has items
         {
             PlayerInput playerInput = other.GetComponent<PlayerInput>(); // Get PlayerInput component
@@ -77,7 +77,11 @@ public class CarFuelSystem : MonoBehaviour
             playerInDepositRange = true;
             nearbyPlayerInventory = playerInventory;
             nearbyPlayerInput = playerInput;
-            
+        }
+        
+        // Handle pushing (only if player has NO items)
+        if (!playerInventory.HasItems()) // Only allow pushing if the player has no items
+        {
             if (!pushingPlayers.Contains(other.gameObject)) // Add to pushing players list
             {
                 pushingPlayers.Add(other.gameObject); // Add player to pushing list
@@ -87,7 +91,8 @@ public class CarFuelSystem : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (pushingPlayers.Contains(other.gameObject)) // Remove from pushing players list
+        // Remove from pushing players list (regardless of items)
+        if (pushingPlayers.Contains(other.gameObject))
         {
             pushingPlayers.Remove(other.gameObject);
         }
