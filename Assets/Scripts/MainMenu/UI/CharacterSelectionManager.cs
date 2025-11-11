@@ -11,6 +11,9 @@ public class CharacterSelectionManager : MonoBehaviour
     [Header("Debug")]
     public bool debugLogs = true;
     
+    [Header("Personajes jugables")]
+    public GameObject[] characterPrefabs; // Asigna los 4 prefabs en el inspector
+    
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
 
     void Awake()
@@ -29,6 +32,7 @@ public class CharacterSelectionManager : MonoBehaviour
             if (playerSlots[i] != null)
             {
                 playerSlots[i].Initialize(i);
+                playerSlots[i].manager = this; // Asigna el manager
             }
             else if (debugLogs)
             {

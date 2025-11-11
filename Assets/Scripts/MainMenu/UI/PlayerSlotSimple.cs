@@ -22,6 +22,10 @@ public class PlayerSlotSimple : MonoBehaviour
     private int slotIndex;
     private bool isJoined = false;
     private GameObject spawnedCharacter;
+    public int selectedCharacterIndex = 0;
+    private GameObject currentPreviewInstance;
+
+    public CharacterSelectionManager manager;
 
     public void Initialize(int index)
     {
@@ -106,4 +110,37 @@ public class PlayerSlotSimple : MonoBehaviour
 
     public bool IsJoined => isJoined;
     public int SlotIndex => slotIndex;
+
+    public void ShowCharacterPreview(GameObject prefab)
+    {
+        // Destruye el preview anterior si existe
+        if (currentPreviewInstance != null)
+            Destroy(currentPreviewInstance);
+
+        // Instancia el nuevo preview en el anchor
+        if (worldPreviewAnchor != null && prefab != null)
+        {
+            currentPreviewInstance = Instantiate(prefab, worldPreviewAnchor);
+            // Ajusta posición/escala si es necesario
+        }
+    }
+
+    public void ChangeCharacter(int direction, GameObject[] characterPrefabs)
+    {
+        // direction: -1 para izquierda, +1 para derecha
+        selectedCharacterIndex = (selectedCharacterIndex + direction + characterPrefabs.Length) % characterPrefabs.Length;
+        ShowCharacterPreview(characterPrefabs[selectedCharacterIndex]);
+    }
+
+    public void OnLeftArrowPressed()
+    {
+        if (manager != null)
+            ChangeCharacter(-1, manager.characterPrefabs);
+    }
+
+    public void OnRightArrowPressed()
+    {
+        if (manager != null)
+            ChangeCharacter(1, manager.characterPrefabs);
+    }
 }

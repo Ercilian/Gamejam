@@ -702,6 +702,8 @@ MonoBehaviour:
   previewLocalEuler: {x: 0, y: 180, z: 0}
   previewScale: 1
   debugLogs: 1
+  selectedCharacterIndex: 0
+  manager: {fileID: 0}
 --- !u!1 &6931156405887048344
 GameObject:
   m_ObjectHideFlags: 0
@@ -822,7 +824,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 83044379240281681}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3969588322936688085}
+        m_TargetAssemblyTypeName: PlayerSlotSimple, Assembly-CSharp
+        m_MethodName: OnRightArrowPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6932080210638962120
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,7 +927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -943,7 +957,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6627328115511606834}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3969588322936688085}
+        m_TargetAssemblyTypeName: PlayerSlotSimple, Assembly-CSharp
+        m_MethodName: OnLeftArrowPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8488860587769958641
 GameObject:
   m_ObjectHideFlags: 0
