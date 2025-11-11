@@ -65,26 +65,37 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    void OnPlayerJoined(PlayerInput playerInput)
+    public void OnPlayerJoined(PlayerInput playerInput)
     {
-        int playerIndex = playerInput.playerIndex;
-        
-        if (debugLogs)
-            Debug.Log($"[CharacterSelection] Jugador {playerIndex} se unió con device: {playerInput.devices[0].name}");
-        
-        // Verificar que el índice esté dentro del rango
-        if (playerIndex >= 0 && playerIndex < playerSlots.Length)
+        // Ignora si el dispositivo principal es Mouse
+        if (playerInput.devices.Count > 0 && playerInput.devices[0] is UnityEngine.InputSystem.Mouse)
         {
-            if (playerSlots[playerIndex] != null)
+            Debug.Log("[CharacterSelection] Ignorado: No se puede unir con Mouse.");
+            return;
+        }
+
+        // Busca el primer slot libre
+        int slotIndex = -1;
+        for (int i = 0; i < playerSlots.Length; i++)
+        {
+            if (playerSlots[i] != null && !playerSlots[i].IsJoined)
             {
-                playerSlots[playerIndex].SetJoinedState(true);
-                activePlayers[playerIndex] = playerInput;
+                slotIndex = i;
+                break;
             }
         }
-        else if (debugLogs)
+
+        if (slotIndex == -1)
         {
-            Debug.LogWarning($"[CharacterSelection] PlayerIndex {playerIndex} fuera del rango de slots disponibles");
+            Debug.LogWarning("[CharacterSelection] No hay slots libres para el jugador.");
+            return;
         }
+
+        if (debugLogs)
+            Debug.Log($"[CharacterSelection] Jugador asignado al slot {slotIndex} con device: {playerInput.devices[0].name}");
+
+        playerSlots[slotIndex].SetJoinedState(true);
+        activePlayers[slotIndex] = playerInput;
     }
 
     void OnPlayerLeft(PlayerInput playerInput)

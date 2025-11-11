@@ -32,9 +32,6 @@ public class PlayerSlotSimple : MonoBehaviour
         TryAutoFindAnchor();
 
         SetJoinedState(false);
-
-        if (debugLogs)
-            Debug.Log($"[Slot {slotIndex}] Inicializado. Idle={idleState != null}, Joined={joinedState != null}, Anchor={(worldPreviewAnchor ? worldPreviewAnchor.name : "NULL")}");
     }
 
     public void SetJoinedState(bool joined)

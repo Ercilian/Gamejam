@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class MainMenu : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject SettingsPanel;
     public GameObject SelectCharacterPanel;
+    public Button firstSelectedButton;
 
     
     void Start()
@@ -14,6 +17,7 @@ public class MainMenu : MonoBehaviour
         mainMenuPanel.SetActive(true);
         SettingsPanel.SetActive(false);
         SelectCharacterPanel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
 
     }
 
