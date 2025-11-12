@@ -70,7 +70,9 @@ namespace Game.Combat
         public event Action OnBoomerangEnded;
 
         // Internal state
-        int currentStep = 0;
+    // use -1 to represent idle (no step selected). This lets the first click
+    // advance to step 0 predictably when StartAttack increments before use.
+    int currentStep = -1;
         float lastAttackTime = -999f;
         float lastComboTime = -999f;
         bool boomerangActive = false;
@@ -78,6 +80,11 @@ namespace Game.Combat
         // track running coroutines per step so we can cancel duplicates
         Dictionary<int, Coroutine> runningStepCoroutines = new Dictionary<int, Coroutine>();
         Coroutine boomerangCoroutine = null;
+    // runtime preview of boomerang tick position (used for runtime Gizmo drawing)
+    Vector3 boomerangPreviewPos = Vector3.zero;
+    Quaternion boomerangPreviewRot = Quaternion.identity;
+    int boomerangPreviewStep = -1;
+    bool boomerangPreviewActive = false;
 
     [Serializable]
     public class StepConfig
@@ -120,10 +127,10 @@ namespace Game.Combat
 
         void Update()
         {
-            // reset combo if idle
-            if (currentStep > 0 && Time.time - lastComboTime > comboResetTime)
+            // reset combo to idle (-1) if idle time exceeded
+            if (currentStep >= 0 && Time.time - lastComboTime > comboResetTime)
             {
-                currentStep = 0;
+                currentStep = -1;
             }
         }
 
@@ -178,8 +185,13 @@ namespace Game.Combat
             lastAttackTime = Time.time;
             lastComboTime = Time.time;
 
+            // If idle (-1), advance to 0 on first press. Otherwise advance to next step.
+            if (currentStep < 0)
+                currentStep = 0;
+            else
+                currentStep = (currentStep + 1) % Math.Max(1, steps.Count);
+
             int step = currentStep;
-            currentStep = (currentStep + 1) % Math.Max(1, steps.Count);
 
             OnAttackStep?.Invoke(step);
 
@@ -215,7 +227,7 @@ namespace Game.Combat
         /// </summary>
         public void ResetCombo()
         {
-            currentStep = 0;
+            currentStep = -1;
             lastAttackTime = -999f;
             lastComboTime = -999f;
             // stop running step coroutines
@@ -406,6 +418,11 @@ namespace Game.Combat
             {
                 cur = Vector3.MoveTowards(cur, maxCenter, boomerangTickDistance);
                 OnBoomerangTick?.Invoke(cur, rot, comboStep);
+                // update preview state for runtime gizmo
+                boomerangPreviewActive = true;
+                boomerangPreviewPos = cur;
+                boomerangPreviewRot = rot;
+                boomerangPreviewStep = comboStep;
                 // detect
                 var hits = Physics.OverlapSphere(cur, Mathf.Max(0.01f, cfg.sphereRadius), enemyLayer, QueryTriggerInteraction.Collide);
                 if (hits != null && hits.Length > 0)
@@ -427,6 +444,11 @@ namespace Game.Combat
             while (t < boomerangPauseTime)
             {
                 OnBoomerangTick?.Invoke(cur, rot, comboStep);
+                // update preview state for runtime gizmo
+                boomerangPreviewActive = true;
+                boomerangPreviewPos = cur;
+                boomerangPreviewRot = rot;
+                boomerangPreviewStep = comboStep;
                 var hits = Physics.OverlapSphere(cur, Mathf.Max(0.01f, cfg.sphereRadius), enemyLayer, QueryTriggerInteraction.Collide);
                 if (hits != null && hits.Length > 0)
                 {
@@ -448,6 +470,11 @@ namespace Game.Combat
                 startCenter = transform.TransformPoint(cfg.offset);
                 cur = Vector3.MoveTowards(cur, startCenter, boomerangTickDistance);
                 OnBoomerangTick?.Invoke(cur, rot, comboStep);
+                // update preview state for runtime gizmo
+                boomerangPreviewActive = true;
+                boomerangPreviewPos = cur;
+                boomerangPreviewRot = rot;
+                boomerangPreviewStep = comboStep;
                 var hits = Physics.OverlapSphere(cur, Mathf.Max(0.01f, cfg.sphereRadius), enemyLayer, QueryTriggerInteraction.Collide);
                 if (hits != null && hits.Length > 0)
                 {
@@ -464,6 +491,11 @@ namespace Game.Combat
 
             boomerangActive = false;
             boomerangCoroutine = null;
+            // deactivate preview
+            boomerangPreviewActive = false;
+            boomerangPreviewStep = -1;
+            // After boomerang completes, return to idle state until the player clicks again.
+            currentStep = -1;
             OnBoomerangEnded?.Invoke();
         }
 
@@ -473,9 +505,22 @@ namespace Game.Combat
 
             int stepToDraw = previewStep;
             if (Application.isPlaying && previewInPlayMode)
-                stepToDraw = Mathf.Clamp(currentStep, 0, steps.Count - 1);
+            {
+                if (currentStep < 0)
+                {
+                    // if we're idle and previewOnly is false, don't draw any runtime step
+                    if (!previewOnly) return;
+                    stepToDraw = Mathf.Clamp(previewStep, 0, steps.Count - 1);
+                }
+                else
+                {
+                    stepToDraw = Mathf.Clamp(currentStep, 0, steps.Count - 1);
+                }
+            }
             else
+            {
                 stepToDraw = Mathf.Clamp(previewStep, 0, steps.Count - 1);
+            }
 
             var cfg = steps[stepToDraw];
             Vector3 rotatedOffset = transform.rotation * Quaternion.Euler(cfg.localEuler) * cfg.offset;
@@ -512,7 +557,14 @@ namespace Game.Combat
             }
 
             Gizmos.color = Color.cyan;
-            if (cfg.shape == Shape.Box)
+            // If boomerang preview active and matches this step, draw moving hitbox instead
+            if (Application.isPlaying && boomerangPreviewActive && boomerangPreviewStep == stepToDraw)
+            {
+                // draw preview sphere at boomerangPreviewPos using cfg.sphereRadius
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(boomerangPreviewPos, cfg.shape == Shape.Sector ? cfg.sectorRadius : Mathf.Max(0.01f, cfg.sphereRadius));
+            }
+            else if (cfg.shape == Shape.Box)
             {
                 Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
                 Gizmos.matrix = Matrix4x4.TRS(center, rot, Vector3.one);
