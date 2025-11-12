@@ -2,16 +2,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
-
     public GameObject mainMenuPanel;
     public GameObject SettingsPanel;
     public GameObject SelectCharacterPanel;
     public Button firstSelectedButton;
 
-    
+    [Header("Input System")]
+    public InputActionAsset inputActions; // Asigna tu InputSystem_Actions en el inspector
+
+    private InputAction cancelAction;
+
     void Start()
     {
         mainMenuPanel.SetActive(true);
@@ -19,6 +23,33 @@ public class MainMenu : MonoBehaviour
         SelectCharacterPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
 
+        // Deshabilita el mouse
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Obtén la acción "Cancel" del Action Map "UI"
+        var uiMap = inputActions.FindActionMap("UI", true);
+        cancelAction = uiMap.FindAction("Cancel", true);
+        cancelAction.Enable();
+        cancelAction.performed += ctx => OnCancel();
+    }
+
+    void Update()
+    {
+        if (Cursor.visible)
+            Cursor.visible = false;
+        if (Cursor.lockState != CursorLockMode.Locked)
+            Cursor.lockState = CursorLockMode.Locked;
+        if (EventSystem.current.currentSelectedGameObject == null && firstSelectedButton != null)
+            EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
+    }
+
+    private void OnCancel()
+    {
+        if (SettingsPanel.activeSelf || SelectCharacterPanel.activeSelf)
+        {
+            Back();
+        }
     }
 
     public void Play()
@@ -43,5 +74,14 @@ public class MainMenu : MonoBehaviour
     public void Exit()
     {
         Application.Quit();
+    }
+
+    void OnDestroy()
+    {
+        if (cancelAction != null)
+        {
+            cancelAction.Disable();
+            cancelAction.Dispose();
+        }
     }
 }

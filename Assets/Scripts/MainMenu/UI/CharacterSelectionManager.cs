@@ -100,6 +100,40 @@ public class CharacterSelectionManager : MonoBehaviour
 
         playerSlots[slotIndex].SetJoinedState(true);
         activePlayers[slotIndex] = playerInput;
+
+        // Añade listeners para las acciones de izquierda/derecha y desconexión
+        var actions = playerInput.actions;
+        var uiMap = playerInput.actions.FindActionMap("UI", true);
+        if (uiMap != null)
+        {
+            var moveLeft = uiMap.FindAction("MoveLeft", true);
+            var moveRight = uiMap.FindAction("MoveRight", true);
+            var disconnect = uiMap.FindAction("Disconnect", false);
+
+            int playerIndex = playerInput.playerIndex;
+            if (playerIndex >= 0 && playerIndex < playerSlots.Length)
+            {
+                moveLeft.performed -= ctx => playerSlots[playerIndex].OnLeftArrowPressed();
+                moveRight.performed -= ctx => playerSlots[playerIndex].OnRightArrowPressed();
+
+                moveLeft.performed += ctx => playerSlots[playerIndex].OnLeftArrowPressed();
+                moveRight.performed += ctx => playerSlots[playerIndex].OnRightArrowPressed();
+
+                // Listener para desconectar
+                if (disconnect != null)
+                {
+                    disconnect.performed += ctx => {
+                        if (debugLogs)
+                            Debug.Log($"[CharacterSelection] Jugador {playerIndex} desconectado por input.");
+                        Destroy(playerInput.gameObject); // <-- Elimina el jugador correctamente
+                    };
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el Action Map 'UI'.");
+        }
     }
 
     void OnPlayerLeft(PlayerInput playerInput)
@@ -143,5 +177,27 @@ public class CharacterSelectionManager : MonoBehaviour
         PlayerInput[] players = new PlayerInput[activePlayers.Count];
         activePlayers.Values.CopyTo(players, 0);
         return players;
+    }
+
+    void Update()
+    {
+        // Solo si hay jugadores unidos
+        for (int i = 0; i < playerSlots.Length; i++)
+        {
+            var slot = playerSlots[i];
+            if (slot != null && slot.IsJoined)
+            {
+                // Puedes usar Input.GetKeyDown o el sistema InputSystem
+                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+                {
+                    slot.OnLeftArrowPressed();
+                }
+                if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+                {
+                    slot.OnRightArrowPressed();
+                }
+                // Si usas InputSystem, puedes mapear acciones y llamarlas aquí
+            }
+        }
     }
 }

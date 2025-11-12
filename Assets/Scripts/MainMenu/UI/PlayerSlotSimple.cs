@@ -73,8 +73,6 @@ public class PlayerSlotSimple : MonoBehaviour
         spawnedCharacter.transform.localEulerAngles = previewLocalEuler;
         spawnedCharacter.transform.localScale = Vector3.one * previewScale;
 
-        if (debugLogs)
-            Debug.Log($"[Slot {slotIndex}] Personaje instanciado en {(anchor == transform ? "slotTransform" : anchor.name)}");
     }
 
     private void DespawnPreview()

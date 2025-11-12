@@ -1702,7 +1702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e780ddb0e74c0479ea0067db89f63e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSelectionSetup
-  inputActions: {fileID: -944628639613478452, guid: 305dd72312fd94447a43b236b4cdccce, type: 3}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!4 &1641888829
 Transform:
   m_ObjectHideFlags: 0
@@ -1754,6 +1754,7 @@ MonoBehaviour:
   SettingsPanel: {fileID: 1934487238}
   SelectCharacterPanel: {fileID: 1418664042}
   firstSelectedButton: {fileID: 605215038}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &1697527372
 MonoBehaviour:
   m_ObjectHideFlags: 0
