@@ -13,6 +13,7 @@ public class CharacterSelectionManager : MonoBehaviour
     
     [Header("Personajes jugables")]
     public GameObject[] characterPrefabs; // Asigna los 4 prefabs en el inspector
+    public GameObject SelectCharacterPanel; // Asigna el panel en el inspector
     
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
 
@@ -109,6 +110,7 @@ public class CharacterSelectionManager : MonoBehaviour
             var moveLeft = uiMap.FindAction("MoveLeft", true);
             var moveRight = uiMap.FindAction("MoveRight", true);
             var disconnect = uiMap.FindAction("Disconnect", false);
+            var submit = uiMap.FindAction("Submit", true);
 
             int playerIndex = playerInput.playerIndex;
             if (playerIndex >= 0 && playerIndex < playerSlots.Length)
@@ -128,6 +130,18 @@ public class CharacterSelectionManager : MonoBehaviour
                         Destroy(playerInput.gameObject); // <-- Elimina el jugador correctamente
                     };
                 }
+
+                // Suscribe el evento para el botón Ready
+                submit.performed += ctx =>
+                {
+                    if (SelectCharacterPanel.activeSelf // Solo si está activa la selección
+                        && playerSlots[playerIndex] != null
+                        && playerSlots[playerIndex].IsJoined
+                        && !playerSlots[playerIndex].IsConfirmed)
+                    {
+                        playerSlots[playerIndex].OnConfirmPressed();
+                    }
+                };
             }
         }
         else

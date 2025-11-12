@@ -703,6 +703,7 @@ MonoBehaviour:
   - {fileID: 4605989410389788580, guid: b52f3948640eb1249a06f87029754d46, type: 3}
   - {fileID: 4605989410389788580, guid: ddd4ba6e7f1817146b903e554a087c49, type: 3}
   - {fileID: 4605989410389788580, guid: e8b1f91169203774fb43a62755a294f7, type: 3}
+  SelectCharacterPanel: {fileID: 1418664042}
 --- !u!114 &268937671
 MonoBehaviour:
   m_ObjectHideFlags: 0

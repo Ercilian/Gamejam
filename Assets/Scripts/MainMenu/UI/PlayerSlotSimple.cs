@@ -8,6 +8,8 @@ public class PlayerSlotSimple : MonoBehaviour
     public GameObject idleState;     // Panel "Press Any Button"
     public GameObject joinedState;   // Panel "PLAYER X"
     public TMP_Text playerText;      // Texto del número de jugador
+    public Button confirmButton;
+    private bool isConfirmed = false;
 
     [Header("Preview del personaje")]
     public GameObject defaultCharacterPrefab;   // Asigna aquí tu prefab del personaje
@@ -26,6 +28,10 @@ public class PlayerSlotSimple : MonoBehaviour
     private GameObject currentPreviewInstance;
 
     public CharacterSelectionManager manager;
+
+    public bool IsConfirmed => isConfirmed;
+
+    
 
     public void Initialize(int index)
     {
@@ -141,4 +147,14 @@ public class PlayerSlotSimple : MonoBehaviour
         if (manager != null)
             ChangeCharacter(1, manager.characterPrefabs);
     }
+
+    public void OnConfirmPressed()
+    {
+        isConfirmed = true;
+        confirmButton.interactable = false;
+        // Cambia el color o muestra "Listo"
+        if (playerText) playerText.text = $"PLAYER {slotIndex + 1} ¡Listo!";
+        if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
+    }
+
 }
