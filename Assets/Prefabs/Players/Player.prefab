@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 3199202718284467957}
   - component: {fileID: 1128500900022400354}
   - component: {fileID: 6450105935060270702}
+  - component: {fileID: 8577440922694416064}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -350,7 +351,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813536838263918369}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3934a204bd8919848aa067d6ea7e9c65, type: 3}
   m_Name: 
@@ -458,6 +459,66 @@ MonoBehaviour:
   hitLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &8577440922694416064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 415dc1fc3557f3d40adeff523709c487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Combat.ComboHitboxController
+  attackCooldown: 0.1
+  comboResetTime: 2
+  steps:
+  - useTicks: 0
+    isBoomerang: 0
+    shape: 2
+    offset: {x: 0, y: 0.55, z: 0.07}
+    localEuler: {x: 0, y: -90, z: 0}
+    boxSize: {x: 1, y: 1, z: 1}
+    sphereRadius: 1
+    sectorRadius: 1.8
+    sectorAngle: 97
+    windowDuration: 0.08
+    tickInterval: 0.04
+  - useTicks: 0
+    isBoomerang: 0
+    shape: 2
+    offset: {x: 0, y: 0.55, z: 0.07}
+    localEuler: {x: 0, y: -90, z: 0}
+    boxSize: {x: 1, y: 1, z: 1}
+    sphereRadius: 1
+    sectorRadius: 1.8
+    sectorAngle: 97
+    windowDuration: 0.08
+    tickInterval: 0.04
+  - useTicks: 0
+    isBoomerang: 1
+    shape: 0
+    offset: {x: 0, y: 0.61, z: 1}
+    localEuler: {x: 0, y: -90, z: 0}
+    boxSize: {x: 1, y: 0.45, z: 1}
+    sphereRadius: 1
+    sectorRadius: 1
+    sectorAngle: 90
+    windowDuration: 0.08
+    tickInterval: 0.04
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  boomerangDistance: 5
+  boomerangTickDistance: 0.5
+  boomerangTickInterval: 0.08
+  boomerangPauseTime: 0.6
+  drawGizmos: 1
+  previewOnly: 0
+  previewStep: 2
+  previewInPlayMode: 1
+  showDebugLogs: 1
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0

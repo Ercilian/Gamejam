@@ -1,0 +1,537 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Game.Combat
+{
+    /// <summary>
+    /// Reusable combo + per-step hitbox controller.
+    /// Attach to any character to configure a combo made of N steps.
+    /// For each step you can configure a hitbox (box or sphere), a detection window
+    /// and whether the step is a boomerang (uses boomerang settings).
+    ///
+    /// This script only handles timing and detection. It does NOT apply damage.
+    /// It exposes events that you should subscribe to in order to apply damage,
+    /// play VFX, or spawn hitbox prefabs.
+    /// </summary>
+    [ExecuteAlways]
+    public class ComboHitboxController : MonoBehaviour
+    {
+        [Header("Combo timing")]
+        [Tooltip("Cooldown between attacks (seconds)")]
+        public float attackCooldown = 0.25f;
+        [Tooltip("Time after the last attack to reset the combo")]
+        public float comboResetTime = 1f;
+
+        [Header("Steps")]
+        [Tooltip("Per-step configuration. Index 0 = step 1, index 1 = step 2, ...")]
+        public List<StepConfig> steps = new List<StepConfig>() { new StepConfig(), new StepConfig(), new StepConfig() };
+
+        [Header("Global hit filtering")]
+        [Tooltip("Which layers are considered hittable by step hitboxes and boomerang")]
+        public LayerMask enemyLayer;
+
+        [Header("Boomerang defaults")]
+        [Tooltip("Distance the boomerang travels from the origin")]
+        public float boomerangDistance = 5f;
+        [Tooltip("Distance advanced per tick while the boomerang moves")]
+        public float boomerangTickDistance = 0.5f;
+        [Tooltip("Seconds between boomerang ticks")]
+        public float boomerangTickInterval = 0.08f;
+        [Tooltip("Pause time at the boomerang apex")]
+        public float boomerangPauseTime = 0.6f;
+
+        [Header("Debug / Visualization")]
+        public bool drawGizmos = true;
+    [Tooltip("When true, show only the selected preview step in the editor Gizmos")]
+    public bool previewOnly = false;
+    [Tooltip("Index of the step to preview in the inspector (clamped to steps count)")]
+    public int previewStep = 0;
+    [Tooltip("When playing, draw the active combo step's hitbox instead of the preview (if true)")]
+    public bool previewInPlayMode = true;
+    [Tooltip("Enable runtime debug logs for combo/hitbox events")]
+    public bool showDebugLogs = false;
+
+        // Public events
+        public event Action<int> OnAttackStep; // invoked when a step begins (step index)
+        public event Action<Collider, int> OnStepHit; // invoked when a collider is detected for a step
+        public event Action OnBoomerangStarted;
+        public event Action<Vector3, Quaternion, int> OnBoomerangTick; // pos, rot, step
+        public event Action OnBoomerangEnded;
+
+        // Internal state
+        int currentStep = 0;
+        float lastAttackTime = -999f;
+        float lastComboTime = -999f;
+        bool boomerangActive = false;
+
+        // track running coroutines per step so we can cancel duplicates
+        Dictionary<int, Coroutine> runningStepCoroutines = new Dictionary<int, Coroutine>();
+        Coroutine boomerangCoroutine = null;
+
+    [Serializable]
+    public class StepConfig
+        {
+            [Tooltip("Si está activo, este paso realiza comprobaciones por ticks durante la ventana; si es false se detecta solo una vez cuando se activa el paso.")]
+            public bool useTicks = true;
+
+            [Tooltip("If true, this step uses the boomerang behaviour instead of a single hitbox")]
+            public bool isBoomerang = false;
+
+            [Tooltip("Shape used for detection (Box or Sphere)")]
+            public Shape shape = Shape.Box;
+
+            [Tooltip("Local offset from the transform to place the detection center")]
+            public Vector3 offset = new Vector3(0f, 0f, 1.2f);
+
+            [Tooltip("Local Euler rotation (degrees) applied to the hitbox around the character. Useful to rotate boxes on a specific axis.")]
+            public Vector3 localEuler = Vector3.zero;
+
+            [Tooltip("Box size (only used if shape == Box)")]
+            public Vector3 boxSize = new Vector3(1f, 1f, 1f);
+
+            [Tooltip("Sphere radius (only used if shape == Sphere)")]
+            public float sphereRadius = 1f;
+
+            [Tooltip("Sector radius (only used if shape == Sector)")]
+            public float sectorRadius = 1f;
+
+            [Tooltip("Sector angle in degrees (only used if shape == Sector)")]
+            public float sectorAngle = 90f;
+
+            [Tooltip("Duration in seconds of the detection window. Only used if UseTicks = true.")]
+            public float windowDuration = 0.08f;
+
+            [Tooltip("Interval between checks while the window is open (seconds). Only used if UseTicks = true.")]
+            public float tickInterval = 0.04f;
+        }
+
+    public enum Shape { Box, Sphere, Sector }
+
+        void Update()
+        {
+            // reset combo if idle
+            if (currentStep > 0 && Time.time - lastComboTime > comboResetTime)
+            {
+                currentStep = 0;
+            }
+        }
+
+        public bool CanAttack()
+        {
+            return Time.time - lastAttackTime >= attackCooldown && !boomerangActive;
+        }
+
+        /// <summary>
+        /// Starts an attack. Returns the step index triggered or -1 if on cooldown.
+        /// </summary>
+        public int StartAttack()
+        {
+            if (!CanAttack())
+            {
+                if (showDebugLogs) Debug.Log($"[Combo] StartAttack rejected: canAttack={CanAttack()} timeSinceLastAttack={Time.time - lastAttackTime} boomerangActive={boomerangActive}");
+                return -1;
+            }
+
+            lastAttackTime = Time.time;
+            lastComboTime = Time.time;
+
+            int step = currentStep;
+            currentStep = (currentStep + 1) % Math.Max(1, steps.Count);
+
+            OnAttackStep?.Invoke(step);
+
+            if (showDebugLogs)
+            {
+                Debug.Log($"[Combo] StartAttack triggered. returnedStep={step} newCurrentStep={currentStep} time={Time.time}");
+                var cfgdbg = (step >= 0 && step < steps.Count) ? steps[step] : null;
+                if (cfgdbg != null) Debug.Log($"[Combo] step {step} isBoomerang={cfgdbg.isBoomerang} shape={cfgdbg.shape}");
+            }
+
+            var cfg = (step >= 0 && step < steps.Count) ? steps[step] : null;
+            if (cfg != null)
+            {
+                if (cfg.isBoomerang)
+                {
+                    if (!boomerangActive)
+                    {
+                        boomerangCoroutine = StartCoroutine(DoBoomerang(step, cfg));
+                    }
+                }
+                else
+                {
+                    // detection for the step
+                    ExecuteStepDetection(step, cfg);
+                }
+            }
+
+            return step;
+        }
+
+        /// <summary>
+        /// Force-reset the combo state.
+        /// </summary>
+        public void ResetCombo()
+        {
+            currentStep = 0;
+            lastAttackTime = -999f;
+            lastComboTime = -999f;
+            // stop running step coroutines
+            foreach (var kv in runningStepCoroutines)
+            {
+                if (kv.Value != null) StopCoroutine(kv.Value);
+            }
+            runningStepCoroutines.Clear();
+
+            if (boomerangCoroutine != null)
+            {
+                StopCoroutine(boomerangCoroutine);
+                boomerangCoroutine = null;
+                boomerangActive = false;
+            }
+
+            if (showDebugLogs) Debug.Log("[Combo] ResetCombo called");
+        }
+
+        void ExecuteStepDetection(int step, StepConfig cfg)
+        {
+            // cancel existing coroutine for this step (if any)
+            if (runningStepCoroutines.TryGetValue(step, out var running) && running != null)
+            {
+                StopCoroutine(running);
+                runningStepCoroutines.Remove(step);
+            }
+
+            // If useTicks is true and windowDuration > 0, perform ticked detection; otherwise detect once
+            if (cfg.useTicks && cfg.windowDuration > 0f)
+            {
+                var c = StartCoroutine(DetectWindow(cfg, step));
+                runningStepCoroutines[step] = c;
+            }
+            else
+            {
+                DoDetectOnce(cfg, step);
+            }
+        }
+
+        void DoDetectOnce(StepConfig cfg, int step)
+        {
+            // Rotate the offset around the character according to localEuler, so the hitbox
+            // orbits the character rather than rotating around its own center.
+            Vector3 rotatedOffset = transform.rotation * Quaternion.Euler(cfg.localEuler) * cfg.offset;
+            Vector3 center = transform.position + rotatedOffset;
+            Collider[] hits = null;
+            if (cfg.shape == Shape.Box)
+            {
+                Vector3 half = cfg.boxSize * 0.5f;
+                Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+                hits = Physics.OverlapBox(center, half, rot, enemyLayer, QueryTriggerInteraction.Collide);
+            }
+            else if (cfg.shape == Shape.Sphere)
+            {
+                hits = Physics.OverlapSphere(center, cfg.sphereRadius, enemyLayer, QueryTriggerInteraction.Collide);
+            }
+            else // Sector
+            {
+                // get candidates in radius then filter by angle
+                hits = Physics.OverlapSphere(center, cfg.sectorRadius, enemyLayer, QueryTriggerInteraction.Collide);
+            }
+
+            if (hits == null || hits.Length == 0) return;
+
+            if (cfg.shape == Shape.Sector)
+            {
+                // compute forward direction taking into account localEuler
+                Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+                Vector3 forward = rot * Vector3.forward;
+                float halfAngle = cfg.sectorAngle * 0.5f;
+                foreach (var h in hits)
+                {
+                    if (h == null) continue;
+                    // use closest point to center for better accuracy
+                    Vector3 point = h.ClosestPoint(center);
+                    Vector3 to = point - center;
+                    if (to.sqrMagnitude < 0.0001f) { OnStepHit?.Invoke(h, step); continue; }
+                    float ang = Vector3.Angle(forward, to);
+                    if (ang <= halfAngle)
+                    {
+                                OnStepHit?.Invoke(h, step);
+                                if (showDebugLogs) Debug.Log($"[Combo] OnStepHit sector: step={step} hit={h.name}");
+                    }
+                }
+            }
+            else
+            {
+                foreach (var h in hits)
+                {
+                    if (h == null) continue;
+                            OnStepHit?.Invoke(h, step);
+                            if (showDebugLogs) Debug.Log($"[Combo] OnStepHit: step={step} hit={h.name}");
+                }
+            }
+        }
+
+        IEnumerator DetectWindow(StepConfig cfg, int step)
+        {
+            float elapsed = 0f;
+            HashSet<Collider> hitSet = new HashSet<Collider>();
+            while (elapsed < cfg.windowDuration)
+            {
+                Vector3 rotatedOffset = transform.rotation * Quaternion.Euler(cfg.localEuler) * cfg.offset;
+                Vector3 center = transform.position + rotatedOffset;
+                Collider[] hits = null;
+                if (cfg.shape == Shape.Box)
+                {
+                    Vector3 half = cfg.boxSize * 0.5f;
+                    Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+                    hits = Physics.OverlapBox(center, half, rot, enemyLayer, QueryTriggerInteraction.Collide);
+                }
+                else if (cfg.shape == Shape.Sphere)
+                {
+                    hits = Physics.OverlapSphere(center, cfg.sphereRadius, enemyLayer, QueryTriggerInteraction.Collide);
+                }
+                else // Sector
+                {
+                    hits = Physics.OverlapSphere(center, cfg.sectorRadius, enemyLayer, QueryTriggerInteraction.Collide);
+                }
+
+                if (hits != null && hits.Length > 0)
+                {
+                    if (cfg.shape == Shape.Sector)
+                    {
+                        Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+                        Vector3 forward = rot * Vector3.forward;
+                        float halfAngle = cfg.sectorAngle * 0.5f;
+                        foreach (var h in hits)
+                        {
+                            if (h == null) continue;
+                            if (hitSet.Contains(h)) continue;
+                            Vector3 point = h.ClosestPoint(center);
+                            Vector3 to = point - center;
+                            if (to.sqrMagnitude < 0.0001f)
+                            {
+                                hitSet.Add(h);
+                                OnStepHit?.Invoke(h, step);
+                                continue;
+                            }
+                            float ang = Vector3.Angle(forward, to);
+                            if (ang <= halfAngle)
+                            {
+                                hitSet.Add(h);
+                                OnStepHit?.Invoke(h, step);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var h in hits)
+                        {
+                            if (h == null) continue;
+                            if (hitSet.Contains(h)) continue;
+                            hitSet.Add(h);
+                            OnStepHit?.Invoke(h, step);
+                        }
+                    }
+                }
+                // wait until next tick
+                yield return new WaitForSeconds(Math.Max(0.001f, cfg.tickInterval));
+                elapsed += cfg.tickInterval;
+            }
+
+            // remove the coroutine entry if it exists
+            if (runningStepCoroutines.ContainsKey(step)) runningStepCoroutines.Remove(step);
+        }
+
+        IEnumerator DoBoomerang(int comboStep, StepConfig cfg)
+        {
+            boomerangActive = true;
+            OnBoomerangStarted?.Invoke();
+
+            // Respect per-step localEuler when placing and aiming the boomerang
+            Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+            Vector3 startCenter = transform.position + (rot * cfg.offset);
+            Vector3 dir = rot * Vector3.forward;
+            dir.y = 0f;
+            if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
+            rot = Quaternion.LookRotation(dir.normalized, Vector3.up);
+            Vector3 maxCenter = startCenter + dir.normalized * boomerangDistance;
+
+            Vector3 cur = startCenter;
+            HashSet<Collider> hitSet = new HashSet<Collider>();
+
+            // Out
+            while ((maxCenter - cur).sqrMagnitude > 0.0004f)
+            {
+                cur = Vector3.MoveTowards(cur, maxCenter, boomerangTickDistance);
+                OnBoomerangTick?.Invoke(cur, rot, comboStep);
+                // detect
+                var hits = Physics.OverlapSphere(cur, Mathf.Max(0.01f, cfg.sphereRadius), enemyLayer, QueryTriggerInteraction.Collide);
+                if (hits != null && hits.Length > 0)
+                {
+                    foreach (var h in hits)
+                    {
+                        if (h == null) continue;
+                        if (hitSet.Contains(h)) continue;
+                        hitSet.Add(h);
+                        OnStepHit?.Invoke(h, comboStep);
+                    }
+                }
+
+                yield return new WaitForSeconds(boomerangTickInterval);
+            }
+
+            // pause at apex
+            float t = 0f;
+            while (t < boomerangPauseTime)
+            {
+                OnBoomerangTick?.Invoke(cur, rot, comboStep);
+                var hits = Physics.OverlapSphere(cur, Mathf.Max(0.01f, cfg.sphereRadius), enemyLayer, QueryTriggerInteraction.Collide);
+                if (hits != null && hits.Length > 0)
+                {
+                    foreach (var h in hits)
+                    {
+                        if (h == null) continue;
+                        if (hitSet.Contains(h)) continue;
+                        hitSet.Add(h);
+                        OnStepHit?.Invoke(h, comboStep);
+                    }
+                }
+                yield return new WaitForSeconds(boomerangTickInterval);
+                t += boomerangTickInterval;
+            }
+
+            // back
+            while ((startCenter - cur).sqrMagnitude > 0.0004f)
+            {
+                startCenter = transform.TransformPoint(cfg.offset);
+                cur = Vector3.MoveTowards(cur, startCenter, boomerangTickDistance);
+                OnBoomerangTick?.Invoke(cur, rot, comboStep);
+                var hits = Physics.OverlapSphere(cur, Mathf.Max(0.01f, cfg.sphereRadius), enemyLayer, QueryTriggerInteraction.Collide);
+                if (hits != null && hits.Length > 0)
+                {
+                    foreach (var h in hits)
+                    {
+                        if (h == null) continue;
+                        if (hitSet.Contains(h)) continue;
+                        hitSet.Add(h);
+                        OnStepHit?.Invoke(h, comboStep);
+                    }
+                }
+                yield return new WaitForSeconds(boomerangTickInterval);
+            }
+
+            boomerangActive = false;
+            boomerangCoroutine = null;
+            OnBoomerangEnded?.Invoke();
+        }
+
+        void OnDrawGizmos()
+        {
+            if (!drawGizmos || steps == null || steps.Count == 0) return;
+
+            int stepToDraw = previewStep;
+            if (Application.isPlaying && previewInPlayMode)
+                stepToDraw = Mathf.Clamp(currentStep, 0, steps.Count - 1);
+            else
+                stepToDraw = Mathf.Clamp(previewStep, 0, steps.Count - 1);
+
+            var cfg = steps[stepToDraw];
+            Vector3 rotatedOffset = transform.rotation * Quaternion.Euler(cfg.localEuler) * cfg.offset;
+            Vector3 center = transform.position + rotatedOffset;
+
+            // Boomerang preview: start -> apex and tick markers
+            if (cfg.isBoomerang)
+            {
+                Quaternion bRot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+                Vector3 startCenter = transform.position + (bRot * cfg.offset);
+                Vector3 dir = bRot * Vector3.forward;
+                dir.y = 0f;
+                if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
+                Vector3 maxCenter = startCenter + dir.normalized * boomerangDistance;
+
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(startCenter, maxCenter);
+
+                // draw ticks along the path
+                float tickStep = Mathf.Max(0.001f, boomerangTickDistance);
+                Vector3 cur = startCenter;
+                int safety = 0;
+                while ((maxCenter - cur).sqrMagnitude > 0.0004f && safety < 1024)
+                {
+                    cur = Vector3.MoveTowards(cur, maxCenter, tickStep);
+                    Gizmos.DrawWireSphere(cur, 0.06f);
+                    safety++;
+                }
+                Gizmos.DrawWireSphere(maxCenter, 0.1f);
+#if UNITY_EDITOR
+                UnityEditor.Handles.Label(startCenter + Vector3.up * 0.2f, "Boomerang start");
+                UnityEditor.Handles.Label(maxCenter + Vector3.up * 0.2f, "Boomerang apex");
+#endif
+            }
+
+            Gizmos.color = Color.cyan;
+            if (cfg.shape == Shape.Box)
+            {
+                Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+                Gizmos.matrix = Matrix4x4.TRS(center, rot, Vector3.one);
+                Gizmos.DrawWireCube(Vector3.zero, cfg.boxSize);
+                Gizmos.matrix = Matrix4x4.identity;
+            }
+            else if (cfg.shape == Shape.Sphere)
+            {
+                Gizmos.DrawWireSphere(center, cfg.sphereRadius);
+            }
+            else if (cfg.shape == Shape.Sector)
+            {
+                // draw sector using Handles for the arc
+                Quaternion rot = transform.rotation * Quaternion.Euler(cfg.localEuler);
+                Vector3 forward = rot * Vector3.forward;
+                float halfAngle = cfg.sectorAngle * 0.5f;
+
+                // draw wire arc and radius lines
+#if UNITY_EDITOR
+                UnityEditor.Handles.color = Color.cyan;
+                Vector3 startDir = Quaternion.AngleAxis(-halfAngle, Vector3.up) * forward;
+                UnityEditor.Handles.DrawWireArc(center, Vector3.up, startDir, cfg.sectorAngle, cfg.sectorRadius);
+                // radius lines
+                Gizmos.DrawLine(center, center + Quaternion.AngleAxis(-halfAngle, Vector3.up) * forward * cfg.sectorRadius);
+                Gizmos.DrawLine(center, center + Quaternion.AngleAxis(halfAngle, Vector3.up) * forward * cfg.sectorRadius);
+#endif
+            }
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.color = Color.white;
+            UnityEditor.Handles.Label(center + Vector3.up * 0.2f, $"Step {stepToDraw}");
+#endif
+        }
+
+        void OnValidate()
+        {
+            // keep comboCount (implicit) in sync with steps list convenience
+            if (steps != null && steps.Count > 0)
+            {
+                // nothing else needed here, but this ensures the list is visible/editable
+            }
+            // clamp previewStep
+            if (steps == null || steps.Count == 0)
+                previewStep = 0;
+            else
+                previewStep = Mathf.Clamp(previewStep, 0, steps.Count - 1);
+        }
+
+        [ContextMenu("Next Preview Step")]
+        void NextPreviewStep()
+        {
+            if (steps == null || steps.Count == 0) return;
+            previewStep = (previewStep + 1) % steps.Count;
+        }
+
+        [ContextMenu("Previous Preview Step")]
+        void PrevPreviewStep()
+        {
+            if (steps == null || steps.Count == 0) return;
+            previewStep = (previewStep - 1 + steps.Count) % steps.Count;
+        }
+    }
+}
