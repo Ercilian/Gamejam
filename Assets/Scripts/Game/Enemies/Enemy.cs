@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using Game.Combat;
 
@@ -8,7 +9,7 @@ namespace Game.Enemies
         [Header("Configuración de Vida")]
         public bool showDebugLogs = true;
         public bool isElite = false;
-        
+
         [Header("Resistencias por Tipo de Daño")]
         [Range(0f, 1f)] public float normalResistance = 0f;      // 0 = sin resistencia, 1 = inmune
         [Range(0f, 1f)] public float criticoResistance = 0f;
@@ -16,17 +17,17 @@ namespace Game.Enemies
         [Range(0f, 1f)] public float hieloResistance = 0f;
         [Range(0f, 1f)] public float electricoResistance = 0f;
         [Range(0f, 1f)] public float perforanteResistance = 0f;
-        
+
         [Header("Estados")]
         public bool canTakeKnockback = true;
         public float stunDuration = 0.5f;
-        
+
         private bool isStunned = false;
         private float stunTimer = 0f;
         private Rigidbody rb;
-        
+
         // Eventos para efectos visuales/sonoros
-        public System.Action<DamageInfo> OnDamageTaken;
+        //public System.Action<DamageInfo> OnDamageTaken;
         public System.Action<int> OnHealthChanged;
         public System.Action OnDeath;
 
@@ -37,7 +38,7 @@ namespace Game.Enemies
             base.Awake();
             rb = GetComponent<Rigidbody>();
         }
-        
+
         void Update()
         {
             if (isStunned)
@@ -50,39 +51,40 @@ namespace Game.Enemies
                 }
             }
         }
-        
-        public override void TakeDamage(DamageInfo damageInfo)
-        {
-            if (curHP <= 0) return; // Ya está muerto
-            
-            // Calcular resistencia
-            float resistance = GetResistanceFor(damageInfo.damageType);
-            float finalDamage = damageInfo.finalDamage * (1f - resistance);
-            
-            // Aplicar daño
-            int damage = Mathf.RoundToInt(finalDamage);
-            curHP = Mathf.Max(0, curHP - damage);
-            
-            if (showDebugLogs)
-            {
-                Debug.Log($"[{name}] Recibió {damage} daño. Vida antes: {curHP + damage}, después: {curHP}");
-            }
-            
-            // Aplicar efectos
-            ApplyEffects(damageInfo);
-            
-            // Disparar eventos
-            OnDamageTaken?.Invoke(damageInfo);
-            OnHealthChanged?.Invoke(curHP);
 
-            // Verificar muerte
-            if (curHP <= 0)
-            {
-                Die(damageInfo);
-            }
-        }
-        
-        private float GetResistanceFor(DamageType damageType)
+        /*  public override void TakeDamage(DamageInfo damageInfo)
+          {
+              if (curHP <= 0) return; // Ya está muerto
+
+              // Calcular resistencia
+              float resistance = GetResistanceFor(damageInfo.damageType);
+              float finalDamage = damageInfo.finalDamage * (1f - resistance);
+
+              // Aplicar daño
+              int damage = Mathf.RoundToInt(finalDamage);
+              curHP = Mathf.Max(0, curHP - damage);
+
+              if (showDebugLogs)
+              {
+                  Debug.Log($"[{name}] Recibió {damage} daño. Vida antes: {curHP + damage}, después: {curHP}");
+              }
+
+              // Aplicar efectos
+              ApplyEffects(damageInfo);
+
+              // Disparar eventos
+              OnDamageTaken?.Invoke(damageInfo);
+              OnHealthChanged?.Invoke(curHP);
+
+              // Verificar muerte
+              if (curHP <= 0)
+              {
+                  Die(damageInfo);
+              }
+          }
+          */
+
+       /* private float GetResistanceFor(DamageType damageType)
         {
             return damageType switch
             {
@@ -95,8 +97,9 @@ namespace Game.Enemies
                 _ => 0f
             };
         }
-        
-        private void ApplyEffects(DamageInfo damageInfo)
+        */
+
+       /* private void ApplyEffects(DamageInfo damageInfo)
         {
             // Knockback
             if (damageInfo.effects.HasFlag(DamageEffects.Knockback) && canTakeKnockback && rb != null)
@@ -108,11 +111,12 @@ namespace Game.Enemies
                 knockbackDir.y = 0f;
                 knockbackDir = knockbackDir.normalized;
                 rb.AddForce(knockbackDir * damageInfo.knockbackForce, ForceMode.Impulse);
-                
+
                 if (showDebugLogs)
                     Debug.Log($"[{name}] Knockback aplicado: {knockbackDir} * {damageInfo.knockbackForce}");
             }
             
+
             // Stun
             if (damageInfo.effects.HasFlag(DamageEffects.Stun))
             {
@@ -120,21 +124,21 @@ namespace Game.Enemies
                 stunTimer = stunDuration;
                 if (showDebugLogs) Debug.Log($"[{name}] Aturdido por {stunDuration}s");
             }
-            
+
             // Otros efectos se pueden implementar aquí
             if (damageInfo.effects.HasFlag(DamageEffects.Burn))
             {
                 // Implementar daño por tiempo
                 if (showDebugLogs) Debug.Log($"[{name}] ¡Ardiendo!");
             }
-            
+
             if (damageInfo.effects.HasFlag(DamageEffects.Freeze))
             {
                 // Implementar ralentización
                 if (showDebugLogs) Debug.Log($"[{name}] ¡Congelado!");
             }
         }
-        
+
         public override void Die(DamageInfo finalDamage)
         {
             if (showDebugLogs)
@@ -155,19 +159,20 @@ namespace Game.Enemies
             }
 
             Destroy(gameObject);
-            
+
         }
-        
+        */
+
         // Métodos de utilidad
         public bool IsStunned() => isStunned;
-        
 
-        
-        #if UNITY_EDITOR
+
+
+#if UNITY_EDITOR
         void OnValidate()
         {
             if (maxHP < 1) maxHP = 1;
         }
-        #endif
+#endif
     }
 }

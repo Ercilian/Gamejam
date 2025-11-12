@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Game.Enemies;
+//using Game.Enemies;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -119,11 +119,13 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemy = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
 
         // Aplicar multiplicador de vida
-        Enemy enemyHealth = enemy.GetComponent<Enemy>();
+        /* Enemy enemyHealth = enemy.GetComponent<Enemy>();
         if (enemyHealth != null)
         {
             enemyHealth.MaxHP = Mathf.RoundToInt(enemyHealth.MaxHP * currentSettings.healthMultiplier);
         }
+            */
+        
     }
     
     void ScheduleNextSpawn()

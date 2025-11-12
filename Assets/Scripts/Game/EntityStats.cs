@@ -4,7 +4,7 @@ using Game.Combat;
 using System.Collections;
 
 
-public class EntityStats : MonoBehaviour, IDamageable // Use the interface to ensure it can take damage
+public class EntityStats : MonoBehaviour // Use the interface to ensure it can take damage
 {
 
     [Header("Stats")]
@@ -52,7 +52,7 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
             maxShield = statsData.MaxShield;
             attackDamage = statsData.AttackDamage;
             defense = statsData.Defense;
-            
+
             // Apply other stats specific to Player if this is a Player
             if (this is Player player && player.TryGetComponent<PlayerInventory>(out var inventory))
             {
@@ -62,7 +62,7 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
         }
     }
 
-    public virtual void TakeDamage(DamageInfo damageInfo) // Method to take damage
+   /* public virtual void TakeDamage(DamageInfo damageInfo) // Method to take damage
     {
         // Calculate damage reduction based on defense
         float damageReduction = defense * 0.5f; // Each defense point reduces 0.5 damage
@@ -75,6 +75,7 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
             Die(damageInfo); // If health is 0 or less, die
         }
     }
+    */
 
 
     public virtual bool IsAlive() // Method to check if entity is alive
@@ -83,10 +84,10 @@ public class EntityStats : MonoBehaviour, IDamageable // Use the interface to en
     }
 
 
-    public virtual void Die(DamageInfo finalDamage) // Method to handle death
-    {
-        Destroy(gameObject);
-    }
+   // public virtual void Die(DamageInfo finalDamage) // Method to handle death
+  //  {
+  //      Destroy(gameObject);
+  //  }
 
     public void Heal(int amount)
     {

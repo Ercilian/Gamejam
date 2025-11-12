@@ -516,9 +516,10 @@ MonoBehaviour:
   boomerangPauseTime: 0.6
   drawGizmos: 1
   previewOnly: 0
-  previewStep: 2
+  previewStep: 0
   previewInPlayMode: 1
   showDebugLogs: 1
+  attackActionRef: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0

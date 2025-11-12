@@ -1,4 +1,4 @@
-using Game.Player.Combat.Pajaro.Habilidad;
+/*using Game.Player.Combat.Pajaro.Habilidad;
 using UnityEngine;
 
 public class HabilidadPajaro : MonoBehaviour
@@ -20,7 +20,7 @@ public class HabilidadPajaro : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator GiroEspecial()
+   private System.Collections.IEnumerator GiroEspecial()
     {
         girando = true;
         float tiempo = 0f;
@@ -31,15 +31,16 @@ public class HabilidadPajaro : MonoBehaviour
             float tickRestante = Mathf.Min(intervaloTick, duracionGiro - tiempo);
             yield return new WaitForSeconds(tickRestante);
             tiempo += tickRestante;
+            
         }
         girando = false;
     }
 
     void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, radioDaño);
-    }
+{
+    Gizmos.color = Color.cyan;
+    Gizmos.DrawWireSphere(transform.position, radioDaño);
+}
 
     private void HacerTickDaño()
     {
@@ -61,10 +62,13 @@ public class HabilidadPajaro : MonoBehaviour
                     effects = Game.Combat.DamageEffects.Knockback,
                     knockbackForce = damageConfig.knockbackForce,
                     knockbackDirection = hitDir
-                };
+                   
+                
                 var info = Game.Combat.DamageInfo.Create(damageConfig.dañoPorTick, config, hitPoint, hitDir, transform, 0);
                 damageable.TakeDamage(info);
+               
             }
         }
     }
 }
+*/

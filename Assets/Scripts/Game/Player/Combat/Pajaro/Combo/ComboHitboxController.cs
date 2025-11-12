@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Game.Combat
 {
@@ -52,6 +53,14 @@ namespace Game.Combat
     public bool previewInPlayMode = true;
     [Tooltip("Enable runtime debug logs for combo/hitbox events")]
     public bool showDebugLogs = false;
+
+        [Header("Input")]
+        [Tooltip("Optional: InputActionReference for the Attack action. If empty, the script will try to find a PlayerInput and use actions['Attack'].")]
+        public InputActionReference attackActionRef;
+
+        // runtime
+        PlayerInput _playerInput;
+        InputAction _attackAction;
 
         // Public events
         public event Action<int> OnAttackStep; // invoked when a step begins (step index)
@@ -121,6 +130,38 @@ namespace Game.Combat
         public bool CanAttack()
         {
             return Time.time - lastAttackTime >= attackCooldown && !boomerangActive;
+        }
+
+        void OnEnable()
+        {
+            // try to get PlayerInput from same GameObject
+            _playerInput = GetComponent<PlayerInput>();
+            if (attackActionRef != null)
+                _attackAction = attackActionRef.action;
+            else if (_playerInput != null && _playerInput.actions != null)
+            {
+                try { _attackAction = _playerInput.actions["Attack"]; } catch { _attackAction = null; }
+            }
+
+            if (_attackAction != null)
+            {
+                _attackAction.performed += OnAttackPerformed;
+                if (!_attackAction.enabled) _attackAction.Enable();
+            }
+        }
+
+        void OnDisable()
+        {
+            if (_attackAction != null)
+            {
+                _attackAction.performed -= OnAttackPerformed;
+            }
+        }
+
+        void OnAttackPerformed(InputAction.CallbackContext ctx)
+        {
+            // Simply invoke StartAttack - StartAttack itself handles cooldowns and boomerang state.
+            StartAttack();
         }
 
         /// <summary>

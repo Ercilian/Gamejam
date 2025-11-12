@@ -3,7 +3,7 @@ using Game.Combat;
 
 public class Car : EntityStats
 {
-
+/*
     public override void Die(DamageInfo finalDamage)
     {
         base.Die(finalDamage);
@@ -13,4 +13,5 @@ public class Car : EntityStats
     {
         base.TakeDamage(damageInfo);
     }
+    */
 }

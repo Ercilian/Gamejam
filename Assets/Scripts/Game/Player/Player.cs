@@ -53,11 +53,11 @@ public class Player : EntityStats
             playerInventory.UsePotion();
         }
     }
-    
+
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
 
     // Si necesitas lógica especial al morir:
-    public override void Die(DamageInfo finalDamage)
+   /* public override void Die(DamageInfo finalDamage)
     {
         base.Die(finalDamage); // Llama a la lógica base (desactivar GameObject y eventos)
         // Aquí puedes añadir animaciones, sonidos, respawn, etc.
@@ -69,4 +69,5 @@ public class Player : EntityStats
         base.TakeDamage(damageInfo);
         // Aquí puedes añadir feedback visual, sonido, etc.
     }
+    */
 }
