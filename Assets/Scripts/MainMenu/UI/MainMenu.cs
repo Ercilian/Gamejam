@@ -16,6 +16,8 @@ public class MainMenu : MonoBehaviour
 
     private InputAction cancelAction;
 
+    public CharacterSelectionManager characterSelectionManager; // Asigna en el inspector
+
     void Start()
     {
         mainMenuPanel.SetActive(true);
@@ -54,6 +56,9 @@ public class MainMenu : MonoBehaviour
 
     public void Play()
     {
+        if (characterSelectionManager != null)
+            characterSelectionManager.ResetSelection(); // Reinicia la selección
+
         mainMenuPanel.SetActive(false);
         SelectCharacterPanel.SetActive(true);
     }

@@ -955,6 +955,8 @@ MonoBehaviour:
   joinedState: {fileID: 3734246090394220132}
   playerText: {fileID: 0}
   confirmButton: {fileID: 7905232823485709692}
+  leftArrowButton: {fileID: 6357216828828269893}
+  rightArrowButton: {fileID: 8909010214889552790}
   defaultCharacterPrefab: {fileID: 1813536838263918369, guid: f9f546d49774f1d4a91dbdfba531b3a0, type: 3}
   worldPreviewAnchor: {fileID: 0}
   previewLocalPosition: {x: 0, y: 0, z: 0}

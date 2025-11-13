@@ -9,6 +9,8 @@ public class PlayerSlotSimple : MonoBehaviour
     public GameObject joinedState;   // Panel "PLAYER X"
     public TMP_Text playerText;      // Texto del número de jugador
     public Button confirmButton;
+    public Button leftArrowButton;
+    public Button rightArrowButton;
     private bool isConfirmed = false;
 
     [Header("Preview del personaje")]
@@ -27,11 +29,13 @@ public class PlayerSlotSimple : MonoBehaviour
     public int selectedCharacterIndex = 0;
     private GameObject currentPreviewInstance;
 
+    private float joinTime = -1f;
+
     public CharacterSelectionManager manager;
 
     public bool IsConfirmed => isConfirmed;
-
-    
+    public bool IsJoined => isJoined;
+    public int SlotIndex => slotIndex;
 
     public void Initialize(int index)
     {
@@ -47,6 +51,7 @@ public class PlayerSlotSimple : MonoBehaviour
     public void SetJoinedState(bool joined)
     {
         isJoined = joined;
+        joinTime = joined ? Time.time : -1f;
 
         if (idleState) idleState.SetActive(!joined);
         if (joinedState) joinedState.SetActive(joined);
@@ -112,9 +117,6 @@ public class PlayerSlotSimple : MonoBehaviour
 
     private void OnDisable() => DespawnPreview();
 
-    public bool IsJoined => isJoined;
-    public int SlotIndex => slotIndex;
-
     public void ShowCharacterPreview(GameObject prefab)
     {
         // Destruye el preview anterior si existe
@@ -138,23 +140,45 @@ public class PlayerSlotSimple : MonoBehaviour
 
     public void OnLeftArrowPressed()
     {
+        if (isConfirmed) return; // No permite cambiar si está confirmado
         if (manager != null)
             ChangeCharacter(-1, manager.characterPrefabs);
     }
 
     public void OnRightArrowPressed()
     {
+        if (isConfirmed) return; // No permite cambiar si está confirmado
         if (manager != null)
             ChangeCharacter(1, manager.characterPrefabs);
     }
 
     public void OnConfirmPressed()
     {
-        isConfirmed = true;
-        confirmButton.interactable = false;
-        // Cambia el color o muestra "Listo"
-        if (playerText) playerText.text = $"PLAYER {slotIndex + 1} ¡Listo!";
-        if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
+        // Solo permite confirmar si han pasado al menos 0.2 segundos desde que se unió
+        if (joinTime > 0 && Time.time - joinTime < 0.2f)
+            return;
+
+        if (!isConfirmed)
+        {
+            isConfirmed = true;
+            confirmButton.interactable = false;
+            if (leftArrowButton) leftArrowButton.interactable = false;
+            if (rightArrowButton) rightArrowButton.interactable = false;
+            // Cambia el color o muestra "Listo"
+            if (playerText) playerText.text = $"PLAYER {slotIndex + 1} ¡Listo!";
+            if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
+        }
+    }
+
+    public void ResetSlotState()
+    {
+        isConfirmed = false;
+        selectedCharacterIndex = 0;
+        if (confirmButton) confirmButton.interactable = true;
+        if (leftArrowButton) leftArrowButton.interactable = true;
+        if (rightArrowButton) rightArrowButton.interactable = true;
+        if (playerText) playerText.text = $"PLAYER {slotIndex + 1}";
+        // Opcional: limpia preview, colores, etc.
     }
 
 }

@@ -214,4 +214,29 @@ public class CharacterSelectionManager : MonoBehaviour
             }
         }
     }
+
+    public void ResetSelection()
+    {
+        // Haz una copia de los PlayerInput activos antes de destruirlos
+        var playersToRemove = new List<PlayerInput>(activePlayers.Values);
+        foreach (var playerInput in playersToRemove)
+        {
+            if (playerInput != null)
+                Destroy(playerInput.gameObject);
+        }
+        activePlayers.Clear();
+
+        // Resetea los slots visuales y de estado
+        for (int i = 0; i < playerSlots.Length; i++)
+        {
+            if (playerSlots[i] != null)
+            {
+                playerSlots[i].SetJoinedState(false);
+                playerSlots[i].ResetSlotState();
+            }
+        }
+
+        if (debugLogs)
+            Debug.Log("[CharacterSelection] Selección de personajes reiniciada.");
+    }
 }
