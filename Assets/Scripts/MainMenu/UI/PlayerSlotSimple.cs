@@ -170,6 +170,20 @@ public class PlayerSlotSimple : MonoBehaviour
         }
     }
 
+    public void OnUnconfirmPressed()
+    {
+        if (isConfirmed)
+        {
+            isConfirmed = false;
+            confirmButton.interactable = true;
+            if (leftArrowButton) leftArrowButton.interactable = true;
+            if (rightArrowButton) rightArrowButton.interactable = true;
+            // Vuelve al estado normal
+            if (playerText) playerText.text = $"PLAYER {slotIndex + 1}";
+            if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección desconfirmada.");
+        }
+    }
+
     public void ResetSlotState()
     {
         isConfirmed = false;

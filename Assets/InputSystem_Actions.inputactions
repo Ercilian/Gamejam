@@ -499,6 +499,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Unconfirm",
+                    "type": "Button",
+                    "id": "75ccc6ff-3a9a-4d73-8f87-ead6bf44fb2f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Cancel",
                     "type": "Button",
                     "id": "15cef263-9014-4fd5-94d9-4e4a6234a6ef",
@@ -583,15 +592,6 @@
                     "name": "MoveRight",
                     "type": "Button",
                     "id": "3c9bce00-9a58-48f7-bd98-4a047ab09fe2",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Disconect",
-                    "type": "Button",
-                    "id": "75ccc6ff-3a9a-4d73-8f87-ead6bf44fb2f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -1145,7 +1145,7 @@
                     "interactions": "Hold",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Disconect",
+                    "action": "Unconfirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1156,7 +1156,7 @@
                     "interactions": "Hold",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Disconect",
+                    "action": "Unconfirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

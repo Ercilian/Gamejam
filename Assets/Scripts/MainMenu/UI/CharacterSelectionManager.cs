@@ -111,6 +111,7 @@ public class CharacterSelectionManager : MonoBehaviour
             var moveRight = uiMap.FindAction("MoveRight", true);
             var disconnect = uiMap.FindAction("Disconnect", false);
             var submit = uiMap.FindAction("Submit", true);
+            var unconfirm = uiMap.FindAction("Unconfirm", false); // Usa el nombre de tu acción
 
             int playerIndex = playerInput.playerIndex;
             if (playerIndex >= 0 && playerIndex < playerSlots.Length)
@@ -142,6 +143,21 @@ public class CharacterSelectionManager : MonoBehaviour
                         playerSlots[playerIndex].OnConfirmPressed();
                     }
                 };
+
+                // Suscribe el evento para el botón Unready
+                if (unconfirm != null)
+                {
+                    unconfirm.performed += ctx =>
+                    {
+                        if (SelectCharacterPanel.activeSelf
+                            && playerSlots[playerIndex] != null
+                            && playerSlots[playerIndex].IsJoined
+                            && playerSlots[playerIndex].IsConfirmed) // Solo si está confirmado
+                        {
+                            playerSlots[playerIndex].OnUnconfirmPressed();
+                        }
+                    };
+                }
             }
         }
         else
