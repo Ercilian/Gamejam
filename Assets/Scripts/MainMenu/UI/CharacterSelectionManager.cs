@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
 
 public class CharacterSelectionManager : MonoBehaviour
@@ -14,6 +16,7 @@ public class CharacterSelectionManager : MonoBehaviour
     [Header("Personajes jugables")]
     public GameObject[] characterPrefabs; // Asigna los 4 prefabs en el inspector
     public GameObject SelectCharacterPanel; // Asigna el panel en el inspector
+    public TMPro.TMP_Text countdownText; // Añade esto en CharacterSelectionManager
     
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
 
@@ -254,5 +257,50 @@ public class CharacterSelectionManager : MonoBehaviour
 
         if (debugLogs)
             Debug.Log("[CharacterSelection] Selección de personajes reiniciada.");
+    }
+
+    private bool AllPlayersConfirmed()
+    {
+        int joinedCount = 0;
+        int confirmedCount = 0;
+
+        foreach (var slot in playerSlots)
+        {
+            if (slot != null && slot.IsJoined)
+            {
+                joinedCount++;
+                if (slot.IsConfirmed)
+                    confirmedCount++;
+            }
+        }
+        // Solo inicia si todos los que están joined están confirmados y hay al menos uno
+        return joinedCount > 0 && confirmedCount == joinedCount;
+    }
+
+    public void OnPlayerConfirmed()
+    {
+        // Llama a esto desde OnConfirmPressed() de cada slot
+        if (AllPlayersConfirmed())
+        {
+            StartCoroutine(StartCountdownAndLoadScene());
+        }
+    }
+
+    private IEnumerator StartCountdownAndLoadScene()
+    {
+        float countdown = 3f;
+        while (countdown > 0)
+        {
+            if (countdownText != null)
+                countdownText.text = $" {Mathf.CeilToInt(countdown)}...";
+            Debug.Log($"Comenzando en {Mathf.CeilToInt(countdown)}...");
+            yield return new WaitForSeconds(1f);
+            countdown -= 1f;
+        }
+
+        if (countdownText != null)
+            countdownText.text = ""; // Limpia el texto al terminar
+
+        SceneManager.LoadScene("MainScene");
     }
 }

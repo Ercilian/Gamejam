@@ -1141,8 +1141,8 @@
                 {
                     "name": "",
                     "id": "bbf3e11b-9f26-4e62-8b7a-1e55835fa4a4",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "Hold",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Unconfirm",
@@ -1152,8 +1152,8 @@
                 {
                     "name": "",
                     "id": "019ab948-c01d-4fb2-b422-77d1d074c08a",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "Hold",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Unconfirm",

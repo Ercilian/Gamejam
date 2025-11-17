@@ -167,6 +167,9 @@ public class PlayerSlotSimple : MonoBehaviour
             // Cambia el color o muestra "Listo"
             if (playerText) playerText.text = $"PLAYER {slotIndex + 1} ¡Listo!";
             if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
+
+            if (manager != null)
+                manager.OnPlayerConfirmed();
         }
     }
 
