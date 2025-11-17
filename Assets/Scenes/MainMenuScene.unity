@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 268937671}
   - component: {fileID: 268937670}
   m_Layer: 0
-  m_Name: CharacterSelectionSystem
+  m_Name: CharacterSelectionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2704,6 +2704,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 268937670}
     - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: previewScale
       value: 1

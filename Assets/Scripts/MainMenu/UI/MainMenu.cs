@@ -6,17 +6,18 @@ using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
+    [Header("UI Panels")]
     public GameObject mainMenuPanel;
     public GameObject SettingsPanel;
     public GameObject SelectCharacterPanel;
+
     public Button firstSelectedButton;
 
     [Header("Input System")]
-    public InputActionAsset inputActions; // Asigna tu InputSystem_Actions en el inspector
+    public InputActionAsset inputActions;
 
     private InputAction cancelAction;
-
-    public CharacterSelectionManager characterSelectionManager; // Asigna en el inspector
+    public CharacterSelectionManager characterSelectionManager;
 
     void Start()
     {
@@ -25,11 +26,9 @@ public class MainMenu : MonoBehaviour
         SelectCharacterPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
 
-        // Deshabilita el mouse
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Obtén la acción "Cancel" del Action Map "UI"
         var uiMap = inputActions.FindActionMap("UI", true);
         cancelAction = uiMap.FindAction("Cancel", true);
         cancelAction.Enable();
@@ -46,18 +45,10 @@ public class MainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
     }
 
-    private void OnCancel()
-    {
-        if (SettingsPanel.activeSelf || SelectCharacterPanel.activeSelf)
-        {
-            Back();
-        }
-    }
-
     public void Play()
     {
         if (characterSelectionManager != null)
-            characterSelectionManager.ResetSelection(); // Reinicia la selección
+            characterSelectionManager.ResetSelection();
 
         mainMenuPanel.SetActive(false);
         SelectCharacterPanel.SetActive(true);
@@ -68,17 +59,25 @@ public class MainMenu : MonoBehaviour
         mainMenuPanel.SetActive(false);
         SettingsPanel.SetActive(true);
     }
+    
+    public void Exit()
+    {
+        Application.Quit();
+    }
+
+    private void OnCancel()
+    {
+        if (SettingsPanel.activeSelf || SelectCharacterPanel.activeSelf)
+        {
+            Back();
+        }
+    }
 
     public void Back()
     {
         mainMenuPanel.SetActive(true);
         SettingsPanel.SetActive(false);
         SelectCharacterPanel.SetActive(false);
-    }
-
-    public void Exit()
-    {
-        Application.Quit();
     }
 
     void OnDestroy()

@@ -5,34 +5,34 @@ using TMPro;
 public class PlayerSlotSimple : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject idleState;     // Panel "Press Any Button"
-    public GameObject joinedState;   // Panel "PLAYER X"
-    public TMP_Text playerText;      // Texto del número de jugador
+    public GameObject idleState;
+    public GameObject joinedState;
     public Button confirmButton;
     public Button leftArrowButton;
     public Button rightArrowButton;
-    private bool isConfirmed = false;
+
 
     [Header("Preview del personaje")]
-    public GameObject defaultCharacterPrefab;   // Asigna aquí tu prefab del personaje
-    public Transform worldPreviewAnchor;        // Empty en la escena, centrado entre las flechas
+    public GameObject defaultCharacterPrefab;
+    public Transform worldPreviewAnchor;
     public Vector3 previewLocalPosition = Vector3.zero;
     public Vector3 previewLocalEuler = new Vector3(0, 180, 0);
     public float previewScale = 1f;
 
+
     [Header("Debug")]
     public bool debugLogs = true;
 
+    [Header("Others")]    
+    public int selectedCharacterIndex = 0;
+    public CharacterSelectionManager manager;
+    
+    private bool isConfirmed = false;
     private int slotIndex;
     private bool isJoined = false;
     private GameObject spawnedCharacter;
-    public int selectedCharacterIndex = 0;
     private GameObject currentPreviewInstance;
-
     private float joinTime = -1f;
-
-    public CharacterSelectionManager manager;
-
     public bool IsConfirmed => isConfirmed;
     public bool IsJoined => isJoined;
     public int SlotIndex => slotIndex;
@@ -56,7 +56,6 @@ public class PlayerSlotSimple : MonoBehaviour
         if (idleState) idleState.SetActive(!joined);
         if (joinedState) joinedState.SetActive(joined);
 
-        if (joined && playerText) playerText.text = $"PLAYER {slotIndex + 1}";
 
         if (joined) SpawnPreview();
         else DespawnPreview();
@@ -103,7 +102,6 @@ public class PlayerSlotSimple : MonoBehaviour
             if (!idleState && childName.Contains("idle")) idleState = child.gameObject;
             if (!joinedState && (childName.Contains("joined") || childName.Contains("player"))) joinedState = child.gameObject;
         }
-        if (!playerText && joinedState) playerText = joinedState.GetComponentInChildren<TMP_Text>();
     }
 
     private void TryAutoFindAnchor()
@@ -165,7 +163,6 @@ public class PlayerSlotSimple : MonoBehaviour
             if (leftArrowButton) leftArrowButton.interactable = false;
             if (rightArrowButton) rightArrowButton.interactable = false;
             // Cambia el color o muestra "Listo"
-            if (playerText) playerText.text = $"PLAYER {slotIndex + 1} ¡Listo!";
             if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
 
             if (manager != null)
@@ -182,7 +179,6 @@ public class PlayerSlotSimple : MonoBehaviour
             if (leftArrowButton) leftArrowButton.interactable = true;
             if (rightArrowButton) rightArrowButton.interactable = true;
             // Vuelve al estado normal
-            if (playerText) playerText.text = $"PLAYER {slotIndex + 1}";
             if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección desconfirmada.");
         }
     }
@@ -194,7 +190,6 @@ public class PlayerSlotSimple : MonoBehaviour
         if (confirmButton) confirmButton.interactable = true;
         if (leftArrowButton) leftArrowButton.interactable = true;
         if (rightArrowButton) rightArrowButton.interactable = true;
-        if (playerText) playerText.text = $"PLAYER {slotIndex + 1}";
         // Opcional: limpia preview, colores, etc.
     }
 
