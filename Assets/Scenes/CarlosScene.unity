@@ -11497,12 +11497,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f613465d97d982498eba1f4d9f9d5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarFuelSystem
-  currentDiesel: 10
-  maxDiesel: 100
+  cur_Diesel: 20
+  max_Diesel: 100
   depositPoint: {fileID: 1316442590}
   depositPrompt: Presiona F para depositar madera
-  showDebugLogs: 1
-  logConsumptionEvery: 5
 --- !u!65 &1316442592
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27027,12 +27025,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c712ba37de636304caa8ace392e0186b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 1, y: 0, z: 0}
   speed: 1
   fastspeed: 1.5
   slowspeed: 0.8
+  cur_speed: 0
   speedTransitionRate: 1
-  usePathFollowing: 1
+  pushSpeed: 0.5
+  pushSpeedTwo: 0.8
   pathPoints:
   - {fileID: 905100830}
   - {fileID: 2097777428}
@@ -27041,11 +27040,9 @@ MonoBehaviour:
   - {fileID: 911314382}
   reachDistance: 3
   pathSmoothness: 2
+  rotationSpeed: 0.5
   fuelConsumptionPerSecond: 1
   isFuelConsumed: 1
-  pushSpeed: 0.5
-  pushSpeedTwo: 0.8
-  rotationSpeed: 0.5
 --- !u!65 &2070441883
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27082,7 +27079,6 @@ MonoBehaviour:
   scrapCollider: {fileID: 349664126}
   plantCollider: {fileID: 2139318381}
   swapAnimationTime: 2
-  showDebugLogs: 1
 --- !u!1 &2072344557
 GameObject:
   m_ObjectHideFlags: 0
@@ -27325,18 +27321,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarPotionsSystem
   plantsRequired: 4
   fuelRequired: 1
-  currentPlants: 0
-  currentFuel: 0
+  currentGreen: 0
+  currentRed: 0
+  currentBlue: 0
+  currentDiesel: 0
   currentPotions: 0
   maxPotions: 1
-  brewingTime: 10
-  isBrewing: 0
+  potionRecipes: []
   plantDepositPoint: {fileID: 2139318380}
   fuelDepositPoint: {fileID: 2139318380}
   plantDepositPrompt: Press 'Attack' to deposit plants
   fuelDepositPrompt: Press 'Attack' to deposit fuel
   brewingPrompt: Brewing potion...
-  showDebugLogs: 1
+  brewingTime: 10
+  isBrewing: 0
+  healPotionData: {fileID: 0}
+  potionSpawnPoint: {fileID: 0}
 --- !u!1001 &390199614115369119
 PrefabInstance:
   m_ObjectHideFlags: 0

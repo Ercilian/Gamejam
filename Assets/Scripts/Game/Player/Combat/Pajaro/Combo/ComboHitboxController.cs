@@ -125,6 +125,13 @@ namespace Game.Combat
 
     public enum Shape { Box, Sphere, Sector }
 
+        void Awake()
+        {
+            // ensure PlayerInput and Attack action are set up
+            _playerInput = GetComponent<PlayerInput>();
+        
+        }
+
         void Update()
         {
             // reset combo to idle (-1) if idle time exceeded
@@ -464,8 +471,12 @@ namespace Game.Combat
                 t += boomerangTickInterval;
             }
 
-            // back
-            while ((startCenter - cur).sqrMagnitude > 0.0004f)
+            // back: ahora solo termina cuando colisiona con el jugador
+            bool boomerangReturned = false;
+            Collider[] myColliders = GetComponentsInChildren<Collider>();
+            if (myColliders == null || myColliders.Length == 0 && showDebugLogs)
+                Debug.LogWarning($"[Combo] No se encontró ningún collider en el jugador para la detección del boomerang.");
+            while (!boomerangReturned)
             {
                 startCenter = transform.TransformPoint(cfg.offset);
                 cur = Vector3.MoveTowards(cur, startCenter, boomerangTickDistance);
@@ -486,17 +497,47 @@ namespace Game.Combat
                         OnStepHit?.Invoke(h, comboStep);
                     }
                 }
+                // Detectar colisión con cualquier collider del jugador (sin filtro de layer para asegurar detección)
+                var playerHits = Physics.OverlapSphere(cur, Mathf.Max(0.2f, cfg.sphereRadius), ~0, QueryTriggerInteraction.Collide);
+                foreach (var h in playerHits)
+                {
+                    foreach (var myCol in myColliders)
+                    {
+                        if (h == myCol)
+                        {
+                            boomerangReturned = true;
+                            if (showDebugLogs) Debug.Log($"[Combo] Boomerang ha vuelto al jugador: {gameObject.name} en posición {cur}");
+                            break;
+                        }
+                    }
+                    if (boomerangReturned) break;
+                }
+                
+                // Debug: mostrar distancia al jugador
+                if (showDebugLogs && !boomerangReturned)
+                {
+                    float distToPlayer = Vector3.Distance(cur, transform.position);
+                    if (distToPlayer < 1f)
+                        Debug.Log($"[Combo] Boomerang cerca del jugador: distancia={distToPlayer:F3} radio={cfg.sphereRadius:F3}");
+                }
+                
                 yield return new WaitForSeconds(boomerangTickInterval);
             }
 
             boomerangActive = false;
             boomerangCoroutine = null;
-            // deactivate preview
-            boomerangPreviewActive = false;
-            boomerangPreviewStep = -1;
+            // MANTENER gizmo activo hasta el final del frame
+            StartCoroutine(DeactivateBoomerangPreviewNextFrame());
             // After boomerang completes, return to idle state until the player clicks again.
             currentStep = -1;
             OnBoomerangEnded?.Invoke();
+        // Desactiva el gizmo de boomerang al final del frame para que se vea correctamente en runtime
+        IEnumerator DeactivateBoomerangPreviewNextFrame()
+        {
+            yield return null;
+            boomerangPreviewActive = false;
+            boomerangPreviewStep = -1;
+        }
         }
 
         void OnDrawGizmos()
