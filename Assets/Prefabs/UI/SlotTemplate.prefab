@@ -953,7 +953,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSlotSimple
   idleState: {fileID: 82996938144402487}
   joinedState: {fileID: 3734246090394220132}
-  playerText: {fileID: 0}
   confirmButton: {fileID: 7905232823485709692}
   leftArrowButton: {fileID: 6357216828828269893}
   rightArrowButton: {fileID: 8909010214889552790}
@@ -963,7 +962,7 @@ MonoBehaviour:
   previewLocalEuler: {x: 0, y: 180, z: 0}
   previewScale: 1
   debugLogs: 1
-  selectedCharacterIndex: 0
+  selectedCharacterIndex: 4
   manager: {fileID: 0}
 --- !u!1 &6931156405887048344
 GameObject:

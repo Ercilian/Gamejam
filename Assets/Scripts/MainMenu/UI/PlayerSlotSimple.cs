@@ -127,18 +127,23 @@ public class PlayerSlotSimple : MonoBehaviour
             currentPreviewInstance = Instantiate(prefab, worldPreviewAnchor);
             // Ajusta posición/escala si es necesario
         }
+        else
+        {
+            Debug.LogWarning($"[Slot {slotIndex}] Prefab nulo o anchor no encontrado.");
+        }
     }
 
     public void ChangeCharacter(int direction, GameObject[] characterPrefabs)
     {
-        // direction: -1 para izquierda, +1 para derecha
         selectedCharacterIndex = (selectedCharacterIndex + direction + characterPrefabs.Length) % characterPrefabs.Length;
+        Debug.Log($"[Slot {slotIndex}] Cambiando a índice {selectedCharacterIndex}: {characterPrefabs[selectedCharacterIndex]?.name}");
         ShowCharacterPreview(characterPrefabs[selectedCharacterIndex]);
     }
 
     public void OnLeftArrowPressed()
     {
-        if (isConfirmed) return; // No permite cambiar si está confirmado
+        Debug.Log($"[Slot {slotIndex}] LeftArrow PRESSED");
+        if (isConfirmed) return;
         if (manager != null)
             ChangeCharacter(-1, manager.characterPrefabs);
     }
