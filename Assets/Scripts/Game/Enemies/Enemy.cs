@@ -25,6 +25,7 @@ namespace Game.Enemies
 
         protected override void Awake()
         {
+            base.Awake(); // Llamar al Awake de EntityStats para aplicar el ScriptableObject
             rb = GetComponent<Rigidbody>();
         }
 
@@ -51,14 +52,6 @@ namespace Game.Enemies
         // Métodos de utilidad
         public bool IsStunned() => isStunned;
 
-
-
-#if UNITY_EDITOR
-        void OnValidate()
-        {
-            if (maxHP < 1) maxHP = 1;
-        }
-#endif
     }
 }
 

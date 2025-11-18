@@ -54,7 +54,7 @@ namespace Game.Combat
     public bool previewOnly = false;
     [Tooltip("Index of the step to preview in the inspector (clamped to steps count)")]
     public int previewStep = 0;
-    [Tooltip("When playing, draw the active combo step's hitbox instead of the preview (if true)")]
+    [Tooltip("When playing, draw the active combo step hitbox instead of the preview (if true)")]
     public bool previewInPlayMode = true;
     [Tooltip("Enable runtime debug logs for combo/hitbox events")]
     public bool showDebugLogs = false;
