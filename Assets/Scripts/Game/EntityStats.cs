@@ -15,6 +15,7 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
     [SerializeField] protected int maxShield = 50;
     [SerializeField] protected int attackDamage = 20;
     [SerializeField] protected int defense = 10;
+    protected int finalDamage;
 
     [Header("Optional Stats Data")]
     [SerializeField] protected PlayerStatsData statsData; // Optional ScriptableObject for stats
@@ -62,25 +63,27 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
         }
     }
 
-   /* public virtual void TakeDamage(DamageInfo damageInfo) // Method to take damage
+    public void TakeDamage(int amount) // Method to take damage
     {
-        // Calculate damage reduction based on defense
-        float damageReduction = defense * 0.5f; // Each defense point reduces 0.5 damage
-        float finalDamage = Mathf.Max(1, damageInfo.finalDamage - damageReduction); // Minimum 1 damage
-        
-        curHP = Mathf.Max(0, curHP - Mathf.RoundToInt(finalDamage)); // Reduce health but not below 0
 
+        finalDamage = Mathf.Max(0, amount - curShield);
+        curHP -= finalDamage;
+        IsAlive();
+    }
+    
+
+
+    public bool IsAlive() // Method to check if entity is alive
+    {
         if (curHP <= 0)
         {
-            Die(damageInfo); // If health is 0 or less, die
+            curHP = 0;
+            Destroy(gameObject);
+            return false; // Entity is dead
         }
-    }
-    */
-
-
-    public virtual bool IsAlive() // Method to check if entity is alive
-    {
-        return curHP > 0;
+        return true;
+         // Entity is alive
+         
     }
 
 

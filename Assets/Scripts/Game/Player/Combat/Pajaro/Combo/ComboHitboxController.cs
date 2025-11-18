@@ -19,6 +19,11 @@ namespace Game.Combat
     [ExecuteAlways]
     public class ComboHitboxController : MonoBehaviour
     {
+        [Header("Combo Step Multipliers")]
+        [Tooltip("Multiplicador de daño por cada paso del combo. Index 0 = paso 1, etc.")]
+        public List<float> stepMultipliers = new List<float>() { 1f, 1.5f, 2f };
+            // Referencia al EntityStats del atacante
+            private EntityStats attackerStats;
         [Header("Combo timing")]
         [Tooltip("Cooldown between attacks (seconds)")]
         public float attackCooldown = 0.25f;
@@ -62,6 +67,7 @@ namespace Game.Combat
         PlayerInput _playerInput;
         InputAction _attackAction;
 
+
         // Public events
         public event Action<int> OnAttackStep; // invoked when a step begins (step index)
         public event Action<Collider, int> OnStepHit; // invoked when a collider is detected for a step
@@ -86,39 +92,29 @@ namespace Game.Combat
     int boomerangPreviewStep = -1;
     bool boomerangPreviewActive = false;
 
-    [Serializable]
-    public class StepConfig
+        [Serializable]
+        public class StepConfig
         {
             [Tooltip("Si está activo, este paso realiza comprobaciones por ticks durante la ventana; si es false se detecta solo una vez cuando se activa el paso.")]
             public bool useTicks = true;
-
             [Tooltip("If true, this step uses the boomerang behaviour instead of a single hitbox")]
             public bool isBoomerang = false;
-
             [Tooltip("Shape used for detection (Box or Sphere)")]
             public Shape shape = Shape.Box;
-
             [Tooltip("Local offset from the transform to place the detection center")]
             public Vector3 offset = new Vector3(0f, 0f, 1.2f);
-
             [Tooltip("Local Euler rotation (degrees) applied to the hitbox around the character. Useful to rotate boxes on a specific axis.")]
             public Vector3 localEuler = Vector3.zero;
-
             [Tooltip("Box size (only used if shape == Box)")]
             public Vector3 boxSize = new Vector3(1f, 1f, 1f);
-
             [Tooltip("Sphere radius (only used if shape == Sphere)")]
             public float sphereRadius = 1f;
-
             [Tooltip("Sector radius (only used if shape == Sector)")]
             public float sectorRadius = 1f;
-
             [Tooltip("Sector angle in degrees (only used if shape == Sector)")]
             public float sectorAngle = 90f;
-
             [Tooltip("Duration in seconds of the detection window. Only used if UseTicks = true.")]
             public float windowDuration = 0.08f;
-
             [Tooltip("Interval between checks while the window is open (seconds). Only used if UseTicks = true.")]
             public float tickInterval = 0.04f;
         }
@@ -126,9 +122,11 @@ namespace Game.Combat
     public enum Shape { Box, Sphere, Sector }
 
         void Awake()
+                    
         {
             // ensure PlayerInput and Attack action are set up
             _playerInput = GetComponent<PlayerInput>();
+            attackerStats = GetComponent<EntityStats>();
         
         }
 
@@ -147,7 +145,10 @@ namespace Game.Combat
         }
 
         void OnEnable()
+                    // Suscribirse al evento de golpe para aplicar daño
+
         {
+            OnStepHit += ApplyDamageToTarget;
             // try to get PlayerInput from same GameObject
             _playerInput = GetComponent<PlayerInput>();
             if (attackActionRef != null)
@@ -166,11 +167,28 @@ namespace Game.Combat
 
         void OnDisable()
         {
-            if (_attackAction != null)
+            OnStepHit -= ApplyDamageToTarget;
+        }
+            // Desuscribirse del evento
+
+
+        private void ApplyDamageToTarget(Collider target, int step)
+        {
+            if (target == null) return;
+            
+            var stats = target.GetComponent<EntityStats>();
+            if (stats != null && attackerStats != null)
             {
-                _attackAction.performed -= OnAttackPerformed;
+                float multiplier = 1f;
+                if (stepMultipliers != null && step >= 0 && step < stepMultipliers.Count)
+                    multiplier = stepMultipliers[step];
+                int damage = Mathf.RoundToInt(attackerStats.AttackDamage * multiplier);
+                stats.TakeDamage(damage);
+                if (showDebugLogs)
+                    Debug.Log($"[Combo] {target.name} recibió {damage} de daño por combo step {step} (multiplier={multiplier})");
             }
         }
+        
 
         void OnAttackPerformed(InputAction.CallbackContext ctx)
         {

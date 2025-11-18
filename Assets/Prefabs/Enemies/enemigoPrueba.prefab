@@ -147,15 +147,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab4a614433b2ba42988cdb934624d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Enemies.EnemyHealth
-  maxHealth: 100
+  maxHP: 100
+  curHP: 100
+  speed: 5
+  curShield: 0
+  maxShield: 50
+  attackDamage: 20
+  defense: 10
+  finalDamage: 0
+  statsData: {fileID: 11400000, guid: ea8b9535648ed024096dfc6d6b6d746c, type: 2}
   showDebugLogs: 1
-  isElite: 0
-  normalResistance: 0
-  criticoResistance: 0
-  fuegoResistance: 0
-  hieloResistance: 0
-  electricoResistance: 0
-  perforanteResistance: 0
   canTakeKnockback: 1
   stunDuration: 0.5
 --- !u!54 &6769849156830466866
