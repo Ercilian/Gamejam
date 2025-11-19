@@ -18,7 +18,7 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
     protected int finalDamage;
     [Header("Optional Stats Data")]
     [SerializeField] protected PlayerStatsData statsData; // Optional ScriptableObject for stats
-
+    [SerializeField] protected EnemyStatsData enemyStatsData; // Optional ScriptableObject for enemy stats
     public int CurrentHP => curHP;
     public int MaxHP
     {
@@ -64,6 +64,16 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
                 // You can modify inventory capacity here if PlayerInventory has a setter
                 // inventory.maxCarryCapacity = statsData.InventoryCapacity;
             }
+        }
+        else if (enemyStatsData != null)
+        {
+            maxHP = enemyStatsData.MaxHealth;
+            speed = enemyStatsData.MoveSpeed;
+            maxShield = enemyStatsData.MaxShield;
+            attackDamage = enemyStatsData.AttackDamage;
+            defense = enemyStatsData.Defense;
+
+            Debug.Log($"[{gameObject.name}] Aplicando stats desde Enemy ScriptableObject: {enemyStatsData.name}");
         }
         else
         {
