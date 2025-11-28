@@ -19,6 +19,7 @@ public class CharacterSelectionManager : MonoBehaviour
     public TMPro.TMP_Text countdownText; // Añade esto en CharacterSelectionManager
     
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
+    private Coroutine countdownCoroutine; // Guarda la referencia
 
     void Awake()
     {
@@ -110,20 +111,24 @@ public class CharacterSelectionManager : MonoBehaviour
         var uiMap = playerInput.actions.FindActionMap("UI", true);
         if (uiMap != null)
         {
-            var moveLeft = uiMap.FindAction("MoveLeft", true);
-            var moveRight = uiMap.FindAction("MoveRight", true);
+            var moveLeft = uiMap.FindAction("MoveLeft");
+            var moveRight = uiMap.FindAction("MoveRight");
             var disconnect = uiMap.FindAction("Disconnect", false);
-            var submit = uiMap.FindAction("Submit", true);
+            var confirm = uiMap.FindAction("Confirm");
             var unconfirm = uiMap.FindAction("Unconfirm", false); // Usa el nombre de tu acción
 
             int playerIndex = playerInput.playerIndex;
             if (playerIndex >= 0 && playerIndex < playerSlots.Length)
             {
-                moveLeft.performed -= ctx => playerSlots[playerIndex].OnLeftArrowPressed();
-                moveRight.performed -= ctx => playerSlots[playerIndex].OnRightArrowPressed();
+                // Desuscribe primero
+                moveLeft.performed -= playerSlots[playerIndex].OnLeftArrowPressed;
+                moveRight.performed -= playerSlots[playerIndex].OnRightArrowPressed;
+                confirm.performed -= playerSlots[playerIndex].OnConfirmPressed;
 
-                moveLeft.performed += ctx => playerSlots[playerIndex].OnLeftArrowPressed();
-                moveRight.performed += ctx => playerSlots[playerIndex].OnRightArrowPressed();
+                // Suscribe después
+                moveLeft.performed += playerSlots[playerIndex].OnLeftArrowPressed;
+                moveRight.performed += playerSlots[playerIndex].OnRightArrowPressed;
+                confirm.performed += playerSlots[playerIndex].OnConfirmPressed;
 
                 // Listener para desconectar
                 if (disconnect != null)
@@ -136,7 +141,7 @@ public class CharacterSelectionManager : MonoBehaviour
                 }
 
                 // Suscribe el evento para el botón Ready
-                submit.performed += ctx =>
+                confirm.performed += ctx =>
                 {
                     if (SelectCharacterPanel.activeSelf // Solo si está activa la selección
                         && playerSlots[playerIndex] != null
@@ -279,10 +284,24 @@ public class CharacterSelectionManager : MonoBehaviour
 
     public void OnPlayerConfirmed()
     {
-        // Llama a esto desde OnConfirmPressed() de cada slot
         if (AllPlayersConfirmed())
         {
-            StartCoroutine(StartCountdownAndLoadScene());
+            // Solo inicia si no está ya corriendo
+            if (countdownCoroutine == null)
+                countdownCoroutine = StartCoroutine(StartCountdownAndLoadScene());
+        }
+    }
+
+    public void OnPlayerUnconfirmed()
+    {
+        // Si alguien cancela, detén la cuenta atrás
+        if (countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+            if (countdownText != null)
+                countdownText.text = ""; // Limpia el texto
+            Debug.Log("[CharacterSelection] Cuenta atrás cancelada por un jugador.");
         }
     }
 

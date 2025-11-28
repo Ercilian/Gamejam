@@ -52,6 +52,7 @@ public class MainMenu : MonoBehaviour
 
         mainMenuPanel.SetActive(false);
         SelectCharacterPanel.SetActive(true);
+        
     }
 
     public void Settings()

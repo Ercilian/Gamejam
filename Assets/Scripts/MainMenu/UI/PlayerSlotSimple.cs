@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class PlayerSlotSimple : MonoBehaviour
 {
@@ -127,18 +128,23 @@ public class PlayerSlotSimple : MonoBehaviour
             currentPreviewInstance = Instantiate(prefab, worldPreviewAnchor);
             // Ajusta posición/escala si es necesario
         }
+        else
+        {
+            Debug.LogWarning($"[Slot {slotIndex}] Prefab nulo o anchor no encontrado.");
+        }
     }
 
     public void ChangeCharacter(int direction, GameObject[] characterPrefabs)
     {
-        // direction: -1 para izquierda, +1 para derecha
         selectedCharacterIndex = (selectedCharacterIndex + direction + characterPrefabs.Length) % characterPrefabs.Length;
+        Debug.Log($"[Slot {slotIndex}] Cambiando a índice {selectedCharacterIndex}: {characterPrefabs[selectedCharacterIndex]?.name}");
         ShowCharacterPreview(characterPrefabs[selectedCharacterIndex]);
     }
 
     public void OnLeftArrowPressed()
     {
-        if (isConfirmed) return; // No permite cambiar si está confirmado
+        Debug.Log($"[Slot {slotIndex}] LeftArrow PRESSED");
+        if (isConfirmed) return;
         if (manager != null)
             ChangeCharacter(-1, manager.characterPrefabs);
     }
@@ -178,6 +184,7 @@ public class PlayerSlotSimple : MonoBehaviour
             confirmButton.interactable = true;
             if (leftArrowButton) leftArrowButton.interactable = true;
             if (rightArrowButton) rightArrowButton.interactable = true;
+            manager.OnPlayerUnconfirmed();
             // Vuelve al estado normal
             if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección desconfirmada.");
         }
@@ -191,6 +198,21 @@ public class PlayerSlotSimple : MonoBehaviour
         if (leftArrowButton) leftArrowButton.interactable = true;
         if (rightArrowButton) rightArrowButton.interactable = true;
         // Opcional: limpia preview, colores, etc.
+    }
+
+    public void OnLeftArrowPressed(InputAction.CallbackContext ctx)
+    {
+        OnLeftArrowPressed();
+    }
+
+    public void OnRightArrowPressed(InputAction.CallbackContext ctx)
+    {
+        OnRightArrowPressed();
+    }
+
+    public void OnConfirmPressed(InputAction.CallbackContext ctx)
+    {
+        OnConfirmPressed();
     }
 
 }

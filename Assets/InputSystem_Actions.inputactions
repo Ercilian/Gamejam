@@ -499,6 +499,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Confirm",
+                    "type": "Button",
+                    "id": "a76e8662-c66f-441d-ab22-908b65eace75",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Unconfirm",
                     "type": "Button",
                     "id": "75ccc6ff-3a9a-4d73-8f87-ead6bf44fb2f",
@@ -876,8 +885,8 @@
                 },
                 {
                     "name": "",
-                    "id": "280b3c14-ea39-4055-882e-643bd41ecf83",
-                    "path": "<Keyboard>/space",
+                    "id": "981156ff-224f-411c-8c7b-75a8423ba3d9",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -887,12 +896,23 @@
                 },
                 {
                     "name": "",
-                    "id": "981156ff-224f-411c-8c7b-75a8423ba3d9",
-                    "path": "<Keyboard>/enter",
+                    "id": "d77efc4d-909a-4ec6-96bd-cad51c1801d7",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d79c741-f8f2-4854-8882-25835a868083",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Submit",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

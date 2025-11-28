@@ -308,6 +308,7 @@ MonoBehaviour:
   maxShield: 50
   attackDamage: 20
   defense: 10
+  finalDamage: 0
   statsData: {fileID: 11400000, guid: 45bc7567054e03344b1d2ef8296eea8b, type: 2}
   activeControl: 1
 --- !u!114 &3199202718284467957
@@ -342,6 +343,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 415dc1fc3557f3d40adeff523709c487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Combat.ComboHitboxController
+  stepMultipliers:
+  - 1
+  - 1.5
+  - 2
   attackCooldown: 0.1
   comboResetTime: 2
   steps:
@@ -387,7 +392,7 @@ MonoBehaviour:
   boomerangPauseTime: 0.6
   drawGizmos: 1
   previewOnly: 0
-  previewStep: 0
+  previewStep: 2
   previewInPlayMode: 1
   showDebugLogs: 1
   attackActionRef: {fileID: 0}

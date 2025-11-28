@@ -21858,6 +21858,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2377239295749694396, guid: 83bcc17152b473047863e0c89104779a, type: 3}
+      propertyPath: mostrarGizmos
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2736871559625387415, guid: 83bcc17152b473047863e0c89104779a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2673.3054

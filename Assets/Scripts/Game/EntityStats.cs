@@ -6,19 +6,19 @@ using System.Collections;
 
 public class EntityStats : MonoBehaviour // Use the interface to ensure it can take damage
 {
+    // Protected fields for stats
+    public int curHP;
+    public int maxHP = 100;
+    public float speed = 5f;
+    public int curShield;
+    public int maxShield;
+    public int attackDamage = 10;
+    protected int defense;
 
-    [Header("Stats")]
-    [SerializeField] protected int maxHP = 100;
-    [SerializeField] protected int curHP = 100;
-    [SerializeField] protected float speed = 5f;
-    [SerializeField] protected int curShield = 0;
-    [SerializeField] protected int maxShield = 50;
-    [SerializeField] protected int attackDamage = 20;
-    [SerializeField] protected int defense = 10;
-
+    protected int finalDamage;
     [Header("Optional Stats Data")]
     [SerializeField] protected PlayerStatsData statsData; // Optional ScriptableObject for stats
-
+    [SerializeField] protected EnemyStatsData enemyStatsData; // Optional ScriptableObject for enemy stats
     public int CurrentHP => curHP;
     public int MaxHP
     {
@@ -36,10 +36,13 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
     public int Defense => defense;
     public PlayerStatsData StatsData => statsData;
 
+
     protected virtual void Awake()
     {
         ApplyStatsData(); // Apply ScriptableObject stats if available
-        curHP = maxHP; // Start with full health when created
+        curHP = maxHP; // Start with full health when created (after applying stats)
+        curShield = maxShield; // Start with full shield when created
+        Debug.Log($"[{gameObject.name}] Stats aplicadas: maxHP={maxHP}, speed={speed}, attackDamage={attackDamage}");
     }
 
     // Method to apply stats from ScriptableObject
@@ -52,6 +55,8 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
             maxShield = statsData.MaxShield;
             attackDamage = statsData.AttackDamage;
             defense = statsData.Defense;
+            
+            Debug.Log($"[{gameObject.name}] Aplicando stats desde ScriptableObject: {statsData.name}");
 
             // Apply other stats specific to Player if this is a Player
             if (this is Player player && player.TryGetComponent<PlayerInventory>(out var inventory))
@@ -60,27 +65,70 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
                 // inventory.maxCarryCapacity = statsData.InventoryCapacity;
             }
         }
-    }
-
-   /* public virtual void TakeDamage(DamageInfo damageInfo) // Method to take damage
-    {
-        // Calculate damage reduction based on defense
-        float damageReduction = defense * 0.5f; // Each defense point reduces 0.5 damage
-        float finalDamage = Mathf.Max(1, damageInfo.finalDamage - damageReduction); // Minimum 1 damage
-        
-        curHP = Mathf.Max(0, curHP - Mathf.RoundToInt(finalDamage)); // Reduce health but not below 0
-
-        if (curHP <= 0)
+        else if (enemyStatsData != null)
         {
-            Die(damageInfo); // If health is 0 or less, die
+            maxHP = enemyStatsData.MaxHealth;
+            speed = enemyStatsData.MoveSpeed;
+            maxShield = enemyStatsData.MaxShield;
+            attackDamage = enemyStatsData.AttackDamage;
+            defense = enemyStatsData.Defense;
+
+            Debug.Log($"[{gameObject.name}] Aplicando stats desde Enemy ScriptableObject: {enemyStatsData.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] No hay ScriptableObject asignado en Stats Data. Usando valores por defecto.");
         }
     }
-    */
 
-
-    public virtual bool IsAlive() // Method to check if entity is alive
+    public void TakeDamage(int amount) // Method to take damage
     {
-        return curHP > 0;
+        if (amount <= 0) return;
+
+        int remainingDamage = amount;
+
+        // Primero aplica el daño al escudo si hay escudo disponible
+        if (curShield > 0)
+        {
+            if (curShield >= remainingDamage)
+            {
+                // El escudo absorbe todo el daño
+                curShield -= remainingDamage;
+                remainingDamage = 0;
+                Debug.Log($"[{gameObject.name}] Escudo absorbió {amount} de daño. Escudo restante: {curShield}");
+            }
+            else
+            {
+                // El escudo absorbe parte del daño y se rompe
+                remainingDamage -= curShield;
+                Debug.Log($"[{gameObject.name}] Escudo roto! Absorbió {curShield} de daño. Daño restante: {remainingDamage}");
+                curShield = 0;
+            }
+        }
+
+        // Si queda daño después del escudo, aplícalo a la vida
+        if (remainingDamage > 0)
+        {
+            curHP -= remainingDamage;
+            Debug.Log($"[{gameObject.name}] Recibió {remainingDamage} de daño a la vida. HP restante: {curHP}");
+        }
+
+        IsAlive();
+    }
+    
+
+
+    public bool IsAlive() // Method to check if entity is alive
+    {
+        if (curHP <= 0)
+        {
+            curHP = 0;
+            Destroy(gameObject);
+            return false; // Entity is dead
+        }
+        return true;
+         // Entity is alive
+         
     }
 
 
