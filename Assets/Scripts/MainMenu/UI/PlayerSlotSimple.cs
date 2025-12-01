@@ -27,6 +27,7 @@ public class PlayerSlotSimple : MonoBehaviour
     [Header("Others")]    
     public int selectedCharacterIndex = 0;
     public CharacterSelectionManager manager;
+    public PlayerInput playerInput;
     
     private bool isConfirmed = false;
     private int slotIndex;

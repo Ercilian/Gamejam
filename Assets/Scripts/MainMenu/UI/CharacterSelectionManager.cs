@@ -17,6 +17,8 @@ public class CharacterSelectionManager : MonoBehaviour
     public GameObject[] characterPrefabs; // Asigna los 4 prefabs en el inspector
     public GameObject SelectCharacterPanel; // Asigna el panel en el inspector
     public TMPro.TMP_Text countdownText; // Añade esto en CharacterSelectionManager
+
+    public PlayerSelectionDataSO selectionDataSO; // Asigna en el inspector
     
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
     private Coroutine countdownCoroutine; // Guarda la referencia
@@ -105,6 +107,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
         playerSlots[slotIndex].SetJoinedState(true);
         activePlayers[slotIndex] = playerInput;
+        playerSlots[slotIndex].playerInput = playerInput; // <-- Aquí está el cambio
 
         // Añade listeners para las acciones de izquierda/derecha y desconexión
         var actions = playerInput.actions;
@@ -320,6 +323,28 @@ public class CharacterSelectionManager : MonoBehaviour
         if (countdownText != null)
             countdownText.text = ""; // Limpia el texto al terminar
 
+        // Guarda los jugadores confirmados en el ScriptableObject
+        SaveConfirmedPlayersToSO();
+
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void SaveConfirmedPlayersToSO()
+    {
+        selectionDataSO.Clear();
+        for (int i = 0; i < playerSlots.Length; i++)
+        {
+            var slot = playerSlots[i];
+            if (slot != null && slot.IsConfirmed)
+            {
+                var info = new PlayerSelectionDataSO.PlayerInfo();
+                info.slotIndex = i;
+                info.characterIndex = slot.selectedCharacterIndex;
+                // Guarda el ID del dispositivo para poder recuperarlo en la siguiente escena
+                if (slot.playerInput != null && slot.playerInput.devices.Count > 0)
+                    info.inputDeviceId = slot.playerInput.devices[0].deviceId.ToString();
+                selectionDataSO.selectedPlayers.Add(info);
+            }
+        }
     }
 }

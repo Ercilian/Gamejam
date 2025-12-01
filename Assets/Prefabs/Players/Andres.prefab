@@ -311,7 +311,7 @@ MonoBehaviour:
   curShield: 0
   maxShield: 50
   attackDamage: 20
-  statsData: {fileID: 11400000, guid: 45bc7567054e03344b1d2ef8296eea8b, type: 2}
+  statsData: {fileID: 11400000, guid: da7f3af98e831bc4e828dc354d94d6c3, type: 2}
   enemyStatsData: {fileID: 0}
   activeControl: 1
 --- !u!114 &3199202718284467957

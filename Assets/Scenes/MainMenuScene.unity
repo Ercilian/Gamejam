@@ -705,6 +705,7 @@ MonoBehaviour:
   - {fileID: 4605989410389788580, guid: e8b1f91169203774fb43a62755a294f7, type: 3}
   SelectCharacterPanel: {fileID: 1418664042}
   countdownText: {fileID: 1253864910}
+  selectionDataSO: {fileID: 11400000, guid: ad9a01878997d7a41840fead73e5b0e2, type: 2}
 --- !u!114 &268937671
 MonoBehaviour:
   m_ObjectHideFlags: 0
