@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 6783460188252569597}
   - component: {fileID: 3199202718284467957}
   - component: {fileID: 8577440922694416064}
+  - component: {fileID: 1941673929811933340}
   m_Layer: 7
   m_Name: Juan
   m_TagString: Player
@@ -274,6 +275,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: a76e8662-c66f-441d-ab22-908b65eace75
     m_ActionName: 'UI/Confirm[/XInputControllerWindows/start,/XInputControllerWindows1/start,/Keyboard/j]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c8a3bed2-e665-4714-8a4e-9b06ba7b1249
+    m_ActionName: 'Player/Dash[/Keyboard/x]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -399,6 +404,46 @@ MonoBehaviour:
   previewInPlayMode: 1
   showDebugLogs: 1
   attackActionRef: {fileID: 0}
+--- !u!114 &1941673929811933340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15dfbb139c8efd24fb3a419edde5886e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dash
+  dashDistance: 5
+  dashDuration: 0.2
+  dashCooldown: 1
+  dashCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  defaultDashDirection: {x: -1, y: 0, z: 0}
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
