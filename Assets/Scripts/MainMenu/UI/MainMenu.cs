@@ -19,7 +19,6 @@ public class MainMenu : MonoBehaviour
 
 
 
-
     // ========================================================================================= Methods ========================================================================================
 
 
@@ -31,6 +30,7 @@ public class MainMenu : MonoBehaviour
         mainMenuPanel.SetActive(true);
         SettingsPanel.SetActive(false);
         SelectCharacterPanel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
