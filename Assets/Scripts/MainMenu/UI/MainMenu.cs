@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
-    [Header("UI Panels")]
+    [Header("UI References")]
     public GameObject mainMenuPanel;
     public GameObject SettingsPanel;
     public GameObject SelectCharacterPanel;

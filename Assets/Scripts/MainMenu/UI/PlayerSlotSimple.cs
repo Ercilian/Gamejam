@@ -5,30 +5,25 @@ using UnityEngine.InputSystem;
 
 public class PlayerSlotSimple : MonoBehaviour
 {
-    [Header("Referencias UI")]
+    [Header("UI References")]
     public GameObject idleState;
     public GameObject joinedState;
     public Button confirmButton;
     public Button leftArrowButton;
     public Button rightArrowButton;
 
-
-    [Header("Preview del personaje")]
+    [Header("Character Preview")]
     public GameObject defaultCharacterPrefab;
     public Transform worldPreviewAnchor;
     public Vector3 previewLocalPosition = Vector3.zero;
     public Vector3 previewLocalEuler = new Vector3(0, 180, 0);
     public float previewScale = 1f;
 
-
-    [Header("Debug")]
-    public bool debugLogs = true;
-
-    [Header("Others")]    
+    [Header("Slot Management")]
     public int selectedCharacterIndex = 0;
     public CharacterSelectionManager manager;
     public PlayerInput playerInput;
-    
+
     private bool isConfirmed = false;
     private int slotIndex;
     private bool isJoined = false;
@@ -51,10 +46,8 @@ public class PlayerSlotSimple : MonoBehaviour
     public void Initialize(int index)
     {
         slotIndex = index;
-
-        if (!idleState || !joinedState) AutoFindComponents();
+        AutoFindComponents();
         TryAutoFindAnchor();
-
         SetJoinedState(false);
     }
 
@@ -70,13 +63,13 @@ public class PlayerSlotSimple : MonoBehaviour
 
     private void TryAutoFindAnchor()
     {
-        // Busca en la escena objetos llamados "PreviewAnchor_X" o "PreviewAnchor (X)"
         var byExact = GameObject.Find($"PreviewAnchor_{slotIndex + 1}");
         if (!byExact) byExact = GameObject.Find($"PreviewAnchor ({slotIndex + 1})");
         if (!byExact) byExact = GameObject.Find($"PreviewAnchor{slotIndex + 1}");
         if (byExact) worldPreviewAnchor = byExact.transform;
     }
-    
+
+    // ================================================= Slot State Management ===========================================
 
     public void SetJoinedState(bool joined)
     {
@@ -86,25 +79,27 @@ public class PlayerSlotSimple : MonoBehaviour
         if (idleState) idleState.SetActive(!joined);
         if (joinedState) joinedState.SetActive(joined);
 
-
         if (joined) SpawnPreview();
         else DespawnPreview();
 
-        if (debugLogs)
-            Debug.Log($"[Slot {slotIndex}] Estado cambiado a: {(joined ? "JOINED" : "IDLE")}");
+        Debug.Log($"[Slot {slotIndex}] Estado cambiado a: {(joined ? "JOINED" : "IDLE")}");
     }
+
+    public void ResetSlotState()
+    {
+        isConfirmed = false;
+        selectedCharacterIndex = 0;
+        confirmButton.interactable = true;
+        leftArrowButton.interactable = true;
+        rightArrowButton.interactable = true;
+        DespawnPreview();
+    }
+
+    // ================================================= Preview Management ==============================================
 
     private void SpawnPreview()
     {
-        if (spawnedCharacter) return;
-
-        if (!defaultCharacterPrefab)
-        {
-            if (debugLogs) Debug.LogWarning($"[Slot {slotIndex}] Sin defaultCharacterPrefab asignado.");
-            return;
-        }
-
-        // Si no hay anchor, intentamos encontrar uno por nombre
+        if (spawnedCharacter || !defaultCharacterPrefab) return;
         if (!worldPreviewAnchor) TryAutoFindAnchor();
         var anchor = worldPreviewAnchor ? worldPreviewAnchor : transform;
 
@@ -112,7 +107,6 @@ public class PlayerSlotSimple : MonoBehaviour
         spawnedCharacter.transform.localPosition = previewLocalPosition;
         spawnedCharacter.transform.localEulerAngles = previewLocalEuler;
         spawnedCharacter.transform.localScale = Vector3.one * previewScale;
-
     }
 
     private void DespawnPreview()
@@ -122,23 +116,21 @@ public class PlayerSlotSimple : MonoBehaviour
             Destroy(spawnedCharacter);
             spawnedCharacter = null;
         }
+        if (currentPreviewInstance)
+        {
+            Destroy(currentPreviewInstance);
+            currentPreviewInstance = null;
+        }
     }
-
-
-
-    private void OnDisable() => DespawnPreview();
 
     public void ShowCharacterPreview(GameObject prefab)
     {
-        // Destruye el preview anterior si existe
         if (currentPreviewInstance != null)
             Destroy(currentPreviewInstance);
 
-        // Instancia el nuevo preview en el anchor
         if (worldPreviewAnchor != null && prefab != null)
         {
             currentPreviewInstance = Instantiate(prefab, worldPreviewAnchor);
-            // Ajusta posición/escala si es necesario
         }
         else
         {
@@ -146,12 +138,16 @@ public class PlayerSlotSimple : MonoBehaviour
         }
     }
 
+    // ================================================= Character Selection =============================================
+
     public void ChangeCharacter(int direction, GameObject[] characterPrefabs)
     {
         selectedCharacterIndex = (selectedCharacterIndex + direction + characterPrefabs.Length) % characterPrefabs.Length;
         Debug.Log($"[Slot {slotIndex}] Cambiando a índice {selectedCharacterIndex}: {characterPrefabs[selectedCharacterIndex]?.name}");
         ShowCharacterPreview(characterPrefabs[selectedCharacterIndex]);
     }
+
+    // ================================================= UI Events ======================================================
 
     public void OnLeftArrowPressed()
     {
@@ -163,14 +159,13 @@ public class PlayerSlotSimple : MonoBehaviour
 
     public void OnRightArrowPressed()
     {
-        if (isConfirmed) return; // No permite cambiar si está confirmado
+        if (isConfirmed) return;
         if (manager != null)
             ChangeCharacter(1, manager.characterPrefabs);
     }
 
     public void OnConfirmPressed()
     {
-        // Solo permite confirmar si han pasado al menos 0.2 segundos desde que se unió
         if (joinTime > 0 && Time.time - joinTime < 0.2f)
             return;
 
@@ -178,11 +173,9 @@ public class PlayerSlotSimple : MonoBehaviour
         {
             isConfirmed = true;
             confirmButton.interactable = false;
-            if (leftArrowButton) leftArrowButton.interactable = false;
-            if (rightArrowButton) rightArrowButton.interactable = false;
-            // Cambia el color o muestra "Listo"
-            if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
-
+            leftArrowButton.interactable = false;
+            rightArrowButton.interactable = false;
+            Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
             if (manager != null)
                 manager.OnPlayerConfirmed();
         }
@@ -194,37 +187,17 @@ public class PlayerSlotSimple : MonoBehaviour
         {
             isConfirmed = false;
             confirmButton.interactable = true;
-            if (leftArrowButton) leftArrowButton.interactable = true;
-            if (rightArrowButton) rightArrowButton.interactable = true;
-            manager.OnPlayerUnconfirmed();
-            // Vuelve al estado normal
-            if (debugLogs) Debug.Log($"[Slot {slotIndex}] Selección desconfirmada.");
+            leftArrowButton.interactable = true;
+            rightArrowButton.interactable = true;
+            if (manager != null)
+                manager.OnPlayerUnconfirmed();
+            Debug.Log($"[Slot {slotIndex}] Selección desconfirmada.");
         }
     }
 
-    public void ResetSlotState()
-    {
-        isConfirmed = false;
-        selectedCharacterIndex = 0;
-        if (confirmButton) confirmButton.interactable = true;
-        if (leftArrowButton) leftArrowButton.interactable = true;
-        if (rightArrowButton) rightArrowButton.interactable = true;
-        // Opcional: limpia preview, colores, etc.
-    }
 
-    public void OnLeftArrowPressed(InputAction.CallbackContext ctx)
-    {
-        OnLeftArrowPressed();
-    }
-
-    public void OnRightArrowPressed(InputAction.CallbackContext ctx)
-    {
-        OnRightArrowPressed();
-    }
-
-    public void OnConfirmPressed(InputAction.CallbackContext ctx)
-    {
-        OnConfirmPressed();
-    }
-
+    public void OnLeftArrowPressed(InputAction.CallbackContext ctx) => OnLeftArrowPressed();
+    public void OnRightArrowPressed(InputAction.CallbackContext ctx) => OnRightArrowPressed();
+    public void OnConfirmPressed(InputAction.CallbackContext ctx) => OnConfirmPressed();
+    private void OnDisable() => DespawnPreview();
 }
