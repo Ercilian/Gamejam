@@ -10,17 +10,23 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject SettingsPanel;
     public GameObject SelectCharacterPanel;
-
     public Button firstSelectedButton;
 
-    [Header("Input System")]
-    public InputActionAsset inputActions;
-
-    private InputAction cancelAction;
+    [Header("Other")]
     public CharacterSelectionManager characterSelectionManager;
+    public InputActionAsset inputActions;
+    private InputAction cancelAction;
+
+
+
+    // ========================================================================================= Methods ========================================================================================
+
+
+
 
     void Start()
     {
+        // Initialize UI
         mainMenuPanel.SetActive(true);
         SettingsPanel.SetActive(false);
         SelectCharacterPanel.SetActive(false);
@@ -29,6 +35,7 @@ public class MainMenu : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        // Initialize Input Actions
         var uiMap = inputActions.FindActionMap("UI", true);
         cancelAction = uiMap.FindAction("Cancel", true);
         cancelAction.Enable();
@@ -52,7 +59,6 @@ public class MainMenu : MonoBehaviour
 
         mainMenuPanel.SetActive(false);
         SelectCharacterPanel.SetActive(true);
-        
     }
 
     public void Settings()

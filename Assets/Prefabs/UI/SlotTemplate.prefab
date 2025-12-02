@@ -956,7 +956,7 @@ MonoBehaviour:
   confirmButton: {fileID: 7905232823485709692}
   leftArrowButton: {fileID: 6357216828828269893}
   rightArrowButton: {fileID: 8909010214889552790}
-  defaultCharacterPrefab: {fileID: 1813536838263918369, guid: f9f546d49774f1d4a91dbdfba531b3a0, type: 3}
+  defaultCharacterPrefab: {fileID: 4605989410389788580, guid: ad4b60aaf58b20d4989e20ca43c1ac8f, type: 3}
   worldPreviewAnchor: {fileID: 0}
   previewLocalPosition: {x: 0, y: 0, z: 0}
   previewLocalEuler: {x: 0, y: 180, z: 0}
@@ -964,6 +964,7 @@ MonoBehaviour:
   debugLogs: 1
   selectedCharacterIndex: 4
   manager: {fileID: 0}
+  playerInput: {fileID: 0}
 --- !u!1 &6931156405887048344
 GameObject:
   m_ObjectHideFlags: 0

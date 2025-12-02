@@ -35,20 +35,48 @@ public class PlayerSlotSimple : MonoBehaviour
     private GameObject spawnedCharacter;
     private GameObject currentPreviewInstance;
     private float joinTime = -1f;
+
     public bool IsConfirmed => isConfirmed;
     public bool IsJoined => isJoined;
     public int SlotIndex => slotIndex;
+
+
+
+
+    // ========================================================================================= Methods ========================================================================================
+
+
+
 
     public void Initialize(int index)
     {
         slotIndex = index;
 
-        // Auto-buscar componentes si no están asignados
         if (!idleState || !joinedState) AutoFindComponents();
         TryAutoFindAnchor();
 
         SetJoinedState(false);
     }
+
+    private void AutoFindComponents()
+    {
+        foreach (Transform child in transform)
+        {
+            string childName = child.name.ToLower();
+            if (!idleState && childName.Contains("idle")) idleState = child.gameObject;
+            if (!joinedState && (childName.Contains("joined") || childName.Contains("player"))) joinedState = child.gameObject;
+        }
+    }
+
+    private void TryAutoFindAnchor()
+    {
+        // Busca en la escena objetos llamados "PreviewAnchor_X" o "PreviewAnchor (X)"
+        var byExact = GameObject.Find($"PreviewAnchor_{slotIndex + 1}");
+        if (!byExact) byExact = GameObject.Find($"PreviewAnchor ({slotIndex + 1})");
+        if (!byExact) byExact = GameObject.Find($"PreviewAnchor{slotIndex + 1}");
+        if (byExact) worldPreviewAnchor = byExact.transform;
+    }
+    
 
     public void SetJoinedState(bool joined)
     {
@@ -96,24 +124,7 @@ public class PlayerSlotSimple : MonoBehaviour
         }
     }
 
-    private void AutoFindComponents()
-    {
-        foreach (Transform child in transform)
-        {
-            string childName = child.name.ToLower();
-            if (!idleState && childName.Contains("idle")) idleState = child.gameObject;
-            if (!joinedState && (childName.Contains("joined") || childName.Contains("player"))) joinedState = child.gameObject;
-        }
-    }
 
-    private void TryAutoFindAnchor()
-    {
-        // Busca en la escena objetos llamados "PreviewAnchor_X" o "PreviewAnchor (X)"
-        var byExact = GameObject.Find($"PreviewAnchor_{slotIndex + 1}");
-        if (!byExact) byExact = GameObject.Find($"PreviewAnchor ({slotIndex + 1})");
-        if (!byExact) byExact = GameObject.Find($"PreviewAnchor{slotIndex + 1}");
-        if (byExact) worldPreviewAnchor = byExact.transform;
-    }
 
     private void OnDisable() => DespawnPreview();
 
