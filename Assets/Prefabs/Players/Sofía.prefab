@@ -379,13 +379,13 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 1
+  - useTicks: 0
     isBoomerang: 0
-    shape: 0
-    offset: {x: 0, y: 0.61, z: 1}
+    shape: 1
+    offset: {x: 0, y: 1.3, z: 0}
     localEuler: {x: 0, y: -90, z: 0}
     boxSize: {x: 1, y: 0.45, z: 1}
-    sphereRadius: 1
+    sphereRadius: 1.85
     sectorRadius: 1
     sectorAngle: 90
     windowDuration: 0.08
@@ -399,7 +399,7 @@ MonoBehaviour:
   boomerangPauseTime: 0.6
   drawGizmos: 1
   previewOnly: 0
-  previewStep: 1
+  previewStep: 2
   previewInPlayMode: 1
   showDebugLogs: 1
   attackActionRef: {fileID: 0}
