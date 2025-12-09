@@ -34,7 +34,7 @@ Transform:
   m_GameObject: {fileID: 1813536838263918369}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -274,6 +274,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: a76e8662-c66f-441d-ab22-908b65eace75
     m_ActionName: 'UI/Confirm[/XInputControllerWindows/start,/XInputControllerWindows1/start,/Keyboard/j]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c8a3bed2-e665-4714-8a4e-9b06ba7b1249
+    m_ActionName: 'Player/Dash[/Keyboard/x]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -355,10 +359,10 @@ MonoBehaviour:
   steps:
   - useTicks: 0
     isBoomerang: 0
-    shape: 2
-    offset: {x: 0, y: 0.55, z: 0.07}
-    localEuler: {x: 0, y: -90, z: 0}
-    boxSize: {x: 1, y: 1, z: 1}
+    shape: 0
+    offset: {x: 0, y: 0.56, z: -1.43}
+    localEuler: {x: 0, y: -180, z: 0}
+    boxSize: {x: 2.18, y: 1, z: 1.12}
     sphereRadius: 1
     sectorRadius: 1.8
     sectorAngle: 97
@@ -366,22 +370,22 @@ MonoBehaviour:
     tickInterval: 0.04
   - useTicks: 0
     isBoomerang: 0
-    shape: 2
-    offset: {x: 0, y: 0.55, z: 0.07}
-    localEuler: {x: 0, y: -90, z: 0}
-    boxSize: {x: 1, y: 1, z: 1}
+    shape: 0
+    offset: {x: 0, y: 0.56, z: -1.43}
+    localEuler: {x: 0, y: -180, z: 0}
+    boxSize: {x: 2.18, y: 1, z: 1.12}
     sphereRadius: 1
     sectorRadius: 1.8
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 1
-    isBoomerang: 1
-    shape: 0
-    offset: {x: 0, y: 0.61, z: 1}
+  - useTicks: 0
+    isBoomerang: 0
+    shape: 1
+    offset: {x: 1.42, y: 0.3, z: 0}
     localEuler: {x: 0, y: -90, z: 0}
     boxSize: {x: 1, y: 0.45, z: 1}
-    sphereRadius: 1
+    sphereRadius: 1.29
     sectorRadius: 1
     sectorAngle: 90
     windowDuration: 0.08
@@ -395,7 +399,7 @@ MonoBehaviour:
   boomerangPauseTime: 0.6
   drawGizmos: 1
   previewOnly: 0
-  previewStep: 2
+  previewStep: 0
   previewInPlayMode: 1
   showDebugLogs: 1
   attackActionRef: {fileID: 0}
