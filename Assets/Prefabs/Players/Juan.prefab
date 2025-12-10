@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -2229003457756849490}
   - component: {fileID: 268196344557052032}
   - component: {fileID: 458908605971134653}
+  - component: {fileID: 2852071597096493069}
   - component: {fileID: 1945218576087875795}
   - component: {fileID: 6783460188252569597}
   - component: {fileID: 3199202718284467957}
@@ -284,6 +285,26 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &2852071597096493069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62673d854c23e74799d3ed6950941b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerReviveSystem
+  timeToRevive: 30
+  reviveHoldTime: 4
+  reviveRange: 2
+  reviveHealthPercent: 0.5
+  downedVisual: {fileID: 0}
+  downedColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.7}
+  showDebugLogs: 0
+  drawGizmos: 1
 --- !u!114 &1945218576087875795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,7 +421,7 @@ MonoBehaviour:
   boomerangPauseTime: 0.6
   drawGizmos: 1
   previewOnly: 0
-  previewStep: 2
+  previewStep: 0
   previewInPlayMode: 1
   showDebugLogs: 1
   attackActionRef: {fileID: 0}

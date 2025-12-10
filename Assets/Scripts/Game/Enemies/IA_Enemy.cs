@@ -141,6 +141,19 @@ public class IA_Enemy : MonoBehaviour
             return;
         }
         
+        // Verificar si el jugador está caído (downed)
+        PlayerReviveSystem reviveSystem = jugadorObjetivo.GetComponent<PlayerReviveSystem>();
+        if (reviveSystem != null && reviveSystem.IsDowned())
+        {
+            // Jugador está caído, dejar de perseguirlo y volver al camión
+            if (mostrarDebug)
+                Debug.Log($"[{name}] Jugador {jugadorObjetivo.name} está caído, volviendo al camión.");
+            
+            jugadorObjetivo = null;
+            estadoActual = EstadoIA.IrAlCamion;
+            return;
+        }
+        
         float distanciaAJugador = Vector3.Distance(transform.position, jugadorObjetivo.position);
         
         // Verificar si el jugador está muy lejos
@@ -179,6 +192,11 @@ public class IA_Enemy : MonoBehaviour
         foreach (GameObject jugador in jugadores)
         {
             if (jugador == null) continue;
+            
+            // Ignorar jugadores caídos
+            PlayerReviveSystem reviveSystem = jugador.GetComponent<PlayerReviveSystem>();
+            if (reviveSystem != null && reviveSystem.IsDowned())
+                continue;
             
             float distancia = Vector3.Distance(transform.position, jugador.transform.position);
             

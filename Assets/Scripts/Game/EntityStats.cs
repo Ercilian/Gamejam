@@ -118,17 +118,26 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
     
 
 
-    public bool IsAlive() // Method to check if entity is alive
+    public virtual bool IsAlive() // Method to check if entity is alive
     {
         if (curHP <= 0)
         {
             curHP = 0;
-            Destroy(gameObject);
+            OnEntityDeath(); // Llamar a método virtual para que las clases hijas puedan sobrescribir
             return false; // Entity is dead
         }
         return true;
          // Entity is alive
          
+    }
+
+    /// <summary>
+    /// Llamado cuando la entidad muere. Las clases hijas pueden sobrescribir esto.
+    /// </summary>
+    protected virtual void OnEntityDeath()
+    {
+        // Comportamiento por defecto: destruir el GameObject
+        Destroy(gameObject);
     }
 
 

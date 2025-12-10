@@ -56,6 +56,24 @@ public class Player : EntityStats
 
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
 
+    /// <summary>
+    /// Sobrescribe la lógica de muerte para usar el sistema de revive
+    /// </summary>
+    protected override void OnEntityDeath()
+    {
+        PlayerReviveSystem reviveSystem = GetComponent<PlayerReviveSystem>();
+        if (reviveSystem != null)
+        {
+            // Entrar en estado "downed" en lugar de morir inmediatamente
+            reviveSystem.EnterDownedState();
+        }
+        else
+        {
+            // Si no hay sistema de revive, usar comportamiento por defecto
+            base.OnEntityDeath();
+        }
+    }
+
     // Si necesitas lógica especial al morir:
    /* public override void Die(DamageInfo finalDamage)
     {
@@ -70,4 +88,5 @@ public class Player : EntityStats
         // Aquí puedes añadir feedback visual, sonido, etc.
     }
     */
+    
 }
