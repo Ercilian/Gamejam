@@ -45,11 +45,13 @@ public class IA_Enemy : MonoBehaviour
     
     // Componentes opcionales
     private Animator animator;
+    private EnemyAttack enemyAttack; // Componente de ataque
     
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        enemyAttack = GetComponent<EnemyAttack>();
 
         // Encontrar camión por tag seleccionado
         if (!string.IsNullOrEmpty(camionTag))
@@ -149,6 +151,16 @@ public class IA_Enemy : MonoBehaviour
             jugadorObjetivo = null;
             estadoActual = EstadoIA.IrAlCamion;
             return;
+        }
+        
+        // Intentar atacar si está en rango
+        if (enemyAttack != null && enemyAttack.CanAttack())
+        {
+            bool atacoExitosamente = enemyAttack.TryAttack(jugadorObjetivo);
+            if (atacoExitosamente && mostrarDebug)
+            {
+                Debug.Log($"[{name}] Atacó al jugador: {jugadorObjetivo.name}");
+            }
         }
         
         // Perseguir al jugador
