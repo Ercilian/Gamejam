@@ -2886,6 +2886,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5629919353086815913}
   - component: {fileID: 8589251134848811260}
+  - component: {fileID: 2244529557559167325}
   - component: {fileID: 9098086719808487341}
   - component: {fileID: 1408560577705298892}
   - component: {fileID: 520319709725049881}
@@ -142340,6 +142341,27 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!65 &2244529557559167325
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5373328905909229363}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 100, y: 10, z: 60}
+  m_Center: {x: -0.0000076293945, y: 4.85, z: 0}
 --- !u!114 &9098086719808487341
 MonoBehaviour:
   m_ObjectHideFlags: 0
