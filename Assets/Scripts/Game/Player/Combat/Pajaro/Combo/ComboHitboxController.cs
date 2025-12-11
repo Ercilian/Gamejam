@@ -66,6 +66,7 @@ namespace Game.Combat
         // runtime
         PlayerInput _playerInput;
         InputAction _attackAction;
+        Animator _animator; // Animator para las animaciones del combo
 
 
         // Public events
@@ -95,10 +96,17 @@ namespace Game.Combat
         [Serializable]
         public class StepConfig
         {
+            [Header("Animation")]
+            [Tooltip("Nombre del trigger/parámetro de animación para este paso del combo")]
+            public string animationTrigger = "";
+            
+            [Header("Detection Settings")]
             [Tooltip("Si está activo, este paso realiza comprobaciones por ticks durante la ventana; si es false se detecta solo una vez cuando se activa el paso.")]
             public bool useTicks = true;
             [Tooltip("If true, this step uses the boomerang behaviour instead of a single hitbox")]
             public bool isBoomerang = false;
+            
+            [Header("Hitbox Shape")]
             [Tooltip("Shape used for detection (Box or Sphere)")]
             public Shape shape = Shape.Box;
             [Tooltip("Local offset from the transform to place the detection center")]
@@ -113,6 +121,8 @@ namespace Game.Combat
             public float sectorRadius = 1f;
             [Tooltip("Sector angle in degrees (only used if shape == Sector)")]
             public float sectorAngle = 90f;
+            
+            [Header("Timing")]
             [Tooltip("Duration in seconds of the detection window. Only used if UseTicks = true.")]
             public float windowDuration = 0.08f;
             [Tooltip("Interval between checks while the window is open (seconds). Only used if UseTicks = true.")]
@@ -127,6 +137,7 @@ namespace Game.Combat
             // ensure PlayerInput and Attack action are set up
             _playerInput = GetComponent<PlayerInput>();
             attackerStats = GetComponent<EntityStats>();
+            _animator = GetComponent<Animator>(); // Obtener el Animator
         
         }
 
@@ -228,6 +239,12 @@ namespace Game.Combat
             }
 
             var cfg = (step >= 0 && step < steps.Count) ? steps[step] : null;
+            if (cfg != null)
+            {
+                // Activar la animación para este paso del combo
+                PlayStepAnimation(cfg);
+            }
+            
             if (cfg != null)
             {
                 if (cfg.isBoomerang)
@@ -656,6 +673,49 @@ namespace Game.Combat
             UnityEditor.Handles.color = Color.white;
             UnityEditor.Handles.Label(center + Vector3.up * 0.2f, $"Step {stepToDraw}");
 #endif
+        }
+
+        /// <summary>
+        /// Reproduce la animación configurada para un paso del combo
+        /// </summary>
+        void PlayStepAnimation(StepConfig cfg)
+        {
+            if (_animator == null)
+            {
+                if (showDebugLogs)
+                    Debug.LogWarning($"[Combo] No hay Animator asignado en {gameObject.name}");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(cfg.animationTrigger))
+            {
+                if (showDebugLogs)
+                    Debug.LogWarning($"[Combo] No hay trigger de animación configurado para este paso");
+                return;
+            }
+
+            // Verificar si el trigger existe en el Animator
+            bool triggerExists = false;
+            foreach (var param in _animator.parameters)
+            {
+                if (param.name == cfg.animationTrigger && param.type == AnimatorControllerParameterType.Trigger)
+                {
+                    triggerExists = true;
+                    break;
+                }
+            }
+
+            if (!triggerExists)
+            {
+                Debug.LogError($"[Combo] El trigger '{cfg.animationTrigger}' no existe en el Animator Controller de {gameObject.name}");
+                return;
+            }
+
+            // Activar el trigger de animación
+            _animator.SetTrigger(cfg.animationTrigger);
+
+            if (showDebugLogs)
+                Debug.Log($"[Combo] Animación activada correctamente: {cfg.animationTrigger}");
         }
 
         void OnValidate()
