@@ -1,24 +1,33 @@
+
 using UnityEngine;
-using System.Collections.Generic;
 
 public class MapManager : MonoBehaviour
 {
-    [Header("Map Prefabs")]
-    public GameObject[] mapPrefabs;
+    [Header("Map Prefabs (ordered)")]
+    public GameObject[] mapPrefabs; // Prefabs de los mapas, asigna en el inspector
 
-    [Header("Colliders")]
-    public Collider[] mapColliders;
+    [Header("Player/Coche")]
+    public Transform carTransform;
 
-    [Header("Car")]
-    public Transform carTransform; 
+    // Instancias activas de los mapas
+    private GameObject[] mapInstances;
+    // Colliders de las instancias activas
+    private Collider[] mapInstanceColliders;
 
     private int currentMapIndex = 0;
 
     void Start()
     {
-        if (mapPrefabs.Length != mapColliders.Length)
+        int count = mapPrefabs.Length;
+        mapInstances = new GameObject[count];
+        mapInstanceColliders = new Collider[count];
+        // Instancia solo el primer mapa y el siguiente
+        for (int i = 0; i < count; i++)
         {
-            Debug.LogError("El número de prefabs y colliders asignados no coincide.");
+            if (i == 0 || i == 1)
+            {
+                InstantiateMap(i);
+            }
         }
         UpdateMapActivation();
     }
@@ -36,9 +45,9 @@ public class MapManager : MonoBehaviour
     int GetCurrentMapIndex()
     {
         Vector3 carPos = carTransform.position;
-        for (int i = 0; i < mapColliders.Length; i++)
+        for (int i = 0; i < mapPrefabs.Length; i++)
         {
-            Collider col = mapColliders[i];
+            Collider col = mapInstanceColliders[i];
             if (col != null)
             {
                 Bounds b = col.bounds;
@@ -55,24 +64,48 @@ public class MapManager : MonoBehaviour
     {
         for (int i = 0; i < mapPrefabs.Length; i++)
         {
+            // Instancia el anterior, actual y siguiente si no existen
+            if ((i == currentMapIndex - 1 || i == currentMapIndex || i == currentMapIndex + 1) && mapInstances[i] == null)
+            {
+                InstantiateMap(i);
+            }
+            // Activa el anterior, actual y siguiente
             if (i == currentMapIndex - 1 || i == currentMapIndex || i == currentMapIndex + 1)
             {
-                if (mapPrefabs[i] != null)
-                    mapPrefabs[i].SetActive(true);
+                if (mapInstances[i] != null)
+                    mapInstances[i].SetActive(true);
             }
+            // Destruye los mapas que estén dos o más posiciones atrás
             else if (i < currentMapIndex - 1)
             {
-                if (mapPrefabs[i] != null)
+                if (mapInstances[i] != null)
                 {
-                    Destroy(mapPrefabs[i]);
-                    mapPrefabs[i] = null;
+                    Destroy(mapInstances[i]);
+                    mapInstances[i] = null;
+                    mapInstanceColliders[i] = null;
                 }
             }
+            // Desactiva los mapas que están más adelante
             else
             {
-                if (mapPrefabs[i] != null)
-                    mapPrefabs[i].SetActive(false);
+                if (mapInstances[i] != null)
+                    mapInstances[i].SetActive(false);
             }
         }
     }
+
+    void InstantiateMap(int index)
+    {
+        if (mapPrefabs[index] != null && mapInstances[index] == null)
+        {
+            mapInstances[index] = Instantiate(mapPrefabs[index]);
+            Collider col = mapInstances[index].GetComponentInChildren<Collider>();
+            if (col == null)
+            {
+                Debug.LogWarning($"No se encontró collider en la instancia de {mapPrefabs[index].name}");
+            }
+            mapInstanceColliders[index] = col;
+        }
+    }
 }
+
