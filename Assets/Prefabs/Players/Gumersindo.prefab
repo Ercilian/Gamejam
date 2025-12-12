@@ -357,7 +357,8 @@ MonoBehaviour:
   attackCooldown: 0.1
   comboResetTime: 2
   steps:
-  - useTicks: 0
+  - animationTrigger: Ataque1
+    useTicks: 0
     isBoomerang: 0
     shape: 0
     offset: {x: 0, y: 0.56, z: -1.43}
@@ -368,7 +369,8 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 0
+  - animationTrigger: 
+    useTicks: 0
     isBoomerang: 0
     shape: 0
     offset: {x: 0, y: 0.56, z: -1.43}
@@ -379,7 +381,8 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 0
+  - animationTrigger: 
+    useTicks: 0
     isBoomerang: 0
     shape: 1
     offset: {x: 1.42, y: 0.3, z: 0}
