@@ -67,6 +67,8 @@ namespace Game.Combat
         PlayerInput _playerInput;
         InputAction _attackAction;
         Animator _animator; // Animator para las animaciones del combo
+        private AudioSource audioSource;
+        [SerializeField] public PlayerStatsData playerStatsData;
 
 
         // Public events
@@ -137,6 +139,7 @@ namespace Game.Combat
             // ensure PlayerInput and Attack action are set up
             _playerInput = GetComponent<PlayerInput>();
             attackerStats = GetComponent<EntityStats>();
+            audioSource = GetComponent<AudioSource>();
             
             // Obtener el Animator (primero busca en este GameObject, luego en hijos)
             _animator = GetComponent<Animator>();
@@ -247,6 +250,7 @@ namespace Game.Combat
             int step = currentStep;
 
             OnAttackStep?.Invoke(step);
+            audioSource.PlayOneShot(playerStatsData.AttackSound);
 
             if (showDebugLogs)
             {

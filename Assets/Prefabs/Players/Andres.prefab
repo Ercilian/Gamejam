@@ -406,6 +406,7 @@ MonoBehaviour:
   previewInPlayMode: 1
   showDebugLogs: 1
   attackActionRef: {fileID: 0}
+  playerStatsData: {fileID: 11400000, guid: da7f3af98e831bc4e828dc354d94d6c3, type: 2}
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
