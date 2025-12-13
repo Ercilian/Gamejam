@@ -12,6 +12,9 @@ public class Player : EntityStats
     private Vector2 movementInput;
     [HideInInspector] public bool activeControl = true; // Allow external scripts (like PlayerInputEmpuje) to enable/disable control
 
+    private Animator animator;
+    private Rigidbody rb; // o CharacterController, según tu sistema
+
 
 
 
@@ -27,6 +30,12 @@ public class Player : EntityStats
         playerInput = GetComponent<PlayerInput>();
         if (playerInput != null)
             healAction = playerInput.actions["Heal"];
+    }
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>(); // o el componente que uses para mover
     }
 
     private void Update()
@@ -50,6 +59,9 @@ public class Player : EntityStats
         {
             playerInventory.UsePotion();
         }
+
+        float currentSpeed = rb.linearVelocity.magnitude;
+        animator.SetFloat("Moving", currentSpeed);
     }
 
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
