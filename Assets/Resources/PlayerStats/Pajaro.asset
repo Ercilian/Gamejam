@@ -24,6 +24,6 @@ MonoBehaviour:
   pushStrength: 1
   playerPrefab: {fileID: 0}
   playerColor: {r: 1, g: 1, b: 1, a: 1}
-  attackSound: {fileID: 8300000, guid: 22ff6e00f3e65224a9ec479e8f3870e0, type: 3}
+  attackSound: {fileID: 0}
   hurtSound: {fileID: 0}
   deathSound: {fileID: 0}

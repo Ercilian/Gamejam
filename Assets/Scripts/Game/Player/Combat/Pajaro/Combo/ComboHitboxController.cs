@@ -67,8 +67,6 @@ namespace Game.Combat
         PlayerInput _playerInput;
         InputAction _attackAction;
         Animator _animator; // Animator para las animaciones del combo
-        private AudioSource audioSource;
-        [SerializeField] public PlayerStatsData statsData;
 
 
         // Public events
@@ -140,7 +138,6 @@ namespace Game.Combat
             _playerInput = GetComponent<PlayerInput>();
             attackerStats = GetComponent<EntityStats>();
             _animator = GetComponent<Animator>(); // Obtener el Animator
-            audioSource = GetComponent<AudioSource>();
         
         }
 
@@ -233,12 +230,6 @@ namespace Game.Combat
             int step = currentStep;
 
             OnAttackStep?.Invoke(step);
-
-            if (statsData != null && statsData.AttackSound != null && audioSource != null)
-            {
-                audioSource.PlayOneShot(statsData.AttackSound);
-                Debug.Log($"[ComboHitboxController] Sonido de ataque reproducido: {statsData.AttackSound.name}");
-            }
 
             if (showDebugLogs)
             {
