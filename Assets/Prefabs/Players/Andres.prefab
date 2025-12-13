@@ -48,7 +48,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813536838263918369}
-  m_Mesh: {fileID: -5495902117074765545, guid: f021dd4eaaf794d4c8b36c107d2c6e98, type: 3}
+  m_Mesh: {fileID: -3305387470228775134, guid: 236afca1ea4f8064dbcb0e1ef7d103f6, type: 3}
 --- !u!23 &7222824160162284086
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -274,6 +274,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: a76e8662-c66f-441d-ab22-908b65eace75
     m_ActionName: 'UI/Confirm[/XInputControllerWindows/start,/XInputControllerWindows1/start,/Keyboard/j]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c8a3bed2-e665-4714-8a4e-9b06ba7b1249
+    m_ActionName: 'Player/Dash[/Keyboard/x,/XInputControllerWindows/rightTrigger]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -353,7 +357,8 @@ MonoBehaviour:
   attackCooldown: 0.1
   comboResetTime: 2
   steps:
-  - useTicks: 0
+  - animationTrigger: 
+    useTicks: 0
     isBoomerang: 0
     shape: 2
     offset: {x: 0, y: 0.55, z: 0.07}
@@ -364,7 +369,8 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 0
+  - animationTrigger: 
+    useTicks: 0
     isBoomerang: 0
     shape: 2
     offset: {x: 0, y: 0.55, z: 0.07}
@@ -375,7 +381,8 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 1
+  - animationTrigger: 
+    useTicks: 1
     isBoomerang: 1
     shape: 0
     offset: {x: 0, y: 0.61, z: 1}
