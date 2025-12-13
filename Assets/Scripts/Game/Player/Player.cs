@@ -42,8 +42,6 @@ public class Player : EntityStats
             {
                 Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-                // Ajusta la rotación agregando un offset (prueba con 90, 180, -90 grados en Y)
-                targetRotation *= Quaternion.Euler(0, 90, 0); // Cambia el 90 por el valor que necesites
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
         }
