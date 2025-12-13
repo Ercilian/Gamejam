@@ -26,10 +26,16 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
     public int GetMaxScrap() => maxScrap;
     public float GetScrapPercentage() => maxScrap > 0 ? (float)currentScrap / maxScrap : 0f;
 
-    // Evento para notificar cambios de scrap (útil para UI)
+    // ===== EVENTS =====
     public System.Action<int> OnScrapChanged;
 
+
+
+
     // ================================================= Methods =================================================
+
+
+
 
     void Update()
     {
@@ -37,7 +43,7 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
         if (playerInScrapRange && nearbyPlayerInventory && nearbyPlayerInput && !isSwapping)
         {
             var attackAction = nearbyPlayerInput.actions["Attack"];
-            if (attackAction != null && attackAction.WasPressedThisFrame())
+            if (attackAction != null && attackAction.WasPressedThisFrame()) // Deposit scrap on 'Attack' input
             {
                 if (nearbyPlayerInventory.DepositScrapItems(this))
                 {
@@ -85,17 +91,8 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
         nearbyPlayerInput = null;
     }
 
-    // ============== ISwappable Implementation ==============
-    public void OnSwapStarted()
-    {
-        isSwapping = true;
-        ClearPlayerInteraction();
-    }
+    // ============== SCRAP MANAGEMENT METHODS ==============
 
-    public void OnSwapCompleted()
-    {
-        isSwapping = false;
-    }
 
     public void AddScrap(int amount)
     {
@@ -133,4 +130,19 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
             return false;
         }
     }
+
+    // ============== ISwappable Implementation ==============
+
+    public void OnSwapStarted()
+    {
+        isSwapping = true;
+        ClearPlayerInteraction();
+    }
+
+    public void OnSwapCompleted()
+    {
+        isSwapping = false;
+    }
+
+
 }

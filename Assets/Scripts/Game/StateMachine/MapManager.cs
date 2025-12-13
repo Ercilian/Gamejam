@@ -4,25 +4,29 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
     [Header("Map Prefabs (ordered)")]
-    public GameObject[] mapPrefabs; // Prefabs de los mapas, asigna en el inspector
+    public GameObject[] mapPrefabs;
 
     [Header("Player/Coche")]
     public Transform carTransform;
 
-    // Instancias activas de los mapas
     private GameObject[] mapInstances;
-    // Colliders de las instancias activas
     private Collider[] mapInstanceColliders;
-
     private int currentMapIndex = 0;
+
+
+
+
+    // ================================================= Methods =================================================
+
+
+
 
     void Start()
     {
         int count = mapPrefabs.Length;
         mapInstances = new GameObject[count];
         mapInstanceColliders = new Collider[count];
-        // Instancia solo el primer mapa y el siguiente
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++) // Instanciate the first two maps
         {
             if (i == 0 || i == 1)
             {
@@ -42,7 +46,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    int GetCurrentMapIndex()
+    int GetCurrentMapIndex() // Method to determine which map the car is currently in
     {
         Vector3 carPos = carTransform.position;
         for (int i = 0; i < mapPrefabs.Length; i++)
@@ -60,23 +64,20 @@ public class MapManager : MonoBehaviour
         return currentMapIndex;
     }
 
-    void UpdateMapActivation()
+    void UpdateMapActivation() // Activate/deactivate maps based on current index
     {
         for (int i = 0; i < mapPrefabs.Length; i++)
         {
-            // Instancia el anterior, actual y siguiente si no existen
-            if ((i == currentMapIndex - 1 || i == currentMapIndex || i == currentMapIndex + 1) && mapInstances[i] == null)
+            if ((i == currentMapIndex - 1 || i == currentMapIndex || i == currentMapIndex + 1) && mapInstances[i] == null) // Instantiate nearby maps
             {
                 InstantiateMap(i);
             }
-            // Activa el anterior, actual y siguiente
             if (i == currentMapIndex - 1 || i == currentMapIndex || i == currentMapIndex + 1)
             {
                 if (mapInstances[i] != null)
                     mapInstances[i].SetActive(true);
             }
-            // Destruye los mapas que estén dos o más posiciones atrás
-            else if (i < currentMapIndex - 1)
+            else if (i < currentMapIndex - 1) // Destroy the maps that are behind
             {
                 if (mapInstances[i] != null)
                 {
@@ -85,8 +86,7 @@ public class MapManager : MonoBehaviour
                     mapInstanceColliders[i] = null;
                 }
             }
-            // Desactiva los mapas que están más adelante
-            else
+            else // Deactivate the maps that are ahead
             {
                 if (mapInstances[i] != null)
                     mapInstances[i].SetActive(false);
@@ -94,7 +94,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void InstantiateMap(int index)
+    void InstantiateMap(int index) // Method to instantiate a map at a given index
     {
         if (mapPrefabs[index] != null && mapInstances[index] == null)
         {

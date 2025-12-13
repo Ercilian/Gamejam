@@ -10,14 +10,14 @@ public class MovCar : MonoBehaviour
     public float fastspeed = 2f;
     public float slowspeed = 0.5f;
     public float cur_speed = 0f;
-    public float speedTransitionRate = 2f; // How quickly the speed changes
+    public float speedTransitionRate = 2f;
     public float pushSpeed = 0.5f;
     public float pushSpeedTwo = 0.85f;
 
     [Header("Path Following System")]
     public Transform[] pathPoints;
-    public float reachDistance = 3f; // Distance to waypoint to consider "reached"
-    public float pathSmoothness = 3f; // Higher values = smoother turns
+    public float reachDistance = 3f;
+    public float pathSmoothness = 3f;
     public float rotationSpeed = 5f;
 
     [Header("Combustible Consumption")]
@@ -50,9 +50,9 @@ public class MovCar : MonoBehaviour
 
     void Start()
     {
-        fuelSystem = GetComponent<CarFuelSystem>() ?? GetComponentInChildren<CarFuelSystem>();
+        fuelSystem = GetComponent<CarFuelSystem>() ?? GetComponentInChildren<CarFuelSystem>(); // Get fuel system component
 
-        if (isFuelConsumed)
+        if (isFuelConsumed) // Start fuel consumption if enabled
             consumeCoroutine = StartCoroutine(ConsumeFuel());
 
         InitializePathFollowing();
@@ -61,14 +61,14 @@ public class MovCar : MonoBehaviour
     void Update()
     {
         float targetSpeed = 0f;
-        Vector3 moveDirection = GetMovementDirection();
+        Vector3 moveDirection = GetMovementDirection(); // Get direction towards current target
 
-        if (!fuelSystem || !fuelSystem.HasFuel())
+        if (!fuelSystem || !fuelSystem.HasFuel()) // Stop if no fuel
         {
             ismoving = false;
             targetSpeed = HandlePush();
         }
-        else
+        else // Move normally if has fuel
         {
             ismoving = true;
             ActivatePushers();

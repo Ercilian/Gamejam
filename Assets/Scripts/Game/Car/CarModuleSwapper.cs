@@ -48,7 +48,7 @@ public class CarModuleSwapper : MonoBehaviour
 
     void OnTriggerEnter(Collider other) // Detect player entering the swap area
     {
-        PlayerInput playerInput = other.GetComponent<PlayerInput>();
+        PlayerInput playerInput = other.GetComponent<PlayerInput>(); 
         if (playerInput != null)
         {
             playerInRange = true;

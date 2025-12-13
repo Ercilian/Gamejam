@@ -697,13 +697,12 @@ MonoBehaviour:
   - {fileID: 1929620804}
   - {fileID: 1868388395}
   - {fileID: 2029999246}
-  debugLogs: 1
+  selectCharacterPanel: {fileID: 1418664042}
   characterPrefabs:
   - {fileID: 4605989410389788580, guid: ad4b60aaf58b20d4989e20ca43c1ac8f, type: 3}
   - {fileID: 4605989410389788580, guid: b52f3948640eb1249a06f87029754d46, type: 3}
   - {fileID: 4605989410389788580, guid: ddd4ba6e7f1817146b903e554a087c49, type: 3}
   - {fileID: 4605989410389788580, guid: e8b1f91169203774fb43a62755a294f7, type: 3}
-  SelectCharacterPanel: {fileID: 1418664042}
   countdownText: {fileID: 1253864910}
   selectionDataSO: {fileID: 11400000, guid: ad9a01878997d7a41840fead73e5b0e2, type: 2}
 --- !u!114 &268937671
@@ -1893,8 +1892,8 @@ MonoBehaviour:
   SettingsPanel: {fileID: 1934487238}
   SelectCharacterPanel: {fileID: 1418664042}
   firstSelectedButton: {fileID: 605215038}
-  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   characterSelectionManager: {fileID: 268937670}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &1697527372
 MonoBehaviour:
   m_ObjectHideFlags: 0

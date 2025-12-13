@@ -11,7 +11,7 @@ public class DifficultyManager : MonoBehaviour
     {
         public string name = "Easy";
         [Range(0f, 1f)]
-        public float triggerProgress = 0.25f; // 0 a 1 (25% = 0.25)
+        public float triggerProgress = 0.25f; //
     }
     
         public DifficultyLevel[] difficultyLevels = {
@@ -29,6 +29,14 @@ public class DifficultyManager : MonoBehaviour
     // Events
     public static event Action<DifficultyLevel, int> OnDifficultyChanged;
 
+
+
+
+    // ================================================= Methods =================================================
+
+
+
+
     void Start()
     {
         enemyspawner.StartSpawning();
@@ -37,27 +45,23 @@ public class DifficultyManager : MonoBehaviour
             
         if (difficultyBar != null)
         {
-            // Suscribirse al evento de progreso
             difficultyBar.OnProgressChanged += HandleProgressChanged;
         }
         
-        // Establecer dificultad inicial
         ApplyDifficulty(0);
         
     }
     
     void OnDestroy()
     {
-        // Desuscribirse para evitar memory leaks
         if (difficultyBar != null)
         {
             difficultyBar.OnProgressChanged -= HandleProgressChanged;
         }
     }
     
-    void HandleProgressChanged(float progress)
+    void HandleProgressChanged(float progress) // Called when the progress bar updates
     {
-        // Encontrar el nivel de dificultad que corresponde a este progreso
         int targetIndex = GetTargetDifficultyIndex(progress);
         
         if (targetIndex > currentDifficultyIndex)
@@ -66,7 +70,7 @@ public class DifficultyManager : MonoBehaviour
         }
     }
     
-    int GetTargetDifficultyIndex(float progress)
+    int GetTargetDifficultyIndex(float progress) // Determine which difficulty level should be active based on progress
     {
         for (int i = difficultyLevels.Length - 1; i >= 0; i--)
         {
@@ -78,7 +82,7 @@ public class DifficultyManager : MonoBehaviour
         return 0;
     }
     
-    void AdvanceToDifficulty(int newIndex)
+    void AdvanceToDifficulty(int newIndex) // Advance to a new difficulty level
     {
         if (newIndex < 0 || newIndex >= difficultyLevels.Length) return;
         if (newIndex <= currentDifficultyIndex) return;
@@ -94,7 +98,7 @@ public class DifficultyManager : MonoBehaviour
         OnDifficultyChanged?.Invoke(difficultyLevels[newIndex], newIndex);
     }
     
-    void ApplyDifficulty(int index)
+    void ApplyDifficulty(int index) // Apply the settings for the specified difficulty level
     {
         if (index < 0 || index >= difficultyLevels.Length) return;
         
