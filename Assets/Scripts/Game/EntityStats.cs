@@ -42,7 +42,6 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
         ApplyStatsData(); // Apply ScriptableObject stats if available
         curHP = maxHP; // Start with full health when created (after applying stats)
         curShield = maxShield; // Start with full shield when created
-        Debug.Log($"[{gameObject.name}] Stats aplicadas: maxHP={maxHP}, speed={speed}, attackDamage={attackDamage}");
     }
 
     // Method to apply stats from ScriptableObject
@@ -56,7 +55,7 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
             attackDamage = statsData.AttackDamage;
             defense = statsData.Defense;
             
-            Debug.Log($"[{gameObject.name}] Aplicando stats desde ScriptableObject: {statsData.name}");
+            Debug.Log($"[{gameObject.name}] Aplicando stats de{statsData.name}: maxHP={maxHP}, speed={speed}, attackDamage={attackDamage}");
 
             // Apply other stats specific to Player if this is a Player
             if (this is Player player && player.TryGetComponent<PlayerInventory>(out var inventory))

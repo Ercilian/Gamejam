@@ -26,5 +26,5 @@ MonoBehaviour:
   mossValue: 0
   mossCollectRange: 0
   mossCollectPrompt: 0
-  collectSound: {fileID: 0}
-  depositSound: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: 1b9fd64d7f6a0ec44ae42804144687a9, type: 3}
+  depositSound: {fileID: 8300000, guid: 373c567687531904da0f4e2cf7e9ef87, type: 3}

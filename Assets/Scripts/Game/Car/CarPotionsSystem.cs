@@ -34,6 +34,10 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
     public bool isBrewing = false;
     public PotionData healPotionData;
     public Transform potionSpawnPoint;
+
+    [Header("Audio")]
+    public AudioClip brewPotionSound;
+    private AudioSource audioSource;
     
     // ===== PRIVATE FIELDS =====
     private bool playerInPlantRange = false;
@@ -59,6 +63,11 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
 
 
 
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     void Update()
     {
@@ -166,16 +175,25 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
 
     // ============== POTION TABLE MANAGEMENT METHODS ==============
 
-    public void AddFuel(int amount)
+    public void AddFuel(int amount, CollectibleData data = null)
     {
         int prevDiesel = currentDiesel;
         currentDiesel = Mathf.Min(currentDiesel + amount, fuelRequired);
+
+        // Sonido de depósito
+        if (data != null && data.depositSound != null)
+            audioSource.PlayOneShot(data.depositSound);
+
         Debug.Log($"[CarPotionsSystem] ⛽ Fuel deposited! Current: {currentDiesel}/{fuelRequired}");
         CheckForAutoBrewing();
     }
 
-    public void AddIngredient(CollectibleData.ItemType type, int amount)
+    public void AddIngredient(CollectibleData.ItemType type, int amount, CollectibleData data = null)
     {
+        // Sonido de depósito
+        if (data != null && data.depositSound != null)
+            audioSource.PlayOneShot(data.depositSound);
+
         switch(type)
         {
             case CollectibleData.ItemType.Diesel:
@@ -228,6 +246,7 @@ public class CarPotionsSystem : MonoBehaviour, ISwappable
 
     private IEnumerator BrewPotion(PotionData potion)
     {
+        audioSource.PlayOneShot(brewPotionSound);
         isBrewing = true;
         Debug.Log("Brewing...");
 

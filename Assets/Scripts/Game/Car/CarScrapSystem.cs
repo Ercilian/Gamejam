@@ -12,9 +12,8 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
     public Transform scrapDepositPoint;
     public string scrapDepositPrompt = "Press 'Attack' to deposit scrap";
 
-    [Header("Debug")]
-    public bool showDebugLogs = true;
-
+    [Header("Audio")]
+    private AudioSource audioSource;
     // ===== PRIVATE FIELDS =====
     private bool playerInScrapRange = false;
     private PlayerInventory nearbyPlayerInventory;
@@ -37,19 +36,21 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
 
 
 
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     void Update()
     {
         // Check if player is in range, has inventory and input, and not swapping
         if (playerInScrapRange && nearbyPlayerInventory && nearbyPlayerInput && !isSwapping)
         {
-            var attackAction = nearbyPlayerInput.actions["Attack"];
+            var attackAction = nearbyPlayerInput.actions["Interact"];
             if (attackAction != null && attackAction.WasPressedThisFrame()) // Deposit scrap on 'Attack' input
             {
                 if (nearbyPlayerInventory.DepositScrapItems(this))
                 {
-                    if (showDebugLogs)
-                        Debug.Log($"[CarScrapSystem] ✅ Scrap deposited! Total: {currentScrap}");
-
+                    Debug.Log($"[CarScrapSystem] ✅ Scrap deposited! Total: {currentScrap}");
                     ClearPlayerInteraction();
                 }
             }
@@ -66,7 +67,7 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
         {
             PlayerInput playerInput = other.GetComponent<PlayerInput>();
             if (playerInput == null) return;
-            var attackAction = playerInput.actions["Attack"];
+            var attackAction = playerInput.actions["Interact"];
             if (attackAction == null) return;
 
             playerInScrapRange = true;
@@ -94,13 +95,15 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
     // ============== SCRAP MANAGEMENT METHODS ==============
 
 
-    public void AddScrap(int amount)
+    public void AddScrap(int amount, CollectibleData data)
     {
         int prevScrap = currentScrap;
         currentScrap = Mathf.Min(currentScrap + amount, maxScrap);
 
-        if (showDebugLogs)
             Debug.Log($"[CarScrapSystem] 💰 +{amount} scrap ({prevScrap} → {currentScrap})");
+
+        if (data != null && data.depositSound != null)
+            audioSource.PlayOneShot(data.depositSound);
 
         OnScrapChanged?.Invoke(currentScrap);
     }
@@ -117,16 +120,14 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
             int prevScrap = currentScrap;
             currentScrap -= amount;
 
-            if (showDebugLogs)
-                Debug.Log($"[CarScrapSystem] 💸 -{amount} scrap ({prevScrap} → {currentScrap})");
+            Debug.Log($"[CarScrapSystem] 💸 -{amount} scrap ({prevScrap} → {currentScrap})");
 
             OnScrapChanged?.Invoke(currentScrap);
             return true;
         }
         else
         {
-            if (showDebugLogs)
-                Debug.Log($"[CarScrapSystem] ❌ Not enough scrap! (Need {amount}, have {currentScrap})");
+            Debug.Log($"[CarScrapSystem] ❌ Not enough scrap! (Need {amount}, have {currentScrap})");
             return false;
         }
     }

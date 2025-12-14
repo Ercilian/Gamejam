@@ -92,8 +92,8 @@ public class WorldCollectible : MonoBehaviour
             rb.useGravity = false;
         }
 
-        // Ignorar colisión con el jugador (opcional, si tienes referencia)
-        // Physics.IgnoreCollision(col, playerCollider);
+        if (collectibleData != null && collectibleData.collectSound != null) // Reproduce collect sound
+            AudioSource.PlayClipAtPoint(collectibleData.collectSound, transform.position);
 
         // Ahora sí, añadir al inventario
         if (nearbyPlayer != null)

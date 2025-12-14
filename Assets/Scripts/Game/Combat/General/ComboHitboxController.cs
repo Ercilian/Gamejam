@@ -154,10 +154,6 @@ namespace Game.Combat
             {
                 Debug.LogWarning($"[Combo] No se encontró Animator en {gameObject.name} ni en sus hijos");
             }
-            else if (showDebugLogs)
-            {
-                Debug.Log($"[Combo] Animator encontrado en {_animator.gameObject.name}. Controller: {(_animator.runtimeAnimatorController != null ? _animator.runtimeAnimatorController.name : "NULL")}");
-            }
         
         }
 

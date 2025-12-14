@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 3199202718284467957}
   - component: {fileID: 8577440922694416064}
   - component: {fileID: 1941673929811933340}
+  - component: {fileID: -9101796909821543562}
   m_Layer: 7
   m_Name: Juan
   m_TagString: Player
@@ -469,6 +470,28 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   defaultDashDirection: {x: -1, y: 0, z: 0}
+--- !u!95 &-9101796909821543562
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e9fad320ed2a1024b9e74fa1890baf49, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0

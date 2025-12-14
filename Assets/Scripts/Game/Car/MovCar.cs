@@ -24,6 +24,13 @@ public class MovCar : MonoBehaviour
     public float fuelConsumptionPerSecond = 1f;
     public bool isFuelConsumed = true;
 
+    [Header("Motor Sound (Single Clip)")]
+    public AudioClip motorLoopClip;
+    public float pitchMin = 0.8f;
+    public float pitchMax = 1.5f;
+    public float maxSpeedForPitch = 2.0f; // Ajusta esto a la velocidad máxima real del coche
+
+    private AudioSource motorAudioSource;
 
     // ===== PRIVATE FIELDS =====
     private CarFuelSystem fuelSystem;
@@ -56,6 +63,15 @@ public class MovCar : MonoBehaviour
             consumeCoroutine = StartCoroutine(ConsumeFuel());
 
         InitializePathFollowing();
+
+        // Motor sound setup
+        motorAudioSource = GetComponent<AudioSource>();
+        if (motorAudioSource == null)
+        {
+            motorAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+        motorAudioSource.clip = motorLoopClip;
+        motorAudioSource.Play();
     }
 
     void Update()
@@ -84,6 +100,19 @@ public class MovCar : MonoBehaviour
             RotateCarTowardsDirection(moveDirection);
             transform.Translate(moveDirection * currentActualSpeed * Time.deltaTime, Space.World);
         }
+
+        UpdateMotorPitch(currentActualSpeed);
+    }
+
+    // ===== MOTOR SOUND SYSTEM (Single Clip, Pitch Only) =====
+
+    private void UpdateMotorPitch(float speed)
+    {
+        if (motorAudioSource == null || motorLoopClip == null) return;
+
+        // Normaliza la velocidad entre 0 y maxSpeedForPitch
+        float t = Mathf.Clamp01(speed / maxSpeedForPitch);
+        motorAudioSource.pitch = Mathf.Lerp(pitchMin, pitchMax, t);
     }
 
     // ===== PATH FOLLOWING METHODS =====

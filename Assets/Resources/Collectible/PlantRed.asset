@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: PlantRed
   itemID: plantred
   itemIcon: {fileID: 0}
-  itemPrefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
+  itemPrefab: {fileID: 5219421215397009677, guid: 2d1ed17da9219844593d0c6e3eba4ecf, type: 3}
   type: 2
   dieselValue: 0
   collectRange: 0
@@ -26,5 +26,5 @@ MonoBehaviour:
   mossValue: 1
   mossCollectRange: 2
   mossCollectPrompt: Presiona E para recoger moss
-  collectSound: {fileID: 0}
-  depositSound: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: 1b9fd64d7f6a0ec44ae42804144687a9, type: 3}
+  depositSound: {fileID: 8300000, guid: 373c567687531904da0f4e2cf7e9ef87, type: 3}

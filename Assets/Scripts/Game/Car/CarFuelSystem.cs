@@ -11,8 +11,10 @@ public class CarFuelSystem : MonoBehaviour
     [Header("Item Deposition")]
     public Transform depositPoint;
     public string depositPrompt = "Press Attack to deposit items";
-    public  AudioClip addDieselSound;
+
+    [Header("Audio")]
     private AudioSource audioSource;
+
     
     // ===== PRIVATE FIELDS =====
     private bool playerInDepositRange = false;
@@ -47,7 +49,7 @@ public class CarFuelSystem : MonoBehaviour
     {
         if (playerInDepositRange && nearbyPlayerInventory && nearbyPlayerInput) // Check if player is in range and has inventory
         {
-            var attackAction = nearbyPlayerInput.actions["Attack"]; // Get the Attack action
+            var attackAction = nearbyPlayerInput.actions["Interact"]; // Get the Attack action
             if (attackAction != null && attackAction.WasPressedThisFrame()) // Check if Attack was pressed
             {
                 if (nearbyPlayerInventory.DepositDieselItems(this)) // Attempt to deposit diesel items
@@ -72,7 +74,7 @@ public class CarFuelSystem : MonoBehaviour
         {
             PlayerInput playerInput = other.GetComponent<PlayerInput>(); // Get PlayerInput component
             if (playerInput == null) return;
-            var attackAction = playerInput.actions["Attack"]; // Get the Attack action
+            var attackAction = playerInput.actions["Interact"]; // Get the Attack action
             if (attackAction == null) return;
 
             // Set state to allow depositing
@@ -110,18 +112,26 @@ public class CarFuelSystem : MonoBehaviour
     }
 
     // ===== FUEL MANAGEMENT METHODS =====
-
-    public void AddDiesel(float amount) // Method to add diesel to the car
+    public void AddDiesel(float amount, CollectibleData data = null) // Method to add diesel to the car
     {
-        Debug.Log("Reproduciendo sonido de añadir diesel");
-        audioSource.PlayOneShot(addDieselSound);
+        // Sonido de depósito del ScriptableObject si está disponible
+        if (data != null && data.depositSound != null)
+        {
+            if (audioSource == null) audioSource = GetComponent<AudioSource>();
+            if (audioSource != null)
+                audioSource.PlayOneShot(data.depositSound);
+            else
+                AudioSource.PlayClipAtPoint(data.depositSound, transform.position);
+        }
+
+        Debug.Log($"[CarFuelSystem] Intentando reproducir sonido de depósito: {data?.depositSound}");
+
         float prevDiesel = cur_Diesel; // Store previous diesel amount
         cur_Diesel = Mathf.Min(cur_Diesel + amount, max_Diesel); // Add diesel but not exceed max
 
         if (movCar) movCar.OnFuelChanged(cur_Diesel, max_Diesel); // Notify MovCar of fuel change
         lastLoggedDiesel = cur_Diesel;
-        
-            Debug.Log($"[CarFuelSystem] ⛽ +{amount} diesel ({prevDiesel:F1} → {cur_Diesel:F1})");
+        Debug.Log($"[CarFuelSystem] ⛽ +{amount} diesel ({prevDiesel:F1} → {cur_Diesel:F1})");
     }
 
     public void ConsumeDiesel(float amount) // Method to consume diesel when the car is moving

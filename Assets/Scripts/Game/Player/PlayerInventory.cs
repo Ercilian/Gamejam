@@ -149,7 +149,7 @@ public class PlayerInventory : MonoBehaviour
     }
 
     private bool 
-    DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int> onDeposit) // Generic method to deposit items of a specific type
+    DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int, CollectibleData> onDeposit) // Generic method to deposit items of a specific type
     {
         if (carriedItems.Count == 0) return false; // No items to deposit
         int totalValue = 0;
@@ -162,16 +162,16 @@ public class PlayerInventory : MonoBehaviour
                     Destroy(visualItems[i]);
                 if (visualItems.Count > i)
                     visualItems.RemoveAt(i);
+
+                // Llama a la acción por cada ítem depositado
+                onDeposit(GetItemValue(carriedItems[i]), carriedItems[i]);
+
                 carriedItems.RemoveAt(i); // Remove item from the carried list
             }
         }
-        if (totalValue > 0) // If any items were deposited
-        {
-            onDeposit(totalValue); // Call the provided action with the total value
-            return true;
-        }
-        return false;
+        return totalValue > 0;
     }
+
 
     private int GetItemValue(CollectibleData item) // Get the value of a specific item based on its type
     {
@@ -189,23 +189,18 @@ public class PlayerInventory : MonoBehaviour
     public bool DepositDieselItems(CarFuelSystem carFuelSystem) // Specific method to deposit diesel items
     {
         return DepositItemsByType(CollectibleData.ItemType.Diesel,
-            value => carFuelSystem.AddDiesel(value));
+            (value, data) => carFuelSystem.AddDiesel(value, data));
     }
 
     public bool DepositScrapItems(CarScrapSystem carScrapSystem) // Specific method to deposit scrap items
     {
         return DepositItemsByType(CollectibleData.ItemType.Scrap,
-            value => carScrapSystem.AddScrap(value));
+            (value, data) => carScrapSystem.AddScrap(value, data));
     }
 
     public bool DepositPlantItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit plant/moss items
     {
-        if (carriedItems.Count == 0) return false;
-
-        // Contadores para cada tipo
-        int red = 0, green = 0, blue = 0;
-
-        // Cuenta y elimina cada tipo de planta
+        bool deposited = false;
         for (int i = carriedItems.Count - 1; i >= 0; i--)
         {
             var type = carriedItems[i].type;
@@ -213,30 +208,24 @@ public class PlayerInventory : MonoBehaviour
                 type == CollectibleData.ItemType.PlantGreen ||
                 type == CollectibleData.ItemType.PlantBlue)
             {
-                if (type == CollectibleData.ItemType.PlantRed) red += GetItemValue(carriedItems[i]);
-                if (type == CollectibleData.ItemType.PlantGreen) green += GetItemValue(carriedItems[i]);
-                if (type == CollectibleData.ItemType.PlantBlue) blue += GetItemValue(carriedItems[i]);
+                int value = GetItemValue(carriedItems[i]);
+                carPotionsSystem.AddIngredient(type, value, carriedItems[i]);
 
                 if (visualItems.Count > i && visualItems[i] != null)
                     Destroy(visualItems[i]);
                 if (visualItems.Count > i)
                     visualItems.RemoveAt(i);
                 carriedItems.RemoveAt(i);
+                deposited = true;
             }
         }
-
-        // Deposita cada tipo por separado
-        if (red > 0) carPotionsSystem.AddIngredient(CollectibleData.ItemType.PlantRed, red);
-        if (green > 0) carPotionsSystem.AddIngredient(CollectibleData.ItemType.PlantGreen, green);
-        if (blue > 0) carPotionsSystem.AddIngredient(CollectibleData.ItemType.PlantBlue, blue);
-
-        return (red + green + blue) > 0;
+        return deposited;
     }
 
-    public bool DepositFuelItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit fuel items for potions
+    public bool DepositFuelItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit fuel items
     {
         return DepositItemsByType(CollectibleData.ItemType.Diesel,
-            value => carPotionsSystem.AddFuel(value));
+            (value, data) => carPotionsSystem.AddFuel(value, data));
     }
 
     public void DropItems()

@@ -31,8 +31,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|Iddle (1)
-      takeName: Armature|Iddle
+      name: Armature|Attack1 (1)
+      takeName: Armature|Attack1
       internalID: 5522812681064789136
       firstFrame: 0
       lastFrame: 62
@@ -42,7 +42,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

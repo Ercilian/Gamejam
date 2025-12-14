@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -3269392371273482521}
   - component: {fileID: -2990272111125107396}
   m_Layer: 0
-  m_Name: Plant
+  m_Name: Plant 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 03eacef3eafe3544eb8e54eb20f8c808, type: 2}
+  - {fileID: 2100000, guid: c2d709b82c2e2c8429ce1e6faa80bdcb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc2001f79cdf7cc4d9e7ffcfb35a71cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldCollectible
-  collectibleData: {fileID: 11400000, guid: 4ea4a8524d4f954409218811f467bf1b, type: 2}
+  collectibleData: {fileID: 11400000, guid: 4041414fd880f1649af939a485cec4ad, type: 2}
   potionData: {fileID: 0}
   collectEffect: {fileID: 0}
   showDebugLogs: 1
