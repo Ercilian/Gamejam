@@ -5529,7 +5529,6 @@ MonoBehaviour:
   maxScrap: 9999
   scrapDepositPoint: {fileID: 349664124}
   scrapDepositPrompt: Press 'Attack' to deposit scrap
-  showDebugLogs: 1
 --- !u!65 &349664126
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27047,6 +27046,10 @@ MonoBehaviour:
   rotationSpeed: 0.5
   fuelConsumptionPerSecond: 1
   isFuelConsumed: 1
+  motorLoopClip: {fileID: 0}
+  pitchMin: 0.8
+  pitchMax: 1.5
+  maxSpeedForPitch: 2
 --- !u!65 &2070441883
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27083,6 +27086,8 @@ MonoBehaviour:
   scrapCollider: {fileID: 349664126}
   plantCollider: {fileID: 2139318381}
   swapAnimationTime: 2
+  lever: {fileID: 0}
+  swapSound: {fileID: 0}
 --- !u!1 &2072344557
 GameObject:
   m_ObjectHideFlags: 0
@@ -27341,6 +27346,7 @@ MonoBehaviour:
   isBrewing: 0
   healPotionData: {fileID: 0}
   potionSpawnPoint: {fileID: 0}
+  brewPotionSound: {fileID: 0}
 --- !u!1001 &390199614115369119
 PrefabInstance:
   m_ObjectHideFlags: 0
