@@ -34,7 +34,7 @@ public class Player : EntityStats
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>(); // Busca en hijos (armature)
         rb = GetComponent<Rigidbody>(); // o el componente que uses para mover
     }
 
@@ -60,8 +60,12 @@ public class Player : EntityStats
             playerInventory.UsePotion();
         }
 
-        float currentSpeed = rb.linearVelocity.magnitude;
-        animator.SetFloat("Moving", currentSpeed);
+        // Calcular velocidad para el blend tree (0 = idle, 1 = caminando)
+        if (animator != null)
+        {
+            float movementMagnitude = movementInput.magnitude;
+            animator.SetFloat("Speed", movementMagnitude);
+        }
     }
 
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
