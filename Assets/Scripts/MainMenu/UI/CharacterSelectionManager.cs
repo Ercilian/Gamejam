@@ -14,6 +14,15 @@ public class CharacterSelectionManager : MonoBehaviour
     public TMPro.TMP_Text countdownText;
     public PlayerSelectionDataSO selectionDataSO;
 
+    [Header("Audio")]
+    private AudioSource audioSource;
+    public AudioClip joinSound;
+    public AudioClip leaveSound;
+    public AudioClip confirmSound;
+    public AudioClip unconfirmSound;
+    public AudioClip countdownBeepSound;
+    public AudioClip hoverSound;
+
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
     private Coroutine countdownCoroutine;
 
@@ -40,6 +49,7 @@ public class CharacterSelectionManager : MonoBehaviour
                 playerSlots[i].manager = this;
             }
         }
+        audioSource = GetComponent<AudioSource>();
     }
 
     void OnEnable()
@@ -86,6 +96,7 @@ public class CharacterSelectionManager : MonoBehaviour
             return;
         }
 
+        audioSource.PlayOneShot(joinSound);
         int slotIndex = -1;
         for (int i = 0; i < playerSlots.Length; i++)
         {
@@ -171,6 +182,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
     public void OnPlayerLeft(PlayerInput playerInput)
     {
+        audioSource.PlayOneShot(leaveSound);
         int playerIndex = playerInput.playerIndex;
         Debug.Log($"[CharacterSelection] Player {playerIndex} disconnected");
 
@@ -242,6 +254,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
     public void OnPlayerConfirmed()
     {
+        audioSource.PlayOneShot(confirmSound);
         if (AllPlayersConfirmed())
         {
             if (countdownCoroutine == null)
@@ -251,6 +264,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
     public void OnPlayerUnconfirmed()
     {
+        audioSource.PlayOneShot(unconfirmSound);
         if (countdownCoroutine != null)
         {
             StopCoroutine(countdownCoroutine);
@@ -265,6 +279,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
     private IEnumerator StartCountdownAndLoadScene()
     {
+        audioSource.PlayOneShot(countdownBeepSound);
         float countdown = 3f;
         while (countdown > 0)
         {
@@ -299,4 +314,12 @@ public class CharacterSelectionManager : MonoBehaviour
             }
         }
     }
+
+
+    public void PlayHoverSound()
+    {
+        audioSource.PlayOneShot(hoverSound);
+    }
 }
+
+    

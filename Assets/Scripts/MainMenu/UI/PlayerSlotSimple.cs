@@ -24,12 +24,15 @@ public class PlayerSlotSimple : MonoBehaviour
     public CharacterSelectionManager manager;
     public PlayerInput playerInput;
 
+    
+
     private bool isConfirmed = false;
     private int slotIndex;
     private bool isJoined = false;
     private GameObject spawnedCharacter;
     private GameObject currentPreviewInstance;
     private float joinTime = -1f;
+    // Elimina la referencia duplicada innecesaria
 
     public bool IsConfirmed => isConfirmed;
     public bool IsJoined => isJoined;
@@ -151,6 +154,8 @@ public class PlayerSlotSimple : MonoBehaviour
 
     public void OnLeftArrowPressed()
     {
+        if (manager != null)
+            manager.PlayHoverSound();
         Debug.Log($"[Slot {slotIndex}] LeftArrow PRESSED");
         if (isConfirmed) return;
         if (manager != null)
@@ -159,6 +164,9 @@ public class PlayerSlotSimple : MonoBehaviour
 
     public void OnRightArrowPressed()
     {
+        if (manager != null)
+            manager.PlayHoverSound();
+        Debug.Log($"[Slot {slotIndex}] RightArrow PRESSED");
         if (isConfirmed) return;
         if (manager != null)
             ChangeCharacter(1, manager.characterPrefabs);

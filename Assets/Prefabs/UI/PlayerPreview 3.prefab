@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3146274676088829394}
   - component: {fileID: 1371747536903834495}
   - component: {fileID: 1722140837930436796}
-  - component: {fileID: 4981399970740384240}
   m_Layer: 5
   m_Name: PlayerPreview 3
   m_TagString: Untagged
@@ -76,24 +75,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4981399970740384240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4605989410389788580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dd5a28f069060445b605f033eeaa673, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player
-  maxHP: 100
-  curHP: 100
-  speed: 5
-  curShield: 0
-  maxShield: 50
-  attackDamage: 20
-  defense: 10
-  statsData: {fileID: 11400000, guid: 45bc7567054e03344b1d2ef8296eea8b, type: 2}
-  activeControl: 1
