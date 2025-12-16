@@ -325,7 +325,7 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - animationTrigger: 
+  - animationTrigger: Ataque3
     useTicks: 0
     isBoomerang: 0
     shape: 1

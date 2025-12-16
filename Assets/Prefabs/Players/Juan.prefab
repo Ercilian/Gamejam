@@ -335,7 +335,7 @@ MonoBehaviour:
     sectorAngle: 110
     windowDuration: 0.08
     tickInterval: 0.04
-  - animationTrigger: 
+  - animationTrigger: Ataque2
     useTicks: 0
     isBoomerang: 0
     shape: 2
@@ -347,7 +347,7 @@ MonoBehaviour:
     sectorAngle: 110
     windowDuration: 0.08
     tickInterval: 0.04
-  - animationTrigger: 
+  - animationTrigger: Ataque3
     useTicks: 1
     isBoomerang: 1
     shape: 0
