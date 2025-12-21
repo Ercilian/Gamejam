@@ -319,8 +319,8 @@ MonoBehaviour:
   - 1
   - 1.5
   - 2
-  attackCooldown: 0.1
-  comboResetTime: 2
+  attackCooldown: 0.2
+  comboResetTime: 0.6
   steps:
   - animationTrigger: Ataque1
     useTicks: 0
