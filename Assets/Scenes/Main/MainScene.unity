@@ -10651,8 +10651,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   mapPrefabs:
   - {fileID: 6540120780592400911, guid: 6ce2ef2625918e64fb9436d746f405d8, type: 3}
+  - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
   - {fileID: 3275800661699807088, guid: 70957c3b5de8cc74f906080a9c85d9ed, type: 3}
+  - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
   - {fileID: 8225967972709827265, guid: 16019a6a530c3814da603a4cc8e8e966, type: 3}
+  - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 6083573750314543136, guid: e3872a51f5a0f70478a5749f7eae2385, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   carTransform: {fileID: 2070441881}
