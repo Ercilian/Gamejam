@@ -62,11 +62,16 @@ namespace Game.Combat
         [Header("Input")]
         [Tooltip("Optional: InputActionReference for the Attack action. If empty, the script will try to find a PlayerInput and use actions['Attack'].")]
         public InputActionReference attackActionRef;
+        
+        [Header("Animators")]
+        [Tooltip("Referencia opcional al arma con su propio Animator. Si no se asigna, solo se usará el animator del personaje.")]
+        public Animator weaponAnimator;
 
         // runtime
         PlayerInput _playerInput;
         InputAction _attackAction;
-        Animator _animator; // Animator para las animaciones del combo
+        Animator _animator; // Animator del personaje
+        Animator _weaponAnimator; // Animator del arma
         private AudioSource audioSource;
         [SerializeField] public PlayerStatsData playerStatsData;
 
@@ -141,18 +146,25 @@ namespace Game.Combat
             attackerStats = GetComponent<EntityStats>();
             audioSource = GetComponent<AudioSource>();
             
-            // Obtener el Animator (primero busca en este GameObject, luego en hijos)
+            // Obtener el Animator del personaje (primero busca en este GameObject, luego en hijos)
             _animator = GetComponent<Animator>();
             if (_animator == null)
             {
                 _animator = GetComponentInChildren<Animator>();
                 if (_animator != null && showDebugLogs)
-                    Debug.Log($"[Combo] Animator encontrado en hijo: {_animator.gameObject.name}");
+                    Debug.Log($"[Combo] Animator de personaje encontrado en hijo: {_animator.gameObject.name}");
             }
             
             if (_animator == null)
             {
-                Debug.LogWarning($"[Combo] No se encontró Animator en {gameObject.name} ni en sus hijos");
+                Debug.LogWarning($"[Combo] No se encontró Animator del personaje en {gameObject.name} ni en sus hijos");
+            }
+            
+            // Asignar el animator del arma desde el inspector (si fue configurado)
+            _weaponAnimator = weaponAnimator;
+            if (_weaponAnimator != null && showDebugLogs)
+            {
+                Debug.Log($"[Combo] Animator de arma asignado: {_weaponAnimator.gameObject.name}");
             }
         
         }
@@ -697,27 +709,6 @@ namespace Game.Combat
         /// </summary>
         void PlayStepAnimation(StepConfig cfg)
         {
-            if (_animator == null)
-            {
-                if (showDebugLogs)
-                    Debug.LogWarning($"[Combo] No hay Animator asignado en {gameObject.name}");
-                return;
-            }
-
-            // Verificar que el Animator está habilitado
-            if (!_animator.enabled)
-            {
-                Debug.LogError($"[Combo] El Animator está deshabilitado en {gameObject.name}");
-                return;
-            }
-
-            // Verificar que el Animator tiene un RuntimeAnimatorController
-            if (_animator.runtimeAnimatorController == null)
-            {
-                Debug.LogError($"[Combo] El Animator no tiene un Controller asignado en {gameObject.name}");
-                return;
-            }
-
             if (string.IsNullOrEmpty(cfg.animationTrigger))
             {
                 if (showDebugLogs)
@@ -725,11 +716,46 @@ namespace Game.Combat
                 return;
             }
 
+            // Activar animación del personaje
+            if (_animator != null)
+            {
+                ActivateAnimatorTrigger(_animator, cfg.animationTrigger, "personaje");
+            }
+            else if (showDebugLogs)
+            {
+                Debug.LogWarning($"[Combo] No hay Animator de personaje asignado en {gameObject.name}");
+            }
+
+            // Activar animación del arma (si existe)
+            if (_weaponAnimator != null)
+            {
+                ActivateAnimatorTrigger(_weaponAnimator, cfg.animationTrigger, "arma");
+            }
+        }
+
+        void ActivateAnimatorTrigger(Animator animator, string triggerName, string animatorType)
+        {
+            if (animator == null) return;
+
+            // Verificar que el Animator está habilitado
+            if (!animator.enabled)
+            {
+                Debug.LogError($"[Combo] El Animator de {animatorType} está deshabilitado en {animator.gameObject.name}");
+                return;
+            }
+
+            // Verificar que el Animator tiene un RuntimeAnimatorController
+            if (animator.runtimeAnimatorController == null)
+            {
+                Debug.LogError($"[Combo] El Animator de {animatorType} no tiene un Controller asignado en {animator.gameObject.name}");
+                return;
+            }
+
             // Verificar si el trigger existe en el Animator
             bool triggerExists = false;
-            foreach (var param in _animator.parameters)
+            foreach (var param in animator.parameters)
             {
-                if (param.name == cfg.animationTrigger && param.type == AnimatorControllerParameterType.Trigger)
+                if (param.name == triggerName && param.type == AnimatorControllerParameterType.Trigger)
                 {
                     triggerExists = true;
                     break;
@@ -738,44 +764,40 @@ namespace Game.Combat
 
             if (!triggerExists)
             {
-                Debug.LogError($"[Combo] El trigger '{cfg.animationTrigger}' no existe en el Animator Controller de {gameObject.name}");
+                Debug.LogError($"[Combo] El trigger '{triggerName}' no existe en el Animator Controller de {animatorType} ({animator.gameObject.name})");
                 return;
             }
 
-            // Verificar el estado del Animator antes de activar el trigger
-            var currentState = _animator.GetCurrentAnimatorStateInfo(0);
-            
             if (showDebugLogs)
             {
-                Debug.Log($"[Combo] === ANTES DE ACTIVAR TRIGGER ===");
-                Debug.Log($"[Combo] GameObject: {_animator.gameObject.name}");
-                Debug.Log($"[Combo] Controller: {_animator.runtimeAnimatorController.name}");
-                Debug.Log($"[Combo] Animator enabled: {_animator.enabled}");
-                Debug.Log($"[Combo] Animator speed: {_animator.speed}");
+                Debug.Log($"[Combo] === ACTIVANDO TRIGGER EN {animatorType.ToUpper()} ===");
+                Debug.Log($"[Combo] GameObject: {animator.gameObject.name}");
+                Debug.Log($"[Combo] Controller: {animator.runtimeAnimatorController.name}");
+                Debug.Log($"[Combo] Animator enabled: {animator.enabled}");
             }
 
             // Resetear el trigger primero por si quedó activo de antes
-            _animator.ResetTrigger(cfg.animationTrigger);
+            animator.ResetTrigger(triggerName);
             
             // Activar el trigger de animación
-            _animator.SetTrigger(cfg.animationTrigger);
+            animator.SetTrigger(triggerName);
             
             // Forzar actualización del Animator para procesar el trigger inmediatamente
-            _animator.Update(0f);
+            animator.Update(0f);
 
             if (showDebugLogs)
             {
-                Debug.Log($"[Combo] ✓ Trigger '{cfg.animationTrigger}' activado");
-                Debug.Log($"[Combo] ¿Está en transición?: {_animator.IsInTransition(0)}");
+                Debug.Log($"[Combo] ✓ Trigger '{triggerName}' activado en {animatorType}");
+                Debug.Log($"[Combo] ¿Está en transición?: {animator.IsInTransition(0)}");
                 
-                if (_animator.IsInTransition(0))
+                if (animator.IsInTransition(0))
                 {
-                    var nextState = _animator.GetNextAnimatorStateInfo(0);
+                    var nextState = animator.GetNextAnimatorStateInfo(0);
                     Debug.Log($"[Combo] ✓ ¡TRANSICIÓN INICIADA! Hash destino: {nextState.fullPathHash}");
                 }
                 else
                 {
-                    Debug.LogWarning($"[Combo] No está en transición aún. Expande 'Settings' en tu transición y verifica 'Transition Duration' y 'Interruption Source'");
+                    Debug.LogWarning($"[Combo] {animatorType} no está en transición aún");
                 }
             }
         }
