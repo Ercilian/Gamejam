@@ -16439,6 +16439,11 @@ MonoBehaviour:
   playerPanelPrefab: {fileID: 4245475645186457498, guid: 0b30736650bca3c4ea425f0b0ea030b6, type: 3}
   panelParent: {fileID: 1407882887}
   playerSelectionDataSO: {fileID: 11400000, guid: ad9a01878997d7a41840fead73e5b0e2, type: 2}
+  allPlayerStats:
+  - {fileID: 11400000, guid: 45bc7567054e03344b1d2ef8296eea8b, type: 2}
+  - {fileID: 11400000, guid: c1b40d85d72f41141b244857cff73032, type: 2}
+  - {fileID: 11400000, guid: 33f326517483cac41a16d8432fd71429, type: 2}
+  - {fileID: 11400000, guid: da7f3af98e831bc4e828dc354d94d6c3, type: 2}
 --- !u!1 &1411472145
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd33cbfb23e7a64eaabce2f966a894d, type: 3}
   m_Name: Serpiente
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
-  playerName: 
+  playerName: Serpi
   description: 
   playerIcon: {fileID: 0}
   maxHealth: 100
@@ -20,11 +20,8 @@ MonoBehaviour:
   maxShield: 50
   attackDamage: 20
   defense: 10
-  attackSpeed: 1
-  attackRange: 2
   inventoryCapacity: 3
   pushStrength: 1
-  pickupSpeed: 1
   playerPrefab: {fileID: 0}
   playerColor: {r: 1, g: 1, b: 1, a: 1}
   attackSound: {fileID: 0}
