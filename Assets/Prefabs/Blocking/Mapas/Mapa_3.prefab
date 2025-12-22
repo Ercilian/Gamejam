@@ -2891,6 +2891,7 @@ GameObject:
   - component: {fileID: 1408560577705298892}
   - component: {fileID: 520319709725049881}
   - component: {fileID: 1803366466003276024}
+  - component: {fileID: 6934773516771752030}
   m_Layer: 3
   m_Name: Suelo_3
   m_TagString: Untagged
@@ -142466,6 +142467,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &6934773516771752030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5373328905909229363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0b6d1fb94fb1041addd8ce1c6a0156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  newOffset: {x: 6, y: 2, z: -6}
+  delaySeconds: 0
+  cameraMovement: {fileID: 0}
 --- !u!1 &7619003973010647004
 GameObject:
   m_ObjectHideFlags: 0
