@@ -24,6 +24,7 @@ public class CameraMovement : MonoBehaviour
 
     private System.Collections.IEnumerator ChangeOffsetCoroutine(Vector3 newOffset, float delaySeconds)
     {
+        smoothSpeed = 2; // Aumenta la velocidad de suavizado temporalmente
         yield return new WaitForSeconds(delaySeconds);
         offset = newOffset;
     }

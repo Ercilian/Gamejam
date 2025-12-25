@@ -23,6 +23,9 @@ public class Dash : MonoBehaviour
     private InputAction dashAction;
     private InputAction moveAction;
 
+    [Header("Dash VFX")]
+    public GameObject dashSmokeVFXPrefab; // Asigna el prefab en el inspector
+
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -81,5 +84,16 @@ public class Dash : MonoBehaviour
         dashTimer = 0f;
         isDashing = true;
         cooldownTimer = dashCooldown;
+
+            if (dashSmokeVFXPrefab != null)
+            {
+                Vector3 vfxPosition = Vector3.Lerp(dashStart, dashEnd, 0.3f); // Puedes ajustar el 0.3f
+                GameObject vfxInstance = Instantiate(dashSmokeVFXPrefab, vfxPosition, Quaternion.identity);
+                DashSmokeVFX vfxScript = vfxInstance.GetComponent<DashSmokeVFX>();
+                if (vfxScript != null)
+                {
+                    vfxScript.PlayDashSmoke(dashDirection);
+                }
+            }
     }
 }

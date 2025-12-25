@@ -413,6 +413,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   defaultDashDirection: {x: -1, y: 0, z: 0}
+  dashSmokeVFXPrefab: {fileID: 1334836379060101269, guid: 299625954a7c2bd449388917846f008d, type: 3}
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
