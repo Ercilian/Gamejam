@@ -9,7 +9,7 @@ public class CameraTrigger : MonoBehaviour
     private void Awake()
     {
         // Busca el componente CameraMovement en la escena (puedes ajustar si tienes varias cámaras)
-        cameraMovement = FindObjectOfType<CameraMovement>();
+        cameraMovement = FindFirstObjectByType<CameraMovement>();
         if (cameraMovement == null)
         {
             Debug.LogError("No se encontró CameraMovement en la escena.");

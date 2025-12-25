@@ -18,4 +18,13 @@ public class DashSmokeVFX : MonoBehaviour
             dashParticleSystem.Emit(emitParams, 1);
         }
     }
+
+    private void Update()
+    {
+        // Si el sistema de partículas ya no está reproduciéndose y no quedan partículas vivas, destruye el GameObject
+        if (dashParticleSystem != null && !dashParticleSystem.IsAlive())
+        {
+            Destroy(gameObject);
+        }
+    }
 }
