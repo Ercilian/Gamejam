@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
+// Script to control camera movement and positioning, targeting a specific object (Car).
 {
     public Transform target;
     public Vector3 offset = new Vector3(-10f, 10f, -10f);

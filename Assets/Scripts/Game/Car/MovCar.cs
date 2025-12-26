@@ -7,8 +7,8 @@ public class MovCar : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float speed = 1f;
-    public float fastspeed = 2f;
-    public float slowspeed = 0.5f;
+    public float fastspeed = 1.2f;
+    public float slowspeed = 0.8f;
     public float cur_speed = 0f;
     public float speedTransitionRate = 2f;
     public float pushSpeed = 0.5f;
@@ -55,7 +55,7 @@ public class MovCar : MonoBehaviour
 
 
 
-    void Start()
+    void Start() // Search for fuel system, initialize path following, and setup motor sound
     {
         fuelSystem = GetComponent<CarFuelSystem>() ?? GetComponentInChildren<CarFuelSystem>(); // Get fuel system component
 
@@ -66,20 +66,16 @@ public class MovCar : MonoBehaviour
 
         // Motor sound setup
         motorAudioSource = GetComponent<AudioSource>();
-        if (motorAudioSource == null)
-        {
-            motorAudioSource = gameObject.AddComponent<AudioSource>();
-        }
         motorAudioSource.clip = motorLoopClip;
         motorAudioSource.Play();
     }
 
-    void Update()
+    void Update() // Main update loop for movement and sound
     {
         float targetSpeed = 0f;
         Vector3 moveDirection = GetMovementDirection(); // Get direction towards current target
 
-        if (!fuelSystem || !fuelSystem.HasFuel()) // Stop if no fuel
+        if (!fuelSystem.HasFuel()) // Stop if no fuel
         {
             ismoving = false;
             targetSpeed = HandlePush();
@@ -91,7 +87,7 @@ public class MovCar : MonoBehaviour
             targetSpeed = GetCurrentSpeed();
         }
 
-        currentActualSpeed = Mathf.MoveTowards(currentActualSpeed, targetSpeed, speedTransitionRate * Time.deltaTime);
+        currentActualSpeed = Mathf.MoveTowards(currentActualSpeed, targetSpeed, speedTransitionRate * Time.deltaTime); // Smooth speed transition
 
         cur_speed = currentActualSpeed;
 
@@ -101,57 +97,39 @@ public class MovCar : MonoBehaviour
             transform.Translate(moveDirection * currentActualSpeed * Time.deltaTime, Space.World);
         }
 
-        UpdateMotorPitch(currentActualSpeed);
+        UpdateMotorPitch(currentActualSpeed); // Update motor sound pitch based on speed
     }
+
 
     // ===== MOTOR SOUND SYSTEM (Single Clip, Pitch Only) =====
 
-    private void UpdateMotorPitch(float speed)
+    private void UpdateMotorPitch(float speed) // Update motor sound pitch based on current speed
     {
-        if (motorAudioSource == null || motorLoopClip == null) return;
-
-        // Normaliza la velocidad entre 0 y maxSpeedForPitch
-        float t = Mathf.Clamp01(speed / maxSpeedForPitch);
-        motorAudioSource.pitch = Mathf.Lerp(pitchMin, pitchMax, t);
+        float t = Mathf.Clamp01(speed / maxSpeedForPitch); // Normalized speed (0 to 1)
+        motorAudioSource.pitch = Mathf.Lerp(pitchMin, pitchMax, t); // Interpolate pitch
     }
+
 
     // ===== PATH FOLLOWING METHODS =====
 
-    private void InitializePathFollowing()
+    private void InitializePathFollowing() // Setup initial target for path following
     {
-        if (pathPoints != null && pathPoints.Length > 0)
-        {
-            currentTarget = pathPoints[0].position;
-        }
-        else
-        {
-            currentTarget = Vector3.zero;
-            Debug.Log("[MovCarro] Path Following NOT initialized - no waypoints set");
-        }
+        currentTarget = pathPoints[0].position;
     }
 
-    private Vector3 GetMovementDirection()
+    private Vector3 GetMovementDirection() // Calculate movement direction towards current target
     {
-        if (pathPoints == null || pathPoints.Length == 0)
-        {
-            Debug.Log("[MovCarro] Path following enabled but no waypoints - returning zero direction");
-            return Vector3.zero;
-        }
-
-        // Update waypoint progress
-        UpdateWaypointProgress();
-
-        // Calculate smooth direction towards current target
-        return CalculateSmoothDirection();
+        UpdateWaypointProgress(); // Call to update waypoint if reached
+        return CalculateSmoothDirection(); // Return smoothed direction
     }
 
-    private void UpdateWaypointProgress()
+    private void UpdateWaypointProgress() // Check if reached current waypoint and update to next
     {
-        if (currentPathIndex < pathPoints.Length)
+        if (currentPathIndex < pathPoints.Length) // Ensure index is within bounds
         {
-            float distanceToTarget = Vector3.Distance(transform.position, currentTarget);
+            float distanceToTarget = Vector3.Distance(transform.position, currentTarget); // Calculate distance to current target
 
-            if (distanceToTarget <= reachDistance)
+            if (distanceToTarget <= reachDistance) // Check if within reach distance
             {
                 currentPathIndex++;
                 if (currentPathIndex < pathPoints.Length)
@@ -166,14 +144,15 @@ public class MovCar : MonoBehaviour
         }
     }
 
-    private Vector3 CalculateSmoothDirection()
+    private Vector3 CalculateSmoothDirection() // Smooth direction calculation towards current target
     {
         Vector3 targetDirection = (currentTarget - transform.position).normalized;
         lastDirection = Vector3.Lerp(lastDirection, targetDirection, Time.deltaTime * pathSmoothness);
         return lastDirection.normalized;
     }
+    
 
-    // ===== ORIGINAL METHODS (UNCHANGED) =====
+    // ===== ORIGINAL METHODS =====
 
     private float HandlePush()
     {
@@ -210,8 +189,6 @@ public class MovCar : MonoBehaviour
 
     private float GetCurrentSpeed()
     {
-        if (!fuelSystem) return 0f;
-
         float dieselPercentage = fuelSystem.GetDieselPercentage();
         if (dieselPercentage < 0.2f)
         {

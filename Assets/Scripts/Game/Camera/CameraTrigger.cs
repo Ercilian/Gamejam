@@ -1,26 +1,21 @@
 using UnityEngine;
 
 public class CameraTrigger : MonoBehaviour
+// Script to change camera offset when the car enters the trigger zone (cinematic camera).
 {
     public Vector3 newOffset = new Vector3(0f, 5f, -5f);
     public float delaySeconds = 2f;
     [SerializeField]private CameraMovement cameraMovement;
 
-    private void Awake()
+    private void Awake() // Search for CameraMovement in the scene
     {
-        // Busca el componente CameraMovement en la escena (puedes ajustar si tienes varias cámaras)
         cameraMovement = FindFirstObjectByType<CameraMovement>();
-        if (cameraMovement == null)
-        {
-            Debug.LogError("No se encontró CameraMovement en la escena.");
-        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) // Detect when the car enters the trigger zone and change camera offset
     {
         if (other.CompareTag("Car") && cameraMovement != null)
         {
-            Debug.Log("Car entered trigger, changing camera offset.");
             cameraMovement.ChangeOffsetWithDelay(newOffset, delaySeconds);
         }
     }
