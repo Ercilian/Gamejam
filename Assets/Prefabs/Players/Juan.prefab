@@ -301,6 +301,7 @@ MonoBehaviour:
   maxPotions: 2
   potions: []
   defaultHealPotion: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
+  potionVFX: {fileID: 1612393978339880064, guid: d797a9a06ca6de24e8610df5bf8d843f, type: 3}
   entityStats: {fileID: 0}
   potionPoolPrefab: {fileID: 2858892124577212541, guid: 72b6290cfdb7f9548b63662d507a01b2, type: 3}
 --- !u!114 &8577440922694416064

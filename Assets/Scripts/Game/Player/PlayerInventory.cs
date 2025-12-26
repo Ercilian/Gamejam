@@ -20,6 +20,7 @@ public class PlayerInventory : MonoBehaviour
     public int maxPotions = 2;
     public List<PotionData> potions = new List<PotionData>(); // Las pociones que tienes
     public PotionData defaultHealPotion; // <-- Asigna aquí tu poción de curación en el inspector
+    public GameObject potionVFX;
 
     public EntityStats entityStats; // Asigna en el inspector
 
@@ -317,6 +318,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (potions.Count == 0) return false;
 
+        Instantiate(potionVFX, transform.position, Quaternion.Euler(90f, 0f, 0f));
         PotionData potion = potions[0];
         potions.RemoveAt(0);
 
