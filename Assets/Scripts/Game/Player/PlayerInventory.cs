@@ -177,9 +177,9 @@ public class PlayerInventory : MonoBehaviour
         {
             CollectibleData.ItemType.Diesel => item.dieselValue,
             CollectibleData.ItemType.Scrap => item.scrapValue,
-            CollectibleData.ItemType.PlantRed => item.mossValue,
-            CollectibleData.ItemType.PlantGreen => item.mossValue,
-            CollectibleData.ItemType.PlantBlue => item.mossValue,
+            CollectibleData.ItemType.PlantRed => item.plantValue,
+            CollectibleData.ItemType.PlantGreen => item.plantValue,
+            CollectibleData.ItemType.PlantBlue => item.plantValue,
             _ => 0
         };
     }

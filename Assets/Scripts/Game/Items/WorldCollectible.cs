@@ -17,6 +17,14 @@ public class WorldCollectible : MonoBehaviour
     private PlayerInventory nearbyPlayer;
     private PlayerInput nearbyPlayerInput; // Referencia al Input System
 
+
+
+
+    // ================================================= Unity Methods =================================================
+
+
+
+
     void Start()
     {
         startPosition = transform.position; // Save the initial position

@@ -150,9 +150,20 @@ public class MovCar : MonoBehaviour
         lastDirection = Vector3.Lerp(lastDirection, targetDirection, Time.deltaTime * pathSmoothness);
         return lastDirection.normalized;
     }
+
+    private void RotateCarTowardsDirection(Vector3 moveDirection)
+    {
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            targetRotation *= Quaternion.Euler(0, -90, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation,
+                rotationSpeed * Time.deltaTime);
+        }
+    }
     
 
-    // ===== ORIGINAL METHODS =====
+    // ===== PUSH METHODS =====
 
     private float HandlePush()
     {
@@ -227,19 +238,15 @@ public class MovCar : MonoBehaviour
     }
 
     void OnDestroy()
-    {
-        if (consumeCoroutine != null)
-        {
+    {  
+        if (consumeCoroutine != null)      
             StopCoroutine(consumeCoroutine);
-        }
     }
 
     // ===== DEBUG/UTILITY METHODS =====
 
     void OnDrawGizmos()
     {
-        if (pathPoints == null) return;
-
         Gizmos.color = Color.cyan;
         for (int i = 0; i < pathPoints.Length; i++)
         {
@@ -259,18 +266,6 @@ public class MovCar : MonoBehaviour
             Gizmos.DrawWireSphere(currentTarget, reachDistance * 1.2f);
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, currentTarget);
-        }
-    }
-
-    // ===== CAR ROTATION =====
-    private void RotateCarTowardsDirection(Vector3 moveDirection)
-    {
-        if (moveDirection != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            targetRotation *= Quaternion.Euler(0, -90, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation,
-                rotationSpeed * Time.deltaTime);
         }
     }
 }

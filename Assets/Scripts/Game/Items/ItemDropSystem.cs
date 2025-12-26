@@ -2,9 +2,10 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class ItemDropSystem : MonoBehaviour
+// This class manages the item drop system for enemies and destructible objects.
 {
     [System.Serializable]
-    public class DroppableItem
+    public class DroppableItem // List of items that can be dropped
     {
         public string itemName;
         public GameObject prefab;
@@ -12,8 +13,7 @@ public class ItemDropSystem : MonoBehaviour
         public int maxQuantity = 1;
     }
 
-    [Header("Item Prefabs")]
-    public DroppableItem[] availableItems;
+    public DroppableItem[] listOfDroppableItems;
 
     [System.Serializable]
     public class DropTable
@@ -32,7 +32,6 @@ public class ItemDropSystem : MonoBehaviour
     }
 
     [SerializeField]
-    [Header("Drop Tables")]
     private DropTable[] dropTables = {
         new DropTable {
             sourceName = "NormalEnemy",
@@ -78,17 +77,22 @@ public class ItemDropSystem : MonoBehaviour
     public float spawnHeightOffset = 0.5f;
     public LayerMask groundLayerMask = -1;
 
-    [Header("Debug")]
-    public bool showDebugLogs = true;
 
-    // Singleton para fácil acceso
     public static ItemDropSystem Instance { get; private set; }
+
+    // ===== PUBLIC GETTERS =====
+    public int GetAvailableItemsCount() => listOfDroppableItems.Length;
+    public string GetItemName(int index) => (index >= 0 && index < listOfDroppableItems.Length) ? listOfDroppableItems[index].itemName : "Unknown";
+
 
 
 
     // ================================================= Unity Methods =================================================
 
-    void Awake()
+
+
+
+    void Awake() // Singleton pattern to ensure only one instance exists
     {
         if (Instance != null && Instance != this)
         {
@@ -116,35 +120,27 @@ public class ItemDropSystem : MonoBehaviour
     public void DropItems(string sourceType, Vector3 position) // Main method to handle item drops
     {
         DropTable table = GetDropTable(sourceType); // Find the appropriate drop table
-        if (table == null)
-        {
-            if (showDebugLogs)
-                Debug.LogWarning($"[ItemDropSystem] No drop table found for: {sourceType}");
-            return;
-        }
 
         int dropCount = GetDropCount(); // Determine how many items to drop
         List<GameObject> droppedItems = new List<GameObject>(); // To keep track of spawned items
 
         for (int i = 0; i < dropCount; i++) // For each item to drop
         {
-            // Choose a random item from the table (can repeat)
-            List<DropTable.ItemDrop> validDrops = new List<DropTable.ItemDrop>();
-            foreach (var itemDrop in table.possibleDrops)
+            List<DropTable.ItemDrop> validDrops = new List<DropTable.ItemDrop>(); // Valid items to drop this iteration
+            foreach (var itemDrop in table.possibleDrops) // Check each possible drop
             {
-                if (Random.Range(0f, 100f) <= itemDrop.dropChance)
-                    validDrops.Add(itemDrop);
+                if (Random.Range(0f, 100f) <= itemDrop.dropChance) // Roll for drop chance
+                    validDrops.Add(itemDrop); // Add to valid drops if successful
             }
 
-            if (validDrops.Count > 0)
+            if (validDrops.Count > 0) // If there are valid drops, choose one at random
             {
-                var chosenDrop = validDrops[Random.Range(0, validDrops.Count)];
-                GameObject item = SpawnItem(chosenDrop.itemIndex, position);
+                var chosenDrop = validDrops[Random.Range(0, validDrops.Count)]; // Randomly select one of the valid drops
+                GameObject item = SpawnItem(chosenDrop.itemIndex, position); // Spawn the item
                 if (item != null)
                     droppedItems.Add(item);
             }
         }
-
     }
 
 
@@ -158,22 +154,20 @@ public class ItemDropSystem : MonoBehaviour
         return null;
     }
 
+    private int GetDropCount() // Determine how many items to drop based on probabilities
+    {
+        float roll = Random.value;
+        if (roll < probDrop3)
+            return 3;
+        else if (roll < probDrop3 + probDrop2)
+            return 2;
+        else
+            return 1;
+    }
+    
     GameObject SpawnItem(int itemIndex, Vector3 position) // Spawns the item prefab with physics
     {
-        if (itemIndex < 0 || itemIndex >= availableItems.Length)
-        {
-            if (showDebugLogs)
-                Debug.LogError($"[ItemDropSystem] Invalid item index: {itemIndex}");
-            return null;
-        }
-
-        DroppableItem itemData = availableItems[itemIndex]; // Get item data
-        if (itemData.prefab == null)
-        {
-            if (showDebugLogs)
-                Debug.LogError($"[ItemDropSystem] No prefab assigned for item: {itemData.itemName}");
-            return null;
-        }
+        DroppableItem itemData = listOfDroppableItems[itemIndex]; // Get item data
 
         int quantity = Random.Range(itemData.minQuantity, itemData.maxQuantity + 1); // Determine quantity to drop
         GameObject lastSpawnedItem = null;
@@ -218,35 +212,6 @@ public class ItemDropSystem : MonoBehaviour
         return lastSpawnedItem;
     }
 
-    private int GetDropCount() // Determine how many items to drop based on probabilities
-    {
-        float roll = Random.value;
-        if (roll < probDrop3)
-            return 3;
-        else if (roll < probDrop3 + probDrop2)
-            return 2;
-        else
-            return 1;
-    }
 
 
-
-    public void ApplyDifficultyModifier(float multiplier) // Adjust drop chances based on difficulty
-    {
-        if (showDebugLogs)
-            Debug.Log($"[ItemDropSystem] Applied difficulty modifier: x{multiplier}");
-    }
-
-    public void ForceDropItem(int itemIndex, Vector3 position, int quantity = 1) // Force drop specific item(s) at position
-    {
-        for (int i = 0; i < quantity; i++)
-        {
-            SpawnItem(itemIndex, position);
-        }
-    }
-
-    // ===== GETTERS =====
-    public int GetAvailableItemsCount() => availableItems.Length;
-    public string GetItemName(int index) =>
-        (index >= 0 && index < availableItems.Length) ? availableItems[index].itemName : "Unknown";
 }

@@ -3,20 +3,27 @@ using System.Collections;
 
 public class PotionPool : MonoBehaviour
 {
+    [Header("Potion Pool Settings")]
     private PotionData potion;
-    private float maxDuration = 7f; // duración máxima en segundos
+    private float maxDuration = 7f;
     private float radius = 1.5f;
-    private int totalTicks = 16; // puedes ajustar el número de ticks
+    private int totalTicks = 16;
 
     private Coroutine effectCoroutine;
     private Coroutine scaleCoroutine;
-
-    // Guardar la escala original
     private Vector3 initialScale;
     private Vector3 finalScale;
     private Vector3 targetScale;
 
-    public void Setup(PotionData potionData)
+
+
+
+    // ================================================= Unity Methods =================================================
+
+
+
+
+    public void Setup(PotionData potionData) // Initialize the potion pool with the given potion data
     {
         potion = potionData;
         initialScale = transform.localScale;

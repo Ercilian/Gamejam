@@ -139670,8 +139670,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc0b6d1fb94fb1041addd8ce1c6a0156, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  newOffset: {x: 6, y: 2, z: -6}
+  m_EditorClassIdentifier: Assembly-CSharp::CameraTrigger
+  newOffset: {x: -1.2, y: 15, z: -10}
   delaySeconds: 0
   cameraMovement: {fileID: 0}
 --- !u!1 &2032587112252344903
