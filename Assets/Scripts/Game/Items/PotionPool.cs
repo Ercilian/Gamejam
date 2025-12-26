@@ -3,36 +3,35 @@ using System.Collections;
 
 public class PotionPool : MonoBehaviour
 {
+    [Header("Potion Pool Settings")]
     private PotionData potion;
-    private float maxDuration = 10f; // duración máxima en segundos
+    private float maxDuration = 7f;
     private float radius = 1.5f;
-    private int totalTicks = 16; // puedes ajustar el número de ticks
+    private int totalTicks = 16;
 
     private Coroutine effectCoroutine;
+    private Coroutine scaleCoroutine;
+    private Vector3 initialScale;
+    private Vector3 finalScale;
+    private Vector3 targetScale;
 
-    public void Setup(PotionData potionData)
+
+
+
+    // ================================================= Unity Methods =================================================
+
+
+
+
+    public void Setup(PotionData potionData) // Initialize the potion pool with the given potion data
     {
         potion = potionData;
-
-        var visual = transform.Find("Visual");
-        if (visual != null)
-        {
-            var renderer = visual.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                bool hasHeal = potion.effectType == PotionEffectType.Heal || potion.effectType2 == PotionEffectType.Heal;
-                bool hasShield = potion.effectType == PotionEffectType.Shield || potion.effectType2 == PotionEffectType.Shield;
-
-                if (hasHeal && hasShield)
-                    renderer.material.color = new Color(0.2f, 0.9f, 0.7f, 0.5f);
-                else if (hasShield)
-                    renderer.material.color = new Color(0.2f, 0.5f, 1f, 0.5f);
-                else if (hasHeal)
-                    renderer.material.color = new Color(0.2f, 1f, 0.2f, 0.5f);
-            }
-        }
+        initialScale = transform.localScale;
+        finalScale = initialScale * 0.5f;
+        targetScale = initialScale;
 
         effectCoroutine = StartCoroutine(ApplyEffectsOverTime());
+        scaleCoroutine = StartCoroutine(SmoothScale());
         Invoke(nameof(DestroyPool), maxDuration);
     }
 
@@ -82,7 +81,12 @@ public class PotionPool : MonoBehaviour
 
             // Solo avanza el tick si al menos un jugador recibe efecto
             if (effectApplied)
+            {
                 tick++;
+                // Calcula la nueva escala objetivo
+                float t = Mathf.Clamp01((float)tick / totalTicks);
+                targetScale = Vector3.Lerp(initialScale, finalScale, t);
+            }
 
             tickInterval = Mathf.Max(minInterval, tickInterval * 0.85f);
             yield return new WaitForSeconds(tickInterval);
@@ -91,10 +95,22 @@ public class PotionPool : MonoBehaviour
         DestroyPool();
     }
 
+    private IEnumerator SmoothScale()
+    {
+        while (true)
+        {
+            // Interpola suavemente hacia la escala objetivo
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * 8f);
+            yield return null;
+        }
+    }
+
     private void DestroyPool()
     {
         if (effectCoroutine != null)
             StopCoroutine(effectCoroutine);
+        if (scaleCoroutine != null)
+            StopCoroutine(scaleCoroutine);
         Destroy(gameObject);
     }
 }

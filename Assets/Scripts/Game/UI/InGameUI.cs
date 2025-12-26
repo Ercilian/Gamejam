@@ -14,14 +14,11 @@ public class InGameUI : MonoBehaviour
     }
     void UpdatePlayerPanels() // Method to update player panels based on selected players
     {
-        foreach (Transform child in panelParent)
-            Destroy(child.gameObject);
-
         foreach (var playerInfo in playerSelectionDataSO.selectedPlayers)
         {
-            GameObject panel = Instantiate(playerPanelPrefab, panelParent);
-            var stats = allPlayerStats[playerInfo.characterIndex];
-            panel.GetComponent<PlayerPanelUI>().Setup(playerInfo, stats);
+            GameObject panel = Instantiate(playerPanelPrefab, panelParent); // Create a new panel for each selected player
+            var stats = allPlayerStats[playerInfo.characterIndex]; // Get the corresponding stats for the player
+            panel.GetComponent<PlayerPanelUI>().Setup(playerInfo, stats); // Setup the panel with player info and stats
         }
     }
 }

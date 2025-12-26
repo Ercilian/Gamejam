@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 public class CarFuelSystem : MonoBehaviour
+// Manages the fuel system of the car, including diesel levels and item deposition
 {
     [Header("Diesel Settings")]
     public float cur_Diesel = 20f;
@@ -33,28 +34,28 @@ public class CarFuelSystem : MonoBehaviour
 
 
 
+
     // ================================================= Methods =================================================
 
 
 
 
-    void Start()
+    void Start() // Search for MovCar component, audio source and initialize last logged diesel
     {
         movCar = GetComponentInParent<MovCar>();
         lastLoggedDiesel = cur_Diesel;
         audioSource = GetComponent<AudioSource>();
     }
 
-    void Update()
+    void Update() // Handle item deposition
     {
         if (playerInDepositRange && nearbyPlayerInventory && nearbyPlayerInput) // Check if player is in range and has inventory
         {
-            var attackAction = nearbyPlayerInput.actions["Interact"]; // Get the Attack action
-            if (attackAction != null && attackAction.WasPressedThisFrame()) // Check if Attack was pressed
+            var InteractAction = nearbyPlayerInput.actions["Interact"]; // Get the Interact action
+            if (InteractAction.WasPressedThisFrame()) // Check if Interact was pressed
             {
                 if (nearbyPlayerInventory.DepositDieselItems(this)) // Attempt to deposit diesel items
                 {
-
                     // Clean up state after depositing
                     playerInDepositRange = false;
                     nearbyPlayerInventory = null;
@@ -64,18 +65,16 @@ public class CarFuelSystem : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other) // Handle player entering deposit/push range
     {
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>(); // Check if the collider has a PlayerInventory
-        
         if (playerInventory == null) return; // If no inventory, exit
 
         if (playerInventory.HasItems()) // Only allow deposit if the player has items
         {
             PlayerInput playerInput = other.GetComponent<PlayerInput>(); // Get PlayerInput component
             if (playerInput == null) return;
-            var attackAction = playerInput.actions["Interact"]; // Get the Attack action
-            if (attackAction == null) return;
+            var InteractAction = playerInput.actions["Interact"]; // Get the Interact action
 
             // Set state to allow depositing
             playerInDepositRange = true;
@@ -93,7 +92,7 @@ public class CarFuelSystem : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other) // Handle player exiting deposit/push range
     {
         // Remove from pushing players list (regardless of items)
         if (pushingPlayers.Contains(other.gameObject))
@@ -111,20 +110,15 @@ public class CarFuelSystem : MonoBehaviour
         }
     }
 
+
     // ===== FUEL MANAGEMENT METHODS =====
+
     public void AddDiesel(float amount, CollectibleData data = null) // Method to add diesel to the car
     {
-        // Sonido de depósito del ScriptableObject si está disponible
-        if (data != null && data.depositSound != null)
+        if (data != null && data.depositSound != null) // Play deposit sound if provided (when all sounds are set, remove null check)
         {
-            if (audioSource == null) audioSource = GetComponent<AudioSource>();
-            if (audioSource != null)
-                audioSource.PlayOneShot(data.depositSound);
-            else
-                AudioSource.PlayClipAtPoint(data.depositSound, transform.position);
+            audioSource.PlayOneShot(data.depositSound);
         }
-
-        Debug.Log($"[CarFuelSystem] Intentando reproducir sonido de depósito: {data?.depositSound}");
 
         float prevDiesel = cur_Diesel; // Store previous diesel amount
         cur_Diesel = Mathf.Min(cur_Diesel + amount, max_Diesel); // Add diesel but not exceed max

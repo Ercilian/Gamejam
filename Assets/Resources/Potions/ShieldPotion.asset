@@ -19,3 +19,4 @@ MonoBehaviour:
   effectAmount: 25
   effectAmount2: 0
   duration: 0
+  vfxPrefab: {fileID: 1612393978339880064, guid: d797a9a06ca6de24e8610df5bf8d843f, type: 3}

@@ -2,8 +2,9 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Collectible", menuName = "Game/Collectible Data")]
 public class CollectibleData : ScriptableObject
+// This ScriptableObject holds data for the collectible items in the game.
 {
-    [Header("Info del Coleccionable")]
+    [Header("Collectible Info")]
     public string itemName;
     public string itemID;
     public Sprite itemIcon;
@@ -18,20 +19,20 @@ public class CollectibleData : ScriptableObject
         PlantBlue
     }
     
-    [Header("Propiedades Diesel")]
+    [Header("Diesel Properties")]
     public int dieselValue;
     public float collectRange;
-    public string collectPrompt = "Presiona E para recoger diesel";
+    public string collectPrompt = "Press E to collect diesel";
 
-    [Header("Propiedades Scrap")]
+    [Header("Scrap Properties")]
     public int scrapValue;
     public float scrapCollectRange;
-    public string scrapCollectPrompt = "Presiona E para recoger scrap";
+    public string scrapCollectPrompt = "Press E to collect scrap";
 
-    [Header("Propiedades Moss")]
-    public int mossValue;
-    public float mossCollectRange;
-    public string mossCollectPrompt = "Presiona E para recoger moss";
+    [Header("Plant Properties")]
+    public int plantValue;
+    public float plantCollectRange;
+    public string plantCollectPrompt = "Press E to collect plant";
 
     [Header("Audio")]
     public AudioClip collectSound;

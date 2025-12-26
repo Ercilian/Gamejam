@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CarModuleSwapper : MonoBehaviour
+// Manages the swapping of car modules between scrap and plant deposits zones.
 {
     [Header("Module Swap Configuration")]
     public Collider scrapCollider;
@@ -33,7 +34,7 @@ public class CarModuleSwapper : MonoBehaviour
 
     
 
-    void Awake() // Cache all ISwappable components on this GameObject
+    void Awake() // Search for swappable components and initialize audio source
     {
         var swappables = GetComponents<ISwappable>();
         swappableComponents.AddRange(swappables);
@@ -45,7 +46,7 @@ public class CarModuleSwapper : MonoBehaviour
         if (playerInRange && nearbyPlayerInput && !isSwapping) // If player is in range and not currently swapping
         {
             var jumpAction = nearbyPlayerInput.actions["Jump"];
-            if (jumpAction != null && jumpAction.WasPressedThisFrame()) // If the jump action was pressed
+            if (jumpAction.WasPressedThisFrame()) // If the jump action was pressed
             {
                 audioSource.PlayOneShot(lever);
                 StartCoroutine(SwapModules()); // Start the swap coroutine

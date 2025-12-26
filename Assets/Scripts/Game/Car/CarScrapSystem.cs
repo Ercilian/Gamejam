@@ -14,6 +14,7 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
 
     [Header("Audio")]
     private AudioSource audioSource;
+    
     // ===== PRIVATE FIELDS =====
     private bool playerInScrapRange = false;
     private PlayerInventory nearbyPlayerInventory;
