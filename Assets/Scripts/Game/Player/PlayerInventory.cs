@@ -20,11 +20,8 @@ public class PlayerInventory : MonoBehaviour
     public int maxPotions = 2;
     public List<PotionData> potions = new List<PotionData>(); // Las pociones que tienes
     public PotionData defaultHealPotion; // <-- Asigna aquí tu poción de curación en el inspector
-    public GameObject potionVFX;
 
     public EntityStats entityStats; // Asigna en el inspector
-
-    public GameObject potionPoolPrefab; // Asigna el prefab en el inspector
 
 
 
@@ -318,9 +315,16 @@ public class PlayerInventory : MonoBehaviour
     {
         if (potions.Count == 0) return false;
 
-        Instantiate(potionVFX, transform.position, Quaternion.Euler(90f, 0f, 0f));
         PotionData potion = potions[0];
         potions.RemoveAt(0);
+
+        if (potion.vfxPrefab != null)
+        {
+            var vfxObj = Instantiate(potion.vfxPrefab, transform.position, Quaternion.Euler(90, 0, 0));
+            var pool = vfxObj.GetComponent<PotionPool>();
+            if (pool != null)
+                pool.Setup(potion);
+        }
 
         ApplyPotionEffect(potion);
         UpdatePotionUI();
@@ -330,14 +334,6 @@ public class PlayerInventory : MonoBehaviour
     // Aplica el efecto de la poción
     private void ApplyPotionEffect(PotionData potion)
     {
-        // Instancia el charco en el suelo si la poción tiene Heal o Shield
-        if (potionPoolPrefab != null && 
-            (potion.effectType == PotionEffectType.Heal || potion.effectType == PotionEffectType.Shield ||
-             potion.effectType2 == PotionEffectType.Heal || potion.effectType2 == PotionEffectType.Shield))
-        {
-            var pool = Instantiate(potionPoolPrefab, transform.position, Quaternion.identity).GetComponent<PotionPool>();
-            pool.Setup(potion);
-        }
 
         // Otros efectos directos (por ejemplo, DamageBoost)
         if (potion.effectType == PotionEffectType.DamageBoost)
