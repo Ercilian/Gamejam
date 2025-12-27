@@ -258,7 +258,22 @@ namespace Game.Combat
             int step = currentStep;
 
             OnAttackStep?.Invoke(step);
-            audioSource.PlayOneShot(playerStatsData.AttackSound);
+            
+            // Reproducir el sonido específico del paso del combo
+            if (playerStatsData != null && audioSource != null)
+            {
+                AudioClip comboSound = playerStatsData.GetComboSound(step);
+                if (comboSound != null)
+                {
+                    audioSource.PlayOneShot(comboSound);
+                    if (showDebugLogs)
+                        Debug.Log($"[Combo] Reproduciendo sonido para paso {step}");
+                }
+                else if (showDebugLogs)
+                {
+                    Debug.LogWarning($"[Combo] No hay sonido asignado para el paso {step}");
+                }
+            }
 
             if (showDebugLogs)
             {

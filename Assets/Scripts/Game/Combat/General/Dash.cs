@@ -26,6 +26,10 @@ public class Dash : MonoBehaviour
     [Header("Dash VFX")]
     public GameObject dashSmokeVFXPrefab; // Asigna el prefab en el inspector
 
+    [Header("Collision Detection")]
+    public LayerMask collisionLayers = -1; // Capas a detectar (por defecto todas)
+    public float collisionCheckRadius = 0.5f; // Radio para SphereCast
+
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -58,7 +62,26 @@ public class Dash : MonoBehaviour
             dashTimer += Time.deltaTime;
             float t = Mathf.Clamp01(dashTimer / dashDuration);
             float curveT = dashCurve.Evaluate(t);
-            transform.position = Vector3.Lerp(dashStart, dashEnd, curveT);
+            Vector3 targetPosition = Vector3.Lerp(dashStart, dashEnd, curveT);
+            
+            // Verificar si hay colisión en el camino hacia la nueva posición
+            Vector3 moveDirection = (targetPosition - transform.position).normalized;
+            float moveDistance = Vector3.Distance(transform.position, targetPosition);
+            
+            RaycastHit hit;
+            Vector3 checkOrigin = transform.position + Vector3.up * collisionCheckRadius;
+            
+            if (Physics.SphereCast(checkOrigin, collisionCheckRadius, moveDirection, out hit, moveDistance + collisionCheckRadius, collisionLayers))
+            {
+                // Detener el dash si hay una colisión
+                transform.position = transform.position + moveDirection * Mathf.Max(0, hit.distance - collisionCheckRadius);
+                isDashing = false;
+            }
+            else
+            {
+                transform.position = targetPosition;
+            }
+            
             if (t >= 1f)
             {
                 isDashing = false;
@@ -80,7 +103,54 @@ public class Dash : MonoBehaviour
         }
         dashDirection = dir.normalized;
         dashStart = transform.position;
-        dashEnd = dashStart + dashDirection * dashDistance;
+        
+        // Detectar colisiones antes de establecer dashEnd
+        float actualDashDistance = dashDistance;
+        RaycastHit hit;
+        Vector3 sphereCastOrigin = dashStart + Vector3.up * collisionCheckRadius;
+        
+        // Verificar si ya está tocando algo en la dirección del dash desde la posición actual
+        Vector3 currentCheckPos = dashStart + Vector3.up * collisionCheckRadius;
+        Vector3 forwardCheckPos = currentCheckPos + dashDirection * collisionCheckRadius * 0.1f;
+        
+        // Usar OverlapSphere para detectar colisiones inmediatas
+        Collider[] nearbyColliders = Physics.OverlapSphere(forwardCheckPos, collisionCheckRadius, collisionLayers, QueryTriggerInteraction.Ignore);
+        
+        // Filtrar el propio collider del jugador
+        bool hasImmediateObstacle = false;
+        foreach (Collider col in nearbyColliders)
+        {
+            if (col.transform != transform && !col.transform.IsChildOf(transform))
+            {
+                hasImmediateObstacle = true;
+                break;
+            }
+        }
+        
+        if (hasImmediateObstacle)
+        {
+            // Hay una pared inmediatamente delante, no hacer dash
+            return;
+        }
+        
+        // Si no hay nada inmediato, hacer SphereCast normal
+        if (Physics.SphereCast(sphereCastOrigin, collisionCheckRadius, dashDirection, out hit, dashDistance + collisionCheckRadius, collisionLayers, QueryTriggerInteraction.Ignore))
+        {
+            // Filtrar si el hit es el propio jugador
+            if (hit.transform != transform && !hit.transform.IsChildOf(transform))
+            {
+                // Si hay un obstáculo, ajustar la distancia del dash para detenerse antes del obstáculo
+                actualDashDistance = Mathf.Max(0, hit.distance - collisionCheckRadius);
+            }
+        }
+        
+        // Solo iniciar el dash si hay distancia válida
+        if (actualDashDistance < 0.1f)
+        {
+            return; // No hacer dash si no hay espacio
+        }
+        
+        dashEnd = dashStart + dashDirection * actualDashDistance;
         dashTimer = 0f;
         isDashing = true;
         cooldownTimer = dashCooldown;

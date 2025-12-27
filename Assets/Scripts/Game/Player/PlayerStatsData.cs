@@ -29,6 +29,10 @@ public class PlayerStatsData : ScriptableObject
     [SerializeField] AudioClip hurtSound;
     [SerializeField] AudioClip deathSound;
 
+    [Header("Combo Sounds")]
+    [Tooltip("Sonidos para cada paso del combo (índice 0 = primer golpe, 1 = segundo golpe, 2 = tercer golpe)")]
+    [SerializeField] AudioClip[] comboSounds = new AudioClip[3];
+
     // Public getters
     public string PlayerName => playerName;
     public string Description => description;
@@ -45,4 +49,13 @@ public class PlayerStatsData : ScriptableObject
     public AudioClip AttackSound => attackSound;
     public AudioClip HurtSound => hurtSound;
     public AudioClip DeathSound => deathSound;
+    public AudioClip[] ComboSounds => comboSounds;
+
+    // Método helper para obtener el sonido de un paso específico del combo
+    public AudioClip GetComboSound(int comboStep)
+    {
+        if (comboSounds == null || comboStep < 0 || comboStep >= comboSounds.Length)
+            return null;
+        return comboSounds[comboStep];
+    }
 }
