@@ -34,7 +34,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
 
 
-    void Awake()
+    void Awake() // Initialize the character selection manager
     {
         if (!playerInputManager)
         {
@@ -52,7 +52,7 @@ public class CharacterSelectionManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    void OnEnable()
+    void OnEnable() // Subscribe to player join/leave events
     {
         if (playerInputManager)
         {
@@ -62,7 +62,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    void OnDisable()
+    void OnDisable() // Unsubscribe from player join/leave events
     {
         if (playerInputManager)
         {
@@ -71,7 +71,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    void Update()
+    void Update() // Handle character selection input
     {
         for (int i = 0; i < playerSlots.Length; i++)
         {
@@ -88,7 +88,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
     // ========================================================================================= Player Input Management ===========================================================================
 
-    public void OnPlayerJoined(PlayerInput playerInput)
+    public void OnPlayerJoined(PlayerInput playerInput) // Handle a new player joining
     {
         if (playerInput.devices.Count > 0 && playerInput.devices[0] is Mouse)
         {
@@ -180,7 +180,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    public void OnPlayerLeft(PlayerInput playerInput)
+    public void OnPlayerLeft(PlayerInput playerInput) // Handle a player leaving
     {
         audioSource.PlayOneShot(leaveSound);
         int playerIndex = playerInput.playerIndex;
@@ -194,7 +194,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    void SyncExistingPlayers()
+    void SyncExistingPlayers() // Sync players that joined before the manager was enabled
     {
         Debug.Log($"[CharacterSelection] Syncing existing players. Total: {PlayerInput.all.Count}");
         foreach (var playerInput in PlayerInput.all)
@@ -205,7 +205,7 @@ public class CharacterSelectionManager : MonoBehaviour
     }
 
 
-    public PlayerInput[] GetActivePlayers()
+    public PlayerInput[] GetActivePlayers() // Get the list of active players
     {
         PlayerInput[] players = new PlayerInput[activePlayers.Count];
         activePlayers.Values.CopyTo(players, 0);
@@ -214,7 +214,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
     // ========================================================================================= Selection State ====================================================================================
 
-    public void ResetSelection()
+    public void ResetSelection() // Reset the character selection state
     {
         var playersToRemove = new List<PlayerInput>(activePlayers.Values);
         foreach (var playerInput in playersToRemove)
@@ -235,7 +235,7 @@ public class CharacterSelectionManager : MonoBehaviour
         Debug.Log("[CharacterSelection] Character selection reset.");
     }
 
-    private bool AllPlayersConfirmed()
+    private bool AllPlayersConfirmed() // Check if all joined players have confirmed their selection
     {
         int joinedCount = 0;
         int confirmedCount = 0;
@@ -252,7 +252,7 @@ public class CharacterSelectionManager : MonoBehaviour
         return joinedCount > 0 && confirmedCount == joinedCount;
     }
 
-    public void OnPlayerConfirmed()
+    public void OnPlayerConfirmed() // Handle a player confirming their selection
     {
         audioSource.PlayOneShot(confirmSound);
         if (AllPlayersConfirmed())
@@ -262,7 +262,7 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    public void OnPlayerUnconfirmed()
+    public void OnPlayerUnconfirmed() // Handle a player unconfirming their selection
     {
         audioSource.PlayOneShot(unconfirmSound);
         if (countdownCoroutine != null)
@@ -277,7 +277,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
     // ========================================================================================= Scene Transition ==================================================================================
 
-    private IEnumerator StartCountdownAndLoadScene()
+    private IEnumerator StartCountdownAndLoadScene() // Start countdown and load the main scene
     {
         audioSource.PlayOneShot(countdownBeepSound);
         float countdown = 3f;
@@ -297,7 +297,7 @@ public class CharacterSelectionManager : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    public void SaveConfirmedPlayersToSO()
+    public void SaveConfirmedPlayersToSO() // Save confirmed player selections to the ScriptableObject
     {
         selectionDataSO.Clear();
         for (int i = 0; i < playerSlots.Length; i++)
@@ -314,7 +314,6 @@ public class CharacterSelectionManager : MonoBehaviour
             }
         }
     }
-
 
     public void PlayHoverSound()
     {
