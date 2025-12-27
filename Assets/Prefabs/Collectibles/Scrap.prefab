@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5782318719826841138}
   m_Layer: 0
   m_Name: Scrap
-  m_TagString: Untagged
+  m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,9 +127,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldCollectible
   collectibleData: {fileID: 11400000, guid: 99c4dcacd1a62764987a4f24b7826e39, type: 2}
+  potionData: {fileID: 0}
   collectEffect: {fileID: 0}
   showDebugLogs: 1
-  rigidbodyDestroyDelay: 2
 --- !u!54 &3301779316852844059
 Rigidbody:
   m_ObjectHideFlags: 0

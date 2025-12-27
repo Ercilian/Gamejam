@@ -24,6 +24,7 @@ public class CarFuelSystem : MonoBehaviour
     private MovCar movCar;
     private float lastLoggedDiesel;
     private List<GameObject> pushingPlayers = new List<GameObject>();
+    private bool fuelConsumptionEnabled = true;
 
     // ===== PUBLIC GETTERS =====
     public float GetCurrentDiesel() => cur_Diesel;
@@ -130,6 +131,12 @@ public class CarFuelSystem : MonoBehaviour
 
     public void ConsumeDiesel(float amount) // Method to consume diesel when the car is moving
     {
+        if (!fuelConsumptionEnabled)
+        {
+            Debug.Log("[CarFuelSystem] Consumo de combustible DESACTIVADO, no se consume diesel.");
+            return;
+        }
+
         float prevDiesel = cur_Diesel; // Store previous diesel amount
         cur_Diesel = Mathf.Max(cur_Diesel - amount, 0f); // Subtract diesel but not go below 0
 
@@ -146,6 +153,12 @@ public class CarFuelSystem : MonoBehaviour
                 Debug.Log("[CarFuelSystem] ⚠️ ¡Combustible bajo!");
             }
         }
+    }
+    
+    public void SetFuelConsumptionEnabled(bool enabled) // Enable or disable fuel consumption
+    {
+        fuelConsumptionEnabled = enabled;
+        Debug.Log($"[CarFuelSystem] fuelConsumptionEnabled = {fuelConsumptionEnabled}");
     }
 
 

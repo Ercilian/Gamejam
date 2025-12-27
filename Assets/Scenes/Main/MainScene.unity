@@ -10612,7 +10612,7 @@ MonoBehaviour:
   - sourceName: NormalEnemy
     possibleDrops:
     - itemIndex: 1
-      dropChance: 15
+      dropChance: 100
     - itemIndex: 2
       dropChance: 5
   - sourceName: EliteEnemy
@@ -10645,7 +10645,6 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  showDebugLogs: 1
 --- !u!114 &458190341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11404,7 +11403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f613465d97d982498eba1f4d9f9d5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarFuelSystem
-  cur_Diesel: 0
+  cur_Diesel: 100
   max_Diesel: 100
   depositPoint: {fileID: 1316442590}
   depositPrompt: Presiona F para depositar madera

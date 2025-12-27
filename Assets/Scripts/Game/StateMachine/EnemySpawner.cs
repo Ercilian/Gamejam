@@ -42,6 +42,14 @@ public class EnemySpawner : MonoBehaviour
     
     private DifficultySettings currentSettings;
     
+
+
+
+    //====================================== UNITY METHODS ======================================
+
+
+
+    
     void Awake()
     {
         ApplyDifficulty(0);
