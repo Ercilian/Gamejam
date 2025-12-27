@@ -54,9 +54,7 @@ public class MainMenu : MonoBehaviour
 
     public void Play()
     {
-        if (characterSelectionManager != null)
-            characterSelectionManager.ResetSelection();
-
+        characterSelectionManager.ResetSelection();
         mainMenuPanel.SetActive(false);
         SelectCharacterPanel.SetActive(true);
     }

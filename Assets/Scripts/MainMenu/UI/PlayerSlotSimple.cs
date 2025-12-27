@@ -25,15 +25,15 @@ public class PlayerSlotSimple : MonoBehaviour
     public PlayerInput playerInput;
 
     
-
+//========= PRIVATE VARIABLES ==============
     private bool isConfirmed = false;
     private int slotIndex;
     private bool isJoined = false;
     private GameObject spawnedCharacter;
     private GameObject currentPreviewInstance;
     private float joinTime = -1f;
-    // Elimina la referencia duplicada innecesaria
 
+//========= PUBLIC GETTERS ==============
     public bool IsConfirmed => isConfirmed;
     public bool IsJoined => isJoined;
     public int SlotIndex => slotIndex;
@@ -49,32 +49,13 @@ public class PlayerSlotSimple : MonoBehaviour
     public void Initialize(int index)
     {
         slotIndex = index;
-        AutoFindComponents();
-        TryAutoFindAnchor();
         SetJoinedState(false);
     }
 
-    private void AutoFindComponents()
-    {
-        foreach (Transform child in transform)
-        {
-            string childName = child.name.ToLower();
-            if (!idleState && childName.Contains("idle")) idleState = child.gameObject;
-            if (!joinedState && (childName.Contains("joined") || childName.Contains("player"))) joinedState = child.gameObject;
-        }
-    }
-
-    private void TryAutoFindAnchor()
-    {
-        var byExact = GameObject.Find($"PreviewAnchor_{slotIndex + 1}");
-        if (!byExact) byExact = GameObject.Find($"PreviewAnchor ({slotIndex + 1})");
-        if (!byExact) byExact = GameObject.Find($"PreviewAnchor{slotIndex + 1}");
-        if (byExact) worldPreviewAnchor = byExact.transform;
-    }
 
     // ================================================= Slot State Management ===========================================
 
-    public void SetJoinedState(bool joined)
+    public void SetJoinedState(bool joined) // Change the joined state of the slot
     {
         isJoined = joined;
         joinTime = joined ? Time.time : -1f;
@@ -88,7 +69,7 @@ public class PlayerSlotSimple : MonoBehaviour
         Debug.Log($"[Slot {slotIndex}] Estado cambiado a: {(joined ? "JOINED" : "IDLE")}");
     }
 
-    public void ResetSlotState()
+    public void ResetSlotState() // Reset the slot to its initial state
     {
         isConfirmed = false;
         selectedCharacterIndex = 0;
@@ -100,10 +81,9 @@ public class PlayerSlotSimple : MonoBehaviour
 
     // ================================================= Preview Management ==============================================
 
-    private void SpawnPreview()
+    private void SpawnPreview() // Spawn the default character preview
     {
         if (spawnedCharacter || !defaultCharacterPrefab) return;
-        if (!worldPreviewAnchor) TryAutoFindAnchor();
         var anchor = worldPreviewAnchor ? worldPreviewAnchor : transform;
 
         spawnedCharacter = Instantiate(defaultCharacterPrefab, anchor);
@@ -112,7 +92,7 @@ public class PlayerSlotSimple : MonoBehaviour
         spawnedCharacter.transform.localScale = Vector3.one * previewScale;
     }
 
-    private void DespawnPreview()
+    private void DespawnPreview() // Despawn the current character preview
     {
         if (spawnedCharacter)
         {
@@ -126,7 +106,7 @@ public class PlayerSlotSimple : MonoBehaviour
         }
     }
 
-    public void ShowCharacterPreview(GameObject prefab)
+    public void ShowCharacterPreview(GameObject prefab) // Show a specific character preview
     {
         if (currentPreviewInstance != null)
             Destroy(currentPreviewInstance);
@@ -143,7 +123,7 @@ public class PlayerSlotSimple : MonoBehaviour
 
     // ================================================= Character Selection =============================================
 
-    public void ChangeCharacter(int direction, GameObject[] characterPrefabs)
+    public void ChangeCharacter(int direction, GameObject[] characterPrefabs) // Change the selected character
     {
         selectedCharacterIndex = (selectedCharacterIndex + direction + characterPrefabs.Length) % characterPrefabs.Length;
         Debug.Log($"[Slot {slotIndex}] Cambiando a índice {selectedCharacterIndex}: {characterPrefabs[selectedCharacterIndex]?.name}");
@@ -152,27 +132,23 @@ public class PlayerSlotSimple : MonoBehaviour
 
     // ================================================= UI Events ======================================================
 
-    public void OnLeftArrowPressed()
+    public void OnLeftArrowPressed() // Handle left arrow button press
     {
-        if (manager != null)
-            manager.PlayHoverSound();
+        manager.PlayHoverSound();
         Debug.Log($"[Slot {slotIndex}] LeftArrow PRESSED");
         if (isConfirmed) return;
-        if (manager != null)
-            ChangeCharacter(-1, manager.characterPrefabs);
+        ChangeCharacter(-1, manager.characterPrefabs);
     }
 
-    public void OnRightArrowPressed()
+    public void OnRightArrowPressed() // Handle right arrow button press
     {
-        if (manager != null)
-            manager.PlayHoverSound();
+        manager.PlayHoverSound();
         Debug.Log($"[Slot {slotIndex}] RightArrow PRESSED");
         if (isConfirmed) return;
-        if (manager != null)
-            ChangeCharacter(1, manager.characterPrefabs);
+        ChangeCharacter(1, manager.characterPrefabs);
     }
 
-    public void OnConfirmPressed()
+    public void OnConfirmPressed() // Handle confirm button press
     {
         if (joinTime > 0 && Time.time - joinTime < 0.2f)
             return;
@@ -184,12 +160,11 @@ public class PlayerSlotSimple : MonoBehaviour
             leftArrowButton.interactable = false;
             rightArrowButton.interactable = false;
             Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
-            if (manager != null)
-                manager.OnPlayerConfirmed();
+            manager.OnPlayerConfirmed();
         }
     }
 
-    public void OnUnconfirmPressed()
+    public void OnUnconfirmPressed() // Handle unconfirm action
     {
         if (isConfirmed)
         {
@@ -197,8 +172,7 @@ public class PlayerSlotSimple : MonoBehaviour
             confirmButton.interactable = true;
             leftArrowButton.interactable = true;
             rightArrowButton.interactable = true;
-            if (manager != null)
-                manager.OnPlayerUnconfirmed();
+            manager.OnPlayerUnconfirmed();
             Debug.Log($"[Slot {slotIndex}] Selección desconfirmada.");
         }
     }
