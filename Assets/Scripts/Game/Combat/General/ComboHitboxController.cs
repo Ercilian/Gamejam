@@ -755,7 +755,7 @@ namespace Game.Combat
             // Verificar que el Animator está habilitado
             if (!animator.enabled)
             {
-                Debug.LogError($"[Combo] El Animator de {animatorType} está deshabilitado en {animator.gameObject.name}");
+                
                 return;
             }
 
