@@ -15,6 +15,18 @@ public class IA_Enemy : MonoBehaviour
     [Tooltip("Distancia mínima al objetivo antes de detenerse")]
     public float distanciaMinima = 1f;
     
+    [Header("Evitación de Obstáculos")]
+    [Tooltip("Detectar y evitar obstáculos")]
+    public bool evitarObstaculos = true;
+    [Tooltip("Distancia para detectar obstáculos")]
+    public float distanciaDeteccionObstaculo = 2f;
+    [Tooltip("Ángulos de los rayos de detección (además del frontal)")]
+    public float[] angulosDeteccion = { 0f, 30f, -30f, 60f, -60f };
+    [Tooltip("Layers que se consideran obstáculos")]
+    public LayerMask capasObstaculos = -1;
+    [Tooltip("Fuerza para esquivar obstáculos")]
+    public float fuerzaEsquive = 3f;
+    
     [Header("Objetivos")]
     [Tooltip("Tag del camión a seguir (selecciona el tag en el desplegable)")]
     [IAEnemyTagSelector]
@@ -212,14 +224,26 @@ public class IA_Enemy : MonoBehaviour
     
     void MoverHacia(Vector3 objetivo, float velocidad)
     {
-    Vector3 direccion = (objetivo - transform.position).normalized;
-    float distancia = Vector3.Distance(transform.position, objetivo);
+        Vector3 direccion = (objetivo - transform.position).normalized;
+        float distancia = Vector3.Distance(transform.position, objetivo);
+        
         // No moverse si está muy cerca
         if (distancia < distanciaMinima)
         {
             if (rb != null)
                 rb.linearVelocity = Vector3.zero;
             return;
+        }
+        
+        // Aplicar evitación de obstáculos si está activado
+        if (evitarObstaculos)
+        {
+            Vector3 direccionEsquive = DetectarYEvitarObstaculos(direccion);
+            if (direccionEsquive != Vector3.zero)
+            {
+                // Mezclar dirección original con dirección de esquive
+                direccion = Vector3.Lerp(direccion, direccionEsquive, 0.7f).normalized;
+            }
         }
         
         if (rb != null)
@@ -242,6 +266,56 @@ public class IA_Enemy : MonoBehaviour
             Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * 5f);
         }
+    }
+    
+    // Sistema de evitación de obstáculos con múltiples raycasts
+    Vector3 DetectarYEvitarObstaculos(Vector3 direccionDeseada)
+    {
+        Vector3 mejorDireccion = Vector3.zero;
+        float mejorPeso = 0f;
+        
+        // Probar múltiples direcciones
+        foreach (float angulo in angulosDeteccion)
+        {
+            Vector3 direccionPrueba = Quaternion.Euler(0, angulo, 0) * direccionDeseada;
+            
+            // Lanzar raycast en esta dirección
+            if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, 
+                                direccionPrueba, 
+                                distanciaDeteccionObstaculo, 
+                                capasObstaculos))
+            {
+                // No hay obstáculo en esta dirección
+                // Preferir direcciones más cercanas a la dirección deseada
+                float peso = 1f - (Mathf.Abs(angulo) / 90f);
+                
+                if (peso > mejorPeso)
+                {
+                    mejorPeso = peso;
+                    mejorDireccion = direccionPrueba;
+                }
+                
+                // Si la dirección frontal está libre, usarla directamente
+                if (Mathf.Approximately(angulo, 0f))
+                {
+                    return Vector3.zero; // No necesita esquivar
+                }
+            }
+            
+            // Debug visual
+            if (mostrarGizmos)
+            {
+                bool hayObstaculo = Physics.Raycast(transform.position + Vector3.up * 0.5f,
+                                                   direccionPrueba,
+                                                   distanciaDeteccionObstaculo,
+                                                   capasObstaculos);
+                Debug.DrawRay(transform.position + Vector3.up * 0.5f, 
+                             direccionPrueba * distanciaDeteccionObstaculo, 
+                             hayObstaculo ? Color.red : Color.green);
+            }
+        }
+        
+        return mejorDireccion;
     }
     
     // Método público para que otros scripts puedan forzar un estado

@@ -337,7 +337,6 @@ MonoBehaviour:
   potions: []
   defaultHealPotion: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
   entityStats: {fileID: 0}
-  potionPoolPrefab: {fileID: 2858892124577212541, guid: 72b6290cfdb7f9548b63662d507a01b2, type: 3}
 --- !u!114 &8577440922694416064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,7 +356,8 @@ MonoBehaviour:
   attackCooldown: 0.1
   comboResetTime: 2
   steps:
-  - useTicks: 0
+  - animationTrigger: 
+    useTicks: 0
     isBoomerang: 0
     shape: 0
     offset: {x: 2.15, y: 0.55, z: -0.01}
@@ -368,7 +368,8 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 0
+  - animationTrigger: 
+    useTicks: 0
     isBoomerang: 0
     shape: 0
     offset: {x: 2.15, y: 0.55, z: -0.01}
@@ -379,7 +380,8 @@ MonoBehaviour:
     sectorAngle: 97
     windowDuration: 0.08
     tickInterval: 0.04
-  - useTicks: 0
+  - animationTrigger: 
+    useTicks: 0
     isBoomerang: 0
     shape: 1
     offset: {x: 0, y: 1.3, z: 0}
@@ -403,6 +405,8 @@ MonoBehaviour:
   previewInPlayMode: 1
   showDebugLogs: 1
   attackActionRef: {fileID: 0}
+  weaponAnimator: {fileID: 0}
+  playerStatsData: {fileID: 0}
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
