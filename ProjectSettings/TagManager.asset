@@ -7,6 +7,7 @@ TagManager:
   - Car
   - Enemy
   - Collectible
+  - ShopCamera
   layers:
   - Default
   - TransparentFX
