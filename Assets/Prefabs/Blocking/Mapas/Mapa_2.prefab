@@ -139674,6 +139674,7 @@ MonoBehaviour:
   newOffset: {x: -1.2, y: 15, z: -10}
   delaySeconds: 0
   cameraMovement: {fileID: 0}
+  disableFuelConsumption: 0
 --- !u!1 &2032587112252344903
 GameObject:
   m_ObjectHideFlags: 0

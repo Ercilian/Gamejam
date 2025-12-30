@@ -13,45 +13,28 @@ public class ShopEntrance : MonoBehaviour
         {
             GameObject spawnObj = GameObject.Find($"ShopSpawnPoint{i}");
             if (spawnObj != null)
-            {
                 shopSpawnPoints.Add(spawnObj.transform);
-            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            int count = Mathf.Min(players.Length, shopSpawnPoints.Count);
-            for (int i = 0; i < count; i++)
-            {
-                players[i].transform.position = shopSpawnPoints[i].position;
-                players[i].transform.rotation = shopSpawnPoints[i].rotation;
-            }
+        if (!other.CompareTag("Player")) return;
 
-            // Buscar la cámara de la tienda por tag (el GameObject debe estar activo, pero el componente Camera puede estar deshabilitado)
-            Camera shopCam = null;
-            GameObject shopCamObj = GameObject.FindWithTag("ShopCamera");
-            if (shopCamObj != null)
-            {
-                shopCam = shopCamObj.GetComponent<Camera>();
-            }
-            if (shopCam != null)
-            {
-                // Desactivar la cámara principal solo si está activa y es distinta
-                Camera mainCam = Camera.main;
-                if (mainCam != null && mainCam != shopCam && mainCam.enabled)
-                {
-                    mainCam.enabled = false;
-                }
-                // Activar la cámara de la tienda solo si está desactivada
-                if (!shopCam.enabled)
-                {
-                    shopCam.enabled = true;
-                }
-            }
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        int count = Mathf.Min(players.Length, shopSpawnPoints.Count);
+        for (int i = 0; i < count; i++)
+        {
+            players[i].transform.position = shopSpawnPoints[i].position;
+            players[i].transform.rotation = shopSpawnPoints[i].rotation;
         }
+
+        Camera shopCam = GameObject.FindWithTag("ShopCamera")?.GetComponent<Camera>();
+        if (shopCam == null) return;
+
+        Camera mainCam = Camera.main;
+        if (mainCam != null && mainCam != shopCam)
+            mainCam.enabled = false;
+        shopCam.enabled = true;
     }
 }
