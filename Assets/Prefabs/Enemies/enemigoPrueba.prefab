@@ -132,10 +132,30 @@ MonoBehaviour:
   rangoDeteccion: 8
   rangoPerdida: 10
   distanciaMinima: 1.3
+  evitarObstaculos: 1
+  distanciaDeteccionObstaculo: 6
+  radioDeteccion: 0.1
+  angulosDeteccion:
+  - 0
+  - 25
+  - -25
+  - 50
+  - -50
+  - 75
+  - -75
+  - 90
+  capasObstaculos:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  tiempoDeteccionAtasco: 0.8
+  distanciaMinMovimiento: 0.01
+  suavidadDireccion: 0.15
+  velocidadRotacion: 8
+  tiempoPersistenciaEsquive: 0.3
   camionTag: Car
   tagJugador: Player
   mostrarDebug: 1
-  mostrarGizmos: 0
+  mostrarGizmos: 1
 --- !u!114 &6466181651961212369
 MonoBehaviour:
   m_ObjectHideFlags: 0

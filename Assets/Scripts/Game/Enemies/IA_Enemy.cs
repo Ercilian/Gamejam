@@ -19,13 +19,31 @@ public class IA_Enemy : MonoBehaviour
     [Tooltip("Detectar y evitar obstáculos")]
     public bool evitarObstaculos = true;
     [Tooltip("Distancia para detectar obstáculos")]
-    public float distanciaDeteccionObstaculo = 2f;
-    [Tooltip("Ángulos de los rayos de detección (además del frontal)")]
-    public float[] angulosDeteccion = { 0f, 30f, -30f, 60f, -60f };
+    public float distanciaDeteccionObstaculo = 2.5f;
+    [Tooltip("Radio del SphereCast para mejor detección")]
+    public float radioDeteccion = 0.3f;
+    [Tooltip("Ángulos de los rayos de detección")]
+    public float[] angulosDeteccion = { 0f, 25f, -25f, 50f, -50f, 75f, -75f };
     [Tooltip("Layers que se consideran obstáculos")]
     public LayerMask capasObstaculos = -1;
-    [Tooltip("Fuerza para esquivar obstáculos")]
-    public float fuerzaEsquive = 3f;
+    [Tooltip("Distancia mínima a mantener de las paredes")]
+    public float distanciaSeguridad = 1.5f;
+    [Tooltip("Fuerza de repulsión cuando está cerca de obstáculos")]
+    public float fuerzaRepulsion = 2f;
+    [Tooltip("Detectar obstáculos laterales")]
+    public bool detectarLaterales = true;
+    [Tooltip("Distancia de detección lateral")]
+    public float distanciaDeteccionLateral = 1f;
+    [Tooltip("Tiempo para detectar si está atascado")]
+    public float tiempoDeteccionAtasco = 1f;
+    [Tooltip("Distancia mínima de movimiento para no considerarse atascado")]
+    public float distanciaMinMovimiento = 0.1f;
+    [Tooltip("Velocidad de suavizado de dirección (menor = más suave)")]
+    public float suavidadDireccion = 0.15f;
+    [Tooltip("Velocidad de rotación (mayor = gira más rápido)")]
+    public float velocidadRotacion = 8f;
+    [Tooltip("Tiempo mínimo manteniendo una dirección de esquive")]
+    public float tiempoPersistenciaEsquive = 0.5f;
     
     [Header("Objetivos")]
     [Tooltip("Tag del camión a seguir (selecciona el tag en el desplegable)")]
@@ -54,6 +72,18 @@ public class IA_Enemy : MonoBehaviour
     private Vector3 ultimaPosicionCamion;
     private float tiempoUltimaDeteccion;
     private Rigidbody rb;
+    
+    // Sistema anti-atasco
+    private Vector3 posicionAnterior;
+    private float tiempoEnMismaPosicion;
+    private Vector3 direccionAlternativa;
+    private float tiempoUsandoDireccionAlternativa;
+    
+    // Sistema de suavizado
+    private Vector3 direccionActual;
+    private Vector3 velocidadSuavizado; // Para SmoothDamp
+    private Vector3 ultimaDireccionEsquive;
+    private float tiempoUltimaEsquive;
     
     // Componentes opcionales
     private Animator animator;
@@ -87,6 +117,9 @@ public class IA_Enemy : MonoBehaviour
 
         if (camion != null)
             ultimaPosicionCamion = camion.position;
+        
+        posicionAnterior = transform.position;
+        direccionActual = transform.forward;
     }
     void Update()
     {
@@ -224,7 +257,7 @@ public class IA_Enemy : MonoBehaviour
     
     void MoverHacia(Vector3 objetivo, float velocidad)
     {
-        Vector3 direccion = (objetivo - transform.position).normalized;
+        Vector3 direccionDeseada = (objetivo - transform.position).normalized;
         float distancia = Vector3.Distance(transform.position, objetivo);
         
         // No moverse si está muy cerca
@@ -235,87 +268,236 @@ public class IA_Enemy : MonoBehaviour
             return;
         }
         
-        // Aplicar evitación de obstáculos si está activado
-        if (evitarObstaculos)
+        // Detectar si está atascado
+        float distanciaMovida = Vector3.Distance(transform.position, posicionAnterior);
+        if (distanciaMovida < distanciaMinMovimiento)
         {
-            Vector3 direccionEsquive = DetectarYEvitarObstaculos(direccion);
-            if (direccionEsquive != Vector3.zero)
+            tiempoEnMismaPosicion += Time.deltaTime;
+            
+            // Si lleva mucho tiempo atascado, buscar dirección alternativa
+            if (tiempoEnMismaPosicion > tiempoDeteccionAtasco)
             {
-                // Mezclar dirección original con dirección de esquive
-                direccion = Vector3.Lerp(direccion, direccionEsquive, 0.7f).normalized;
+                if (tiempoUsandoDireccionAlternativa <= 0)
+                {
+                    // Calcular nueva dirección alternativa (perpendicular + hacia objetivo)
+                    Vector3 perpendicular = new Vector3(-direccionDeseada.z, 0, direccionDeseada.x);
+                    if (Random.value > 0.5f) perpendicular = -perpendicular;
+                    
+                    direccionAlternativa = (perpendicular + direccionDeseada * 0.3f).normalized;
+                    tiempoUsandoDireccionAlternativa = 2f; // Usar durante 2 segundos
+                    
+                    if (mostrarDebug)
+                        Debug.Log($"[{name}] ¡Atascado! Usando dirección alternativa");
+                }
             }
         }
+        else
+        {
+            // Se está moviendo correctamente
+            tiempoEnMismaPosicion = 0;
+        }
+        
+        posicionAnterior = transform.position;
+        
+        Vector3 direccionFinal = direccionDeseada;
+        
+        // Usar dirección alternativa si está activa
+        if (tiempoUsandoDireccionAlternativa > 0)
+        {
+            direccionFinal = direccionAlternativa;
+            tiempoUsandoDireccionAlternativa -= Time.deltaTime;
+        }
+        // Aplicar evitación de obstáculos si está activado
+        else if (evitarObstaculos)
+        {
+            Vector3 direccionEsquive = DetectarYEvitarObstaculos(direccionDeseada);
+            Vector3 direccionRepulsion = Vector3.zero;
+            
+            // Detectar obstáculos laterales para mantenerse alejado de paredes
+            if (detectarLaterales)
+            {
+                direccionRepulsion = DetectarObstaculosLaterales();
+            }
+            
+            if (direccionEsquive != Vector3.zero)
+            {
+                // Mantener persistencia: si acabamos de esquivar, continuar en esa dirección
+                if (Time.time - tiempoUltimaEsquive < tiempoPersistenciaEsquive)
+                {
+                    direccionFinal = Vector3.Lerp(direccionDeseada, ultimaDireccionEsquive, 0.7f).normalized;
+                }
+                else
+                {
+                    // Nueva dirección de esquive MÁS AGRESIVA (mayor peso)
+                    ultimaDireccionEsquive = direccionEsquive;
+                    tiempoUltimaEsquive = Time.time;
+                    direccionFinal = Vector3.Lerp(direccionDeseada, direccionEsquive, 0.85f).normalized;
+                }
+            }
+            else if (Time.time - tiempoUltimaEsquive < tiempoPersistenciaEsquive)
+            {
+                // Mantener un poco la dirección anterior aunque ya no haya obstáculo
+                direccionFinal = Vector3.Lerp(direccionDeseada, ultimaDireccionEsquive, 0.3f).normalized;
+            }
+            
+            // Aplicar repulsión lateral si hay paredes cerca
+            if (direccionRepulsion != Vector3.zero)
+            {
+                direccionFinal = (direccionFinal + direccionRepulsion * fuerzaRepulsion).normalized;
+            }
+        }
+        
+        // Suavizar la dirección usando SmoothDamp para transiciones fluidas
+        direccionActual = Vector3.SmoothDamp(direccionActual, direccionFinal, ref velocidadSuavizado, suavidadDireccion);
         
         if (rb != null)
         {
             // Movimiento con Rigidbody (recomendado)
-            Vector3 velocidadDeseada = direccion * velocidad;
+            Vector3 velocidadDeseada = direccionActual * velocidad;
             velocidadDeseada.y = rb.linearVelocity.y; // Mantener velocidad Y (gravedad)
             rb.linearVelocity = velocidadDeseada;
         }
         else
         {
             // Movimiento con Transform (alternativo)
-            Vector3 movimiento = direccion * velocidad * Time.deltaTime;
+            Vector3 movimiento = direccionActual * velocidad * Time.deltaTime;
             transform.position += movimiento;
         }
         
-        // Rotar hacia el objetivo
-        if (direccion != Vector3.zero)
+        // Rotar hacia la dirección actual de manera suave
+        if (direccionActual.magnitude > 0.1f)
         {
-            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * 5f);
+            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionActual);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * velocidadRotacion);
         }
     }
     
-    // Sistema de evitación de obstáculos con múltiples raycasts
+    // Sistema de evitación de obstáculos mejorado con SphereCast
     Vector3 DetectarYEvitarObstaculos(Vector3 direccionDeseada)
     {
+        Vector3 origenDeteccion = transform.position + Vector3.up * 0.5f;
+        
+        // Primero verificar si el camino frontal está libre
+        bool frontalBloqueado = Physics.SphereCast(origenDeteccion, 
+                                                    radioDeteccion, 
+                                                    direccionDeseada, 
+                                                    out RaycastHit hitFrontal,
+                                                    distanciaDeteccionObstaculo, 
+                                                    capasObstaculos);
+        
+        // Verificar si está demasiado cerca incluso sin estar bloqueado
+        bool muyCerca = frontalBloqueado && hitFrontal.distance < distanciaSeguridad;
+        
+        if (!frontalBloqueado)
+        {
+            return Vector3.zero; // Camino libre, no necesita esquivar
+        }
+        
+        // Hay obstáculo al frente, buscar mejor alternativa
         Vector3 mejorDireccion = Vector3.zero;
         float mejorPeso = 0f;
         
         // Probar múltiples direcciones
-        foreach (float angulo in angulosDeteccion)
+        for (int i = 0; i < angulosDeteccion.Length; i++)
         {
+            float angulo = angulosDeteccion[i];
+            if (Mathf.Approximately(angulo, 0f)) continue; // Ya probamos frontal
+            
             Vector3 direccionPrueba = Quaternion.Euler(0, angulo, 0) * direccionDeseada;
             
-            // Lanzar raycast en esta dirección
-            if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, 
-                                direccionPrueba, 
-                                distanciaDeteccionObstaculo, 
-                                capasObstaculos))
+            // Usar SphereCast para mejor detección
+            bool hayObstaculo = Physics.SphereCast(origenDeteccion, 
+                                                   radioDeteccion, 
+                                                   direccionPrueba, 
+                                                   out RaycastHit hit,
+                                                   distanciaDeteccionObstaculo, 
+                                                   capasObstaculos);
+            
+            if (!hayObstaculo)
             {
-                // No hay obstáculo en esta dirección
-                // Preferir direcciones más cercanas a la dirección deseada
-                float peso = 1f - (Mathf.Abs(angulo) / 90f);
+                // No hay obstáculo: calcular peso (preferir direcciones más alejadas cuando está muy cerca)
+                float peso;
+                if (muyCerca)
+                {
+                    // Muy cerca: priorizar ángulos más pronunciados para alejarse
+                    peso = Mathf.Abs(angulo) / 90f; // Invertido: mayor ángulo = mejor
+                }
+                else
+                {
+                    // Normal: preferir direcciones cercanas a la original
+                    peso = 1f - (Mathf.Abs(angulo) / 90f);
+                }
                 
                 if (peso > mejorPeso)
                 {
                     mejorPeso = peso;
                     mejorDireccion = direccionPrueba;
                 }
-                
-                // Si la dirección frontal está libre, usarla directamente
-                if (Mathf.Approximately(angulo, 0f))
+            }
+            else
+            {
+                // Hay obstáculo pero más lejos: considerar si es la mejor opción parcial
+                if (hit.distance > distanciaSeguridad)
                 {
-                    return Vector3.zero; // No necesita esquivar
+                    float peso = (hit.distance / distanciaDeteccionObstaculo) * 0.4f;
+                    if (peso > mejorPeso)
+                    {
+                        mejorPeso = peso;
+                        mejorDireccion = direccionPrueba;
+                    }
                 }
             }
             
             // Debug visual
             if (mostrarGizmos)
             {
-                bool hayObstaculo = Physics.Raycast(transform.position + Vector3.up * 0.5f,
-                                                   direccionPrueba,
-                                                   distanciaDeteccionObstaculo,
-                                                   capasObstaculos);
-                Debug.DrawRay(transform.position + Vector3.up * 0.5f, 
+                Color colorRayo = hayObstaculo ? Color.red : Color.green;
+                Debug.DrawRay(origenDeteccion, 
                              direccionPrueba * distanciaDeteccionObstaculo, 
-                             hayObstaculo ? Color.red : Color.green);
+                             colorRayo);
             }
         }
         
+        // Debug del obstáculo frontal
+        if (mostrarGizmos)
+        {
+            Debug.DrawLine(origenDeteccion, hitFrontal.point, muyCerca ? Color.magenta : Color.yellow);
+        }
+        
         return mejorDireccion;
+    }
+    
+    // Detectar obstáculos laterales para mantenerse alejado de paredes
+    Vector3 DetectarObstaculosLaterales()
+    {
+        Vector3 repulsion = Vector3.zero;
+        Vector3 origenDeteccion = transform.position + Vector3.up * 0.5f;
+        Vector3 derecha = transform.right;
+        Vector3 izquierda = -transform.right;
+        
+        // Detectar a la derecha
+        if (Physics.Raycast(origenDeteccion, derecha, out RaycastHit hitDerecha, distanciaDeteccionLateral, capasObstaculos))
+        {
+            // Empujar hacia la izquierda
+            float fuerzaDerecha = 1f - (hitDerecha.distance / distanciaDeteccionLateral);
+            repulsion -= derecha * fuerzaDerecha;
+            
+            if (mostrarGizmos)
+                Debug.DrawRay(origenDeteccion, derecha * hitDerecha.distance, Color.cyan);
+        }
+        
+        // Detectar a la izquierda
+        if (Physics.Raycast(origenDeteccion, izquierda, out RaycastHit hitIzquierda, distanciaDeteccionLateral, capasObstaculos))
+        {
+            // Empujar hacia la derecha
+            float fuerzaIzquierda = 1f - (hitIzquierda.distance / distanciaDeteccionLateral);
+            repulsion -= izquierda * fuerzaIzquierda;
+            
+            if (mostrarGizmos)
+                Debug.DrawRay(origenDeteccion, izquierda * hitIzquierda.distance, Color.cyan);
+        }
+        
+        return repulsion;
     }
     
     // Método público para que otros scripts puedan forzar un estado

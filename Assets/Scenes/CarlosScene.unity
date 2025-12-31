@@ -10639,7 +10639,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458190336}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a468f09969ff94542947baa32b9ffcc6, type: 3}
   m_Name: 
@@ -10679,7 +10679,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458190336}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2327c3126b05e6f478e7b707bf22b2ae, type: 3}
   m_Name: 
@@ -10719,19 +10719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f2884a707685954792688e934d36e3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemDropSystem
-  availableItems:
-  - itemName: Scrap
-    prefab: {fileID: 5219421215397009677, guid: 3df252fd5914c414cbd1b785305c6696, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
-  - itemName: Diesel
-    prefab: {fileID: 5219421215397009677, guid: 93c524a2c72611749b474dff8449254f, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
-  - itemName: Plant
-    prefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
+  listOfDroppableItems: []
   dropTables:
   - sourceName: NormalEnemy
     possibleDrops:
@@ -10769,7 +10757,6 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  showDebugLogs: 1
 --- !u!114 &458190341
 MonoBehaviour:
   m_ObjectHideFlags: 0
