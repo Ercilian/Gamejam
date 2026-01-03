@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 using System.Collections.Generic;
 
 public class CarScrapSystem : MonoBehaviour, ISwappable
@@ -7,6 +8,7 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
     [Header("Scrap")]
     public int currentScrap = 0;
     public int maxScrap = 9999;
+    public TMP_Text scrapUIText;
 
     [Header("Scrap Deposit Point")]
     public Transform scrapDepositPoint;
@@ -40,6 +42,8 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+            UpdateScrapUI();
+            OnScrapChanged += _ => UpdateScrapUI();
     }
     void Update()
     {
@@ -56,6 +60,7 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
                 }
             }
         }
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -132,6 +137,14 @@ public class CarScrapSystem : MonoBehaviour, ISwappable
             return false;
         }
     }
+
+
+    // ============== UI UPDATE ==============
+    private void UpdateScrapUI()
+    {
+        scrapUIText.text = $"{currentScrap}";
+    }
+
 
     // ============== ISwappable Implementation ==============
 

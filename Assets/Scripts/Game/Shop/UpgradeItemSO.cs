@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UpgradeItems", menuName = "Game/Shop/UpgradeItems")]
-public class UpgradeItems : ScriptableObject
+[CreateAssetMenu(fileName = "UpgradeItem", menuName = "Game/Shop/UpgradeItem")]
+public class UpgradeItemSO : ScriptableObject
 {
 
     public string itemName;
-    public Sprite itemIcon;
+    public Sprite icon;
     public string description;
-    public int cost;
+    public int price;
     public int healthModifier;
     public int damageModifier;
     public int speedModifier;

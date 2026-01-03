@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Milk
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItems
   itemName: Milk
-  itemIcon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f6ad3921478e83b4a844bbefc7efef09, type: 3}
   description: Increase maxHealth
-  cost: 150
+  price: 150
   healthModifier: 50
   damageModifier: 0
   speedModifier: 0

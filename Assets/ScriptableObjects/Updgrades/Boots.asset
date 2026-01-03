@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Boots
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeItems
   itemName: Boots
-  itemIcon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 922007d368d8b3f46accb9d70727eeac, type: 3}
   description: Increase Speed
-  cost: 150
+  price: 10
   healthModifier: 0
   damageModifier: 0
   speedModifier: 5
