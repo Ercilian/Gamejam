@@ -13,7 +13,8 @@ public class MovCar : MonoBehaviour
     public float speedTransitionRate = 2f;
     public float pushSpeed = 0.5f;
     public float pushSpeedTwo = 0.85f;
-
+    public Animator truckAnimator;
+    
     [Header("Path Following System")]
     public Transform[] pathPoints;
     public float reachDistance = 3f;
@@ -98,6 +99,9 @@ public class MovCar : MonoBehaviour
         }
 
         UpdateMotorPitch(currentActualSpeed); // Update motor sound pitch based on speed
+
+        float normalizedSpeed = Mathf.Clamp01(cur_speed / fastspeed);
+        truckAnimator.SetFloat("Speed", normalizedSpeed);
     }
 
 

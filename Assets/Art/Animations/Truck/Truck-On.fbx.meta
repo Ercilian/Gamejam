@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2c8d9f14e26aefb4eb1ed8c6787baa64
+guid: 880eba38604a8b14285a575c7a8b2bee
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,9 +31,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Truck_On
-      takeName: Armature.004|Armature.001Action
-      internalID: -9027478188125155498
+      name: Truck-On
+      takeName: Armature.001Action
+      internalID: -4386357291700952360
       firstFrame: 0
       lastFrame: 17
       wrapMode: 0

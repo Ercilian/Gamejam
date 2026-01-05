@@ -33,7 +33,7 @@ public class ShopItemSlot : MonoBehaviour
         // Solo el jugador puede comprar
         var playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory == null) return;
-        var carScrap = FindObjectOfType<CarScrapSystem>();
+        var carScrap = FindFirstObjectByType<CarScrapSystem>();
         if (carScrap == null) return;
         if (carScrap.CanAfford(upgradeData.price))
         {

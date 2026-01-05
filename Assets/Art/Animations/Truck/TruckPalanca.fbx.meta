@@ -31,7 +31,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature.001Action
+      name: LeverAction
       takeName: Armature.001Action
       internalID: -4386357291700952360
       firstFrame: 0

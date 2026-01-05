@@ -10,7 +10,9 @@ public class CarModuleSwapper : MonoBehaviour
     public Collider scrapCollider;
     public Collider plantCollider;
     public float swapAnimationTime = 1f;
-
+    public Animator leverAnimator;
+    public Animator swapAnimator;
+    
     [Header("Audio")]
     public AudioClip lever;
     public AudioClip swapSound;
@@ -19,9 +21,11 @@ public class CarModuleSwapper : MonoBehaviour
 
     // ===== PRIVATE FIELDS =====
     private bool isSwapping = false;
+    private bool isPotionMode = false;
     private List<ISwappable> swappableComponents = new List<ISwappable>();
     private bool playerInRange = false;
     private PlayerInput nearbyPlayerInput;
+
 
     // ===== PUBLIC GETTERS =====
     public bool IsSwapping() => isSwapping;
@@ -77,8 +81,20 @@ public class CarModuleSwapper : MonoBehaviour
     private IEnumerator SwapModules() // Coroutine to handle the swap process
     {
         audioSource.PlayOneShot(swapSound);
+        leverAnimator.SetTrigger("ActivateLever");
         isSwapping = true;
         Debug.Log("[CarModuleSwapper] 🔄 Intercambiando módulos...");
+        
+        if (isPotionMode)
+        {
+            swapAnimator.SetTrigger("ShowScrap");
+            isPotionMode = false;
+        }
+        else
+        {
+            swapAnimator.SetTrigger("ShowPotion");
+            isPotionMode = true;
+        }
 
         foreach (var swappable in swappableComponents) // Notify all components that the swap is starting
         {
