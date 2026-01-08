@@ -5520,6 +5520,8 @@ MonoBehaviour:
   scrapCollider: {fileID: 349664126}
   plantCollider: {fileID: 2139318381}
   swapAnimationTime: 2
+  leverAnimator: {fileID: 0}
+  swapAnimator: {fileID: 0}
   lever: {fileID: 8300000, guid: b8bab7653a9c00d4a8e8b934e788b865, type: 3}
   swapSound: {fileID: 8300000, guid: 485138bb54b6daa4486acd28702f60e9, type: 3}
 --- !u!82 &349664128
@@ -27194,6 +27196,7 @@ MonoBehaviour:
   speedTransitionRate: 1
   pushSpeed: 0.2
   pushSpeedTwo: 0.4
+  truckAnimator: {fileID: 0}
   pathPoints:
   - {fileID: 905100830}
   - {fileID: 2097777428}
@@ -27544,6 +27547,8 @@ MonoBehaviour:
   scrapCollider: {fileID: 349664126}
   plantCollider: {fileID: 2139318381}
   swapAnimationTime: 2
+  leverAnimator: {fileID: 0}
+  swapAnimator: {fileID: 0}
   lever: {fileID: 8300000, guid: b8bab7653a9c00d4a8e8b934e788b865, type: 3}
   swapSound: {fileID: 8300000, guid: 485138bb54b6daa4486acd28702f60e9, type: 3}
 --- !u!82 &2139318385
