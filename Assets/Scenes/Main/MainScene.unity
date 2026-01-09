@@ -614,7 +614,6 @@ GameObject:
   - component: {fileID: 349664128}
   - component: {fileID: 349664126}
   - component: {fileID: 349664125}
-  - component: {fileID: 349664127}
   m_Layer: 0
   m_Name: ScrapDepositZone
   m_TagString: Untagged
@@ -675,25 +674,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.65, y: 1.6947682, z: 1.2}
   m_Center: {x: -4.3, y: 0, z: 0.3}
---- !u!114 &349664127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349664123}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b40043bf2ab529449965c13e05d3e69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarModuleSwapper
-  scrapCollider: {fileID: 349664126}
-  plantCollider: {fileID: 2139318381}
-  swapAnimationTime: 2
-  leverAnimator: {fileID: 0}
-  swapAnimator: {fileID: 0}
-  lever: {fileID: 0}
-  swapSound: {fileID: 0}
 --- !u!82 &349664128
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6034,7 +6014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   mapPrefabs:
-  - {fileID: 6540120780592400911, guid: 6ce2ef2625918e64fb9436d746f405d8, type: 3}
+  - {fileID: 6540120780592400911, guid: 195a01cd24aefd9449a37fca53973d38, type: 3}
   - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
   - {fileID: 3275800661699807088, guid: 70957c3b5de8cc74f906080a9c85d9ed, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
@@ -18523,7 +18503,7 @@ MonoBehaviour:
   rotationSpeed: 0.5
   fuelConsumptionPerSecond: 1
   isFuelConsumed: 1
-  motorLoopClip: {fileID: 0}
+  motorLoopClip: {fileID: 8300000, guid: 846a721187dccb843a208d49c4c2bbe4, type: 3}
   pitchMin: 0.8
   pitchMax: 1.5
   maxSpeedForPitch: 2
@@ -18581,9 +18561,9 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.32
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -18690,7 +18670,7 @@ MonoBehaviour:
   swapAnimationTime: 2
   leverAnimator: {fileID: 1740763825}
   swapAnimator: {fileID: 306736698}
-  lever: {fileID: 0}
+  lever: {fileID: 8300000, guid: 6b3a487e537e2dc42a877e7703a3b2e1, type: 3}
   swapSound: {fileID: 0}
 --- !u!1 &2071539653
 GameObject:
@@ -18989,7 +18969,6 @@ GameObject:
   - component: {fileID: 2139318381}
   - component: {fileID: 2139318382}
   - component: {fileID: 2139318383}
-  - component: {fileID: 2139318384}
   m_Layer: 0
   m_Name: PotionDepositZone
   m_TagString: Untagged
@@ -19093,7 +19072,7 @@ MonoBehaviour:
   isBrewing: 0
   healPotionData: {fileID: 11400000, guid: 599a2de8ed24bed4bb1ba92cf0bf8783, type: 2}
   potionSpawnPoint: {fileID: 2139318380}
-  brewPotionSound: {fileID: 0}
+  brewPotionSound: {fileID: 8300000, guid: cdf562b595253f44f8eacb00e2ac2410, type: 3}
 --- !u!114 &2139318383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19110,25 +19089,6 @@ MonoBehaviour:
   potionData: {fileID: 0}
   collectEffect: {fileID: 0}
   showDebugLogs: 1
---- !u!114 &2139318384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139318379}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b40043bf2ab529449965c13e05d3e69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarModuleSwapper
-  scrapCollider: {fileID: 349664126}
-  plantCollider: {fileID: 2139318381}
-  swapAnimationTime: 2
-  leverAnimator: {fileID: 0}
-  swapAnimator: {fileID: 0}
-  lever: {fileID: 0}
-  swapSound: {fileID: 0}
 --- !u!82 &2139318385
 AudioSource:
   m_ObjectHideFlags: 0
