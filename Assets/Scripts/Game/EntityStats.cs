@@ -133,7 +133,7 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
     /// <summary>
     /// Llamado cuando la entidad muere. Las clases hijas pueden sobrescribir esto.
     /// </summary>
-    protected virtual void OnEntityDeath()
+    public virtual void OnEntityDeath()
     {
         // Comportamiento por defecto: destruir el GameObject
         Destroy(gameObject);

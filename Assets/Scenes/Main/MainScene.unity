@@ -5967,9 +5967,9 @@ MonoBehaviour:
   dropTables:
   - sourceName: NormalEnemy
     possibleDrops:
+    - itemIndex: 0
+      dropChance: 20
     - itemIndex: 1
-      dropChance: 100
-    - itemIndex: 2
       dropChance: 5
   - sourceName: EliteEnemy
     possibleDrops:

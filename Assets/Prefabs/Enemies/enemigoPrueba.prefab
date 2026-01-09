@@ -147,6 +147,10 @@ MonoBehaviour:
   capasObstaculos:
     serializedVersion: 2
     m_Bits: 4294967295
+  distanciaSeguridad: 1.5
+  fuerzaRepulsion: 2
+  detectarLaterales: 1
+  distanciaDeteccionLateral: 1
   tiempoDeteccionAtasco: 0.8
   distanciaMinMovimiento: 0.01
   suavidadDireccion: 0.15
@@ -168,8 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab4a614433b2ba42988cdb934624d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Enemies.EnemyHealth
-  curHP: 100
-  maxHP: 100
+  curHP: 10
+  maxHP: 10
   speed: 5
   curShield: 0
   maxShield: 50
@@ -177,6 +181,7 @@ MonoBehaviour:
   statsData: {fileID: 11400000, guid: ea8b9535648ed024096dfc6d6b6d746c, type: 2}
   enemyStatsData: {fileID: 0}
   showDebugLogs: 1
+  isElite: 0
   canTakeKnockback: 1
   stunDuration: 0.5
 --- !u!114 &1582930904324048210

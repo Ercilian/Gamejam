@@ -73,7 +73,7 @@ public class Player : EntityStats
     /// <summary>
     /// Sobrescribe la lógica de muerte para usar el sistema de revive
     /// </summary>
-    protected override void OnEntityDeath()
+    public override void OnEntityDeath()
     {
         PlayerReviveSystem reviveSystem = GetComponent<PlayerReviveSystem>();
         if (reviveSystem != null)

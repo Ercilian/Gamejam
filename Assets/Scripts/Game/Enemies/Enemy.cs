@@ -7,6 +7,7 @@ namespace Game.Enemies
     {
         
         public bool showDebugLogs = true;
+        public bool isElite = false;
 
         [Header("Estados")]
         public bool canTakeKnockback = true;
@@ -47,7 +48,20 @@ namespace Game.Enemies
 
           }
                   
-
+        public override void OnEntityDeath()
+        {
+            
+            if (isElite)
+            {
+                ItemDropSystem.Instance.DropFromEliteEnemy(transform.position);
+            }
+            else
+            {
+                ItemDropSystem.Instance.DropFromNormalEnemy(transform.position);
+            }
+            OnDeath?.Invoke();
+            Destroy(gameObject);
+        }
 
         // Métodos de utilidad
         public bool IsStunned() => isStunned;

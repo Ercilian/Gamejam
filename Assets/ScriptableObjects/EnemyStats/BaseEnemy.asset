@@ -15,7 +15,7 @@ MonoBehaviour:
   playerName: BaseEnemy
   description: 
   playerIcon: {fileID: 0}
-  maxHealth: 150
+  maxHealth: 10
   moveSpeed: 5
   maxShield: 50
   attackDamage: 20
@@ -27,3 +27,7 @@ MonoBehaviour:
   attackSound: {fileID: 0}
   hurtSound: {fileID: 0}
   deathSound: {fileID: 0}
+  comboSounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

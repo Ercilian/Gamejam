@@ -161,5 +161,6 @@ MonoBehaviour:
   statsData: {fileID: 11400000, guid: ea8b9535648ed024096dfc6d6b6d746c, type: 2}
   enemyStatsData: {fileID: 0}
   showDebugLogs: 1
+  isElite: 1
   canTakeKnockback: 1
   stunDuration: 0.5
