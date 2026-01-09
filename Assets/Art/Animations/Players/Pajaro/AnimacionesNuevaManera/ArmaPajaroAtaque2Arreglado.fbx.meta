@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cd451988b8047ce4c90422ad3c94129a
+guid: 81574681c11f69b41b1fa066e232978a
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,40 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ArmaPajaroAtaque1F
-      takeName: Armature.002|Armature.002|Armature.002Action
-      internalID: -7993448377519322060
+      name: ArmaPajaroAtaque2F
+      takeName: Armature.002|Armature.002Action
+      internalID: 5138602965388526686
       firstFrame: 0
-      lastFrame: 11
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature.002|Armature.002|Armature.002|Armature.002Action
-      takeName: Armature.002|Armature.002|Armature.002|Armature.002Action
-      internalID: 5405695321807933363
-      firstFrame: 0
-      lastFrame: 13
+      lastFrame: 4
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
