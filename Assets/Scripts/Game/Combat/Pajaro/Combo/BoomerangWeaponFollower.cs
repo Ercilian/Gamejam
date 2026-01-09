@@ -15,23 +15,7 @@ namespace Game.Combat
         [Tooltip("Referencia al ComboHitboxController del jugador")]
         public ComboHitboxController comboController;
         
-        [Header("Posición Manual (OPCIONAL)")]
-        [Tooltip("Si está activado, usa los valores manuales en lugar de detectar automáticamente")]
-        public bool useManualPosition = false;
-        
-        [Tooltip("Posición local manual del arma cuando está en la mano")]
-        public Vector3 manualLocalPosition = Vector3.zero;
-        
-        [Tooltip("Rotación local manual del arma cuando está en la mano")]
-        public Vector3 manualLocalRotation = Vector3.zero;
-        
-        [Tooltip("Escala local manual del arma cuando está en la mano")]
-        public Vector3 manualLocalScale = Vector3.one;
-        
         [Header("Configuración")]
-        [Tooltip("Si está activo, crea una copia del arma para el boomerang")]
-        public bool cloneWeapon = true; // True por defecto - necesario para la animación
-        
         [Tooltip("Suavizar el movimiento del arma")]
         public bool smoothMovement = false;
         
@@ -54,15 +38,11 @@ namespace Game.Combat
         private Vector3 originalLocalPosition;
         private Quaternion originalLocalRotation;
         private Vector3 originalLocalScale;
-        private Vector3 originalWorldPosition;
-        private Quaternion originalWorldRotation;
         
-        // Clon del arma y wrapper
+        // Clon del arma
         private GameObject clonedWeapon;
-        private GameObject weaponWrapper; // Contenedor para manejar el pivote correctamente
         private Animator weaponAnimator;
         private Animator clonedAnimator;
-        private bool isRestoring = false; // Flag para forzar posición en LateUpdate
         
         void Start()
         {
@@ -86,45 +66,14 @@ namespace Game.Combat
                 if (weaponAnimator == null)
                     weaponAnimator = weaponObject.GetComponentInChildren<Animator>();
                 
-                // Guardar posición de referencia inicial
-                StartCoroutine(SaveInitialPosition());
-            }
-        }
-        
-        System.Collections.IEnumerator SaveInitialPosition()
-        {
-            // Esperar 2 frames para que todo se inicialice
-            yield return null;
-            yield return null;
-            
-            if (weaponObject != null)
-            {
+                // Guardar estado original
                 originalParent = weaponObject.transform.parent;
+                originalLocalPosition = weaponObject.transform.localPosition;
+                originalLocalRotation = weaponObject.transform.localRotation;
+                originalLocalScale = weaponObject.transform.localScale;
                 
-                // Usar valores manuales si están activados
-                if (useManualPosition)
-                {
-                    originalLocalPosition = manualLocalPosition;
-                    originalLocalRotation = Quaternion.Euler(manualLocalRotation);
-                    originalLocalScale = manualLocalScale;
-                    
-                    Debug.Log($"[BoomerangWeaponFollower] Usando posición MANUAL como referencia:\n" +
-                             $"LocalPos={originalLocalPosition}\n" +
-                             $"LocalRot={manualLocalRotation}\n" +
-                             $"LocalScale={originalLocalScale}");
-                }
-                else
-                {
-                    originalLocalPosition = weaponObject.transform.localPosition;
-                    originalLocalRotation = weaponObject.transform.localRotation;
-                    originalLocalScale = weaponObject.transform.localScale;
-                    
-                    Debug.Log($"[BoomerangWeaponFollower] Posición AUTOMÁTICA guardada en Start:\n" +
-                             $"Parent={originalParent?.name}\n" +
-                             $"LocalPos={originalLocalPosition}\n" +
-                             $"LocalRot={originalLocalRotation.eulerAngles}\n" +
-                             $"LocalScale={originalLocalScale}");
-                }
+                if (showDebugLogs)
+                    Debug.Log($"[BoomerangWeaponFollower] Estado original guardado: Pos={originalLocalPosition}, Rot={originalLocalRotation.eulerAngles}");
             }
         }
         
@@ -139,9 +88,6 @@ namespace Game.Combat
             
             if (clonedWeapon != null)
                 Destroy(clonedWeapon);
-            
-            if (weaponWrapper != null)
-                Destroy(weaponWrapper);
         }
         
         void OnBoomerangStarted()
@@ -150,71 +96,39 @@ namespace Game.Combat
             
             isFollowingBoomerang = true;
             
-            // NO guardar aquí - usamos la posición de referencia guardada en Start
-            Debug.Log($"[BoomerangWeaponFollower] BOOMERANG INICIADO\n" +
-                     $"Posición ACTUAL del arma: LocalPos={weaponObject.transform.localPosition}\n" +
-                     $"Posición de REFERENCIA (la que restauraremos): LocalPos={originalLocalPosition}\n" +
-                     $"¿Son diferentes? {Vector3.Distance(weaponObject.transform.localPosition, originalLocalPosition) > 0.01f}");
+            if (showDebugLogs)
+                Debug.Log("[BoomerangWeaponFollower] Boomerang iniciado - creando clon del arma");
             
-            // Desactivar animator SIEMPRE para evitar que interfiera
+            // Desactivar animator del arma original
             if (weaponAnimator != null)
                 weaponAnimator.enabled = false;
             
-            if (cloneWeapon)
-            {
-                // MODO CLON: Crear wrapper y clon
-                weaponWrapper = new GameObject("WeaponWrapper_Temp");
-                if (originalParent != null)
-                {
-                    weaponWrapper.transform.position = originalParent.position;
-                    weaponWrapper.transform.rotation = originalParent.rotation;
-                }
-                else
-                {
-                    weaponWrapper.transform.position = originalWorldPosition;
-                    weaponWrapper.transform.rotation = originalWorldRotation;
-                }
-                
-                clonedWeapon = Instantiate(weaponObject);
-                clonedWeapon.name = weaponObject.name + "_Clone";
-                clonedWeapon.transform.SetParent(weaponWrapper.transform, false);
-                clonedWeapon.transform.localPosition = originalLocalPosition;
-                clonedWeapon.transform.localRotation = originalLocalRotation;
-                clonedWeapon.transform.localScale = originalLocalScale;
-                
-                clonedAnimator = clonedWeapon.GetComponent<Animator>();
-                if (clonedAnimator == null)
-                    clonedAnimator = clonedWeapon.GetComponentInChildren<Animator>();
-                
-                weaponObject.SetActive(false);
-            }
-            else
-            {
-                // MODO DIRECTO: Mover el arma original
-                weaponObject.transform.SetParent(null);
-            }
+            // Crear clon del arma
+            clonedWeapon = Instantiate(weaponObject);
+            clonedWeapon.name = weaponObject.name + "_Clone";
+            clonedWeapon.transform.position = weaponObject.transform.position;
+            clonedWeapon.transform.rotation = weaponObject.transform.rotation;
+            clonedWeapon.transform.localScale = weaponObject.transform.lossyScale;
+            
+            clonedAnimator = clonedWeapon.GetComponent<Animator>();
+            if (clonedAnimator == null)
+                clonedAnimator = clonedWeapon.GetComponentInChildren<Animator>();
+            
+            // Desactivar el arma original
+            weaponObject.SetActive(false);
         }
         
         void OnBoomerangTick(Vector3 position, Quaternion rotation, int step)
         {
-            if (!isFollowingBoomerang) return;
+            if (!isFollowingBoomerang || clonedWeapon == null) return;
             
             targetPosition = position + rotation * positionOffset;
             targetRotation = rotation;
             
             if (!smoothMovement)
             {
-                if (cloneWeapon && weaponWrapper != null)
-                {
-                    // Mover el wrapper, no el clon directamente
-                    weaponWrapper.transform.position = targetPosition;
-                    weaponWrapper.transform.rotation = targetRotation;
-                }
-                else if (!cloneWeapon && weaponObject != null)
-                {
-                    weaponObject.transform.position = targetPosition;
-                    weaponObject.transform.rotation = targetRotation;
-                }
+                clonedWeapon.transform.position = targetPosition;
+                clonedWeapon.transform.rotation = targetRotation;
             }
         }
         
@@ -222,129 +136,44 @@ namespace Game.Combat
         {
             isFollowingBoomerang = false;
             
-            if (cloneWeapon)
+            // Destruir el clon
+            if (clonedWeapon != null)
             {
-                // MODO CLON: Destruir wrapper/clon y reactivar original
-                if (weaponWrapper != null)
-                {
-                    DestroyImmediate(weaponWrapper);
-                    weaponWrapper = null;
-                    clonedWeapon = null;
-                    clonedAnimator = null;
-                }
-                
-                // Iniciar restauración forzada
-                StartCoroutine(ForceRestoreWeapon());
+                DestroyImmediate(clonedWeapon);
+                clonedWeapon = null;
+                clonedAnimator = null;
             }
-            else
+            
+            // Restaurar el arma original
+            if (weaponObject != null)
             {
-                // MODO DIRECTO: Reparentar el arma original
-                if (weaponObject != null && originalParent != null)
-                {
-                    weaponObject.transform.SetParent(originalParent, false);
-                    weaponObject.transform.localPosition = originalLocalPosition;
-                    weaponObject.transform.localRotation = originalLocalRotation;
-                    weaponObject.transform.localScale = originalLocalScale;
-                    
-                    if (weaponAnimator != null)
-                        weaponAnimator.enabled = true;
-                }
-            }
-        }
-        
-        System.Collections.IEnumerator ForceRestoreWeapon()
-        {
-            if (weaponObject == null) yield break;
-            
-            isRestoring = true;
-            
-            Debug.Log($"[BoomerangWeaponFollower] INICIO RESTAURACIÓN\n" +
-                     $"Restaurando a: LocalPos={originalLocalPosition}, LocalRot={originalLocalRotation.eulerAngles}\n" +
-                     $"Modo: {(useManualPosition ? "MANUAL" : "AUTOMÁTICO")}");
-            
-            // FRAME 0: Forzar posición mientras está desactivado
-            weaponObject.transform.localPosition = originalLocalPosition;
-            weaponObject.transform.localRotation = originalLocalRotation;
-            weaponObject.transform.localScale = originalLocalScale;
-            
-            // Activar el arma
-            weaponObject.SetActive(true);
-            
-            Debug.Log($"[BoomerangWeaponFollower] Arma activada - LocalPos actual: {weaponObject.transform.localPosition} vs esperado: {originalLocalPosition}");
-            
-            // FRAME 1: Esperar y forzar de nuevo
-            yield return null;
-            
-            weaponObject.transform.localPosition = originalLocalPosition;
-            weaponObject.transform.localRotation = originalLocalRotation;
-            weaponObject.transform.localScale = originalLocalScale;
-            
-            // FRAME 2: Una vez más
-            yield return null;
-            
-            weaponObject.transform.localPosition = originalLocalPosition;
-            weaponObject.transform.localRotation = originalLocalRotation;
-            weaponObject.transform.localScale = originalLocalScale;
-            
-            // Reactivar animator DESPUÉS de forzar posición
-            if (weaponAnimator != null)
-                weaponAnimator.enabled = true;
-            
-            Debug.Log($"[BoomerangWeaponFollower] FIN RESTAURACIÓN\n" +
-                     $"LocalPos final: {weaponObject.transform.localPosition}\n" +
-                     $"Diferencia: {Vector3.Distance(weaponObject.transform.localPosition, originalLocalPosition):F4}\n" +
-                     $"WorldPos final: {weaponObject.transform.position}");
-            
-            // Mantener flag activo 5 frames más para LateUpdate
-            for (int i = 0; i < 5; i++)
-                yield return null;
-            
-            isRestoring = false;
-        }
-        void Update()
-        {
-            if (!isFollowingBoomerang || !smoothMovement) return;
-            
-            if (cloneWeapon && weaponWrapper != null)
-            {
-                // Mover el wrapper suavemente
-                weaponWrapper.transform.position = Vector3.Lerp(
-                    weaponWrapper.transform.position,
-                    targetPosition,
-                    Time.deltaTime * lerpSpeed
-                );
-                
-                weaponWrapper.transform.rotation = Quaternion.Slerp(
-                    weaponWrapper.transform.rotation,
-                    targetRotation,
-                    Time.deltaTime * lerpSpeed
-                );
-            }
-            else if (!cloneWeapon && weaponObject != null)
-            {
-                weaponObject.transform.position = Vector3.Lerp(
-                    weaponObject.transform.position,
-                    targetPosition,
-                    Time.deltaTime * lerpSpeed
-                );
-                
-                weaponObject.transform.rotation = Quaternion.Slerp(
-                    weaponObject.transform.rotation,
-                    targetRotation,
-                    Time.deltaTime * lerpSpeed
-                );
-            }
-        }
-        
-        void LateUpdate()
-        {
-            // Durante la restauración, forzar posición después de todos los updates
-            if (isRestoring && weaponObject != null)
-            {
+                weaponObject.SetActive(true);
                 weaponObject.transform.localPosition = originalLocalPosition;
                 weaponObject.transform.localRotation = originalLocalRotation;
                 weaponObject.transform.localScale = originalLocalScale;
+                
+                if (weaponAnimator != null)
+                    weaponAnimator.enabled = true;
+                
+                if (showDebugLogs)
+                    Debug.Log("[BoomerangWeaponFollower] Arma restaurada a su posición original");
             }
+        }
+        void Update()
+        {
+            if (!isFollowingBoomerang || !smoothMovement || clonedWeapon == null) return;
+            
+            clonedWeapon.transform.position = Vector3.Lerp(
+                clonedWeapon.transform.position,
+                targetPosition,
+                Time.deltaTime * lerpSpeed
+            );
+            
+            clonedWeapon.transform.rotation = Quaternion.Slerp(
+                clonedWeapon.transform.rotation,
+                targetRotation,
+                Time.deltaTime * lerpSpeed
+            );
         }
     }
 }
