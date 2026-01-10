@@ -5848,7 +5848,6 @@ GameObject:
   - component: {fileID: 458190339}
   - component: {fileID: 458190340}
   - component: {fileID: 458190341}
-  - component: {fileID: 458190342}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5981,15 +5980,15 @@ MonoBehaviour:
       dropChance: 20
   - sourceName: DestructibleObjectDiesel
     possibleDrops:
-    - itemIndex: 0
-      dropChance: 30
     - itemIndex: 1
-      dropChance: 10
+      dropChance: 100
   - sourceName: DestructibleObjectPlant
     possibleDrops:
-    - itemIndex: 0
-      dropChance: 50
-    - itemIndex: 1
+    - itemIndex: 2
+      dropChance: 25
+    - itemIndex: 3
+      dropChance: 20
+    - itemIndex: 4
       dropChance: 20
   probDrop1: 0.2
   probDrop2: 0.1
@@ -6023,20 +6022,6 @@ MonoBehaviour:
   - {fileID: 6083573750314543136, guid: e3872a51f5a0f70478a5749f7eae2385, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   carTransform: {fileID: 2070441881}
---- !u!114 &458190342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 458190336}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da803b99b53bf6f4ab1a5b14e54adb25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopTestSpawner
-  slot: {fileID: 0}
-  testUpgrade: {fileID: 11400000, guid: e26b33bab0551f34fbb3529244678769, type: 2}
 --- !u!1 &487059974
 GameObject:
   m_ObjectHideFlags: 0
@@ -18561,7 +18546,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.32
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0

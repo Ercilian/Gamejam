@@ -72,12 +72,8 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
             attackDamage = enemyStatsData.AttackDamage;
             defense = enemyStatsData.Defense;
 
-            Debug.Log($"[{gameObject.name}] Aplicando stats desde Enemy ScriptableObject: {enemyStatsData.name}");
         }
-        else
-        {
-            Debug.LogWarning($"[{gameObject.name}] No hay ScriptableObject asignado en Stats Data. Usando valores por defecto.");
-        }
+
     }
 
     public void TakeDamage(int amount) // Method to take damage

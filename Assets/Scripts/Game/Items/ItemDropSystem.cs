@@ -112,9 +112,13 @@ public class ItemDropSystem : MonoBehaviour
         DropItems("EliteEnemy", position);
     }
 
-    public void DropFromDestructible(Vector3 position) // Called by destructible object scripts on death
+    public void DropFromDestructibleDiesel(Vector3 position) // Called by destructible object scripts on death
     {
-        DropItems("DestructibleObject", position);
+        DropItems("DestructibleObjectDiesel", position);
+    }
+    public void DropFromDestructiblePlant(Vector3 position) // Called by destructible object scripts on death
+    {
+        DropItems("DestructibleObjectPlant", position);
     }
 
     public void DropItems(string sourceType, Vector3 position) // Main method to handle item drops

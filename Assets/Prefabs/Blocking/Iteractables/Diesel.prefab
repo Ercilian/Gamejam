@@ -12,11 +12,12 @@ GameObject:
   - component: {fileID: 1342683428299444113}
   - component: {fileID: 2355116382929560540}
   - component: {fileID: 5927382620584328648}
+  - component: {fileID: 6224129812851999189}
   - component: {fileID: 7194956268047398910}
-  - component: {fileID: 3726034343834246461}
-  m_Layer: 0
+  - component: {fileID: 7007498109067698542}
+  m_Layer: 6
   m_Name: Diesel
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -349,16 +350,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &7194956268047398910
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6639423799803608183}
-  m_Mesh: {fileID: 0}
---- !u!64 &3726034343834246461
-MeshCollider:
+--- !u!65 &6224129812851999189
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -375,7 +368,34 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &7194956268047398910
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6639423799803608183}
   m_Mesh: {fileID: 0}
+--- !u!114 &7007498109067698542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6639423799803608183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71f5dec22516f941a1e00ec05da9b8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  curHP: 0
+  maxHP: 10
+  speed: 0
+  curShield: 0
+  maxShield: 0
+  attackDamage: 10
+  statsData: {fileID: 0}
+  enemyStatsData: {fileID: 0}
