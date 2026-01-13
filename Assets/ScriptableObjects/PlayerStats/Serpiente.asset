@@ -27,3 +27,7 @@ MonoBehaviour:
   attackSound: {fileID: 0}
   hurtSound: {fileID: 0}
   deathSound: {fileID: 0}
+  comboSounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
