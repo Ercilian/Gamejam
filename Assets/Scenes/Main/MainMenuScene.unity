@@ -1241,13 +1241,11 @@ MonoBehaviour:
   - {fileID: 1182653794}
   - {fileID: 1929620804}
   - {fileID: 1868388395}
-  - {fileID: 2029999246}
   selectCharacterPanel: {fileID: 1418664042}
   characterPrefabs:
   - {fileID: 4605989410389788580, guid: ad4b60aaf58b20d4989e20ca43c1ac8f, type: 3}
   - {fileID: 4605989410389788580, guid: b52f3948640eb1249a06f87029754d46, type: 3}
   - {fileID: 4605989410389788580, guid: ddd4ba6e7f1817146b903e554a087c49, type: 3}
-  - {fileID: 4605989410389788580, guid: e8b1f91169203774fb43a62755a294f7, type: 3}
   countdownText: {fileID: 1253864910}
   selectionDataSO: {fileID: 11400000, guid: ad9a01878997d7a41840fead73e5b0e2, type: 2}
   joinSound: {fileID: 8300000, guid: 62c41bd52e9016749b37b243218c404f, type: 3}
@@ -1269,7 +1267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInputManager
   m_NotificationBehavior: 0
-  m_MaxPlayerCount: 4
+  m_MaxPlayerCount: 3
   m_AllowJoining: 1
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
@@ -4886,17 +4884,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7910392537721798263, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
   m_PrefabInstance: {fileID: 1396161829}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2029999246 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
-  m_PrefabInstance: {fileID: 1396161829}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df3bafe5a77f95741a941b17da2e81d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSlotSimple
 --- !u!1 &2066723357
 GameObject:
   m_ObjectHideFlags: 0

@@ -961,8 +961,7 @@ MonoBehaviour:
   previewLocalPosition: {x: 0, y: 0, z: 0}
   previewLocalEuler: {x: 0, y: 180, z: 0}
   previewScale: 1
-  debugLogs: 1
-  selectedCharacterIndex: 4
+  selectedCharacterIndex: 3
   manager: {fileID: 0}
   playerInput: {fileID: 0}
 --- !u!1 &6931156405887048344
