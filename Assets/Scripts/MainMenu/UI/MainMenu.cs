@@ -18,6 +18,8 @@ public class MainMenu : MonoBehaviour
     public InputActionAsset inputActions;
     private InputAction cancelAction;
 
+    public Slider masterVolumeSlider;
+
 
 
     // ========================================================================================= Methods ========================================================================================
@@ -64,6 +66,7 @@ public class MainMenu : MonoBehaviour
     {
         mainMenuPanel.SetActive(false);
         SettingsPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(masterVolumeSlider.gameObject);
     }
     
     public void Exit()
