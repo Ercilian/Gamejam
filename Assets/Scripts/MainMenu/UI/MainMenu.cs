@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     public GameObject SettingsPanel;
     public GameObject SelectCharacterPanel;
     public Button firstSelectedButton;
+    public GameObject SelectionManager;
 
     [Header("Other")]
     public CharacterSelectionManager characterSelectionManager;
