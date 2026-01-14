@@ -375,4 +375,17 @@ public class PlayerInventory : MonoBehaviour
         }
         return false;
     }
+
+    public void ApplyUpgrade(UpgradeItemSO upgrade)
+    {
+        if (upgrade == null) return;
+        var stats = GetComponent<EntityStats>();
+        if (stats != null)
+        {
+            stats.maxHP += upgrade.healthModifier;
+            stats.attackDamage += upgrade.damageModifier;
+            stats.speed += upgrade.speedModifier;
+            Debug.Log($"[PlayerInventory] Applied upgrade: {upgrade.itemName}");
+        }
+    }
 }

@@ -30,16 +30,15 @@ public class ShopItemSlot : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (purchased) return;
-        // Solo el jugador puede comprar
         var playerInventory = other.GetComponent<PlayerInventory>();
         if (playerInventory == null) return;
         var carScrap = FindFirstObjectByType<CarScrapSystem>();
         if (carScrap == null) return;
         if (carScrap.CanAfford(upgradeData.price))
         {
-            // Comprar: restar dinero, aplicar efecto y eliminar slot
             carScrap.SpendScrap(upgradeData.price);
-            // Sonido de compra
+            playerInventory.ApplyUpgrade(upgradeData);
+
             if (purchaseSound != null)
             {
                 audioSource.PlayOneShot(purchaseSound);

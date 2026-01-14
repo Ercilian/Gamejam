@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public class ShopManager : MonoBehaviour
 {
     [Header("Shop Setup")]
-    public List<UpgradeItemSO> availableUpgrades; // Asigna aquí todos los upgrades posibles
-    public ShopItemSlot shopItemSlotPrefab; // Prefab del slot
-    public Transform slotsParent; // Donde se instanciarán los slots
-    public int slotsCount = 3; // Número de objetos en la tienda
+    public List<UpgradeItemSO> availableUpgrades;
+    public ShopItemSlot shopItemSlotPrefab;
+    public Transform slotsParent;
+    public int slotsCount = 3;
 
     void Start()
     {
@@ -17,7 +17,6 @@ public class ShopManager : MonoBehaviour
 
     void GenerateShop()
     {
-        // Selecciona upgrades aleatorios (puedes mejorar la lógica si quieres evitar repeticiones)
         List<UpgradeItemSO> pool = new List<UpgradeItemSO>(availableUpgrades);
         for (int i = 0; i < slotsCount && pool.Count > 0; i++)
         {
@@ -28,8 +27,7 @@ public class ShopManager : MonoBehaviour
             ShopItemSlot slot = Instantiate(shopItemSlotPrefab, slotsParent);
             slot.SetupSlot(upgrade);
 
-            // Alinea los slots horizontalmente (ajusta el offset según el tamaño de tu prefab)
-            slot.transform.localPosition = new Vector3(i * 2.0f, 0, 0); // 2.0f es la separación entre slots
+            slot.transform.localPosition = new Vector3(i * 2.0f, 0, 0); // 2.0f is the spacing between slots
         }
     }
 }
