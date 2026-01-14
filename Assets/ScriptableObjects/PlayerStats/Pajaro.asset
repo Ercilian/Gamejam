@@ -18,7 +18,7 @@ MonoBehaviour:
   maxHealth: 100
   moveSpeed: 5
   maxShield: 25
-  attackDamage: 25
+  attackDamage: 30
   defense: 10
   inventoryCapacity: 3
   pushStrength: 1

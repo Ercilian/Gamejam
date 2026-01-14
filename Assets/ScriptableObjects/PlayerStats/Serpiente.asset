@@ -15,10 +15,10 @@ MonoBehaviour:
   playerName: Serpi
   description: 
   playerIcon: {fileID: 0}
-  maxHealth: 150
-  moveSpeed: 5
-  maxShield: 50
-  attackDamage: 20
+  maxHealth: 100
+  moveSpeed: 6.5
+  maxShield: 0
+  attackDamage: 35
   defense: 10
   inventoryCapacity: 3
   pushStrength: 1
