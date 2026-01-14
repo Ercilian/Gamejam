@@ -34,7 +34,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -3880581976594992817, guid: 56649ca4687b4224aaa3e12200875bbe, type: 3}
+    m_Motion: {fileID: 149885328460683727, guid: 4a2d4d04f618d464da72bdb5dd75b533, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -42,7 +42,7 @@ BlendTree:
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -3880581976594992817, guid: 75a46e9d5ff6e3e43913d0c3957a33a2, type: 3}
+    m_Motion: {fileID: 2264077025236624520, guid: a9a1b10da1aa8634e859626796580345, type: 3}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -153,7 +153,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -3880581976594992817, guid: 9f108ce23a0c2f942b902fb584ed9a2f, type: 3}
+  m_Motion: {fileID: -4386357291700952360, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -206,7 +206,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7001736878801954451, guid: 0513e71c6dba53b40a5a820023e4ffb9, type: 3}
+  m_Motion: {fileID: -4386357291700952360, guid: d4a411bb08a543844a904af5a2db58c0, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -272,7 +272,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 4
+    m_ConditionEvent: Speed
+    m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1781519323367777254}
   m_Solo: 0
@@ -281,7 +284,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0.6
+  m_ExitTime: 1
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -293,7 +296,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: cangrejoAnimaciones
+  m_Name: SerpienteAnimations
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Ataque1
@@ -361,7 +364,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -3880581976594992817, guid: cb94584465acab84092e5fe10830e397, type: 3}
+  m_Motion: {fileID: -4386357291700952360, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
