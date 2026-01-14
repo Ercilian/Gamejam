@@ -12426,7 +12426,7 @@ MonoBehaviour:
   - {fileID: 321477649}
   playerPrefabs:
   - {fileID: 1813536838263918369, guid: 0674b31648968d144873881aec2c1a04, type: 3}
-  - {fileID: 2357198592192616268, guid: cb847489b8ed2c0419bab8ea20e71e83, type: 3}
+  - {fileID: 9179252528894641704, guid: 006e4729f869b8948b94cffade1744bc, type: 3}
   - {fileID: 1813536838263918369, guid: 7e5cb4ca25d2e544f9a6ea5149eab994, type: 3}
   selectionDataSO: {fileID: 11400000, guid: ad9a01878997d7a41840fead73e5b0e2, type: 2}
 --- !u!1 &1427627160

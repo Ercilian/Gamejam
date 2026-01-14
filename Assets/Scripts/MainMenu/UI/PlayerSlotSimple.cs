@@ -63,7 +63,30 @@ public class PlayerSlotSimple : MonoBehaviour
         if (idleState) idleState.SetActive(!joined);
         if (joinedState) joinedState.SetActive(joined);
 
-        if (joined) SpawnPreview();
+        if (joined)
+        {
+            if (manager != null && manager.characterPrefabs != null && defaultCharacterPrefab != null)
+            {
+                int foundIndex = -1;
+                for (int i = 0; i < manager.characterPrefabs.Length; i++)
+                {
+                    if (manager.characterPrefabs[i] == defaultCharacterPrefab)
+                    {
+                        foundIndex = i;
+                        break;
+                    }
+                }
+                if (foundIndex != -1)
+                {
+                    selectedCharacterIndex = foundIndex;
+                }
+                else
+                {
+                    selectedCharacterIndex = 0; // fallback
+                }
+            }
+            SpawnPreview();
+        }
         else DespawnPreview();
 
         Debug.Log($"[Slot {slotIndex}] Estado cambiado a: {(joined ? "JOINED" : "IDLE")}");
