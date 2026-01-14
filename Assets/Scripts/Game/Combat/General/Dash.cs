@@ -19,6 +19,11 @@ public class Dash : MonoBehaviour
     private Vector3 dashStart;
     private Vector3 dashEnd;
 
+    /// <summary>
+    /// Property to check if the player is currently dashing (invulnerable)
+    /// </summary>
+    public bool IsDashing => isDashing;
+
     private PlayerInput playerInput;
     private InputAction dashAction;
     private InputAction moveAction;

@@ -80,6 +80,17 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
     {
         if (amount <= 0) return;
 
+        // Check if this is a Player and if they are dashing (invulnerable)
+        if (this is Player player)
+        {
+            Dash dashComponent = player.GetComponent<Dash>();
+            if (dashComponent != null && dashComponent.IsDashing)
+            {
+                Debug.Log($"[{gameObject.name}] ¡Daño esquivado durante el dash!");
+                return; // No damage during dash
+            }
+        }
+
         int remainingDamage = amount;
 
         // Primero aplica el daño al escudo si hay escudo disponible
