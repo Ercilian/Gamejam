@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Gamejam.sln"
+    "dotnet.defaultSolution": "Embers Of Freedom.sln"
 }

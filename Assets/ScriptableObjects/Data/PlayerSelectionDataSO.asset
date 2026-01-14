@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5136f6a30d342149bd8f8c60ca141a0, type: 3}
   m_Name: PlayerSelectionDataSO
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSelectionDataSO
-  selectedPlayers: []
+  selectedPlayers:
+  - slotIndex: 0
+    characterIndex: 0
+    inputDeviceId: 1
+  - slotIndex: 1
+    characterIndex: 0
+    inputDeviceId: 6

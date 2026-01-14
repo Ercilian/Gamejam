@@ -110,7 +110,11 @@ public class PlayerSlotSimple : MonoBehaviour
     {
         if (currentPreviewInstance != null)
             Destroy(currentPreviewInstance);
-
+        if (spawnedCharacter != null)
+        {
+            Destroy(spawnedCharacter);
+            spawnedCharacter = null;
+        }
         if (worldPreviewAnchor != null && prefab != null)
         {
             currentPreviewInstance = Instantiate(prefab, worldPreviewAnchor);
