@@ -1,307 +1,626 @@
-/*using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FrogCombat : MonoBehaviour
 {
-    [Header("Boss Data")]
-    [SerializeField] private EnemyStatsData bossData;
-    [SerializeField] private bool showDebugLogs = true;
-
-    [Header("Sistema de Fases")]
-    [SerializeField] private int faseActual = 1;
-    [SerializeField] private float umbralFase2 = 0.66f; // Cambia a fase 2 al 66% de vida
-    [SerializeField] private float umbralFase3 = 0.33f; // Cambia a fase 3 al 33% de vida
-
-    [Header("Efectos de Transición (Opcional)")]
-    [SerializeField] private ParticleSystem efectoCambioFase;
-    [SerializeField] private AudioClip sonidoCambioFase;
-    [SerializeField] private AudioSource audioSource;
-
-    [Header("Fase 1 - Spawn de Enemigos")]
-    [SerializeField] private GameObject enemigoPrefab;
-    [SerializeField] private Transform[] puntosSpawn; // Puntos donde aparecerán los enemigos
-    [SerializeField] private float intervaloSpawn = 5f; // Cada cuántos segundos spawnea
-    [SerializeField] private int maxEnemigosSimultaneos = 5;
-    [SerializeField] private int enemigosSpawneadosPorOleada = 2;
-
-    // Stats del boss (cargadas desde ScriptableObject)
-    private float vidaMaxima;
-    private float vidaActual;
-
-    private bool enTransicionFase = false;
-    private float tiempoUltimoSpawn;
-    private int enemigosActivosFase1 = 0;
-
-    void Start()
+    #region Enumerations
+    private enum BossPhase
     {
-        if (bossData == null)
-        {
-            Debug.LogError("[FrogCombat] No hay BossData asignado!");
-            return;
-        }
-
-        // Cargar stats desde el ScriptableObject
-        vidaMaxima = bossData.MaxHealth;
-        vidaActual = vidaMaxima;
-        
-        InicializarFase1();
-        
-        if (audioSource == null)
-            audioSource = GetComponent<AudioSource>();
-
-        Log($"Boss iniciado - Vida: {vidaMaxima} ({bossData.EnemyName})");
+        Phase1,
+        Phase2
     }
 
-    void Update()
+    private enum AttackType
     {
-        if (enTransicionFase) return;
-
-        // Ejecutar comportamiento de la fase actual
-        switch (faseActual)
-        {
-            case 1:
-                ComportamientoFase1();
-                break;
-            case 2:
-                ComportamientoFase2();
-                break;
-            case 3:
-                ComportamientoFase3();
-                break;
-        }
+        BulletHell,
+        JumpAttack,
+        MortarAttack,
+        SpawnEnemies,
+        PushAttack
     }
+    #endregion
 
-    #region Sistema de Vida y Daño
+    #region Boss Configuration
+    [SerializeField] private float maxHealth = 200f;
+    [SerializeField] private float phaseTransitionHealth = 80f;
     
-    public void RecibirDanio(float cantidad)
-    {
-        if (vidaActual <= 0) return;
-
-        vidaActual -= cantidad;
-        vidaActual = Mathf.Max(0, vidaActual);
-
-        Log($"Boss recibió {cantidad} de daño. Vida: {vidaActual}/{vidaMaxima} ({GetPorcentajeVida() * 100:F1}%)");
-
-        VerificarCambioDeFase();
-
-        if (vidaActual <= 0)
-        {
-            MorirBoss();
-        }
-    }
-
-    public float GetPorcentajeVida()
-    {
-        return vidaActual / vidaMaxima;
-    }
-
+    [Header("Attack Configuration")]
+    [SerializeField] private Transform targetTransform;
+    [SerializeField] private float attackCooldown = 3f;
+    [SerializeField] private float bulletSpeed = 8f;
+    [SerializeField] private float mortarSpeed = 5f;
+    
+    [Header("Bullet Hell Settings")]
+    [SerializeField] private int bulletPatternCount = 8;
+    [SerializeField] private float bulletHellCooldown = 3f;
+    [SerializeField] private bool enableBulletHell = true;
+    
+    [Header("Jump Attack Settings")]
+    [SerializeField] private float jumpHeight = 20f;
+    [SerializeField] private float jumpDuration = 1.5f;
+    [SerializeField] private float jumpCooldown = 4f;
+    [SerializeField] private float jumpImpactRadius = 6f;
+    [SerializeField] private float jumpImpactDamage = 30f;
+    [SerializeField] private bool enableJumpAttack = true;
+    
+    [Header("Push Attack Settings")]
+    [SerializeField] private float pushDetectionRadius = 4f;
+    [SerializeField] private float pushForce = 20f;
+    [SerializeField] private float pushCooldown = 4.5f;
+    [SerializeField] private float pushChargeDuration = 1f;
+    [SerializeField] private bool enablePushAttack = true;
+    
+    [Header("Mortar Attack Settings")]
+    [SerializeField] private int mortarProjectileCount = 6;
+    [SerializeField] private float mortarArc = 70f;
+    [SerializeField] private float mortarCooldown = 4f;
+    [SerializeField] private bool enableMortarAttack = true;
+    
+    [Header("Enemy Spawning")]
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private int enemiesToSpawn = 3;
+    [SerializeField] private float spawnRadius = 5f;
+    [SerializeField] private float spawnCooldown = 5f;
+    [SerializeField] private bool enableSpawnEnemies = true;
+    
+    [Header("Projectile Configuration")]
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject mortarProjectilePrefab;
+    [SerializeField] private Vector3 projectileSpawnOffset = Vector3.zero;
+    
+    [Header("UI & Effects")]
+    [SerializeField] private ParticleSystem attackEffectPrefab;
+    [SerializeField] private AudioClip attackSFX;
+    [SerializeField] private AudioSource audioSource;
     #endregion
 
-    #region Sistema de Fases
-
-    private void VerificarCambioDeFase()
-    {
-        float porcentajeVida = GetPorcentajeVida();
-
-        if (faseActual == 1 && porcentajeVida <= umbralFase2)
-        {
-            CambiarAFase(2);
-        }
-        else if (faseActual == 2 && porcentajeVida <= umbralFase3)
-        {
-            CambiarAFase(3);
-        }
-    }
-
-    private void CambiarAFase(int nuevaFase)
-    {
-        if (enTransicionFase || faseActual == nuevaFase) return;
-
-        Log($"========== CAMBIO DE FASE: {faseActual} -> {nuevaFase} ==========");
-        StartCoroutine(TransicionDeFase(nuevaFase));
-    }
-
-    private IEnumerator TransicionDeFase(int nuevaFase)
-    {
-        enTransicionFase = true;
-
-        // Efectos de transición
-        if (efectoCambioFase != null)
-            efectoCambioFase.Play();
-
-        if (audioSource != null && sonidoCambioFase != null)
-            audioSource.PlayOneShot(sonidoCambioFase);
-
-        yield return new WaitForSeconds(1f);
-
-        faseActual = nuevaFase;
-
-        // Inicializar la nueva fase
-        switch (nuevaFase)
-        {
-            case 2:
-                InicializarFase2();
-                break;
-            case 3:
-                InicializarFase3();
-                break;
-        }
-
-        enTransicionFase = false;
-    }
-
+    #region State Variables
+    private float currentHealth;
+    private BossPhase currentPhase = BossPhase.Phase1;
+    private bool isDefeated = false;
+    private bool isJumping = false;
+    private float lastJumpTime = 0f;
+    private float lastPushTime = 0f;
+    
+    private float lastAttackTime = 0f;
+    private float lastBulletHellTime = 0f;
+    private float lastMortarTime = 0f;
+    private float lastSpawnTime = 0f;
+    
+    private Rigidbody rb;
     #endregion
 
-    #region Inicialización de Fases
-
-    private void InicializarFase1()
+    #region Initialization
+    private void Start()
     {
-        Log("=== FASE 1 INICIADA: Invocación de Enemigos ===");
-        tiempoUltimoSpawn = Time.time;
-        enemigosActivosFase1 = 0;
+        InitializeBoss();
     }
 
-    private void InicializarFase2()
+    private void InitializeBoss()
     {
-        Log("=== FASE 2 INICIADA ===");
-        // TODO: Configurar comportamiento de fase 2
+        rb = GetComponent<Rigidbody>();
+        currentHealth = maxHealth;
+        
+        // Proteger el boss de ser destruido entre escenas
+        DontDestroyOnLoad(gameObject);
+        
+        // Configurar Rigidbody para que el boss sea estático pero pueda moverse con scripts
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        
+        if (targetTransform == null)
+        {
+            Player player = FindFirstObjectByType<Player>();
+            if (player != null)
+                targetTransform = player.transform;
+        }
+        
+        Debug.Log($"[FrogBoss] Boss initialized with {maxHealth} HP");
     }
-
-    private void InicializarFase3()
-    {
-        Log("=== FASE 3 INICIADA ===");
-        // TODO: Configurar comportamiento de fase 3
-    }
-
     #endregion
 
-    #region Comportamiento de Fases
-
-    private void ComportamientoFase1()
+    #region Update Loop
+    private void Update()
     {
-        // Spawnear enemigos periódicamente
-        if (Time.time - tiempoUltimoSpawn >= intervaloSpawn)
-        {
-            if (enemigosActivosFase1 < maxEnemigosSimultaneos)
-            {
-                SpawnearOleadaEnemigos();
-                tiempoUltimoSpawn = Time.time;
-            }
-        }
-    }
-
-    private void SpawnearOleadaEnemigos()
-    {
-        if (enemigoPrefab == null)
-        {
-            Log("ERROR: No hay prefab de enemigo asignado");
+        if (isDefeated)
             return;
-        }
-
-        int enemigosASpawnear = Mathf.Min(enemigosSpawneadosPorOleada, maxEnemigosSimultaneos - enemigosActivosFase1);
-
-        for (int i = 0; i < enemigosASpawnear; i++)
-        {
-            Vector3 posicionSpawn = ObtenerPosicionSpawn();
-            GameObject enemigo = Instantiate(enemigoPrefab, posicionSpawn, Quaternion.identity);
-            
-            // Buscar el componente que gestiona el enemigo (carga el ScriptableObject)
-            var enemigoComponent = enemigo.GetComponent<Enemy>();
-            if (enemigoComponent != null)
-            {
-                // Suscribirse al evento de muerte desde el ScriptableObject/Component
-                enemigoComponent.OnMuerte += OnEnemigoMuerto;
-            }
-            else
-            {
-                Log("ADVERTENCIA: El enemigo no tiene componente Enemy");
-            }
-            
-            enemigosActivosFase1++;
-            Log($"Enemigo spawneado en {posicionSpawn}. Enemigos activos: {enemigosActivosFase1}");
-        }
-
-        Log($"Oleada spawneada: {enemigosASpawnear} enemigos");
-    }
-
-    private void OnEnemigoMuerto()
-    {
-        enemigosActivosFase1--;
-        Log($"Enemigo eliminado. Enemigos activos: {enemigosActivosFase1}");
-    }
-
-    private Vector3 ObtenerPosicionSpawn()
-    {
-        // Si hay puntos de spawn definidos, usar uno aleatorio
-        if (puntosSpawn != null && puntosSpawn.Length > 0)
-        {
-            Transform puntoAleatorio = puntosSpawn[Random.Range(0, puntosSpawn.Length)];
-            return puntoAleatorio.position;
-        }
         
-        // Si no, spawnear en círculo alrededor del boss
-        float angulo = Random.Range(0f, 360f);
-        float distancia = Random.Range(5f, 10f);
-        Vector3 offset = new Vector3(
-            Mathf.Cos(angulo * Mathf.Deg2Rad) * distancia,
-            0f,
-            Mathf.Sin(angulo * Mathf.Deg2Rad) * distancia
-        );
+        UpdateBossPhase();
+        HandleMovement();
+        HandleAttackPattern();
+    }
+
+    private void UpdateBossPhase()
+    {
+        if (currentPhase == BossPhase.Phase1 && currentHealth <= phaseTransitionHealth)
+        {
+            TransitionToPhase2();
+        }
+    }
+
+    private void HandleMovement()
+    {
+        // El boss es estático, no se mueve horizontalmente
+        // Durante los saltos, la posición se controla manualmente en el coroutine
+        if (!isJumping && rb != null)
+        {
+            // Para un Rigidbody kinematic, usar MovePosition en lugar de linearVelocity
+            rb.MovePosition(transform.position);
+        }
+    }
+
+    private void HandleAttackPattern()
+    {
+        float timeSinceLastAttack = Time.time - lastAttackTime;
         
-        return transform.position + offset;
+        if (timeSinceLastAttack < attackCooldown)
+            return;
+        
+        List<AttackType> availableAttacks = GetAvailableAttacks();
+        
+        if (availableAttacks.Count > 0)
+        {
+            AttackType selectedAttack = availableAttacks[Random.Range(0, availableAttacks.Count)];
+            ExecuteAttack(selectedAttack);
+            lastAttackTime = Time.time;
+        }
     }
 
-    private void ComportamientoFase2()
+    private List<AttackType> GetAvailableAttacks()
     {
-        // TODO: Implementar comportamiento de fase 2
+        List<AttackType> attacks = new List<AttackType>();
+        float distanceToPlayer = targetTransform != null ? Vector3.Distance(transform.position, targetTransform.position) : float.MaxValue;
+        
+        if (enableBulletHell && Time.time - lastBulletHellTime > bulletHellCooldown)
+            attacks.Add(AttackType.BulletHell);
+        
+        if (enableJumpAttack && Time.time - lastJumpTime > jumpCooldown)
+            attacks.Add(AttackType.JumpAttack);
+        
+        if (enableMortarAttack && Time.time - lastMortarTime > mortarCooldown)
+            attacks.Add(AttackType.MortarAttack);
+        
+        // Push Attack solo cuando el jugador está cerca
+        if (enablePushAttack && Time.time - lastPushTime > pushCooldown && distanceToPlayer <= pushDetectionRadius * 1.5f)
+            attacks.Add(AttackType.PushAttack);
+        
+        if (enableSpawnEnemies && Time.time - lastSpawnTime > spawnCooldown)
+            attacks.Add(AttackType.SpawnEnemies);
+        
+        return attacks;
     }
-
-    private void ComportamientoFase3()
-    {
-        // TODO: Implementar comportamiento de fase 3
-    }
-
     #endregion
 
-    #region Muerte
-
-    private void MorirBoss()
+    #region Attack Execution
+    private void ExecuteAttack(AttackType attackType)
     {
-        Log("¡BOSS DERROTADO!");
-        // TODO: Implementar muerte del boss
+        switch (attackType)
+        {
+            case AttackType.BulletHell:
+                StartCoroutine(BulletHellAttack());
+                break;
+            case AttackType.JumpAttack:
+                StartCoroutine(JumpAttack());
+                break;
+            case AttackType.MortarAttack:
+                StartCoroutine(MortarAttack());
+                break;
+            case AttackType.PushAttack:
+                StartCoroutine(PushAttack());
+                break;
+            case AttackType.SpawnEnemies:
+                SpawnEnemies();
+                break;
+        }
+    }
+
+    private IEnumerator BulletHellAttack()
+    {
+        lastBulletHellTime = Time.time;
+        PlayAttackEffect();
+        PlayAttackSFX();
+        
+        Debug.Log("[FrogBoss] Bullet Hell Attack - Arc Pattern!");
+        
+        yield return new WaitForSeconds(0.3f);
+        
+        // Patrón de arco (Mega Satan style) - bolas salen en un arco frontal
+        float arcWidth = 120f; // Ancho del arco en grados
+        float startAngle = -arcWidth * 0.5f; // Comienza a la izquierda del arco
+        
+        for (int i = 0; i < bulletPatternCount; i++)
+        {
+            float angle = startAngle + (arcWidth / (bulletPatternCount - 1)) * i;
+            Vector2 direction = GetDirectionFromAngle(angle);
+            SpawnProjectile(direction, bulletSpeed, false);
+        }
+        
+        yield return new WaitForSeconds(bulletHellCooldown * 0.5f);
+        
+        // Segunda ola en Phase 2 - arco expandido
+        if (currentPhase == BossPhase.Phase2)
+        {
+            float phase2ArcWidth = 150f; // Arco más amplio en fase 2
+            float phase2StartAngle = -phase2ArcWidth * 0.5f;
+            
+            for (int i = 0; i < bulletPatternCount; i++)
+            {
+                float angle = phase2StartAngle + (phase2ArcWidth / (bulletPatternCount - 1)) * i;
+                Vector2 direction = GetDirectionFromAngle(angle);
+                
+                SpawnProjectile(direction, bulletSpeed, false);
+            }
+        }
+    }
+
+    private IEnumerator JumpAttack()
+    {
+        lastJumpTime = Time.time;
+        PlayAttackEffect();
+        PlayAttackSFX();
+        
+        Debug.Log("[FrogBoss] Jump Attack - Saltando hacia el jugador!");
+        
+        isJumping = true;
+        
+        // Desactivar restricciones temporalmente para el salto
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.constraints = RigidbodyConstraints.None;
+        }
+        rb.linearVelocity = Vector3.zero;
+        
+        Vector3 bossStartPosition = transform.position;
+        Vector3 jumpTargetPosition = targetTransform != null ? targetTransform.position : bossStartPosition;
+        
+        Vector3 midPoint = (bossStartPosition + jumpTargetPosition) * 0.5f;
+        Vector3 peakPosition = midPoint + Vector3.up * jumpHeight;
+        
+        // Fase de subida hacia el jugador
+        float elapsedTime = 0f;
+        while (elapsedTime < jumpDuration * 0.5f)
+        {
+            float t = elapsedTime / (jumpDuration * 0.5f);
+            transform.position = Vector3.Lerp(bossStartPosition, peakPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Fase de caída hacia el jugador
+        elapsedTime = 0f;
+        while (elapsedTime < jumpDuration * 0.5f)
+        {
+            float t = elapsedTime / (jumpDuration * 0.5f);
+            transform.position = Vector3.Lerp(peakPosition, jumpTargetPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Aplicar daño en área sin cambiar la posición del boss
+        Collider[] hitColliders = Physics.OverlapSphere(jumpTargetPosition, jumpImpactRadius);
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.gameObject != gameObject)
+            {
+                if (collider.CompareTag("Player") || collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    EntityStats entityStats = collider.GetComponent<EntityStats>();
+                    if (entityStats != null)
+                    {
+                        entityStats.TakeDamage((int)jumpImpactDamage);
+                        Debug.Log($"[FrogBoss] Jump impact hit {collider.gameObject.name} for {jumpImpactDamage} damage!");
+                    }
+                }
+            }
+        }
+        
+        // Impacto al aterrizar - efecto en la posición del salto, pero boss permanece en el aire
+        PlayAttackEffect();
+        PlayAttackSFX();
+        
+        // Pausa después del impacto
+        yield return new WaitForSeconds(0.5f);
+        
+        Debug.Log("[FrogBoss] Saltando de vuelta a posición original!");
+        
+        // Posición intermedia para el regreso
+        Vector3 returnPeakPosition = (jumpTargetPosition + bossStartPosition) * 0.5f + Vector3.up * (jumpHeight * 0.8f);
+        
+        // Subida de regreso
+        elapsedTime = 0f;
+        while (elapsedTime < jumpDuration * 0.5f)
+        {
+            float t = elapsedTime / (jumpDuration * 0.5f);
+            transform.position = Vector3.Lerp(jumpTargetPosition, returnPeakPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Caída de regreso
+        elapsedTime = 0f;
+        while (elapsedTime < jumpDuration * 0.5f)
+        {
+            float t = elapsedTime / (jumpDuration * 0.5f);
+            transform.position = Vector3.Lerp(returnPeakPosition, bossStartPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Asegurar que vuelve a la posición original
+        transform.position = bossStartPosition;
+        rb.linearVelocity = Vector3.zero;
+        isJumping = false;
+        
+        // Restaurar restricciones de física
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        
+        Debug.Log("[FrogBoss] Volvió a posición fija!");
+    }
+
+    private IEnumerator MortarAttack()
+    {
+        lastMortarTime = Time.time;
+        PlayAttackEffect();
+        PlayAttackSFX();
+        
+        Debug.Log("[FrogBoss] Mortar Attack!");
+        
+        if (targetTransform == null)
+            yield break;
+        
+        Vector3 targetPos = targetTransform.position;
+        float startAngle = -mortarArc * 0.5f;
+        
+        for (int i = 0; i < mortarProjectileCount; i++)
+        {
+            float angle = startAngle + (mortarArc / (mortarProjectileCount - 1)) * i;
+            SpawnMortarProjectile(targetPos, angle);
+            
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private IEnumerator PushAttack()
+    {
+        lastPushTime = Time.time;
+        PlayAttackSFX();
+        
+        Debug.Log("[FrogBoss] Push Attack!");
+        
+        // Fase de carga - mostrar área de ataque
+        VisualizeAttackArea();
+        
+        float chargeElapsed = 0f;
+        while (chargeElapsed < pushChargeDuration)
+        {
+            chargeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Ejecutar el empuje
+        PlayAttackEffect();
+        PlayAttackSFX();
+        
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, pushDetectionRadius);
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.gameObject != gameObject)
+            {
+                // Verificar si es el jugador por tag o layer
+                if (collider.CompareTag("Player") || collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    Rigidbody targetRb = collider.GetComponent<Rigidbody>();
+                    if (targetRb != null)
+                    {
+                        Vector3 pushDirection = (collider.transform.position - transform.position).normalized;
+                        pushDirection.y = 0; // Solo empuje horizontal
+                        targetRb.linearVelocity = new Vector3(pushDirection.x * pushForce, targetRb.linearVelocity.y, pushDirection.z * pushForce);
+                        
+                        Debug.Log($"[FrogBoss] Pushed {collider.gameObject.name}!");
+                    }
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Projectile Management
+    private void SpawnProjectile(Vector2 direction, float speed, bool isMortar)
+    {
+        if (projectilePrefab == null) return;
+        
+        Vector3 spawnPos = transform.position + projectileSpawnOffset;
+        GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+        
+        Rigidbody projRb = projectile.GetComponent<Rigidbody>();
+        if (projRb != null)
+        {
+            Vector3 dir3D = new Vector3(direction.x, 0, direction.y);
+            projRb.linearVelocity = dir3D * speed;
+            projectile.transform.rotation = Quaternion.LookRotation(dir3D);
+        }
+    }
+
+    private void SpawnMortarProjectile(Vector3 targetPosition, float launchAngle)
+    {
+        if (mortarProjectilePrefab == null)
+            return;
+        
+        Vector3 spawnPos = transform.position + projectileSpawnOffset;
+        GameObject projectile = Instantiate(mortarProjectilePrefab, spawnPos, Quaternion.identity);
+        
+        Rigidbody projRb = projectile.GetComponent<Rigidbody>();
+        if (projRb != null)
+        {
+            float radians = launchAngle * Mathf.Deg2Rad;
+            Vector3 direction = new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0);
+            projRb.linearVelocity = direction * mortarSpeed;
+            projRb.useGravity = true; // Aplicar gravedad para trayectoria parabólica
+        }
+    }
+    #endregion
+
+    #region Phase Transition
+    private void TransitionToPhase2()
+    {
+        currentPhase = BossPhase.Phase2;
+        bulletSpeed *= 1.1f;
+        mortarSpeed *= 1.1f;
+        attackCooldown *= 0.8f;
+        
+        PlayAttackEffect();
+        Debug.Log("[FrogBoss] ¡TRANSICIÓN A FASE 2! El boss está más fuerte!");
+    }
+    #endregion
+
+    #region Damage & Health
+    public void TakeDamage(float damage)
+    {
+        if (isDefeated)
+            return; // Ignorar daño si el boss ya fue derrotado
+        
+        currentHealth -= damage;
+        
+        Debug.Log($"[FrogBoss] Damage taken: {damage}. HP: {currentHealth}/{maxHealth}");
+        
+        if (currentHealth <= 0)
+        {
+            DefeatedBoss();
+        }
+    }
+
+    private void DefeatedBoss()
+    {
+        if (isDefeated)
+            return; // Prevenir múltiples llamadas
+        
+        isDefeated = true;
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        
+        Debug.Log("[FrogBoss] ¡EL BOSS HA SIDO DERROTADO!");
+        
+        // Efecto de derrota
+        if (attackEffectPrefab != null)
+        {
+            ParticleSystem effect = Instantiate(attackEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect.gameObject, 3f);
+        }
+        
         gameObject.SetActive(false);
     }
-
     #endregion
 
-    #region Debug y Testing
-
-    private void Log(string mensaje)
+    #region Utility Methods
+    private Vector2 GetDirectionFromAngle(float angle)
     {
-        if (showDebugLogs)
+        float radians = angle * Mathf.Deg2Rad;
+        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+    }
+
+    private void PlayAttackEffect()
+    {
+        if (attackEffectPrefab == null)
+            return;
+        
+        ParticleSystem effect = Instantiate(attackEffectPrefab, transform.position, Quaternion.identity);
+        Destroy(effect.gameObject, 1f);
+    }
+
+    private void PlayAttackSFX()
+    {
+        if (audioSource != null && attackSFX != null)
         {
-            Debug.Log($"[FrogCombat] {mensaje}");
+            audioSource.PlayOneShot(attackSFX);
         }
     }
 
-    [ContextMenu("Probar Daño (100)")]
-    private void ProbarDanio()
+    private void VisualizeAttackArea()
     {
-        RecibirDanio(100f);
+        StartCoroutine(ShowAttackAreaVisualization());
     }
 
-    [ContextMenu("Forzar Fase 2")]
-    private void ForzarFase2()
+    private IEnumerator ShowAttackAreaVisualization()
     {
-        CambiarAFase(2);
+        // Crear un GameObject temporal para visualizar el área
+        GameObject areaVisual = new GameObject("PushAttackArea");
+        areaVisual.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+        
+        // Agregar un LineRenderer para dibujar el círculo
+        LineRenderer lineRenderer = areaVisual.AddComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = new Color(1f, 0.5f, 0f, 0.8f); // Naranja
+        lineRenderer.endColor = new Color(1f, 0.5f, 0f, 0.8f);
+        lineRenderer.startWidth = 0.2f;
+        lineRenderer.endWidth = 0.2f;
+        lineRenderer.useWorldSpace = false;
+        
+        // Dibujar círculo en el suelo
+        int segments = 40;
+        Vector3[] positions = new Vector3[segments + 1];
+        
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = (360f / segments) * i * Mathf.Deg2Rad;
+            positions[i] = new Vector3(Mathf.Cos(angle) * pushDetectionRadius, 0f, Mathf.Sin(angle) * pushDetectionRadius);
+        }
+        
+        lineRenderer.positionCount = positions.Length;
+        lineRenderer.SetPositions(positions);
+        
+        // Mostrar el área durante la carga
+        yield return new WaitForSeconds(pushChargeDuration);
+        
+        // Destruir el área visual
+        Destroy(areaVisual);
     }
 
-    [ContextMenu("Forzar Fase 3")]
-    private void ForzarFase3()
+    private void SpawnEnemies()
     {
-        CambiarAFase(3);
+        lastSpawnTime = Time.time;
+        PlayAttackEffect();
+        PlayAttackSFX();
+        
+        Debug.Log($"[FrogBoss] Spawning {enemiesToSpawn} enemies!");
+        
+        if (enemyPrefab == null)
+        {
+            Debug.LogWarning("[FrogBoss] Enemy prefab not assigned!");
+            return;
+        }
+        
+        for (int i = 0; i < enemiesToSpawn; i++)
+        {
+            Vector3 randomDirection = Random.insideUnitSphere.normalized;
+            randomDirection.y = 0; // Mantener spawn en plano horizontal
+            Vector3 spawnPosition = transform.position + randomDirection * spawnRadius;
+            
+            GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            Debug.Log($"[FrogBoss] Enemy spawned at {spawnPosition}");
+        }
     }
+    #endregion
 
+    #region Gizmos & Debug
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, spawnRadius);
+        
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, jumpImpactRadius);
+        
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, pushDetectionRadius);
+    }
     #endregion
 }
-*/

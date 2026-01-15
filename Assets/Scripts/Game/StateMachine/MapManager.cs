@@ -81,6 +81,13 @@ public class MapManager : MonoBehaviour
             {
                 if (mapInstances[i] != null)
                 {
+                    // Proteger al boss de ser destruido junto con el mapa
+                    FrogCombat bossCombat = mapInstances[i].GetComponentInChildren<FrogCombat>();
+                    if (bossCombat != null)
+                    {
+                        bossCombat.transform.parent = null; // Desparentar el boss antes de destruir el mapa
+                    }
+                    
                     Destroy(mapInstances[i]);
                     mapInstances[i] = null;
                     mapInstanceColliders[i] = null;
