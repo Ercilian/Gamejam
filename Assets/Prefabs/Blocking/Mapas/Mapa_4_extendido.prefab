@@ -2198,6 +2198,7 @@ GameObject:
   - component: {fileID: 1560092881997866547}
   - component: {fileID: 8973943223866733242}
   - component: {fileID: 5521325269830217482}
+  - component: {fileID: 8161054292700304734}
   m_Layer: 3
   m_Name: Suelo_4
   m_TagString: Untagged
@@ -2235,12 +2236,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 300.5279, y: 10, z: 60}
-  m_Center: {x: -0.33648682, y: 4.8500004, z: 0}
+  m_Size: {x: 300, y: 10, z: 60}
+  m_Center: {x: 0, y: 4.85, z: 0}
 --- !u!114 &2579825190288264924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31273,6 +31274,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &8161054292700304734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2323407455087880266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0b6d1fb94fb1041addd8ce1c6a0156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraTrigger
+  newOffset: {x: -1.2, y: 15, z: -10}
+  delaySeconds: 0
+  cameraMovement: {fileID: 0}
+  disableFuelConsumption: 0
 --- !u!1 &3116478913340058924
 GameObject:
   m_ObjectHideFlags: 0
@@ -34496,7 +34513,7 @@ Transform:
   m_GameObject: {fileID: 6083573750314543136}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 366.78113, y: -0.00002, z: -46.848846}
+  m_LocalPosition: {x: 1369.038, y: -0.2000198, z: -48.712204}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
