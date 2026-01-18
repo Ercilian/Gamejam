@@ -7,6 +7,7 @@ public class Player : EntityStats
     private PlayerInventory playerInventory;
     private PlayerInput playerInput;
     private InputAction healAction;
+    private PlayerInputPush playerInputPush;
 
     private float rotationSpeed = 10f; // Velocidad de rotación del jugador
     private Vector2 movementInput;
@@ -28,6 +29,7 @@ public class Player : EntityStats
         base.Awake();
         playerInventory = GetComponent<PlayerInventory>();
         playerInput = GetComponent<PlayerInput>();
+        playerInputPush = GetComponent<PlayerInputPush>();
         if (playerInput != null)
             healAction = playerInput.actions["Heal"];
     }
@@ -61,11 +63,13 @@ public class Player : EntityStats
         }
 
         // Calcular velocidad para el blend tree (0 = idle, 1 = caminando)
-        if (animator != null)
-        {
-            float movementMagnitude = movementInput.magnitude;
-            animator.SetFloat("Speed", movementMagnitude);
-        }
+        float movementMagnitude = movementInput.magnitude;
+        animator.SetFloat("Speed", movementMagnitude);
+
+        if (playerInputPush != null)
+            animator.SetBool("IsPushing", playerInputPush.ImPushing());
+        else
+            animator.SetBool("IsPushing", false);
     }
 
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
