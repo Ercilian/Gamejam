@@ -7252,7 +7252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f613465d97d982498eba1f4d9f9d5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarFuelSystem
-  cur_Diesel: 100
+  cur_Diesel: 0
   max_Diesel: 100
   depositPoint: {fileID: 1316442590}
   depositPrompt: Presiona F para depositar madera
@@ -18982,9 +18982,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1316442590}
   - {fileID: 349664124}
   - {fileID: 2139318380}
+  - {fileID: 1316442590}
   - {fileID: 1943855650}
   - {fileID: 1150594237}
   - {fileID: 919969482}
