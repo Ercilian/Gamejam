@@ -81,7 +81,8 @@ public class Player : EntityStats
     {
         PlayerReviveSystem reviveSystem = GetComponent<PlayerReviveSystem>();
         if (reviveSystem != null)
-        {
+        {   
+            
             // Entrar en estado "downed" en lugar de morir inmediatamente
             reviveSystem.EnterDownedState();
         }
