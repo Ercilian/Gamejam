@@ -17,7 +17,7 @@ public class PlayerSlotSimple : MonoBehaviour
     public Transform worldPreviewAnchor;
     public Vector3 previewLocalPosition = Vector3.zero;
     public Vector3 previewLocalEuler = new Vector3(0, 180, 0);
-    public float previewScale = 1f;
+    public float previewScale;
 
     [Header("Slot Management")]
     public int selectedCharacterIndex = 0;
@@ -141,6 +141,9 @@ public class PlayerSlotSimple : MonoBehaviour
         if (worldPreviewAnchor != null && prefab != null)
         {
             currentPreviewInstance = Instantiate(prefab, worldPreviewAnchor);
+            currentPreviewInstance.transform.localPosition = previewLocalPosition;
+            currentPreviewInstance.transform.localEulerAngles = previewLocalEuler;
+            currentPreviewInstance.transform.localScale = Vector3.one * previewScale;
         }
         else
         {

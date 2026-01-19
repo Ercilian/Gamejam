@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd33cbfb23e7a64eaabce2f966a894d, type: 3}
   m_Name: Serpiente
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
-  playerName: Serpi
+  playerName: Zofy
+  playerPrefabName: 
   description: 
-  playerIcon: {fileID: 0}
+  playerIcon: {fileID: 21300000, guid: 724a16ae6ef5ec14ba562661efd4cf2a, type: 3}
   maxHealth: 100
   moveSpeed: 6.5
   maxShield: 0

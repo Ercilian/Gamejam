@@ -1822,7 +1822,7 @@ PrefabInstance:
       objectReference: {fileID: 4605989410389788580, guid: ddd4ba6e7f1817146b903e554a087c49, type: 3}
     - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: selectedCharacterIndex
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3980157597735122981, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1940,7 +1940,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: previewScale
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: worldPreviewAnchor
@@ -1952,7 +1952,7 @@ PrefabInstance:
       objectReference: {fileID: 4605989410389788580, guid: ad4b60aaf58b20d4989e20ca43c1ac8f, type: 3}
     - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: selectedCharacterIndex
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3969588322936688085, guid: 5098a7b2150025f48a50a95db44d1d88, type: 3}
       propertyPath: availableCharacters.Array.size
