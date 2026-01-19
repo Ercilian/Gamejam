@@ -78,9 +78,16 @@ public class Dash : MonoBehaviour
             
             if (Physics.SphereCast(checkOrigin, collisionCheckRadius, moveDirection, out hit, moveDistance + collisionCheckRadius, collisionLayers))
             {
-                // Detener el dash si hay una colisión
-                transform.position = transform.position + moveDirection * Mathf.Max(0, hit.distance - collisionCheckRadius);
-                isDashing = false;
+                // Detener el dash si hay una colisión (pero ignorar proyectiles)
+                if (hit.collider != null && !hit.collider.CompareTag("Projectile"))
+                {
+                    transform.position = transform.position + moveDirection * Mathf.Max(0, hit.distance - collisionCheckRadius);
+                    isDashing = false;
+                }
+                else
+                {
+                    transform.position = targetPosition;
+                }
             }
             else
             {

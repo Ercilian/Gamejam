@@ -34,6 +34,8 @@ public class FrogCombat : MonoBehaviour
     [Header("Bullet Hell Settings")]
     [SerializeField] private int bulletPatternCount = 8;
     [SerializeField] private float bulletHellCooldown = 3f;
+    [SerializeField] private float bulletHellBaseDirection = 0f; // 0 = hacia adelante, 90 = arriba, etc
+    [SerializeField] private float bulletHellArcHeight = 2f; // Altura del arco de los proyectiles
     [SerializeField] private bool enableBulletHell = true;
     
     [Header("Jump Attack Settings")]
@@ -67,7 +69,8 @@ public class FrogCombat : MonoBehaviour
     [Header("Projectile Configuration")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private GameObject mortarProjectilePrefab;
-    [SerializeField] private Vector3 projectileSpawnOffset = Vector3.zero;
+    [SerializeField] private Vector3 bulletHellSpawnOffset = Vector3.zero; // Offset para bullet hell
+    [SerializeField] private Vector3 projectileSpawnOffset = Vector3.zero; // Offset general (heredado)
     
     [Header("UI & Effects")]
     [SerializeField] private ParticleSystem attackEffectPrefab;
@@ -230,7 +233,7 @@ public class FrogCombat : MonoBehaviour
         
         // Patrón de arco (Mega Satan style) - bolas salen en un arco frontal
         float arcWidth = 120f; // Ancho del arco en grados
-        float startAngle = -arcWidth * 0.5f; // Comienza a la izquierda del arco
+        float startAngle = bulletHellBaseDirection - arcWidth * 0.5f; // Comienza a la izquierda del arco
         
         for (int i = 0; i < bulletPatternCount; i++)
         {
@@ -245,7 +248,7 @@ public class FrogCombat : MonoBehaviour
         if (currentPhase == BossPhase.Phase2)
         {
             float phase2ArcWidth = 150f; // Arco más amplio en fase 2
-            float phase2StartAngle = -phase2ArcWidth * 0.5f;
+            float phase2StartAngle = bulletHellBaseDirection - phase2ArcWidth * 0.5f;
             
             for (int i = 0; i < bulletPatternCount; i++)
             {
@@ -438,16 +441,87 @@ public class FrogCombat : MonoBehaviour
     {
         if (projectilePrefab == null) return;
         
-        Vector3 spawnPos = transform.position + projectileSpawnOffset;
+        Vector3 spawnPos = transform.position + bulletHellSpawnOffset;
         GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         
+        // Desactivar Rigidbody si existe
         Rigidbody projRb = projectile.GetComponent<Rigidbody>();
         if (projRb != null)
         {
-            Vector3 dir3D = new Vector3(direction.x, 0, direction.y);
-            projRb.linearVelocity = dir3D * speed;
-            projectile.transform.rotation = Quaternion.LookRotation(dir3D);
+            projRb.isKinematic = true;
+            projRb.constraints = RigidbodyConstraints.FreezeAll;
         }
+        
+        // Iniciar corrutina de trayectoria de arco
+        StartCoroutine(AnimateProjectileArc(projectile, direction, speed, bulletHellArcHeight));
+    }
+
+    private IEnumerator AnimateProjectileArc(GameObject projectile, Vector2 direction, float speed, float arcHeight)
+    {
+        Vector3 startPos = projectile.transform.position;
+        Vector3 dir3D = new Vector3(direction.x, 0, direction.y).normalized;
+        
+        // Distancia de viaje del proyectil
+        float travelDistance = 50f;
+        float duration = travelDistance / speed;
+        
+        float elapsedTime = 0f;
+        float damageRadius = 1.5f; // Radio para detectar al jugador
+        bool hasDamagedPlayer = false;
+        
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            
+            // Posición horizontal (línea recta)
+            Vector3 horizontalPos = startPos + dir3D * (travelDistance * t);
+            
+            // Altura del arco (parábola)
+            float arcY = Mathf.Sin(t * Mathf.PI) * arcHeight;
+            
+            // Posición final
+            projectile.transform.position = horizontalPos + Vector3.up * arcY;
+            
+            // Rotar hacia la dirección de movimiento
+            if (dir3D != Vector3.zero)
+                projectile.transform.rotation = Quaternion.LookRotation(dir3D);
+            
+            // Detectar colisión con el jugador por distancia
+            if (targetTransform != null && !hasDamagedPlayer)
+            {
+                float distanceToPlayer = Vector3.Distance(projectile.transform.position, targetTransform.position);
+                if (distanceToPlayer < damageRadius)
+                {
+                    // Verificar si el jugador está en dash
+                    Dash dashComponent = targetTransform.GetComponent<Dash>();
+                    if (dashComponent != null && dashComponent.IsDashing)
+                    {
+                        Debug.Log("[FrogBoss] Proyectil tocó jugador en dash - sin daño");
+                    }
+                    else
+                    {
+                        // Causar daño al jugador
+                        EntityStats playerStats = targetTransform.GetComponent<EntityStats>();
+                        if (playerStats != null)
+                        {
+                            playerStats.TakeDamage(15); // Daño de 15
+                            Debug.Log($"[FrogBoss] ¡Proyectil impactó al jugador! Daño: 15");
+                            hasDamagedPlayer = true;
+                            
+                            // Destruir proyectil inmediatamente al impactar
+                            Destroy(projectile);
+                            yield break; // Salir de la corrutina
+                        }
+                    }
+                }
+            }
+            
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Destruir proyectil al final de la trayectoria si no impactó
+        Destroy(projectile);
     }
 
     private void SpawnMortarProjectile(Vector3 targetPosition, float launchAngle)

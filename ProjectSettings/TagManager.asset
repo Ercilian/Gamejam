@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Collectible
   - ShopCamera
+  - Projectile
   layers:
   - Default
   - TransparentFX
