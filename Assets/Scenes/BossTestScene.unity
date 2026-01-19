@@ -1238,7 +1238,7 @@ MonoBehaviour:
   pushForce: 20
   pushCooldown: 4.5
   pushChargeDuration: 1.5
-  enablePushAttack: 0
+  enablePushAttack: 1
   mortarProjectileCount: 6
   mortarArc: 70
   mortarCooldown: 4

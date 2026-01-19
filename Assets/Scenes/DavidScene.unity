@@ -5481,6 +5481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarScrapSystem
   currentScrap: 0
   maxScrap: 9999
+  scrapUIText: {fileID: 0}
   scrapDepositPoint: {fileID: 349664124}
   scrapDepositPrompt: Press 'Attack' to deposit scrap
 --- !u!65 &349664126
@@ -5519,6 +5520,8 @@ MonoBehaviour:
   scrapCollider: {fileID: 349664126}
   plantCollider: {fileID: 2139318381}
   swapAnimationTime: 2
+  leverAnimator: {fileID: 0}
+  swapAnimator: {fileID: 0}
   lever: {fileID: 8300000, guid: b8bab7653a9c00d4a8e8b934e788b865, type: 3}
   swapSound: {fileID: 8300000, guid: 485138bb54b6daa4486acd28702f60e9, type: 3}
 --- !u!82 &349664128
@@ -10719,19 +10722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f2884a707685954792688e934d36e3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemDropSystem
-  availableItems:
-  - itemName: Scrap
-    prefab: {fileID: 5219421215397009677, guid: 3df252fd5914c414cbd1b785305c6696, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
-  - itemName: Diesel
-    prefab: {fileID: 5219421215397009677, guid: 93c524a2c72611749b474dff8449254f, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
-  - itemName: Plant
-    prefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
+  listOfDroppableItems: []
   dropTables:
   - sourceName: NormalEnemy
     possibleDrops:
@@ -10769,7 +10760,6 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  showDebugLogs: 1
 --- !u!114 &458190341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16616,7 +16606,7 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 1813536838263918369, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+  m_PlayerPrefab: {fileID: 9179252528894641704, guid: 006e4729f869b8948b94cffade1744bc, type: 3}
   m_SplitScreen: 0
   m_MaintainAspectRatioInSplitScreen: 0
   m_FixedNumberOfSplitScreens: -1
@@ -27095,6 +27085,7 @@ MonoBehaviour:
   speedTransitionRate: 1
   pushSpeed: 0.2
   pushSpeedTwo: 0.4
+  truckAnimator: {fileID: 0}
   pathPoints:
   - {fileID: 905100830}
   - {fileID: 2097777428}
@@ -27445,6 +27436,8 @@ MonoBehaviour:
   scrapCollider: {fileID: 349664126}
   plantCollider: {fileID: 2139318381}
   swapAnimationTime: 2
+  leverAnimator: {fileID: 0}
+  swapAnimator: {fileID: 0}
   lever: {fileID: 8300000, guid: b8bab7653a9c00d4a8e8b934e788b865, type: 3}
   swapSound: {fileID: 8300000, guid: 485138bb54b6daa4486acd28702f60e9, type: 3}
 --- !u!82 &2139318385
