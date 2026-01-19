@@ -1226,7 +1226,7 @@ MonoBehaviour:
   bulletPatternCount: 14
   bulletHellCooldown: 3
   bulletHellBaseDirection: 180
-  bulletHellArcHeight: 2
+  bulletHellArcHeight: 0.1
   enableBulletHell: 1
   jumpHeight: 20
   jumpDuration: 1.5
@@ -1250,7 +1250,7 @@ MonoBehaviour:
   enableSpawnEnemies: 0
   projectilePrefab: {fileID: 42299429}
   mortarProjectilePrefab: {fileID: 42299429}
-  bulletHellSpawnOffset: {x: -3.5, y: -4, z: 0}
+  bulletHellSpawnOffset: {x: -3.5, y: -3, z: 0}
   projectileSpawnOffset: {x: 0, y: 0, z: 0}
   attackEffectPrefab: {fileID: 0}
   attackSFX: {fileID: 0}
