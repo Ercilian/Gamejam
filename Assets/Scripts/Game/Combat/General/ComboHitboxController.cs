@@ -73,6 +73,7 @@ namespace Game.Combat
         Animator _animator; // Animator del personaje
         Animator _weaponAnimator; // Animator del arma
         private AudioSource audioSource;
+        private PlayerInventory playerInventory; // Referencia al inventario del jugador
         [SerializeField] public PlayerStatsData playerStatsData;
 
 
@@ -145,6 +146,7 @@ namespace Game.Combat
             _playerInput = GetComponent<PlayerInput>();
             attackerStats = GetComponent<EntityStats>();
             audioSource = GetComponent<AudioSource>();
+            playerInventory = GetComponent<PlayerInventory>(); // Obtener referencia al inventario
             
             // Obtener el Animator del personaje (primero busca en este GameObject, luego en hijos)
             _animator = GetComponent<Animator>();
@@ -180,7 +182,9 @@ namespace Game.Combat
 
         public bool CanAttack()
         {
-            return Time.time - lastAttackTime >= attackCooldown && !boomerangActive;
+            // No puede atacar si tiene items en las manos o si está en cooldown o boomerang activo
+            bool hasItems = playerInventory != null && playerInventory.HasItems();
+            return Time.time - lastAttackTime >= attackCooldown && !boomerangActive && !hasItems;
         }
 
         void OnEnable()
