@@ -159,7 +159,7 @@ MonoBehaviour:
   camionTag: Car
   tagJugador: Player
   mostrarDebug: 1
-  mostrarGizmos: 1
+  mostrarGizmos: 0
 --- !u!114 &6466181651961212369
 MonoBehaviour:
   m_ObjectHideFlags: 0
