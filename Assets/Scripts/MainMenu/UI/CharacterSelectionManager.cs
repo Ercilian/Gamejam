@@ -78,11 +78,8 @@ public class CharacterSelectionManager : MonoBehaviour
             Debug.LogWarning("[CharacterSelection] Ignored: PlayerInput has no devices.");
             return;
         }
-        if (playerInput.devices[0] is Mouse)
-        {
-            Debug.Log("[CharacterSelection] Ignored: Cannot join with Mouse.");
-            return;
-        }
+
+
 
         audioSource.PlayOneShot(joinSound);
 
@@ -241,6 +238,7 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             StopCoroutine(countdownCoroutine);
             countdownCoroutine = null;
+            audioSource.Stop(); // Detener cualquier beep en curso
             if (countdownText != null)
                 countdownText.text = "";
             Debug.Log("[CharacterSelection] Countdown cancelled by a player.");
@@ -251,14 +249,16 @@ public class CharacterSelectionManager : MonoBehaviour
 
     private IEnumerator StartCountdownAndLoadScene() // Start countdown and load the main scene
     {
-        audioSource.PlayOneShot(countdownBeepSound);
         float countdown = 3f;
         while (countdown > 0)
         {
             if (countdownText != null)
                 countdownText.text = $" {Mathf.CeilToInt(countdown)}...";
             Debug.Log($"Starting in {Mathf.CeilToInt(countdown)}...");
+            audioSource.clip = countdownBeepSound;
+            audioSource.Play();
             yield return new WaitForSeconds(1f);
+            audioSource.Stop(); // Por si el beep es más largo que 1s
             countdown -= 1f;
         }
 
