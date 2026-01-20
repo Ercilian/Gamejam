@@ -55,15 +55,20 @@ public class FrogCombat : MonoBehaviour
     
     [Header("Mortar Attack Settings")]
     [SerializeField] private int mortarProjectileCount = 6;
-    [SerializeField] private float mortarArc = 70f;
     [SerializeField] private float mortarCooldown = 4f;
+    [SerializeField] private float mortarRandomRadius = 15f; // Radio del área aleatoria de caída
+    [SerializeField] private Vector3 mortarAttackAreaCenter = Vector3.zero; // Centro del área de morteros (relativo al boss)
+    [SerializeField] private float mortarFallDuration = 2f; // Tiempo que tarda en caer el mortero
+    [SerializeField] private float mortarMaxHeight = 25f; // Altura máxima del mortero en el aire
+    [SerializeField] private float mortarDamageRadius = 3f; // Radio del área de daño del mortero
     [SerializeField] private bool enableMortarAttack = true;
     
     [Header("Enemy Spawning")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private int enemiesToSpawn = 3;
-    [SerializeField] private float spawnRadius = 5f;
+    [SerializeField] private Transform[] enemySpawnPoints; // Puntos de spawn de enemigos
     [SerializeField] private float spawnCooldown = 5f;
+    [SerializeField] private float delayBetweenEnemySpawns = 0.5f; // Delay entre spawns de enemigos
     [SerializeField] private bool enableSpawnEnemies = true;
     
     [Header("Projectile Configuration")]
@@ -216,7 +221,7 @@ public class FrogCombat : MonoBehaviour
                 StartCoroutine(PushAttack());
                 break;
             case AttackType.SpawnEnemies:
-                SpawnEnemies();
+                StartCoroutine(SpawnEnemies());
                 break;
         }
     }
@@ -377,16 +382,16 @@ public class FrogCombat : MonoBehaviour
         
         Debug.Log("[FrogBoss] Mortar Attack!");
         
-        if (targetTransform == null)
-            yield break;
-        
-        Vector3 targetPos = targetTransform.position;
-        float startAngle = -mortarArc * 0.5f;
+        // Centro del área de morteros en el mundo
+        Vector3 areaCenter = transform.position + mortarAttackAreaCenter;
         
         for (int i = 0; i < mortarProjectileCount; i++)
         {
-            float angle = startAngle + (mortarArc / (mortarProjectileCount - 1)) * i;
-            SpawnMortarProjectile(targetPos, angle);
+            // Generar posición aleatoria dentro del área
+            Vector2 randomOffset = Random.insideUnitCircle * mortarRandomRadius;
+            Vector3 randomPosition = areaCenter + new Vector3(randomOffset.x, 0, randomOffset.y);
+            
+            SpawnMortarProjectile(randomPosition);
             
             yield return new WaitForSeconds(0.1f);
         }
@@ -524,7 +529,7 @@ public class FrogCombat : MonoBehaviour
         Destroy(projectile);
     }
 
-    private void SpawnMortarProjectile(Vector3 targetPosition, float launchAngle)
+    private void SpawnMortarProjectile(Vector3 impactPosition)
     {
         if (mortarProjectilePrefab == null)
             return;
@@ -532,14 +537,85 @@ public class FrogCombat : MonoBehaviour
         Vector3 spawnPos = transform.position + projectileSpawnOffset;
         GameObject projectile = Instantiate(mortarProjectilePrefab, spawnPos, Quaternion.identity);
         
-        Rigidbody projRb = projectile.GetComponent<Rigidbody>();
-        if (projRb != null)
+        // Asegurar que el impacto sea en el suelo
+        impactPosition.y = spawnPos.y;
+        
+        // Animar el proyectil como parábola pura
+        StartCoroutine(AnimateMortarProjectile(projectile, spawnPos, impactPosition));
+        
+        // Crear el área de impacto en el suelo
+        CreateMortarImpactArea(impactPosition);
+    }
+    
+    private IEnumerator AnimateMortarProjectile(GameObject projectile, Vector3 startPos, Vector3 endPos)
+    {
+        float duration = mortarFallDuration; // Usar el valor ajustable
+        float elapsedTime = 0f;
+        
+        while (elapsedTime < duration && projectile != null)
         {
-            float radians = launchAngle * Mathf.Deg2Rad;
-            Vector3 direction = new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0);
-            projRb.linearVelocity = direction * mortarSpeed;
-            projRb.useGravity = true; // Aplicar gravedad para trayectoria parabólica
+            float t = elapsedTime / duration;
+            
+            // Interpolación horizontal
+            Vector3 horizontalPos = Vector3.Lerp(startPos, endPos, t);
+            
+            // Parábola vertical (sube y baja) - usa la altura máxima ajustable
+            float arcHeight = Mathf.Sin(t * Mathf.PI) * mortarMaxHeight;
+            
+            projectile.transform.position = horizontalPos + Vector3.up * arcHeight;
+            
+            // Rotar hacia la dirección de movimiento
+            Vector3 direction = (endPos - startPos).normalized;
+            if (direction != Vector3.zero)
+            {
+                projectile.transform.rotation = Quaternion.LookRotation(direction);
+            }
+            
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
+        
+        // Destruir el proyectil al terminar la trayectoria
+        if (projectile != null)
+        {
+            Destroy(projectile);
+        }
+    }
+    
+    private void CreateMortarImpactArea(Vector3 impactPosition)
+    {
+        // Crear un GameObject para el área de impacto
+        GameObject impactArea = new GameObject("MortarImpactArea");
+        impactArea.transform.position = impactPosition;
+        
+        // Agregar el componente de daño
+        MortarImpactArea mortarArea = impactArea.AddComponent<MortarImpactArea>();
+        mortarArea.SetDamageRadius(mortarDamageRadius);
+        mortarArea.SetDelayBeforeDamage(mortarFallDuration);
+        
+        // Visualizar el área con LineRenderer
+        LineRenderer lineRenderer = impactArea.AddComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = new Color(1f, 0.5f, 0f, 0.8f); // Naranja
+        lineRenderer.endColor = new Color(1f, 0.5f, 0f, 0.8f);
+        lineRenderer.startWidth = 0.2f;
+        lineRenderer.endWidth = 0.2f;
+        lineRenderer.useWorldSpace = false;
+        
+        // Dibujar círculo en el suelo
+        int segments = 40;
+        Vector3[] positions = new Vector3[segments + 1];
+        
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = (360f / segments) * i * Mathf.Deg2Rad;
+            positions[i] = new Vector3(Mathf.Cos(angle) * mortarDamageRadius, 0f, Mathf.Sin(angle) * mortarDamageRadius);
+        }
+        
+        lineRenderer.positionCount = positions.Length;
+        lineRenderer.SetPositions(positions);
+        
+        Debug.Log("[FrogBoss] Área de impacto de mortero creada en: " + impactPosition);
     }
     #endregion
 
@@ -658,7 +734,7 @@ public class FrogCombat : MonoBehaviour
         Destroy(areaVisual);
     }
 
-    private void SpawnEnemies()
+    private IEnumerator SpawnEnemies()
     {
         lastSpawnTime = Time.time;
         PlayAttackEffect();
@@ -669,17 +745,30 @@ public class FrogCombat : MonoBehaviour
         if (enemyPrefab == null)
         {
             Debug.LogWarning("[FrogBoss] Enemy prefab not assigned!");
-            return;
+            yield break;
+        }
+        
+        // Verificar si hay puntos de spawn definidos
+        if (enemySpawnPoints == null || enemySpawnPoints.Length == 0)
+        {
+            Debug.LogWarning("[FrogBoss] No enemy spawn points assigned!");
+            yield break;
         }
         
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            Vector3 randomDirection = Random.insideUnitSphere.normalized;
-            randomDirection.y = 0; // Mantener spawn en plano horizontal
-            Vector3 spawnPosition = transform.position + randomDirection * spawnRadius;
+            // Seleccionar un punto de spawn aleatorio
+            Transform randomSpawnPoint = enemySpawnPoints[Random.Range(0, enemySpawnPoints.Length)];
+            Vector3 spawnPosition = randomSpawnPoint.position;
             
             GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            Debug.Log($"[FrogBoss] Enemy spawned at {spawnPosition}");
+            Debug.Log($"[FrogBoss] Enemy {i + 1} spawned at {spawnPosition}");
+            
+            // Esperar antes de spawnear el siguiente enemigo
+            if (i < enemiesToSpawn - 1)
+            {
+                yield return new WaitForSeconds(delayBetweenEnemySpawns);
+            }
         }
     }
     #endregion
@@ -687,9 +776,6 @@ public class FrogCombat : MonoBehaviour
     #region Gizmos & Debug
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, spawnRadius);
-        
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, jumpImpactRadius);
         
