@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7039a4e21e1148e42bcc6298d0169c02
+guid: c3870a9b4d010474a98db5cf2d706cb2
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,18 +31,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ZofyRunObjet
-      takeName: Armature.001|Armature.001Action
-      internalID: 2264077025236624520
+      name: ZofyCollectibleIddle
+      takeName: Armature.001|ArmatureAction.002
+      internalID: 1570611337149101020
       firstFrame: 0
-      lastFrame: 16
+      lastFrame: 72
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

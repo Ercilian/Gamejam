@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9073267519917668082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1140811053641460962}
+  m_Layer: 0
+  m_Name: ItemHoldPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1140811053641460962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9073267519917668082}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0016, y: -0.0005, z: -0.0087}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1316116354499802927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &68271632889683252
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -551,6 +582,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8981156404098146296, guid: 4a2d4d04f618d464da72bdb5dd75b533, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1140811053641460962}
     - targetCorrespondingSourceObject: {fileID: 3544013951435709867, guid: 4a2d4d04f618d464da72bdb5dd75b533, type: 3}
       insertIndex: -1
       addedObject: {fileID: 538239311198124767}
@@ -559,6 +593,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7924650572780428191}
   m_SourcePrefab: {fileID: 100100000, guid: 4a2d4d04f618d464da72bdb5dd75b533, type: 3}
+--- !u!4 &1316116354499802927 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8981156404098146296, guid: 4a2d4d04f618d464da72bdb5dd75b533, type: 3}
+  m_PrefabInstance: {fileID: 1233789538410403623}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1627475607106810060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4a2d4d04f618d464da72bdb5dd75b533, type: 3}
@@ -619,7 +658,7 @@ PrefabInstance:
     - target: {fileID: 3199202718284467957, guid: 0674b31648968d144873881aec2c1a04, type: 3}
       propertyPath: itemHoldPoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1140811053641460962}
     - target: {fileID: 3559229165855641145, guid: 0674b31648968d144873881aec2c1a04, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.414446
