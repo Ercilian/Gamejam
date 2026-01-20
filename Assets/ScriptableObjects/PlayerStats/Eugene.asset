@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Eugene
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
   playerName: Eugene
-  playerPrefabName: 
-  description: 
+  description: Eugene es un cangrejo
   playerIcon: {fileID: 21300000, guid: 642166b926d42894bb5cde42ee0612eb, type: 3}
   maxHealth: 140
   moveSpeed: 4

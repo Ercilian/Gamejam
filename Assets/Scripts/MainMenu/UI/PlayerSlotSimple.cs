@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 
+
 public class PlayerSlotSimple : MonoBehaviour
 {
     [Header("UI References")]
@@ -18,6 +19,10 @@ public class PlayerSlotSimple : MonoBehaviour
     public Vector3 previewLocalPosition = Vector3.zero;
     public Vector3 previewLocalEuler = new Vector3(0, 180, 0);
     public float previewScale;
+    public TMP_Text characterInfo;
+
+    [Header("Player Stats Data")]
+    public PlayerStatsData[] playerStatsDataArray; // Debe asignarse en el inspector, mismo orden que characterPrefabs
 
     [Header("Slot Management")]
     public int selectedCharacterIndex = 0;
@@ -29,7 +34,6 @@ public class PlayerSlotSimple : MonoBehaviour
     private bool isConfirmed = false;
     private int slotIndex;
     private bool isJoined = false;
-    private GameObject spawnedCharacter;
     private GameObject currentPreviewInstance;
     private float joinTime = -1f;
 
@@ -63,6 +67,7 @@ public class PlayerSlotSimple : MonoBehaviour
         if (idleState) idleState.SetActive(!joined);
         if (joinedState) joinedState.SetActive(joined);
 
+
         if (joined)
         {
             if (manager != null && manager.characterPrefabs != null && defaultCharacterPrefab != null)
@@ -86,8 +91,13 @@ public class PlayerSlotSimple : MonoBehaviour
                 }
             }
             SpawnPreview();
+            UpdateCharacterDescription(selectedCharacterIndex);
         }
-        else DespawnPreview();
+        else
+        {
+            DespawnPreview();
+            if (characterInfo) characterInfo.text = "";
+        }
 
         Debug.Log($"[Slot {slotIndex}] Estado cambiado a: {(joined ? "JOINED" : "IDLE")}");
     }
@@ -100,28 +110,23 @@ public class PlayerSlotSimple : MonoBehaviour
         leftArrowButton.interactable = true;
         rightArrowButton.interactable = true;
         DespawnPreview();
+        if (characterInfo) characterInfo.text = "";
     }
 
     // ================================================= Preview Management ==============================================
 
     private void SpawnPreview() // Spawn the default character preview
     {
-        if (spawnedCharacter || !defaultCharacterPrefab) return;
+        if (currentPreviewInstance || !defaultCharacterPrefab) return;
         var anchor = worldPreviewAnchor ? worldPreviewAnchor : transform;
-
-        spawnedCharacter = Instantiate(defaultCharacterPrefab, anchor);
-        spawnedCharacter.transform.localPosition = previewLocalPosition;
-        spawnedCharacter.transform.localEulerAngles = previewLocalEuler;
-        spawnedCharacter.transform.localScale = Vector3.one * previewScale;
+        currentPreviewInstance = Instantiate(defaultCharacterPrefab, anchor);
+        currentPreviewInstance.transform.localPosition = previewLocalPosition;
+        currentPreviewInstance.transform.localEulerAngles = previewLocalEuler;
+        currentPreviewInstance.transform.localScale = Vector3.one * previewScale;
     }
 
     private void DespawnPreview() // Despawn the current character preview
     {
-        if (spawnedCharacter)
-        {
-            Destroy(spawnedCharacter);
-            spawnedCharacter = null;
-        }
         if (currentPreviewInstance)
         {
             Destroy(currentPreviewInstance);
@@ -132,11 +137,9 @@ public class PlayerSlotSimple : MonoBehaviour
     public void ShowCharacterPreview(GameObject prefab) // Show a specific character preview
     {
         if (currentPreviewInstance != null)
-            Destroy(currentPreviewInstance);
-        if (spawnedCharacter != null)
         {
-            Destroy(spawnedCharacter);
-            spawnedCharacter = null;
+            Destroy(currentPreviewInstance);
+            currentPreviewInstance = null;
         }
         if (worldPreviewAnchor != null && prefab != null)
         {
@@ -144,10 +147,25 @@ public class PlayerSlotSimple : MonoBehaviour
             currentPreviewInstance.transform.localPosition = previewLocalPosition;
             currentPreviewInstance.transform.localEulerAngles = previewLocalEuler;
             currentPreviewInstance.transform.localScale = Vector3.one * previewScale;
+            // Actualizar descripción al mostrar preview
+            int index = -1;
+            if (manager != null && manager.characterPrefabs != null)
+            {
+                for (int i = 0; i < manager.characterPrefabs.Length; i++)
+                {
+                    if (manager.characterPrefabs[i] == prefab)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+            UpdateCharacterDescription(index);
         }
         else
         {
             Debug.LogWarning($"[Slot {slotIndex}] Prefab nulo o anchor no encontrado.");
+            if (characterInfo) characterInfo.text = "";
         }
     }
 
@@ -158,6 +176,20 @@ public class PlayerSlotSimple : MonoBehaviour
         selectedCharacterIndex = (selectedCharacterIndex + direction + characterPrefabs.Length) % characterPrefabs.Length;
         Debug.Log($"[Slot {slotIndex}] Cambiando a índice {selectedCharacterIndex}: {characterPrefabs[selectedCharacterIndex]?.name}");
         ShowCharacterPreview(characterPrefabs[selectedCharacterIndex]);
+    }
+
+    // ===================== Descripción de personaje =====================
+    private void UpdateCharacterDescription(int index)
+    {
+        if (characterInfo == null) return;
+        if (playerStatsDataArray != null && index >= 0 && index < playerStatsDataArray.Length && playerStatsDataArray[index] != null)
+        {
+            characterInfo.text = playerStatsDataArray[index].Description;
+        }
+        else
+        {
+            characterInfo.text = "";
+        }
     }
 
     // ================================================= UI Events ======================================================

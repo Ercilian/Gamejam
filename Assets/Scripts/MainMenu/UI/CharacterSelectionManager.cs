@@ -26,7 +26,7 @@ public class CharacterSelectionManager : MonoBehaviour
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
     private Coroutine countdownCoroutine;
 
-    public int GetJoinedPlayersCount() => activePlayers.Count;
+
 
 
     // ========================================================================================= Methods ========================================================================================
@@ -43,11 +43,8 @@ public class CharacterSelectionManager : MonoBehaviour
 
         for (int i = 0; i < playerSlots.Length; i++)
         {
-            if (playerSlots[i] != null)
-            {
                 playerSlots[i].Initialize(i);
                 playerSlots[i].manager = this;
-            }
         }
         audioSource = GetComponent<AudioSource>();
     }
@@ -71,113 +68,97 @@ public class CharacterSelectionManager : MonoBehaviour
         }
     }
 
-    void Update() // Handle character selection input
-    {
-        for (int i = 0; i < playerSlots.Length; i++)
-        {
-            var slot = playerSlots[i];
-            if (slot != null && slot.IsJoined)
-            {
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-                    slot.OnLeftArrowPressed();
-                if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-                    slot.OnRightArrowPressed();
-            }
-        }
-    }
 
     // ========================================================================================= Player Input Management ===========================================================================
 
     public void OnPlayerJoined(PlayerInput playerInput) // Handle a new player joining
     {
-        if (playerInput.devices.Count > 0 && playerInput.devices[0] is Mouse)
+        if (playerInput.devices.Count == 0)
+        {
+            Debug.LogWarning("[CharacterSelection] Ignored: PlayerInput has no devices.");
+            return;
+        }
+        if (playerInput.devices[0] is Mouse)
         {
             Debug.Log("[CharacterSelection] Ignored: Cannot join with Mouse.");
             return;
         }
 
         audioSource.PlayOneShot(joinSound);
-        int slotIndex = -1;
+
         for (int i = 0; i < playerSlots.Length; i++)
         {
-            if (playerSlots[i] != null && !playerSlots[i].IsJoined)
+            if (!playerSlots[i].IsJoined)
             {
-                slotIndex = i;
-                break;
-            }
-        }
+                Debug.Log($"[CharacterSelection] Player assigned to slot {i} with device: {playerInput.devices[0].name}");
+                playerSlots[i].SetJoinedState(true);
+                activePlayers[i] = playerInput;
+                playerSlots[i].playerInput = playerInput;
 
-        if (slotIndex == -1)
-        {
-            Debug.LogWarning("[CharacterSelection] No free slots available for the player.");
-            return;
-        }
-
-        Debug.Log($"[CharacterSelection] Player assigned to slot {slotIndex} with device: {playerInput.devices[0].name}");
-
-        playerSlots[slotIndex].SetJoinedState(true);
-        activePlayers[slotIndex] = playerInput;
-        playerSlots[slotIndex].playerInput = playerInput;
-
-        var uiMap = playerInput.actions.FindActionMap("UI", true);
-        if (uiMap != null)
-        {
-            var moveLeft = uiMap.FindAction("MoveLeft");
-            var moveRight = uiMap.FindAction("MoveRight");
-            var disconnect = uiMap.FindAction("Disconnect", false);
-            var confirm = uiMap.FindAction("Confirm");
-            var unconfirm = uiMap.FindAction("Unconfirm", false);
-
-            int playerIndex = playerInput.playerIndex;
-            if (playerIndex >= 0 && playerIndex < playerSlots.Length)
-            {
-                moveLeft.performed -= playerSlots[playerIndex].OnLeftArrowPressed;
-                moveRight.performed -= playerSlots[playerIndex].OnRightArrowPressed;
-                confirm.performed -= playerSlots[playerIndex].OnConfirmPressed;
-
-                moveLeft.performed += playerSlots[playerIndex].OnLeftArrowPressed;
-                moveRight.performed += playerSlots[playerIndex].OnRightArrowPressed;
-                confirm.performed += playerSlots[playerIndex].OnConfirmPressed;
-
-                if (disconnect != null)
+                var uiMap = playerInput.actions.FindActionMap("UI", true);
+                if (uiMap != null)
                 {
-                    disconnect.performed += ctx =>
-                    {
-                        Debug.Log($"[CharacterSelection] Player {playerIndex} disconnected by input.");
-                        Destroy(playerInput.gameObject);
-                    };
-                }
+                    var moveLeft = uiMap.FindAction("MoveLeft");
+                    var moveRight = uiMap.FindAction("MoveRight");
+                    var disconnect = uiMap.FindAction("Disconnect", false);
+                    var confirm = uiMap.FindAction("Confirm");
+                    var unconfirm = uiMap.FindAction("Unconfirm", false);
 
-                confirm.performed += ctx =>
-                {
-                    if (selectCharacterPanel.activeSelf
-                        && playerSlots[playerIndex] != null
-                        && playerSlots[playerIndex].IsJoined
-                        && !playerSlots[playerIndex].IsConfirmed)
+                    int playerIndex = playerInput.playerIndex;
+                    if (playerIndex >= 0 && playerIndex < playerSlots.Length)
                     {
-                        playerSlots[playerIndex].OnConfirmPressed();
-                    }
-                };
+                        moveLeft.performed -= playerSlots[playerIndex].OnLeftArrowPressed;
+                        moveRight.performed -= playerSlots[playerIndex].OnRightArrowPressed;
+                        confirm.performed -= playerSlots[playerIndex].OnConfirmPressed;
 
-                if (unconfirm != null)
-                {
-                    unconfirm.performed += ctx =>
-                    {
-                        if (selectCharacterPanel.activeSelf
-                            && playerSlots[playerIndex] != null
-                            && playerSlots[playerIndex].IsJoined
-                            && playerSlots[playerIndex].IsConfirmed)
+                        moveLeft.performed += playerSlots[playerIndex].OnLeftArrowPressed;
+                        moveRight.performed += playerSlots[playerIndex].OnRightArrowPressed;
+                        confirm.performed += playerSlots[playerIndex].OnConfirmPressed;
+
+                        if (disconnect != null)
                         {
-                            playerSlots[playerIndex].OnUnconfirmPressed();
+                            disconnect.performed += ctx =>
+                            {
+                                Debug.Log($"[CharacterSelection] Player {playerIndex} disconnected by input.");
+                                Destroy(playerInput.gameObject);
+                            };
                         }
-                    };
+
+                        confirm.performed += ctx =>
+                        {
+                            if (selectCharacterPanel.activeSelf
+                                && playerSlots[playerIndex] != null
+                                && playerSlots[playerIndex].IsJoined
+                                && !playerSlots[playerIndex].IsConfirmed)
+                            {
+                                playerSlots[playerIndex].OnConfirmPressed();
+                            }
+                        };
+
+                        if (unconfirm != null)
+                        {
+                            unconfirm.performed += ctx =>
+                            {
+                                if (selectCharacterPanel.activeSelf
+                                    && playerSlots[playerIndex] != null
+                                    && playerSlots[playerIndex].IsJoined
+                                    && playerSlots[playerIndex].IsConfirmed)
+                                {
+                                    playerSlots[playerIndex].OnUnconfirmPressed();
+                                }
+                            };
+                        }
+                    }
                 }
+                else
+                {
+                    Debug.LogWarning("Not found Action Map 'UI'.");
+                }
+                return;
             }
         }
-        else
-        {
-            Debug.LogWarning("Not found Action Map 'UI'.");
-        }
+        Debug.LogWarning("[CharacterSelection] No free slots available for the player.");
+        return;
     }
 
     public void OnPlayerLeft(PlayerInput playerInput) // Handle a player leaving
@@ -188,8 +169,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
         if (playerIndex >= 0 && playerIndex < playerSlots.Length)
         {
-            if (playerSlots[playerIndex] != null)
-                playerSlots[playerIndex].SetJoinedState(false);
+            playerSlots[playerIndex].SetJoinedState(false);
             activePlayers.Remove(playerIndex);
         }
     }
@@ -205,12 +185,7 @@ public class CharacterSelectionManager : MonoBehaviour
     }
 
 
-    public PlayerInput[] GetActivePlayers() // Get the list of active players
-    {
-        PlayerInput[] players = new PlayerInput[activePlayers.Count];
-        activePlayers.Values.CopyTo(players, 0);
-        return players;
-    }
+
 
     // ========================================================================================= Selection State ====================================================================================
 
@@ -226,11 +201,8 @@ public class CharacterSelectionManager : MonoBehaviour
 
         for (int i = 0; i < playerSlots.Length; i++)
         {
-            if (playerSlots[i] != null)
-            {
-                playerSlots[i].SetJoinedState(false);
-                playerSlots[i].ResetSlotState();
-            }
+            playerSlots[i].SetJoinedState(false);
+            playerSlots[i].ResetSlotState();
         }
         Debug.Log("[CharacterSelection] Character selection reset.");
     }
@@ -242,7 +214,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
         foreach (var slot in playerSlots)
         {
-            if (slot != null && slot.IsJoined)
+            if (slot.IsJoined)
             {
                 joinedCount++;
                 if (slot.IsConfirmed)
@@ -303,7 +275,7 @@ public class CharacterSelectionManager : MonoBehaviour
         for (int i = 0; i < playerSlots.Length; i++)
         {
             var slot = playerSlots[i];
-            if (slot != null && slot.IsConfirmed)
+            if (slot.IsConfirmed)
             {
                 var info = new PlayerSelectionDataSO.PlayerInfo();
                 info.slotIndex = i;

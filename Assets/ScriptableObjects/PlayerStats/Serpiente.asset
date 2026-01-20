@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Serpiente
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
   playerName: Zofy
-  playerPrefabName: 
-  description: 
+  description: Zofy es una serpiente
   playerIcon: {fileID: 21300000, guid: 724a16ae6ef5ec14ba562661efd4cf2a, type: 3}
   maxHealth: 100
   moveSpeed: 6.5

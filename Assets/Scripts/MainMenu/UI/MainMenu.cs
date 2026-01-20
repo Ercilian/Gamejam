@@ -79,6 +79,8 @@ public class MainMenu : MonoBehaviour
         if (SettingsPanel.activeSelf || SelectCharacterPanel.activeSelf)
         {
             Back();
+            EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
+
         }
     }
 
