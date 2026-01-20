@@ -16,6 +16,8 @@ public class PlayerInventory : MonoBehaviour
     private PlayerInput playerInput; // Reference to PlayerInput component
     private WorldCollectible nearbyCollectible; // Reference to nearby collectible
 
+    private Animator animator; // Referencia al Animator
+
     [Header("Pociones")]
     public int maxPotions = 2;
     public List<PotionData> potions = new List<PotionData>(); // Las pociones que tienes
@@ -35,6 +37,12 @@ public class PlayerInventory : MonoBehaviour
     {
         if (entityStats == null)
             entityStats = GetComponent<EntityStats>();
+            // Buscar Animator en este objeto o en hijos
+            animator = GetComponent<Animator>();
+            if (animator == null)
+                animator = GetComponentInChildren<Animator>();
+            if (animator == null)
+                Debug.LogWarning("[PlayerInventory] No se encontró Animator en el jugador ni en sus hijos.");
     }
 
     void Start()
@@ -116,6 +124,10 @@ public class PlayerInventory : MonoBehaviour
         if (!CanCarryItem(item)) return; // Check if can carry the item
         carriedItems.Add(item); // Add item to the carried list
         CreateVisualItem(item); // Create the visual representation of the item
+
+            // Activar HasItem si es el primer ítem
+            if (animator != null && carriedItems.Count == 1)
+                animator.SetBool("HasItem", true);
 
     }
 
@@ -278,6 +290,10 @@ public class PlayerInventory : MonoBehaviour
         carriedItems.Clear();
         visualItems.Clear();
 
+            // Desactivar HasItem si ya no quedan ítems
+            if (animator != null)
+                animator.SetBool("HasItem", false);
+
     }
 
     void ClearInventory() // Method to clear the inventory (used on player death or similar) (NEED TO CHANGE THIS)
@@ -288,6 +304,10 @@ public class PlayerInventory : MonoBehaviour
             if (visualItem) Destroy(visualItem);
         }
         visualItems.Clear();
+
+            // Desactivar HasItem si se limpia el inventario
+            if (animator != null)
+                animator.SetBool("HasItem", false);
     }
 
 
