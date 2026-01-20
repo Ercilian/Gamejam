@@ -3473,13 +3473,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuPanel: {fileID: 1914011919}
-  SettingsPanel: {fileID: 1934487238}
-  SelectCharacterPanel: {fileID: 1418664042}
+  settingsPanel: {fileID: 1934487238}
+  selectCharacterPanel: {fileID: 1418664042}
   firstSelectedButton: {fileID: 605215038}
-  SelectionManager: {fileID: 268937669}
+  masterVolumeSlider: {fileID: 1115665615}
   characterSelectionManager: {fileID: 268937670}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  masterVolumeSlider: {fileID: 1115665615}
 --- !u!114 &1697527372
 MonoBehaviour:
   m_ObjectHideFlags: 0

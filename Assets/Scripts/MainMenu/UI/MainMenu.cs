@@ -6,19 +6,18 @@ using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
+
     [Header("UI References")]
     public GameObject mainMenuPanel;
-    public GameObject SettingsPanel;
-    public GameObject SelectCharacterPanel;
+    public GameObject settingsPanel;
+    public GameObject selectCharacterPanel;
     public Button firstSelectedButton;
-    public GameObject SelectionManager;
+    public Slider masterVolumeSlider;
 
     [Header("Other")]
     public CharacterSelectionManager characterSelectionManager;
     public InputActionAsset inputActions;
     private InputAction cancelAction;
-
-    public Slider masterVolumeSlider;
 
 
 
@@ -31,8 +30,8 @@ public class MainMenu : MonoBehaviour
     {
         // Initialize UI
         mainMenuPanel.SetActive(true);
-        SettingsPanel.SetActive(false);
-        SelectCharacterPanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        selectCharacterPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
 
         Cursor.visible = false;
@@ -51,7 +50,7 @@ public class MainMenu : MonoBehaviour
             Cursor.visible = false;
         if (Cursor.lockState != CursorLockMode.Locked)
             Cursor.lockState = CursorLockMode.Locked;
-        if (EventSystem.current.currentSelectedGameObject == null && firstSelectedButton != null)
+        if (EventSystem.current.currentSelectedGameObject == null)
             EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
     }
 
@@ -59,13 +58,13 @@ public class MainMenu : MonoBehaviour
     {
         characterSelectionManager.ResetSelection();
         mainMenuPanel.SetActive(false);
-        SelectCharacterPanel.SetActive(true);
+        selectCharacterPanel.SetActive(true);
     }
 
     public void Settings()
     {
         mainMenuPanel.SetActive(false);
-        SettingsPanel.SetActive(true);
+        settingsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(masterVolumeSlider.gameObject);
     }
     
@@ -76,7 +75,7 @@ public class MainMenu : MonoBehaviour
 
     private void OnCancel()
     {
-        if (SettingsPanel.activeSelf || SelectCharacterPanel.activeSelf)
+        if (settingsPanel.activeSelf || selectCharacterPanel.activeSelf)
         {
             Back();
             EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
@@ -87,8 +86,8 @@ public class MainMenu : MonoBehaviour
     public void Back()
     {
         mainMenuPanel.SetActive(true);
-        SettingsPanel.SetActive(false);
-        SelectCharacterPanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        selectCharacterPanel.SetActive(false);
     }
 
     void OnDestroy()
