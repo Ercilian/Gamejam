@@ -19049,7 +19049,7 @@ MonoBehaviour:
   rotationSpeed: 0.5
   fuelConsumptionPerSecond: 1
   isFuelConsumed: 1
-  motorLoopClip: {fileID: 8300000, guid: 846a721187dccb843a208d49c4c2bbe4, type: 3}
+  motorLoopClip: {fileID: 8300000, guid: 130536f91b593e14583aa18fa4224812, type: 3}
   pitchMin: 0.8
   pitchMax: 1.5
   maxSpeedForPitch: 2
@@ -19105,7 +19105,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 7304847378366574197, guid: dd104c47d6a14a745a0eb4e45b0b19ed, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 130536f91b593e14583aa18fa4224812, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.1
   m_Pitch: 1
@@ -19216,7 +19216,7 @@ MonoBehaviour:
   swapAnimationTime: 2
   leverAnimator: {fileID: 1740763825}
   swapAnimator: {fileID: 306736698}
-  lever: {fileID: 8300000, guid: 6b3a487e537e2dc42a877e7703a3b2e1, type: 3}
+  lever: {fileID: 8300000, guid: cfb9d3b8a4689cd43afc07c96fd7605e, type: 3}
   swapSound: {fileID: 0}
 --- !u!1 &2071539653
 GameObject:
