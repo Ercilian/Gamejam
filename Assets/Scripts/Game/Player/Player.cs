@@ -82,7 +82,7 @@ public class Player : EntityStats
         PlayerReviveSystem reviveSystem = GetComponent<PlayerReviveSystem>();
         if (reviveSystem != null)
         {   
-            
+            animator.SetTrigger("IsDead");
             // Entrar en estado "downed" en lugar de morir inmediatamente
             reviveSystem.EnterDownedState();
         }
