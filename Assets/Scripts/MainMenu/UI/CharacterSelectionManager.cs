@@ -80,6 +80,17 @@ public class CharacterSelectionManager : MonoBehaviour
 
         audioSource.PlayOneShot(joinSound);
 
+        // Cancel countdown if a new player joins during countdown
+        if (countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+            audioSource.Stop(); // Stop any beep in progress
+            if (countdownText != null)
+                countdownText.text = "";
+            Debug.Log("[CharacterSelection] Countdown cancelled because a new player joined.");
+        }
+
         for (int i = 0; i < playerSlots.Length; i++)
         {
             if (!playerSlots[i].IsJoined)
