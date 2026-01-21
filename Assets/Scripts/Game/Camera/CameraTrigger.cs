@@ -1,6 +1,7 @@
 using Microsoft.VisualBasic;
 using UnityEngine;
 
+
 public class CameraTrigger : MonoBehaviour
 // Script to change camera offset when the car enters the trigger zone (cinematic camera).
 {
@@ -8,6 +9,9 @@ public class CameraTrigger : MonoBehaviour
     public float delaySeconds = 2f;
     [SerializeField] private CameraMovement cameraMovement;
     public bool disableFuelConsumption = false;
+    [Header("Zona de pasillo (activa diálogo)")]
+    public bool isPasillo = false;
+
 
     private void Awake() // Search for CameraMovement in the scene
     {
@@ -16,7 +20,7 @@ public class CameraTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) // Detect when the car enters the trigger zone and change camera offset
     {
-        if (other.CompareTag("Car") && cameraMovement != null)
+        if (other.CompareTag("Car"))
         {
             cameraMovement.ChangeOffsetWithDelay(newOffset, delaySeconds);
 
@@ -33,7 +37,23 @@ public class CameraTrigger : MonoBehaviour
 
             var carFuelSystem = other.GetComponentInChildren<CarFuelSystem>(); // Disable fuel consumption if specified            
             carFuelSystem.SetFuelConsumptionEnabled(!disableFuelConsumption);
-            
+
+
+
+            if (isPasillo)
+            {
+                UIManager.Instance.DialogueSetup();
+                var dialogueSystem = FindFirstObjectByType<DialogueSystem>();
+                if (dialogueSystem != null)
+                {
+                    // Pasar el identificador del pasillo (nombre del suelo) al sistema de diálogos
+                    dialogueSystem.ActivateDialogueForPasillo(gameObject.name);
+                }
+            }
+            else
+            {
+                UIManager.Instance.GameUISetup();
+            }
         }
     }
 }

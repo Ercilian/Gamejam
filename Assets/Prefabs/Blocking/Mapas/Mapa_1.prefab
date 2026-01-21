@@ -1665,7 +1665,6 @@ GameObject:
   - component: {fileID: 5360655593582946271}
   - component: {fileID: 8703227379558401881}
   - component: {fileID: 4017662051593799546}
-  - component: {fileID: 8035499264942740138}
   m_Layer: 3
   m_Name: Suelo_1
   m_TagString: Untagged
@@ -223191,22 +223190,6 @@ MonoBehaviour:
   m_SkinMeshRef: {fileID: 0}
   m_OriginalMeshObject: {fileID: 0}
   m_Mode: 0
---- !u!114 &8035499264942740138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5512363739320418267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc0b6d1fb94fb1041addd8ce1c6a0156, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraTrigger
-  newOffset: {x: -1.2, y: 15, z: -10}
-  delaySeconds: 0
-  cameraMovement: {fileID: 0}
-  disableFuelConsumption: 0
 --- !u!1 &5732183350219494052
 GameObject:
   m_ObjectHideFlags: 0

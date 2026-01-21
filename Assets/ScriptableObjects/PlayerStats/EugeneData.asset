@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bd33cbfb23e7a64eaabce2f966a894d, type: 3}
-  m_Name: Eugene
+  m_Name: EugeneData
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
   playerName: Eugene
   description: Eugene es un cangrejo

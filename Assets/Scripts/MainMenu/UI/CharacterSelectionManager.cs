@@ -55,7 +55,6 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             playerInputManager.onPlayerJoined += OnPlayerJoined;
             playerInputManager.onPlayerLeft += OnPlayerLeft;
-            SyncExistingPlayers();
         }
     }
 
@@ -78,8 +77,6 @@ public class CharacterSelectionManager : MonoBehaviour
             Debug.LogWarning("[CharacterSelection] Ignored: PlayerInput has no devices.");
             return;
         }
-
-
 
         audioSource.PlayOneShot(joinSound);
 
@@ -154,7 +151,6 @@ public class CharacterSelectionManager : MonoBehaviour
                 return;
             }
         }
-        Debug.LogWarning("[CharacterSelection] No free slots available for the player.");
         return;
     }
 
@@ -170,18 +166,6 @@ public class CharacterSelectionManager : MonoBehaviour
             activePlayers.Remove(playerIndex);
         }
     }
-
-    void SyncExistingPlayers() // Sync players that joined before the manager was enabled
-    {
-        Debug.Log($"[CharacterSelection] Syncing existing players. Total: {PlayerInput.all.Count}");
-        foreach (var playerInput in PlayerInput.all)
-        {
-            if (!activePlayers.ContainsKey(playerInput.playerIndex))
-                OnPlayerJoined(playerInput);
-        }
-    }
-
-
 
 
     // ========================================================================================= Selection State ====================================================================================
@@ -258,7 +242,7 @@ public class CharacterSelectionManager : MonoBehaviour
             audioSource.clip = countdownBeepSound;
             audioSource.Play();
             yield return new WaitForSeconds(1f);
-            audioSource.Stop(); // Por si el beep es más largo que 1s
+            audioSource.Stop();
             countdown -= 1f;
         }
 

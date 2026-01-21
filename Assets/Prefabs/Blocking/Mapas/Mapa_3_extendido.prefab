@@ -36212,6 +36212,7 @@ MonoBehaviour:
   delaySeconds: 0
   cameraMovement: {fileID: 0}
   disableFuelConsumption: 0
+  isPasillo: 0
 --- !u!1 &3429432633270324462
 GameObject:
   m_ObjectHideFlags: 0

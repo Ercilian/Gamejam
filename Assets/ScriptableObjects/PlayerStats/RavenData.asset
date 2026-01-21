@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bd33cbfb23e7a64eaabce2f966a894d, type: 3}
-  m_Name: Serpiente
+  m_Name: RavenData
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
-  playerName: Zofy
-  description: Zofy es una serpiente
-  playerIcon: {fileID: 21300000, guid: 724a16ae6ef5ec14ba562661efd4cf2a, type: 3}
+  playerName: Raven
+  description: Raven es un pajaro
+  playerIcon: {fileID: 21300000, guid: 9fe5cc16d16c1c84793a957f3ae01989, type: 3}
   maxHealth: 100
-  moveSpeed: 6.5
-  maxShield: 0
-  attackDamage: 35
+  moveSpeed: 5
+  maxShield: 25
+  attackDamage: 30
   defense: 10
   inventoryCapacity: 3
   pushStrength: 1
   playerPrefab: {fileID: 0}
   playerColor: {r: 1, g: 1, b: 1, a: 1}
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 22ff6e00f3e65224a9ec479e8f3870e0, type: 3}
   hurtSound: {fileID: 0}
   deathSound: {fileID: 0}
   comboSounds:

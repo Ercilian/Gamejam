@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4017662051593799546}
   - component: {fileID: 8597960990981219484}
   m_Layer: 3
-  m_Name: Suelo_1
+  m_Name: Pasillo_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221558,6 +221558,7 @@ MonoBehaviour:
   delaySeconds: 2
   cameraMovement: {fileID: 0}
   disableFuelConsumption: 1
+  isPasillo: 1
 --- !u!1 &6540120780592400911
 GameObject:
   m_ObjectHideFlags: 0

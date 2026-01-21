@@ -99,7 +99,6 @@ public class PlayerSlotSimple : MonoBehaviour
             if (characterInfo) characterInfo.text = "";
         }
 
-        Debug.Log($"[Slot {slotIndex}] Estado cambiado a: {(joined ? "JOINED" : "IDLE")}");
     }
 
     public void ResetSlotState() // Reset the slot to its initial state
@@ -147,7 +146,7 @@ public class PlayerSlotSimple : MonoBehaviour
             currentPreviewInstance.transform.localPosition = previewLocalPosition;
             currentPreviewInstance.transform.localEulerAngles = previewLocalEuler;
             currentPreviewInstance.transform.localScale = Vector3.one * previewScale;
-            // Actualizar descripción al mostrar preview
+
             int index = -1;
             if (manager != null && manager.characterPrefabs != null)
             {
@@ -178,7 +177,6 @@ public class PlayerSlotSimple : MonoBehaviour
         ShowCharacterPreview(characterPrefabs[selectedCharacterIndex]);
     }
 
-    // ===================== Descripción de personaje =====================
     private void UpdateCharacterDescription(int index)
     {
         if (characterInfo == null) return;
@@ -197,7 +195,6 @@ public class PlayerSlotSimple : MonoBehaviour
     public void OnLeftArrowPressed() // Handle left arrow button press
     {
         manager.PlayHoverSound();
-        Debug.Log($"[Slot {slotIndex}] LeftArrow PRESSED");
         if (isConfirmed) return;
         ChangeCharacter(-1, manager.characterPrefabs);
     }
@@ -205,7 +202,6 @@ public class PlayerSlotSimple : MonoBehaviour
     public void OnRightArrowPressed() // Handle right arrow button press
     {
         manager.PlayHoverSound();
-        Debug.Log($"[Slot {slotIndex}] RightArrow PRESSED");
         if (isConfirmed) return;
         ChangeCharacter(1, manager.characterPrefabs);
     }
@@ -221,7 +217,6 @@ public class PlayerSlotSimple : MonoBehaviour
             confirmButton.interactable = false;
             leftArrowButton.interactable = false;
             rightArrowButton.interactable = false;
-            Debug.Log($"[Slot {slotIndex}] Selección confirmada.");
             manager.OnPlayerConfirmed();
         }
     }
@@ -235,7 +230,6 @@ public class PlayerSlotSimple : MonoBehaviour
             leftArrowButton.interactable = true;
             rightArrowButton.interactable = true;
             manager.OnPlayerUnconfirmed();
-            Debug.Log($"[Slot {slotIndex}] Selección desconfirmada.");
         }
     }
 
