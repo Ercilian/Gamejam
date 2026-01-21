@@ -179,6 +179,9 @@ public class PlayerInventory : MonoBehaviour
                 carriedItems.RemoveAt(i); // Remove item from the carried list
             }
         }
+        // Si ya no quedan ítems, desactivar HasItem en el Animator
+        if (carriedItems.Count == 0 && animator != null)
+            animator.SetBool("HasItem", false);
         return totalValue > 0;
     }
 
