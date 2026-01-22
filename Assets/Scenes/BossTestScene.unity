@@ -1379,7 +1379,7 @@ MonoBehaviour:
   pushForce: 20
   pushCooldown: 4.5
   pushChargeDuration: 1.5
-  enablePushAttack: 1
+  enablePushAttack: 0
   mortarProjectileCount: 3
   mortarCooldown: 4
   mortarRandomRadius: 14
@@ -1387,7 +1387,7 @@ MonoBehaviour:
   mortarFallDuration: 2
   mortarMaxHeight: 25
   mortarDamageRadius: 4
-  enableMortarAttack: 1
+  enableMortarAttack: 0
   enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
   enemiesToSpawn: 5
   enemySpawnPoints:
@@ -1402,7 +1402,7 @@ MonoBehaviour:
   enableSpawnEnemies: 0
   projectilePrefab: {fileID: 42299429}
   mortarProjectilePrefab: {fileID: 42299429}
-  bulletHellSpawnOffset: {x: -1, y: -3, z: 0}
+  bulletHellSpawnOffset: {x: -1, y: 0.75, z: 0}
   projectileSpawnOffset: {x: 0, y: 0, z: 0}
   attackEffectPrefab: {fileID: 0}
   attackSFX: {fileID: 0}
