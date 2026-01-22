@@ -96,6 +96,16 @@ public class BossProjectile : MonoBehaviour
         {
             Debug.Log("[BossProjectile] Detectado jugador");
             
+            // Verificar si el jugador está en invulnerabilidad temporal - si es así, ignorar colisión
+            Player playerComponent = collision.GetComponent<Player>();
+            if (playerComponent != null && playerComponent.IsInvulnerable)
+            {
+                Debug.Log("[BossProjectile] Jugador en invulnerabilidad - ignorando colisión con el proyectil");
+                // Ignorar la colisión entre el proyectil y el jugador invulnerable
+                Physics.IgnoreCollision(projectileCollider, collision, true);
+                return; // No destruir, dejar que el proyectil continúe
+            }
+            
             // Verificar si el jugador está en dash - si es así, no causar daño
             Dash dashComponent = collision.GetComponent<Dash>();
             if (dashComponent != null && dashComponent.IsDashing)

@@ -76,7 +76,7 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
 
     }
 
-    public void TakeDamage(int amount) // Method to take damage
+    public virtual void TakeDamage(int amount) // Method to take damage
     {
         if (amount <= 0) return;
 

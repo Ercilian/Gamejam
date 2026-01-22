@@ -146,7 +146,7 @@ MonoBehaviour:
   - 90
   capasObstaculos:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 127
   distanciaSeguridad: 1.5
   fuerzaRepulsion: 2
   detectarLaterales: 1

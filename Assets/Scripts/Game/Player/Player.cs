@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Game.Combat;
+using System.Collections;
 
 public class Player : EntityStats
 {
@@ -15,6 +16,14 @@ public class Player : EntityStats
 
     private Animator animator;
     private Rigidbody rb; // o CharacterController, según tu sistema
+
+    // ============ Tiempo de Gracia (Invulnerabilidad Temporal) ============
+    [Header("Invulnerabilidad")]
+    [SerializeField] private float gracePeriodDuration = 1.5f; // Duración del tiempo de gracia en segundos
+    private bool isInGracePeriod = false; // Indica si está en tiempo de gracia
+
+    // Propiedad pública para verificar si está en invulnerabilidad
+    public bool IsInvulnerable => isInGracePeriod;
 
 
 
@@ -75,6 +84,85 @@ public class Player : EntityStats
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
 
     /// <summary>
+    /// Sobrescribe TakeDamage para implementar tiempo de gracia (invulnerabilidad temporal)
+    /// </summary>
+    public override void TakeDamage(int amount)
+    {
+        // Si está en tiempo de gracia, ignorar el daño
+        if (isInGracePeriod)
+        {
+            Debug.Log($"[{gameObject.name}] ¡Tiempo de gracia activo! Daño esquivado.");
+            return;
+        }
+
+        // Aplicar daño normal desde la clase base
+        base.TakeDamage(amount);
+
+        // Iniciar el tiempo de gracia
+        StartCoroutine(GracePeriodCoroutine());
+    }
+
+    /// <summary>
+    /// Corrutina que gestiona el tiempo de gracia (invulnerabilidad temporal)
+    /// </summary>
+    private IEnumerator GracePeriodCoroutine()
+    {
+        isInGracePeriod = true;
+        Debug.Log($"[{gameObject.name}] Tiempo de gracia iniciado por {gracePeriodDuration} segundos");
+
+        // Aquí puedes añadir feedback visual (parpadeo, cambio de color, etc.)
+        // Por ejemplo, cambiar el color del player o hacerlo semitransparente
+        VisualGracePeriodFeedback(true);
+
+        yield return new WaitForSeconds(gracePeriodDuration);
+
+        isInGracePeriod = false;
+        VisualGracePeriodFeedback(false);
+        Debug.Log($"[{gameObject.name}] Tiempo de gracia finalizado. Vulnerable nuevamente.");
+    }
+
+    /// <summary>
+    /// Proporciona feedback visual durante el tiempo de gracia (parpadeo)
+    /// </summary>
+    private void VisualGracePeriodFeedback(bool isGracing)
+    {
+        if (isGracing)
+        {
+            // Puedes cambiar el color del jugador para indicar invulnerabilidad
+            // Ejemplo: cambiar a un color más transparente o diferente
+            Renderer renderer = GetComponentInChildren<Renderer>();
+            if (renderer != null)
+            {
+                StartCoroutine(FlashPlayerDuringGracePeriod(renderer));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Hace parpadear el jugador durante el tiempo de gracia
+    /// </summary>
+    private IEnumerator FlashPlayerDuringGracePeriod(Renderer renderer)
+    {
+        float elapsedTime = 0f;
+        Color originalColor = renderer.material.color;
+
+        while (elapsedTime < gracePeriodDuration)
+        {
+            // Cambiar entre visible e invisible (parpadeo)
+            float alpha = Mathf.PingPong(elapsedTime * 5f, 1f); // Parpadea 5 veces por segundo
+            Color newColor = originalColor;
+            newColor.a = alpha;
+            renderer.material.color = newColor;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Restaurar el color original
+        renderer.material.color = originalColor;
+    }
+
+    /// <summary>
     /// Sobrescribe la lógica de muerte para usar el sistema de revive
     /// </summary>
     public override void OnEntityDeath()
@@ -92,20 +180,4 @@ public class Player : EntityStats
             base.OnEntityDeath();
         }
     }
-
-    // Si necesitas lógica especial al morir:
-   /* public override void Die(DamageInfo finalDamage)
-    {
-        base.Die(finalDamage); // Llama a la lógica base (desactivar GameObject y eventos)
-        // Aquí puedes añadir animaciones, sonidos, respawn, etc.
-    }
-
-    // Si necesitas lógica especial al recibir daño:
-    public override void TakeDamage(DamageInfo damageInfo)
-    {
-        base.TakeDamage(damageInfo);
-        // Aquí puedes añadir feedback visual, sonido, etc.
-    }
-    */
-    
 }
