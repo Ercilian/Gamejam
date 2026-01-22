@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8bedeb5ea3eb2b14ab36a32f5aefbb8c
+guid: a8184a47e1f232948a64dde0cedf633b
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: FrogEnemyBossAttackMortero
+      name: FrogBossPushAttack
       takeName: ArmatureAction
       internalID: -3880581976594992817
       firstFrame: 0
-      lastFrame: 157
+      lastFrame: 92
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

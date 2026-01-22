@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8cf190b0cfd28fc4282458ca0d368746
+guid: 95ccf5a5e16a9874eb2176945558f18e
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: FrogEnemyBossOpenDoor
+      name: FrogBossCloseDoor
       takeName: ArmatureAction.001
       internalID: 7001736878801954451
       firstFrame: 0
-      lastFrame: 36
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

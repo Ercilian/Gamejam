@@ -97,12 +97,14 @@ public class FrogCombat : MonoBehaviour
     private float lastSpawnTime = 0f;
     
     private Rigidbody rb;
+    private Animator animator;
     #endregion
 
     #region Initialization
     private void Start()
     {
         InitializeBoss();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void InitializeBoss()
@@ -228,6 +230,8 @@ public class FrogCombat : MonoBehaviour
 
     private IEnumerator BulletHellAttack()
     {
+        animator.SetTrigger("BulletHellAttack");
+        yield return new WaitForSeconds(0.5f); // Esperar a que la animación comience
         lastBulletHellTime = Time.time;
         PlayAttackEffect();
         PlayAttackSFX();
@@ -376,6 +380,8 @@ public class FrogCombat : MonoBehaviour
 
     private IEnumerator MortarAttack()
     {
+        animator.SetTrigger("MortarAttack");
+        yield return new WaitForSeconds(1.5f); // Esperar a que la animación comience
         lastMortarTime = Time.time;
         PlayAttackEffect();
         PlayAttackSFX();
@@ -399,6 +405,8 @@ public class FrogCombat : MonoBehaviour
 
     private IEnumerator PushAttack()
     {
+        animator.SetTrigger("PushAttack");
+        yield return new WaitForSeconds(0.2f); // Esperar a que la animación comience
         lastPushTime = Time.time;
         PlayAttackSFX();
         
