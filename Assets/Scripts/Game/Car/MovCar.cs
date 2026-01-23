@@ -14,12 +14,16 @@ public class MovCar : MonoBehaviour
     public float pushSpeed = 0.5f;
     public float pushSpeedTwo = 0.85f;
     public Animator truckAnimator;
-    
+
     [Header("Path Following System")]
-    public Transform[] pathPoints;
+    // public Transform[] pathPoints; // Eliminado, ahora se obtiene dinámicamente
     public float reachDistance = 3f;
     public float pathSmoothness = 3f;
     public float rotationSpeed = 5f;
+
+    // Referencia al MapManager para obtener los checkpoints
+    private MapManager mapManager;
+    private List<Transform> pathPoints = new List<Transform>();
 
     [Header("Combustible Consumption")]
     public float fuelConsumptionPerSecond = 1f;
@@ -118,7 +122,18 @@ public class MovCar : MonoBehaviour
 
     private void InitializePathFollowing() // Setup initial target for path following
     {
-        currentTarget = pathPoints[0].position;
+        // Buscar el MapManager en la escena
+        mapManager = FindObjectOfType<MapManager>();
+        if (mapManager != null && mapManager.globalCheckpoints.Count > 0)
+        {
+            pathPoints = mapManager.globalCheckpoints;
+            currentPathIndex = 0;
+            currentTarget = pathPoints[0].position;
+        }
+        else
+        {
+            Debug.LogError("[MovCar] No se encontraron checkpoints globales en MapManager.");
+        }
     }
 
     private Vector3 GetMovementDirection() // Calculate movement direction towards current target
@@ -129,14 +144,14 @@ public class MovCar : MonoBehaviour
 
     private void UpdateWaypointProgress() // Check if reached current waypoint and update to next
     {
-        if (currentPathIndex < pathPoints.Length) // Ensure index is within bounds
+        if (currentPathIndex < pathPoints.Count) // Ensure index is within bounds
         {
             float distanceToTarget = Vector3.Distance(transform.position, currentTarget); // Calculate distance to current target
 
             if (distanceToTarget <= reachDistance) // Check if within reach distance
             {
                 currentPathIndex++;
-                if (currentPathIndex < pathPoints.Length)
+                if (currentPathIndex < pathPoints.Count)
                 {
                     currentTarget = pathPoints[currentPathIndex].position;
                 }
@@ -252,14 +267,18 @@ public class MovCar : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
-        for (int i = 0; i < pathPoints.Length; i++)
+        // Solo dibujar si hay pathPoints
+        if (pathPoints != null)
         {
-            if (pathPoints[i] != null)
+            for (int i = 0; i < pathPoints.Count; i++)
             {
-                Gizmos.DrawWireSphere(pathPoints[i].position, reachDistance);
-                if (i > 0 && pathPoints[i - 1] != null)
+                if (pathPoints[i] != null)
                 {
-                    Gizmos.DrawLine(pathPoints[i - 1].position, pathPoints[i].position);
+                    Gizmos.DrawWireSphere(pathPoints[i].position, reachDistance);
+                    if (i > 0 && pathPoints[i - 1] != null)
+                    {
+                        Gizmos.DrawLine(pathPoints[i - 1].position, pathPoints[i].position);
+                    }
                 }
             }
         }
