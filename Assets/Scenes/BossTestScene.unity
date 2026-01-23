@@ -1262,7 +1262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8972614775451585002, guid: b2fd73ecad6f00e4387e3ef2addaccea, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -38
+      value: -35
       objectReference: {fileID: 0}
     - target: {fileID: 8972614775451585002, guid: b2fd73ecad6f00e4387e3ef2addaccea, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1361,10 +1361,12 @@ MonoBehaviour:
   maxHealth: 200
   phaseTransitionHealth: 80
   targetTransform: {fileID: 0}
-  attackCooldown: 1
-  bulletSpeed: 5
+  attackCooldown: 3
+  bulletSpeed: 8
   mortarSpeed: 5
-  bulletPatternCount: 18
+  bulletPatternCount: 12
+  bulletHellBurstCount: 3
+  delayBetweenBursts: 1
   bulletHellCooldown: 3
   bulletHellBaseDirection: 180
   bulletHellArcHeight: 0.1
@@ -1379,17 +1381,17 @@ MonoBehaviour:
   pushForce: 20
   pushCooldown: 4.5
   pushChargeDuration: 1.5
-  enablePushAttack: 0
-  mortarProjectileCount: 3
+  enablePushAttack: 1
+  mortarProjectileCount: 5
   mortarCooldown: 4
   mortarRandomRadius: 14
   mortarAttackAreaCenter: {x: -20, y: 0, z: 4}
   mortarFallDuration: 2
   mortarMaxHeight: 25
-  mortarDamageRadius: 4
-  enableMortarAttack: 0
+  mortarDamageRadius: 5
+  enableMortarAttack: 1
   enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
-  enemiesToSpawn: 5
+  enemiesToSpawn: 10
   enemySpawnPoints:
   - {fileID: 111857630}
   - {fileID: 509315963}
@@ -1399,7 +1401,7 @@ MonoBehaviour:
   - {fileID: 1427972056}
   spawnCooldown: 22.5
   delayBetweenEnemySpawns: 0.5
-  enableSpawnEnemies: 0
+  enableSpawnEnemies: 1
   projectilePrefab: {fileID: 42299429}
   mortarProjectilePrefab: {fileID: 42299429}
   bulletHellSpawnOffset: {x: -1, y: 0.75, z: 0}

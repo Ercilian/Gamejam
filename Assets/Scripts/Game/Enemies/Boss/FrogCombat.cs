@@ -33,6 +33,8 @@ public class FrogCombat : MonoBehaviour
     
     [Header("Bullet Hell Settings")]
     [SerializeField] private int bulletPatternCount = 8;
+    [SerializeField] private int bulletHellBurstCount = 1; // Cantidad de ráfagas por ataque
+    [SerializeField] private float delayBetweenBursts = 0.5f; // Delay entre ráfagas
     [SerializeField] private float bulletHellCooldown = 3f;
     [SerializeField] private float bulletHellBaseDirection = 0f; // 0 = hacia adelante, 90 = arriba, etc
     [SerializeField] private float bulletHellArcHeight = 2f; // Altura del arco de los proyectiles
@@ -236,35 +238,54 @@ public class FrogCombat : MonoBehaviour
         PlayAttackEffect();
         PlayAttackSFX();
         
-        Debug.Log("[FrogBoss] Bullet Hell Attack - Arc Pattern!");
+        Debug.Log($"[FrogBoss] Bullet Hell Attack - {bulletHellBurstCount} ráfagas!");
         
         yield return new WaitForSeconds(0.3f);
         
-        // Patrón de arco (Mega Satan style) - bolas salen en un arco frontal
-        float arcWidth = 120f; // Ancho del arco en grados
-        float startAngle = bulletHellBaseDirection - arcWidth * 0.5f; // Comienza a la izquierda del arco
-        
-        for (int i = 0; i < bulletPatternCount; i++)
+        // Generar múltiples ráfagas según la configuración
+        for (int burstIndex = 0; burstIndex < bulletHellBurstCount; burstIndex++)
         {
-            float angle = startAngle + (arcWidth / (bulletPatternCount - 1)) * i;
-            Vector2 direction = GetDirectionFromAngle(angle);
-            SpawnProjectile(direction, bulletSpeed, false);
+            // Patrón de arco (Mega Satan style) - bolas salen en un arco frontal
+            float arcWidth = 120f; // Ancho del arco en grados
+            float startAngle = bulletHellBaseDirection - arcWidth * 0.5f; // Comienza a la izquierda del arco
+            
+            for (int i = 0; i < bulletPatternCount; i++)
+            {
+                float angle = startAngle + (arcWidth / (bulletPatternCount - 1)) * i;
+                Vector2 direction = GetDirectionFromAngle(angle);
+                SpawnProjectile(direction, bulletSpeed, false);
+            }
+            
+            // Esperar antes de la siguiente ráfaga
+            if (burstIndex < bulletHellBurstCount - 1)
+            {
+                yield return new WaitForSeconds(delayBetweenBursts);
+            }
         }
         
         yield return new WaitForSeconds(bulletHellCooldown * 0.5f);
         
-        // Segunda ola en Phase 2 - arco expandido
+        // Segunda fase en Phase 2 - arco expandido con múltiples ráfagas
         if (currentPhase == BossPhase.Phase2)
         {
-            float phase2ArcWidth = 150f; // Arco más amplio en fase 2
-            float phase2StartAngle = bulletHellBaseDirection - phase2ArcWidth * 0.5f;
-            
-            for (int i = 0; i < bulletPatternCount; i++)
+            for (int burstIndex = 0; burstIndex < bulletHellBurstCount; burstIndex++)
             {
-                float angle = phase2StartAngle + (phase2ArcWidth / (bulletPatternCount - 1)) * i;
-                Vector2 direction = GetDirectionFromAngle(angle);
+                float phase2ArcWidth = 150f; // Arco más amplio en fase 2
+                float phase2StartAngle = bulletHellBaseDirection - phase2ArcWidth * 0.5f;
                 
-                SpawnProjectile(direction, bulletSpeed, false);
+                for (int i = 0; i < bulletPatternCount; i++)
+                {
+                    float angle = phase2StartAngle + (phase2ArcWidth / (bulletPatternCount - 1)) * i;
+                    Vector2 direction = GetDirectionFromAngle(angle);
+                    
+                    SpawnProjectile(direction, bulletSpeed, false);
+                }
+                
+                // Esperar antes de la siguiente ráfaga
+                if (burstIndex < bulletHellBurstCount - 1)
+                {
+                    yield return new WaitForSeconds(delayBetweenBursts);
+                }
             }
         }
     }
