@@ -28,9 +28,12 @@ public class EnemyAttack : MonoBehaviour
     protected Enemy enemyStats;
     protected float lastAttackTime = -999f;
 
+    public Animator animator;
+
     protected virtual void Awake()
     {
         enemyStats = GetComponent<Enemy>();
+        animator = GetComponentInChildren<Animator>();
         if (enemyStats == null)
         {
             Debug.LogError($"[{gameObject.name}] EnemyAttack requiere un componente Enemy en el mismo GameObject.");

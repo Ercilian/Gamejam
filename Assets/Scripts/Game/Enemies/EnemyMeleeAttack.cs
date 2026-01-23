@@ -30,6 +30,7 @@ public class EnemyMeleeAttack : EnemyAttack
 
     protected override void ExecuteAttack(Transform target)
     {
+        animator.SetTrigger("Attack");
         // Detectar todos los jugadores en el área de ataque
         Collider[] hitPlayers = DetectPlayersInAttackArea();
 
