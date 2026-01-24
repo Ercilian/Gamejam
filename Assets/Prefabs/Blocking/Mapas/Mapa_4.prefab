@@ -141410,6 +141410,8 @@ MonoBehaviour:
   newOffset: {x: 6, y: 2, z: -6}
   delaySeconds: 0
   cameraMovement: {fileID: 0}
+  disableFuelConsumption: 0
+  isPasillo: 0
 --- !u!1 &3116478913340058924
 GameObject:
   m_ObjectHideFlags: 0

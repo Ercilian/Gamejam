@@ -5,9 +5,11 @@ public class ShopEntrance : MonoBehaviour
 {
     [Header("Spawn Points for Players in Shop")]
     public List<Transform> shopSpawnPoints;
+    private ShopStopTrigger shopStopTrigger;
 
     private void OnEnable()
     {
+        shopStopTrigger = FindFirstObjectByType<ShopStopTrigger>();
         shopSpawnPoints = new List<Transform>();
         for (int i = 1; i <= 4; i++)
         {
@@ -20,6 +22,7 @@ public class ShopEntrance : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+        if (shopStopTrigger.unlockShop == false) return;
 
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         int count = Mathf.Min(players.Length, shopSpawnPoints.Count);

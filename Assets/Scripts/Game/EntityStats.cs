@@ -55,7 +55,6 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
             attackDamage = statsData.AttackDamage;
             defense = statsData.Defense;
             
-            Debug.Log($"[{gameObject.name}] Aplicando stats de{statsData.name}: maxHP={maxHP}, speed={speed}, attackDamage={attackDamage}");
 
             // Apply other stats specific to Player if this is a Player
             if (this is Player player && player.TryGetComponent<PlayerInventory>(out var inventory))

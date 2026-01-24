@@ -153,8 +153,6 @@ namespace Game.Combat
             if (_animator == null)
             {
                 _animator = GetComponentInChildren<Animator>();
-                if (_animator != null && showDebugLogs)
-                    Debug.Log($"[Combo] Animator de personaje encontrado en hijo: {_animator.gameObject.name}");
             }
             
             if (_animator == null)
@@ -164,10 +162,6 @@ namespace Game.Combat
             
             // Asignar el animator del arma desde el inspector (si fue configurado)
             _weaponAnimator = weaponAnimator;
-            if (_weaponAnimator != null && showDebugLogs)
-            {
-                Debug.Log($"[Combo] Animator de arma asignado: {_weaponAnimator.gameObject.name}");
-            }
         
         }
 

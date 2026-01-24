@@ -123,7 +123,7 @@ public class MovCar : MonoBehaviour
     private void InitializePathFollowing() // Setup initial target for path following
     {
         // Buscar el MapManager en la escena
-        mapManager = FindObjectOfType<MapManager>();
+        mapManager = FindFirstObjectByType<MapManager>();
         if (mapManager != null && mapManager.globalCheckpoints.Count > 0)
         {
             pathPoints = mapManager.globalCheckpoints;
