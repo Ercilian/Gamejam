@@ -7,6 +7,9 @@ public class BossProjectile : MonoBehaviour
     [SerializeField] private float lifetime = 10f;
     [SerializeField] private bool destroyOnHit = true;
     [SerializeField] private ParticleSystem hitEffectPrefab;
+    [Header("Hitbox Configuration")]
+    [SerializeField] [Range(0.1f, 1.0f)] private float hitboxScale = 0.6f;
+    [SerializeField] private bool showHitboxGizmo = true;
     #endregion
 
     #region State
@@ -42,6 +45,25 @@ public class BossProjectile : MonoBehaviour
         if (projectileCollider != null)
         {
             projectileCollider.isTrigger = true;
+            
+            // Escalar la hitbox del collider para hacerla más pequeña
+            if (projectileCollider is SphereCollider sphereCollider)
+            {
+                sphereCollider.radius *= hitboxScale;
+                Debug.Log($"[BossProjectile] SphereCollider escalado a {hitboxScale * 100}% del tamaño original");
+            }
+            else if (projectileCollider is BoxCollider boxCollider)
+            {
+                boxCollider.size *= hitboxScale;
+                Debug.Log($"[BossProjectile] BoxCollider escalado a {hitboxScale * 100}% del tamaño original");
+            }
+            else if (projectileCollider is CapsuleCollider capsuleCollider)
+            {
+                capsuleCollider.radius *= hitboxScale;
+                capsuleCollider.height *= hitboxScale;
+                Debug.Log($"[BossProjectile] CapsuleCollider escalado a {hitboxScale * 100}% del tamaño original");
+            }
+            
             Debug.Log("[BossProjectile] Collider configurado como trigger");
         }
         else
@@ -157,6 +179,33 @@ public class BossProjectile : MonoBehaviour
     {
         get => projectileDamage;
         set => projectileDamage = value;
+    }
+    #endregion
+
+    #region Debug Visualization
+    private void OnDrawGizmos()
+    {
+        if (!showHitboxGizmo) return;
+
+        Collider col = GetComponent<Collider>();
+        if (col == null) return;
+
+        Gizmos.color = Color.yellow;
+
+        if (col is SphereCollider sphereCol)
+        {
+            Gizmos.DrawWireSphere(transform.position + sphereCol.center, sphereCol.radius * transform.lossyScale.x);
+        }
+        else if (col is BoxCollider boxCol)
+        {
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.DrawWireCube(boxCol.center, boxCol.size);
+        }
+        else if (col is CapsuleCollider capsuleCol)
+        {
+            // Simplified capsule visualization
+            Gizmos.DrawWireSphere(transform.position + capsuleCol.center, capsuleCol.radius * transform.lossyScale.x);
+        }
     }
     #endregion
 }

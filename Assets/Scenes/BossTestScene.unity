@@ -1362,12 +1362,12 @@ MonoBehaviour:
   phaseTransitionHealth: 80
   targetTransform: {fileID: 0}
   attackCooldown: 3
-  bulletSpeed: 8
+  bulletSpeed: 8.5
   mortarSpeed: 5
   bulletPatternCount: 12
   bulletHellBurstCount: 3
   delayBetweenBursts: 1
-  bulletHellCooldown: 3
+  bulletHellCooldown: 5
   bulletHellBaseDirection: 180
   bulletHellArcHeight: 0.1
   enableBulletHell: 1
