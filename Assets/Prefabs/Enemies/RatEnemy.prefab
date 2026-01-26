@@ -266,9 +266,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2037825775853091594}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2113660983585649411}
   m_SourcePrefab: {fileID: 100100000, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
 --- !u!137 &837601763030257835 stripped
 SkinnedMeshRenderer:
@@ -307,18 +304,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2113660983585649411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7774316095059840484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b9f2923833e23c48ab1e6b369dfb035, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DissolvingController
-  skinnedMesh: {fileID: 837601763030257835}
-  dissolveRate: 0.0125
-  refreshRate: 0.025

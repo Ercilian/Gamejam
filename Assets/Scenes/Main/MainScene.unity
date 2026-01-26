@@ -6245,12 +6245,12 @@ MonoBehaviour:
   ChickenElitePrefab: {fileID: 7519758676284165041, guid: 0a452edbe3af793479fce7b9cb00f2c4, type: 3}
   TurtlePrefab: {fileID: 7519758676284165041, guid: 9c38d2b1de7f17d41b56ad232eae5be2, type: 3}
   TurtleElitePrefab: {fileID: 7519758676284165041, guid: 44a3afb97a44fa245ace1dad5c142bfa, type: 3}
-  ratSpawnChance: 50
-  ratEliteSpawnChance: 5
-  chickenSpawnChance: 10
-  chickenEliteSpawnChance: 5
-  turtleSpawnChance: 5
-  turtleEliteSpawnChance: 3
+  ratSpawnChance: 25
+  ratEliteSpawnChance: 0
+  chickenSpawnChance: 25
+  chickenEliteSpawnChance: 0
+  turtleSpawnChance: 25
+  turtleEliteSpawnChance: 0
   carTransform: {fileID: 2070441881}
   difficultyConfigs:
   - spawnInterval: 2.5
