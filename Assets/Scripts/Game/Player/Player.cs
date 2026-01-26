@@ -5,6 +5,8 @@ using System.Collections;
 
 public class Player : EntityStats
 {
+    private PlayerPanelUI playerPanelUI;
+
     private PlayerInventory playerInventory;
     private PlayerInput playerInput;
     private InputAction healAction;
@@ -41,6 +43,9 @@ public class Player : EntityStats
         playerInputPush = GetComponent<PlayerInputPush>();
         if (playerInput != null)
             healAction = playerInput.actions["Heal"];
+
+        // Buscar el UI en la escena (puedes cambiar esto si tienes varios jugadores)
+        playerPanelUI = FindObjectOfType<PlayerPanelUI>();
     }
 
     void Start()
@@ -97,6 +102,10 @@ public class Player : EntityStats
 
         // Aplicar daño normal desde la clase base
         base.TakeDamage(amount);
+
+        // Actualizar la barra de vida en el UI
+        if (playerPanelUI != null)
+            playerPanelUI.SetHealth(curHP); // curHP es de EntityStats
 
         // Iniciar el tiempo de gracia
         StartCoroutine(GracePeriodCoroutine());
@@ -179,5 +188,9 @@ public class Player : EntityStats
             // Si no hay sistema de revive, usar comportamiento por defecto
             base.OnEntityDeath();
         }
+
+        // Actualizar la barra de vida en el UI (vida 0)
+        if (playerPanelUI != null)
+            playerPanelUI.SetHealth(0);
     }
 }
