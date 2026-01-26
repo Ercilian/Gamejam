@@ -49,6 +49,7 @@ public class PlayerReviveSystem : MonoBehaviour
     // Referencias
     private EntityStats entityStats;
     private Player player;
+    private Animator animator;
     private Renderer[] renderers;
     private Color[] originalColors;
 
@@ -57,11 +58,12 @@ public class PlayerReviveSystem : MonoBehaviour
     public System.Action OnPlayerRevived;
     public System.Action OnPlayerDead;
     public System.Action<float> OnReviveProgressChanged; // Para UI de progreso
-
+        
     void Awake()
     {
         entityStats = GetComponent<EntityStats>();
         player = GetComponent<Player>();
+        animator = GetComponent<Animator>();
         renderers = GetComponentsInChildren<Renderer>();
         
         // Guardar colores originales
@@ -194,6 +196,7 @@ public class PlayerReviveSystem : MonoBehaviour
     private void Revive()
     {
         currentState = ReviveState.Alive;
+        animator.SetTrigger("Revived");
         
         // Restaurar HP
         int reviveHP = Mathf.RoundToInt(entityStats.MaxHP * reviveHealthPercent);
