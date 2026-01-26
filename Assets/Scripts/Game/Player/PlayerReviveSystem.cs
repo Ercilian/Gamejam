@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using Game.Combat;
 
 /// <summary>
 /// Sistema de revivir jugadores. Cuando un jugador llega a 0 HP, entra en estado "downed"
@@ -58,6 +59,7 @@ public class PlayerReviveSystem : MonoBehaviour
     public System.Action OnPlayerRevived;
     public System.Action OnPlayerDead;
     public System.Action<float> OnReviveProgressChanged; // Para UI de progreso
+    ComboHitboxController comboHitboxController;
         
     void Awake()
     {
@@ -76,6 +78,8 @@ public class PlayerReviveSystem : MonoBehaviour
 
         if (downedVisual != null)
             downedVisual.SetActive(false);
+
+        comboHitboxController = GetComponent<ComboHitboxController>();
     }
 
     void Update()
@@ -224,6 +228,8 @@ public class PlayerReviveSystem : MonoBehaviour
             Debug.Log($"[{gameObject.name}] Jugador revivido por {(reviverPlayer != null ? reviverPlayer.name : "desconocido")}");
 
         reviverPlayer = null;
+        comboHitboxController.enabled = true;
+
     }
 
     /// <summary>

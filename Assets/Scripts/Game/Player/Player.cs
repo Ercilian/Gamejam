@@ -11,6 +11,7 @@ public class Player : EntityStats
     private PlayerInput playerInput;
     private InputAction healAction;
     private PlayerInputPush playerInputPush;
+    private ComboHitboxController comboHitboxController;
 
     private float rotationSpeed = 10f; // Velocidad de rotación del jugador
     private Vector2 movementInput;
@@ -49,6 +50,7 @@ public class Player : EntityStats
 
         // Buscar el UI en la escena (puedes cambiar esto si tienes varios jugadores)
         playerPanelUI = FindObjectOfType<PlayerPanelUI>();
+        comboHitboxController = GetComponent<ComboHitboxController>();
     }
 
     void Start()
@@ -191,6 +193,7 @@ public class Player : EntityStats
             animator.SetTrigger("IsDead");
             // Entrar en estado "downed" en lugar de morir inmediatamente
             reviveSystem.EnterDownedState();
+            comboHitboxController.enabled = false;
         }
         else
         {
