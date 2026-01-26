@@ -116,6 +116,7 @@ public class RangedEnemyAttack : EnemyAttack
 
     protected override void ExecuteAttack(Transform target)
     {
+        animator.SetTrigger("Attack");
         Debug.Log($"[{gameObject.name}] ========== EXECUTEATACK LLAMADO ==========");
         
         if (target == null)
