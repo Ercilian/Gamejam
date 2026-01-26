@@ -75,6 +75,7 @@ namespace Game.Combat
         private AudioSource audioSource;
         private PlayerInventory playerInventory; // Referencia al inventario del jugador
         [SerializeField] public PlayerStatsData playerStatsData;
+        global::Player player;
 
 
         // Public events
@@ -175,7 +176,8 @@ namespace Game.Combat
         }
 
         public bool CanAttack()
-        {
+        {   
+            if (player.isDowned) return false;
             // No puede atacar si tiene items en las manos o si está en cooldown o boomerang activo
             bool hasItems = playerInventory != null && playerInventory.HasItems();
             return Time.time - lastAttackTime >= attackCooldown && !boomerangActive && !hasItems;
