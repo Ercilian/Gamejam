@@ -1370,18 +1370,24 @@ MonoBehaviour:
   bulletHellCooldown: 5
   bulletHellBaseDirection: 180
   bulletHellArcHeight: 0.1
-  enableBulletHell: 1
+  bulletHellPhaseConfig:
+    enableInPhase1: 1
+    enableInPhase2: 0
   jumpHeight: 20
   jumpDuration: 1.5
   jumpCooldown: 4
   jumpImpactRadius: 6
   jumpImpactDamage: 30
-  enableJumpAttack: 0
+  jumpAttackPhaseConfig:
+    enableInPhase1: 0
+    enableInPhase2: 1
   pushDetectionRadius: 8.28
   pushForce: 20
   pushCooldown: 4.5
   pushChargeDuration: 1.5
-  enablePushAttack: 1
+  pushAttackPhaseConfig:
+    enableInPhase1: 1
+    enableInPhase2: 1
   mortarProjectileCount: 5
   mortarCooldown: 4
   mortarRandomRadius: 14
@@ -1389,7 +1395,9 @@ MonoBehaviour:
   mortarFallDuration: 2
   mortarMaxHeight: 25
   mortarDamageRadius: 5
-  enableMortarAttack: 1
+  mortarAttackPhaseConfig:
+    enableInPhase1: 1
+    enableInPhase2: 1
   enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
   enemiesToSpawn: 10
   enemySpawnPoints:
@@ -1401,7 +1409,9 @@ MonoBehaviour:
   - {fileID: 1427972056}
   spawnCooldown: 22.5
   delayBetweenEnemySpawns: 0.5
-  enableSpawnEnemies: 1
+  spawnEnemiesPhaseConfig:
+    enableInPhase1: 1
+    enableInPhase2: 0
   projectilePrefab: {fileID: 42299429}
   mortarProjectilePrefab: {fileID: 42299429}
   bulletHellSpawnOffset: {x: -1, y: 0.75, z: 0}

@@ -71,6 +71,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0688de0399633428113ded7b938cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IA_Enemy
+  tipoEnemigo: 0
+  distanciaOptimaAtaque: 5
   velocidadBase: 1
   velocidadPersecucion: 1.2
   rangoDeteccion: 8
@@ -103,7 +105,7 @@ MonoBehaviour:
   camionTag: Car
   tagJugador: Player
   mostrarDebug: 1
-  mostrarGizmos: 0
+  mostrarGizmos: 1
 --- !u!114 &6466181651961212369
 MonoBehaviour:
   m_ObjectHideFlags: 0

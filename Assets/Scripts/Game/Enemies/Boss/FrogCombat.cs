@@ -2,6 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class AttackPhaseConfig
+{
+    public bool enableInPhase1 = true;
+    public bool enableInPhase2 = true;
+}
+
 public class FrogCombat : MonoBehaviour
 {
     #region Enumerations
@@ -38,7 +45,9 @@ public class FrogCombat : MonoBehaviour
     [SerializeField] private float bulletHellCooldown = 3f;
     [SerializeField] private float bulletHellBaseDirection = 0f; // 0 = hacia adelante, 90 = arriba, etc
     [SerializeField] private float bulletHellArcHeight = 2f; // Altura del arco de los proyectiles
-    [SerializeField] private bool enableBulletHell = true;
+    [Space(10)]
+    [Tooltip("Configurar en qué fases está disponible Bullet Hell")]
+    [SerializeField] private AttackPhaseConfig bulletHellPhaseConfig = new AttackPhaseConfig();
     
     [Header("Jump Attack Settings")]
     [SerializeField] private float jumpHeight = 20f;
@@ -46,14 +55,18 @@ public class FrogCombat : MonoBehaviour
     [SerializeField] private float jumpCooldown = 4f;
     [SerializeField] private float jumpImpactRadius = 6f;
     [SerializeField] private float jumpImpactDamage = 30f;
-    [SerializeField] private bool enableJumpAttack = true;
+    [Space(10)]
+    [Tooltip("Configurar en qué fases está disponible Jump Attack")]
+    [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig = new AttackPhaseConfig();
     
     [Header("Push Attack Settings")]
     [SerializeField] private float pushDetectionRadius = 4f;
     [SerializeField] private float pushForce = 20f;
     [SerializeField] private float pushCooldown = 4.5f;
     [SerializeField] private float pushChargeDuration = 1f;
-    [SerializeField] private bool enablePushAttack = true;
+    [Space(10)]
+    [Tooltip("Configurar en qué fases está disponible Push Attack")]
+    [SerializeField] private AttackPhaseConfig pushAttackPhaseConfig = new AttackPhaseConfig();
     
     [Header("Mortar Attack Settings")]
     [SerializeField] private int mortarProjectileCount = 6;
@@ -63,7 +76,9 @@ public class FrogCombat : MonoBehaviour
     [SerializeField] private float mortarFallDuration = 2f; // Tiempo que tarda en caer el mortero
     [SerializeField] private float mortarMaxHeight = 25f; // Altura máxima del mortero en el aire
     [SerializeField] private float mortarDamageRadius = 3f; // Radio del área de daño del mortero
-    [SerializeField] private bool enableMortarAttack = true;
+    [Space(10)]
+    [Tooltip("Configurar en qué fases está disponible Mortar Attack")]
+    [SerializeField] private AttackPhaseConfig mortarAttackPhaseConfig = new AttackPhaseConfig();
     
     [Header("Enemy Spawning")]
     [SerializeField] private GameObject enemyPrefab;
@@ -71,7 +86,9 @@ public class FrogCombat : MonoBehaviour
     [SerializeField] private Transform[] enemySpawnPoints; // Puntos de spawn de enemigos
     [SerializeField] private float spawnCooldown = 5f;
     [SerializeField] private float delayBetweenEnemySpawns = 0.5f; // Delay entre spawns de enemigos
-    [SerializeField] private bool enableSpawnEnemies = true;
+    [Space(10)]
+    [Tooltip("Configurar en qué fases está disponible Spawn Enemies")]
+    [SerializeField] private AttackPhaseConfig spawnEnemiesPhaseConfig = new AttackPhaseConfig();
     
     [Header("Projectile Configuration")]
     [SerializeField] private GameObject projectilePrefab;
@@ -187,23 +204,42 @@ public class FrogCombat : MonoBehaviour
         List<AttackType> attacks = new List<AttackType>();
         float distanceToPlayer = targetTransform != null ? Vector3.Distance(transform.position, targetTransform.position) : float.MaxValue;
         
-        if (enableBulletHell && Time.time - lastBulletHellTime > bulletHellCooldown)
+        // Verificar qué ataques están habilitados para la fase actual
+        bool isPhase1 = currentPhase == BossPhase.Phase1;
+        bool isPhase2 = currentPhase == BossPhase.Phase2;
+        
+        // Bullet Hell
+        if (IsAttackEnabledInCurrentPhase(bulletHellPhaseConfig) && Time.time - lastBulletHellTime > bulletHellCooldown)
             attacks.Add(AttackType.BulletHell);
         
-        if (enableJumpAttack && Time.time - lastJumpTime > jumpCooldown)
+        // Jump Attack
+        if (IsAttackEnabledInCurrentPhase(jumpAttackPhaseConfig) && Time.time - lastJumpTime > jumpCooldown)
             attacks.Add(AttackType.JumpAttack);
         
-        if (enableMortarAttack && Time.time - lastMortarTime > mortarCooldown)
+        // Mortar Attack
+        if (IsAttackEnabledInCurrentPhase(mortarAttackPhaseConfig) && Time.time - lastMortarTime > mortarCooldown)
             attacks.Add(AttackType.MortarAttack);
         
         // Push Attack solo cuando el jugador está cerca
-        if (enablePushAttack && Time.time - lastPushTime > pushCooldown && distanceToPlayer <= pushDetectionRadius * 1.5f)
+        if (IsAttackEnabledInCurrentPhase(pushAttackPhaseConfig) && Time.time - lastPushTime > pushCooldown && distanceToPlayer <= pushDetectionRadius * 1.5f)
             attacks.Add(AttackType.PushAttack);
         
-        if (enableSpawnEnemies && Time.time - lastSpawnTime > spawnCooldown)
+        // Spawn Enemies
+        if (IsAttackEnabledInCurrentPhase(spawnEnemiesPhaseConfig) && Time.time - lastSpawnTime > spawnCooldown)
             attacks.Add(AttackType.SpawnEnemies);
         
         return attacks;
+    }
+    
+    /// <summary>
+    /// Verifica si un ataque está habilitado en la fase actual del boss
+    /// </summary>
+    private bool IsAttackEnabledInCurrentPhase(AttackPhaseConfig config)
+    {
+        if (currentPhase == BossPhase.Phase1)
+            return config.enableInPhase1;
+        else
+            return config.enableInPhase2;
     }
     #endregion
 

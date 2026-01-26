@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1775081685688558815}
   - component: {fileID: 2240810136016823338}
   - component: {fileID: 5517919747808571863}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,9 +127,9 @@ GameObject:
   - component: {fileID: 3919509324527742769}
   - component: {fileID: 7784328434514426453}
   - component: {fileID: 4054494973640483355}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TurtleEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -236,6 +236,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd37b7ad6d72c574aaf7c43fabfaf88d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMortar
+  baseDamage: 10
+  attackCooldown: 4
+  attackRange: 20
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  showDebugLogs: 1
+  drawGizmos: 0
+  animator: {fileID: 0}
+  chanceToAttackCar: 0.8
+  carTag: Car
+  enableDamageReset: 1
+  damageThreshold: 10
+  mortarProjectileCount: 1
+  mortarDispersionRadius: 2
+  mortarFallDuration: 2
+  mortarMaxHeight: 15
+  mortarDamageRadius: 3
+  delayBetweenProjectiles: 0.2
+  impactGroundHeight: 0
+  mortarProjectilePrefab: {fileID: 8114323310556695630, guid: 643d951769025e7419eda2b8c7aaafa1, type: 3}
+  projectileSpawnOffset: {x: 0, y: 2, z: 0}
 --- !u!114 &4054494973640483355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IA_Enemy
   tipoEnemigo: 1
-  distanciaOptimaAtaque: 10
+  distanciaOptimaAtaque: 15
   velocidadBase: 2
   velocidadPersecucion: 5
   rangoDeteccion: 8
