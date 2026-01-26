@@ -118,7 +118,7 @@ public class MapManager : MonoBehaviour
         if (finalMapList[index] != null && mapInstances[index] == null)
         {
             // Instanciar el mapa en (0,0,0) primero
-            GameObject newMap = Instantiate(finalMapList[index], Vector3.zero, Quaternion.identity);
+            GameObject newMap = Instantiate(finalMapList[index], new Vector3(0f, -0.5f, 0f), Quaternion.identity);
 
             // Calcular la posición correcta
             if (index > 0 && mapInstances[index - 1] != null)
