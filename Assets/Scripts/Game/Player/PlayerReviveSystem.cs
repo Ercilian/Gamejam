@@ -65,7 +65,7 @@ public class PlayerReviveSystem : MonoBehaviour
     {
         entityStats = GetComponent<EntityStats>();
         player = GetComponent<Player>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         renderers = GetComponentsInChildren<Renderer>();
         
         // Guardar colores originales
