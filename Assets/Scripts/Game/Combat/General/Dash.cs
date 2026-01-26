@@ -25,6 +25,7 @@ public class Dash : MonoBehaviour
     public bool IsDashing => isDashing;
 
     private PlayerInput playerInput;
+    private Player player;
     private InputAction dashAction;
     private InputAction moveAction;
 
@@ -37,6 +38,7 @@ public class Dash : MonoBehaviour
 
     void Awake()
     {
+        player = GetComponent<Player>();
         playerInput = GetComponent<PlayerInput>();
         if (playerInput != null)
         {
@@ -103,6 +105,8 @@ public class Dash : MonoBehaviour
 
     private void OnDashPerformed(InputAction.CallbackContext ctx)
     {
+        if (player.isDowned == true) return;
+
         if (isDashing || cooldownTimer > 0f) return;
 
         // Dirección de movimiento actual
