@@ -27,14 +27,14 @@ RectTransform:
   m_GameObject: {fileID: 1498451973313550374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7740176, y: 0.7371596, z: 0.7371596}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4006628005122426049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.41182354, y: 0.5285715}
   m_AnchorMax: {x: 0.98800004, y: 0.757143}
-  m_AnchoredPosition: {x: -0.41307068, y: -15.30002}
+  m_AnchoredPosition: {x: 9.6, y: -7.8}
   m_SizeDelta: {x: 0.38189697, y: -0.21490002}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &7992634717207820414
@@ -109,7 +109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3942353, y: 0.757143}
   m_AnchorMax: {x: 1, y: 0.957143}
-  m_AnchoredPosition: {x: -0.000015258789, y: -15.391397}
+  m_AnchoredPosition: {x: -0.000015258789, y: -10.7}
   m_SizeDelta: {x: 0, y: 0.031200409}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5589909312439608900
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12.35
+  m_fontSize: 15.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -238,14 +238,14 @@ RectTransform:
   m_GameObject: {fileID: 3733218936532712425}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.73483, y: 0.73483, z: 0.73483}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4006628005122426049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.018117648, y: 0.042857133}
   m_AnchorMax: {x: 0.3942353, y: 0.957143}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 8.5, y: -2.1}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6744939713392786119
@@ -328,8 +328,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 195, y: 69}
+  m_AnchoredPosition: {x: 0, y: 9.564575}
+  m_SizeDelta: {x: 195, y: 88.1292}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4422294562351274151
 CanvasRenderer:
@@ -352,15 +352,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 930b7f4818ac8da41bec166e05996545, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -412,14 +412,14 @@ RectTransform:
   m_GameObject: {fileID: 4985495063348111868}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7740176, y: 0.7371596, z: 0.7371596}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4006628005122426049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.41182354, y: 0.5285715}
   m_AnchorMax: {x: 0.98800004, y: 0.757143}
-  m_AnchoredPosition: {x: -0.22213745, y: -15.299998}
+  m_AnchoredPosition: {x: -2.947586, y: -7.8}
   m_SizeDelta: {x: 0.38189697, y: -0.21490002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1789514333351229217
@@ -556,7 +556,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 38.76068, y: -5.442871}
+  m_AnchoredPosition: {x: 38.76068, y: 4.4}
   m_SizeDelta: {x: 80, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3911394447957181052
@@ -652,7 +652,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -6.3119698, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

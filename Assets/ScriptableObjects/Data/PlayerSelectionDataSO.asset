@@ -16,3 +16,6 @@ MonoBehaviour:
   - slotIndex: 0
     characterIndex: 0
     inputDeviceId: 1
+  - slotIndex: 1
+    characterIndex: 1
+    inputDeviceId: 1
