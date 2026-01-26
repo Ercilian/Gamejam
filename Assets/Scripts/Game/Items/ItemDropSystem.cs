@@ -178,20 +178,12 @@ public class ItemDropSystem : MonoBehaviour
 
         for (int i = 0; i < quantity; i++) // Spawn each item
         {
-            Vector3 randomOffset = Random.insideUnitCircle * dropRadius;
-            Vector3 basePosition = position + new Vector3(randomOffset.x, 0f, randomOffset.y);
-
-            // Raycast to find the ground and adjust spawn height to not pass through the floor
-            Vector3 spawnPosition = basePosition;
-            RaycastHit hit;
-            if (Physics.Raycast(basePosition + Vector3.up * 10f, Vector3.down, out hit, 20f, groundLayerMask))
-            {
-                spawnPosition = hit.point + Vector3.up * spawnHeightOffset;
-            }
-            else
-            {
-                spawnPosition = basePosition + Vector3.up * 1f;
-            }
+            Vector2 randomOffset2D = Random.insideUnitCircle * dropRadius;
+            Vector3 spawnPosition = new Vector3(
+                position.x + randomOffset2D.x,
+                1.0f + spawnHeightOffset, // Altura fija
+                position.z + randomOffset2D.y
+            );
 
             Quaternion randomRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
@@ -210,7 +202,6 @@ public class ItemDropSystem : MonoBehaviour
                 rb.AddForce(forceDirection * dropForce, ForceMode.Impulse);
                 rb.AddTorque(Random.insideUnitSphere * dropForce * 0.5f, ForceMode.Impulse);
             }
-
         }
 
         return lastSpawnedItem;

@@ -6162,8 +6162,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2327c3126b05e6f478e7b707bf22b2ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  normalEnemyPrefab: {fileID: 3553444444597907559, guid: 83bcc17152b473047863e0c89104779a, type: 3}
-  eliteEnemyPrefab: {fileID: 4562653153443482117, guid: 9cf22b09f090349478409fae07153eac, type: 3}
+  spawnInterval: 5
+  maxEnemies: 0
+  RatPrefab: {fileID: 3553444444597907559, guid: 83bcc17152b473047863e0c89104779a, type: 3}
+  RatElitePrefab: {fileID: 3553444444597907559, guid: 8a2d50f5e3a19ff4b9fc43d376e9603d, type: 3}
+  ChickenPrefab: {fileID: 7519758676284165041, guid: 374241356f4e2b64493b635051ebe3f5, type: 3}
+  ChickenElitePrefab: {fileID: 7519758676284165041, guid: 0a452edbe3af793479fce7b9cb00f2c4, type: 3}
+  TurtlePrefab: {fileID: 7519758676284165041, guid: 9c38d2b1de7f17d41b56ad232eae5be2, type: 3}
+  TurtleElitePrefab: {fileID: 7519758676284165041, guid: 44a3afb97a44fa245ace1dad5c142bfa, type: 3}
+  ratSpawnChance: 50
+  ratEliteSpawnChance: 5
+  chickenSpawnChance: 10
+  chickenEliteSpawnChance: 5
+  turtleSpawnChance: 5
+  turtleEliteSpawnChance: 3
   carTransform: {fileID: 2070441881}
   difficultyConfigs:
   - spawnInterval: 2.5
@@ -6218,7 +6230,7 @@ MonoBehaviour:
   - sourceName: NormalEnemy
     possibleDrops:
     - itemIndex: 0
-      dropChance: 20
+      dropChance: 10
     - itemIndex: 1
       dropChance: 5
   - sourceName: EliteEnemy
@@ -6241,9 +6253,9 @@ MonoBehaviour:
       dropChance: 20
     - itemIndex: 4
       dropChance: 20
-  probDrop1: 0.2
-  probDrop2: 0.1
-  probDrop3: 0.05
+  probDrop1: 1
+  probDrop2: 0.3
+  probDrop3: 0.1
   dropForce: 1.5
   dropRadius: 2
   upwardForce: 1.5
