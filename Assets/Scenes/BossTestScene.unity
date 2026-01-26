@@ -1380,11 +1380,11 @@ MonoBehaviour:
   jumpImpactDamage: 30
   jumpAttackPhaseConfig:
     enableInPhase1: 0
-    enableInPhase2: 1
+    enableInPhase2: 0
   pushDetectionRadius: 8.28
   pushForce: 20
   pushCooldown: 4.5
-  pushChargeDuration: 1.5
+  pushChargeDuration: 1.7
   pushAttackPhaseConfig:
     enableInPhase1: 1
     enableInPhase2: 1
