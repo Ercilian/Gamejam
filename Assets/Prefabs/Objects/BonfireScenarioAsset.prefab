@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d9a6cc4db4ccb324890293226d768ccf, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ca18982c499d43b409d61f4afa7fa60a, type: 2}
     - target: {fileID: 919132149155446097, guid: d9a6cc4db4ccb324890293226d768ccf, type: 3}
       propertyPath: m_Name
       value: BonfireScenarioAsset
