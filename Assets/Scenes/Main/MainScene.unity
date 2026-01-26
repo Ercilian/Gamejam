@@ -6164,11 +6164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   normalEnemyPrefab: {fileID: 3553444444597907559, guid: 83bcc17152b473047863e0c89104779a, type: 3}
   eliteEnemyPrefab: {fileID: 4562653153443482117, guid: 9cf22b09f090349478409fae07153eac, type: 3}
-  spawnPoints:
-  - {fileID: 212697894}
-  - {fileID: 300589058}
-  - {fileID: 1074491259}
-  - {fileID: 331187824}
+  carTransform: {fileID: 2070441881}
   difficultyConfigs:
   - spawnInterval: 2.5
     healthMultiplier: 1

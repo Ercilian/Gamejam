@@ -1,0 +1,324 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3553444444597907559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2736871559625387415}
+  - component: {fileID: 890137915879124939}
+  - component: {fileID: 2377239295749694396}
+  - component: {fileID: 6466181651961212369}
+  - component: {fileID: 1582930904324048210}
+  - component: {fileID: 6769849156830466866}
+  - component: {fileID: 8000106711055502679}
+  m_Layer: 6
+  m_Name: RatEliteEnemy
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2736871559625387415
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3553444444597907559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 6964882661199615838}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &890137915879124939
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3553444444597907559}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.3154838, z: 1.25171}
+  m_Center: {x: 0, y: 0.1577419, z: -0.12585507}
+--- !u!114 &2377239295749694396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3553444444597907559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0688de0399633428113ded7b938cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IA_Enemy
+  tipoEnemigo: 0
+  distanciaOptimaAtaque: 5
+  velocidadBase: 1
+  velocidadPersecucion: 1.2
+  rangoDeteccion: 8
+  rangoPerdida: 10
+  distanciaMinima: 1.3
+  evitarObstaculos: 1
+  distanciaDeteccionObstaculo: 6
+  radioDeteccion: 0.1
+  angulosDeteccion:
+  - 0
+  - 25
+  - -25
+  - 50
+  - -50
+  - 75
+  - -75
+  - 90
+  capasObstaculos:
+    serializedVersion: 2
+    m_Bits: 127
+  distanciaSeguridad: 1.5
+  fuerzaRepulsion: 2
+  detectarLaterales: 1
+  distanciaDeteccionLateral: 1
+  tiempoDeteccionAtasco: 0.8
+  distanciaMinMovimiento: 0.01
+  suavidadDireccion: 0.15
+  velocidadRotacion: 8
+  tiempoPersistenciaEsquive: 0.3
+  camionTag: Car
+  tagJugador: Player
+  mostrarDebug: 1
+  mostrarGizmos: 0
+--- !u!114 &6466181651961212369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3553444444597907559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ab4a614433b2ba42988cdb934624d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Enemies.EnemyHealth
+  curHP: 10
+  maxHP: 10
+  speed: 5
+  curShield: 0
+  maxShield: 50
+  attackDamage: 20
+  statsData: {fileID: 11400000, guid: ea8b9535648ed024096dfc6d6b6d746c, type: 2}
+  enemyStatsData: {fileID: 0}
+  showDebugLogs: 1
+  isElite: 0
+  canTakeKnockback: 1
+  stunDuration: 0.5
+--- !u!114 &1582930904324048210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3553444444597907559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b3a6bbefe108340904ad6c2bab0ffd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMeleeAttack
+  baseDamage: 10
+  attackCooldown: 2
+  attackRange: 3
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  showDebugLogs: 0
+  drawGizmos: 0
+  animator: {fileID: 0}
+  attackShape: 1
+  attackBoxSize: {x: 1.5, y: 1.5, z: 2}
+  attackOffset: {x: 0, y: 0, z: 1}
+  coneAngle: 90
+  hitEffectPrefab: {fileID: 0}
+  hitSound: {fileID: 0}
+--- !u!54 &6769849156830466866
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3553444444597907559}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!114 &8000106711055502679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3553444444597907559}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b9f2923833e23c48ab1e6b369dfb035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DissolvingController
+  skinnedMesh: {fileID: 837601763030257835}
+  dissolveRate: 0.0125
+  refreshRate: 0.025
+--- !u!1001 &7431645948178722997
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2736871559625387415}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.54
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -1387881916362842082, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: faeae2a0f3d14e140b1667b2d12e27af, type: 2}
+    - target: {fileID: -1387881916362842082, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 12233e2d31430eb4fbb1fa63248ef850, type: 2}
+    - target: {fileID: 919132149155446097, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      propertyPath: m_Name
+      value: RataAttack
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2037825775853091594}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2113660983585649411}
+  m_SourcePrefab: {fileID: 100100000, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+--- !u!137 &837601763030257835 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1387881916362842082, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+  m_PrefabInstance: {fileID: 7431645948178722997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6964882661199615838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+  m_PrefabInstance: {fileID: 7431645948178722997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7774316095059840484 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
+  m_PrefabInstance: {fileID: 7431645948178722997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2037825775853091594
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7774316095059840484}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 54ad218d8dce0a040983144f8894ed77, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2113660983585649411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7774316095059840484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b9f2923833e23c48ab1e6b369dfb035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DissolvingController
+  skinnedMesh: {fileID: 837601763030257835}
+  dissolveRate: 0.0125
+  refreshRate: 0.025

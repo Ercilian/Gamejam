@@ -5,12 +5,36 @@ using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("Spawn Interval (seconds)")]
+    public float spawnInterval = 5f;
+
+    [Header("Max Enemies Per Point (0 = infinito)")]
+    public int maxEnemies = 0;
+
+    // Control de spawn por punto
+    private Dictionary<EnemySpawnPoint, float> nextSpawnTimeByPoint = new Dictionary<EnemySpawnPoint, float>();
+    private Dictionary<EnemySpawnPoint, int> spawnedCountByPoint = new Dictionary<EnemySpawnPoint, int>();
     [Header("Enemy Prefabs")]
-    public GameObject normalEnemyPrefab;
-    public GameObject eliteEnemyPrefab;
+    public GameObject RatPrefab;
+    public GameObject RatElitePrefab;
+    public GameObject ChickenPrefab;
+    public GameObject ChickenElitePrefab;
+    public GameObject TurtlePrefab;
+    public GameObject TurtleElitePrefab;
+
+    [Header("Probabilidad de spawn por tipo (%)")]
+    [Range(0f, 100f)] public float ratSpawnChance = 33f;
+    [Range(0f, 100f)] public float ratEliteSpawnChance = 0f;
+    [Range(0f, 100f)] public float chickenSpawnChance = 33f;
+    [Range(0f, 100f)] public float chickenEliteSpawnChance = 0f;
+    [Range(0f, 100f)] public float turtleSpawnChance = 34f;
+    [Range(0f, 100f)] public float turtleEliteSpawnChance = 0f;
     
-    [Header("Spawn Points")]  
-    public Transform[] spawnPoints;
+    [Header("Spawn Points (auto-detect)")]
+    private EnemySpawnPoint[] spawnPoints;
+
+    [Header("Car/Truck Reference")]
+    public Transform carTransform;
     
     [System.Serializable]
     public class DifficultySettings
@@ -53,6 +77,7 @@ public class EnemySpawner : MonoBehaviour
     void Awake()
     {
         ApplyDifficulty(0);
+        // No buscar aquí, se buscarán dinámicamente en Update
     }
     
     void Start()
@@ -69,12 +94,28 @@ public class EnemySpawner : MonoBehaviour
     
     void Update()
     {
-        if (!isSpawning) return;
-        
-        if (Time.time >= nextSpawnTime)
+        if (!isSpawning || carTransform == null) return;
+
+        // Buscar dinámicamente todos los EnemySpawnPoint activos en la escena
+        spawnPoints = FindObjectsOfType<EnemySpawnPoint>();
+        foreach (var sp in spawnPoints)
         {
-            SpawnEnemy();
-            ScheduleNextSpawn();
+            if (sp == null) continue;
+
+            // Inicializar si es necesario
+            if (!nextSpawnTimeByPoint.ContainsKey(sp)) nextSpawnTimeByPoint[sp] = 0f;
+            if (!spawnedCountByPoint.ContainsKey(sp)) spawnedCountByPoint[sp] = 0;
+
+            // Controlar máximo de enemigos
+            if (maxEnemies > 0 && spawnedCountByPoint[sp] >= maxEnemies) continue;
+            // Controlar intervalo
+            if (Time.time < nextSpawnTimeByPoint[sp]) continue;
+
+            sp.TryActivate(carTransform, (point) => {
+                nextSpawnTimeByPoint[sp] = Time.time + spawnInterval;
+                spawnedCountByPoint[sp]++;
+                OnSpawnPointActivated(point);
+            });
         }
     }
     
@@ -105,35 +146,55 @@ public class EnemySpawner : MonoBehaviour
     
     void SpawnEnemy()
     {
-        // Filtrar solo los spawnPoints válidos (no destruidos)
-        List<Transform> validSpawnPoints = new List<Transform>();
-        foreach (var sp in spawnPoints)
-        {
-            if (sp != null)
-                validSpawnPoints.Add(sp);
+        // No se usa más, el spawn ahora es por punto activado
+        // (mantener método para compatibilidad, pero vacío)
+        return;
+    }
+
+    // Nuevo método: llamado cuando un punto se activa
+    void OnSpawnPointActivated(EnemySpawnPoint sp)
+    {
+        // Selección de prefab según probabilidades
+        float roll = Random.Range(0f, 100f);
+        float cumulative = 0f;
+        GameObject prefabToSpawn = null;
+
+        cumulative += ratSpawnChance;
+        if (roll < cumulative && RatPrefab != null)
+            prefabToSpawn = RatPrefab;
+        else {
+            cumulative += ratEliteSpawnChance;
+            if (roll < cumulative && RatElitePrefab != null)
+                prefabToSpawn = RatElitePrefab;
+            else {
+                cumulative += chickenSpawnChance;
+                if (roll < cumulative && ChickenPrefab != null)
+                    prefabToSpawn = ChickenPrefab;
+                else {
+                    cumulative += chickenEliteSpawnChance;
+                    if (roll < cumulative && ChickenElitePrefab != null)
+                        prefabToSpawn = ChickenElitePrefab;
+                    else {
+                        cumulative += turtleSpawnChance;
+                        if (roll < cumulative && TurtlePrefab != null)
+                            prefabToSpawn = TurtlePrefab;
+                        else {
+                            cumulative += turtleEliteSpawnChance;
+                            if (roll < cumulative && TurtleElitePrefab != null)
+                                prefabToSpawn = TurtleElitePrefab;
+                        }
+                    }
+                }
+            }
         }
-        if (validSpawnPoints.Count == 0) return;
-
-        // Elegir punto de spawn aleatorio
-        Transform spawnPoint = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)];
-
-        // Decidir si spawnar elite o normal
-        bool spawnElite = Random.Range(0f, 100f) < currentSettings.elitePercentage;
-        GameObject prefabToSpawn = spawnElite ? eliteEnemyPrefab : normalEnemyPrefab;
 
         if (prefabToSpawn == null) return;
-
-        // Spawnear enemigo
-        GameObject enemy = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
-
-        // Aplicar multiplicador de vida
-        /* Enemy enemyHealth = enemy.GetComponent<Enemy>();
-        if (enemyHealth != null)
-        {
-            enemyHealth.MaxHP = Mathf.RoundToInt(enemyHealth.MaxHP * currentSettings.healthMultiplier);
-        }
-            */
-        
+        GameObject enemy = Instantiate(prefabToSpawn, sp.transform.position, sp.transform.rotation);
+        // Aquí puedes aplicar la dificultad al enemigo si lo deseas
+        // Ejemplo:
+        // Enemy enemyHealth = enemy.GetComponent<Enemy>();
+        // if (enemyHealth != null)
+        //     enemyHealth.MaxHP = Mathf.RoundToInt(enemyHealth.MaxHP * currentSettings.healthMultiplier);
     }
     
     void ScheduleNextSpawn()
@@ -151,7 +212,10 @@ public class EnemySpawner : MonoBehaviour
     // ===== PUBLIC METHODS =====
     
     public void StartSpawning()
-    {
+    {    // Resetear contadores de spawn
+        nextSpawnTimeByPoint.Clear();
+        spawnedCountByPoint.Clear();
+    
         // ===== VALIDAR CONFIGURACIÓN ANTES DE EMPEZAR =====
         if (currentSettings == null)
         {

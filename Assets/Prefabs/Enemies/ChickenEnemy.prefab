@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 4054494973640483355}
   - component: {fileID: 5971302895367770438}
   m_Layer: 0
-  m_Name: enemigoRango 1
+  m_Name: ChickenEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
