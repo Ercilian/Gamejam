@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3199202718284467957}
   - component: {fileID: 8577440922694416064}
   - component: {fileID: 1118129386369167385}
+  - component: {fileID: -3534234024151943136}
   m_Layer: 7
   m_Name: EugenePlayer
   m_TagString: Player
@@ -359,6 +360,8 @@ MonoBehaviour:
   statsData: {fileID: 11400000, guid: c1b40d85d72f41141b244857cff73032, type: 2}
   enemyStatsData: {fileID: 0}
   activeControl: 1
+  gracePeriodDuration: 1.5
+  isDowned: 0
 --- !u!114 &3199202718284467957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +496,26 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   collisionCheckRadius: 0.5
+--- !u!114 &-3534234024151943136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62673d854c23e74799d3ed6950941b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerReviveSystem
+  timeToRevive: 30
+  reviveHoldTime: 4
+  reviveRange: 2
+  reviveHealthPercent: 0.5
+  downedVisual: {fileID: 0}
+  downedColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.7}
+  showDebugLogs: 0
+  drawGizmos: 1
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0

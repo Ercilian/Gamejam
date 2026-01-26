@@ -299,7 +299,7 @@ public class PlayerInventory : MonoBehaviour
 
     }
 
-    void ClearInventory() // Method to clear the inventory (used on player death or similar) (NEED TO CHANGE THIS)
+    public void ClearInventory() // Method to clear the inventory (used on player death or similar) (NEED TO CHANGE THIS)
     {
         carriedItems.Clear();
         foreach (var visualItem in visualItems)

@@ -186,6 +186,7 @@ public class Player : EntityStats
     /// </summary>
     public override void OnEntityDeath()
     {
+        playerInventory.ClearInventory();
         isDowned = true;
         PlayerReviveSystem reviveSystem = GetComponent<PlayerReviveSystem>();
         if (reviveSystem != null)
