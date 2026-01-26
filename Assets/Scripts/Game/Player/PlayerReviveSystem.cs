@@ -199,9 +199,12 @@ public class PlayerReviveSystem : MonoBehaviour
         int reviveHP = Mathf.RoundToInt(entityStats.MaxHP * reviveHealthPercent);
         entityStats.curHP = reviveHP;
 
-        // Reactivar control
+        // Reactivar control y actualizar estado de downed
         if (player != null)
+        {
             player.activeControl = true;
+            player.isDowned = false;
+        }
 
         // Desactivar visual de caído
         if (downedVisual != null)

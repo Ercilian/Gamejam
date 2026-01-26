@@ -27,6 +27,9 @@ public class Player : EntityStats
     // Propiedad pública para verificar si está en invulnerabilidad
     public bool IsInvulnerable => isInGracePeriod;
 
+    // ============ Estado de muerte ============
+    public bool isDowned = false; // Indica si el jugador está muerto o en estado downed
+
 
 
 
@@ -93,6 +96,11 @@ public class Player : EntityStats
     /// </summary>
     public override void TakeDamage(int amount)
     {
+        // Si está muerto o en estado downed, ignorar el daño
+        if (isDowned)
+        {
+            return;
+        }
         // Si está en tiempo de gracia, ignorar el daño
         if (isInGracePeriod)
         {
@@ -176,6 +184,7 @@ public class Player : EntityStats
     /// </summary>
     public override void OnEntityDeath()
     {
+        isDowned = true;
         PlayerReviveSystem reviveSystem = GetComponent<PlayerReviveSystem>();
         if (reviveSystem != null)
         {   
