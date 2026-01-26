@@ -21,6 +21,7 @@ public class RangedEnemyAttack : EnemyAttack
     private bool mostrandoAviso = false;
     private float tiempoInicioAviso;
     private Vector3 direccionCongelada;
+    private Vector3 puntoFinalCongelado;
     private bool direccionEstaCongelada = false;
 
     protected override void Awake()
@@ -68,23 +69,24 @@ public class RangedEnemyAttack : EnemyAttack
             if (tiempoRestante <= tiempoCongelacion && !direccionEstaCongelada)
             {
                 direccionCongelada = (objetivoActual.position - puntoDisparo.position).normalized;
+                puntoFinalCongelado = puntoDisparo.position + direccionCongelada * attackRange;
                 direccionEstaCongelada = true;
                 Debug.Log($"[{gameObject.name}] 🔒 DIRECCIÓN CONGELADA - Tiempo restante: {tiempoRestante:F2}s, Dirección: {direccionCongelada}");
             }
             
-            // Usar dirección congelada o seguir al objetivo
-            Vector3 direccion;
+            // Usar posición congelada o seguir al objetivo
+            Vector3 puntoFinal;
             if (direccionEstaCongelada)
             {
-                direccion = direccionCongelada;
+                puntoFinal = puntoFinalCongelado;
             }
             else
             {
-                direccion = (objetivoActual.position - puntoDisparo.position).normalized;
+                Vector3 direccion = (objetivoActual.position - puntoDisparo.position).normalized;
+                puntoFinal = puntoDisparo.position + direccion * attackRange;
             }
             
             // Actualizar posición de la línea
-            Vector3 puntoFinal = puntoDisparo.position + direccion * attackRange;
             lineRenderer.SetPosition(0, puntoDisparo.position);
             lineRenderer.SetPosition(1, puntoFinal);
             

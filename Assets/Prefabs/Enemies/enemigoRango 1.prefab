@@ -211,7 +211,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   puntoDisparo: {fileID: 2161399959065998965}
   tiempoAntesDeDanio: 6
-  tiempoCongelacion: 2
+  tiempoCongelacion: 6
   duracionEfectoRaycast: 0.3
 --- !u!1001 &8713588748468775092
 PrefabInstance:

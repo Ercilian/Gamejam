@@ -6326,7 +6326,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   randomMapPool:
   - {fileID: 6540120780592400911, guid: 6ce2ef2625918e64fb9436d746f405d8, type: 3}
-  - {fileID: 3275800661699807088, guid: 70957c3b5de8cc74f906080a9c85d9ed, type: 3}
   fixedMaps:
   - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
