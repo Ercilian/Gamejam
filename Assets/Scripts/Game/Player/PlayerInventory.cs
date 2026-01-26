@@ -1,0 +1,414 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
+
+public class PlayerInventory : MonoBehaviour
+{
+    [Header("Configuración")]
+    public int maxCarryCapacity = 3;
+    public Transform itemHoldPoint; //Empty where items are visually held on the players (need to change to the hands)
+    public float itemStackOffset = 0.3f; // Offset to objects in the stack
+
+    private List<CollectibleData> carriedItems = new List<CollectibleData>(); //List of carried items
+    private List<GameObject> visualItems = new List<GameObject>(); // List of instantiated visual items
+    private PlayerInput playerInput; // Reference to PlayerInput component
+    private WorldCollectible nearbyCollectible; // Reference to nearby collectible
+
+    private Animator animator; // Referencia al Animator
+
+    [Header("Pociones")]
+    public int maxPotions = 2;
+    public List<PotionData> potions = new List<PotionData>(); // Las pociones que tienes
+    public PotionData defaultHealPotion; // <-- Asigna aquí tu poción de curación en el inspector
+
+    public EntityStats entityStats; // Asigna en el inspector
+
+
+
+
+    // ================================================= Methods =================================================
+
+
+
+
+    private void Awake()
+    {
+        if (entityStats == null)
+            entityStats = GetComponent<EntityStats>();
+            // Buscar Animator en este objeto o en hijos
+            animator = GetComponent<Animator>();
+            if (animator == null)
+                animator = GetComponentInChildren<Animator>();
+            if (animator == null)
+                Debug.LogWarning("[PlayerInventory] No se encontró Animator en el jugador ni en sus hijos.");
+    }
+
+    void Start()
+    {
+        playerInput = GetComponent<PlayerInput>(); // Get PlayerInput reference
+
+        // Subscribe to the Crouch action event
+        if (playerInput != null)
+        {
+            var crouchAction = playerInput.actions["Crouch"];
+            if (crouchAction != null)
+            {
+                crouchAction.performed += OnCrouchPressed;
+            }
+        }
+
+        if (potions.Count == 0 && defaultHealPotion != null)
+        {
+            for (int i = 0; i < maxPotions; i++)
+            {
+                potions.Add(defaultHealPotion);
+            }
+            UpdatePotionUI();
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from events to prevent memory leaks
+        if (playerInput != null)
+        {
+            var crouchAction = playerInput.actions["Crouch"];
+            if (crouchAction != null)
+            {
+                crouchAction.performed -= OnCrouchPressed;
+            }
+        }
+    }
+
+    void Update()
+    {
+        // Handle interact manually (reliable method)
+        if (playerInput != null && nearbyCollectible != null)
+        {
+            var interactAction = playerInput.actions["Interact"];
+            if (interactAction != null && interactAction.WasPressedThisFrame())
+            {
+                nearbyCollectible.CollectItem();
+            }
+        }
+    }
+
+
+
+    void OnCrouchPressed(InputAction.CallbackContext context)
+    {
+
+        if (carriedItems.Count > 0)
+        {
+            DropItems();
+        }
+    }
+
+
+
+    public void SetNearbyCollectible(WorldCollectible collectible)
+    {
+        nearbyCollectible = collectible;
+    }
+
+    public bool CanCarryItem(CollectibleData item) // Boolean to check if the player can carry the item
+    {
+        if (carriedItems.Count == 0) return true; // if no items, can carry any item
+        return carriedItems.Count < maxCarryCapacity && item.type == carriedItems[0].type; // if has items, can only carry same type and not exceed capacity
+    }
+
+    public void PickupItem(CollectibleData item) // Method to pick up an item
+    {
+        if (!CanCarryItem(item)) return; // Check if can carry the item
+        carriedItems.Add(item); // Add item to the carried list
+        CreateVisualItem(item); // Create the visual representation of the item
+
+            // Activar HasItem si es el primer ítem
+            if (animator != null && carriedItems.Count == 1)
+                animator.SetBool("HasItem", true);
+
+    }
+
+    void CreateVisualItem(CollectibleData item)
+    {
+        if (!item.itemPrefab || !itemHoldPoint) return;
+        GameObject visualItem = Instantiate(item.itemPrefab);
+
+        // Desactivar collider ANTES de hacer parenting o mover el objeto
+        Collider itemCollider = visualItem.GetComponent<Collider>();
+        if (itemCollider) itemCollider.enabled = false;
+
+        visualItem.transform.SetParent(itemHoldPoint);
+        Vector3 stackPosition = Vector3.up * (visualItems.Count * itemStackOffset);
+        visualItem.transform.localPosition = stackPosition;
+
+        // Desactivar física mientras lo llevas
+        Rigidbody rb = visualItem.GetComponent<Rigidbody>();
+        if (rb)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
+        WorldCollectible worldScript = visualItem.GetComponent<WorldCollectible>();
+        if (worldScript) Destroy(worldScript);
+
+        visualItems.Add(visualItem);
+    }
+
+    private bool 
+    DepositItemsByType(CollectibleData.ItemType itemType, System.Action<int, CollectibleData> onDeposit) // Generic method to deposit items of a specific type
+    {
+        if (carriedItems.Count == 0) return false; // No items to deposit
+        int totalValue = 0;
+        for (int i = carriedItems.Count - 1; i >= 0; i--) // Iterate backwards to safely remove items
+        {
+            if (carriedItems[i].type == itemType) // Check if the item is of the specified type
+            {
+                totalValue += GetItemValue(carriedItems[i]); // Accumulate the value
+                if (visualItems.Count > i && visualItems[i] != null) //Destroy visual item if exists
+                    Destroy(visualItems[i]);
+                if (visualItems.Count > i)
+                    visualItems.RemoveAt(i);
+
+                // Llama a la acción por cada ítem depositado
+                onDeposit(GetItemValue(carriedItems[i]), carriedItems[i]);
+
+                carriedItems.RemoveAt(i); // Remove item from the carried list
+            }
+        }
+        // Si ya no quedan ítems, desactivar HasItem en el Animator
+        if (carriedItems.Count == 0 && animator != null)
+            animator.SetBool("HasItem", false);
+        return totalValue > 0;
+    }
+
+
+    private int GetItemValue(CollectibleData item) // Get the value of a specific item based on its type
+    {
+        return item.type switch
+        {
+            CollectibleData.ItemType.Diesel => item.dieselValue,
+            CollectibleData.ItemType.Scrap => item.scrapValue,
+            CollectibleData.ItemType.PlantRed => item.plantValue,
+            CollectibleData.ItemType.PlantGreen => item.plantValue,
+            CollectibleData.ItemType.PlantBlue => item.plantValue,
+            _ => 0
+        };
+    }
+
+    public bool DepositDieselItems(CarFuelSystem carFuelSystem) // Specific method to deposit diesel items
+    {
+        return DepositItemsByType(CollectibleData.ItemType.Diesel,
+            (value, data) => carFuelSystem.AddDiesel(value, data));
+    }
+
+    public bool DepositScrapItems(CarScrapSystem carScrapSystem) // Specific method to deposit scrap items
+    {
+        return DepositItemsByType(CollectibleData.ItemType.Scrap,
+            (value, data) => carScrapSystem.AddScrap(value, data));
+    }
+
+    public bool DepositPlantItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit plant/moss items
+    {
+        bool deposited = false;
+        for (int i = carriedItems.Count - 1; i >= 0; i--)
+        {
+            var type = carriedItems[i].type;
+            if (type == CollectibleData.ItemType.PlantRed ||
+                type == CollectibleData.ItemType.PlantGreen ||
+                type == CollectibleData.ItemType.PlantBlue)
+            {
+                int value = GetItemValue(carriedItems[i]);
+                carPotionsSystem.AddIngredient(type, value, carriedItems[i]);
+
+                if (visualItems.Count > i && visualItems[i] != null)
+                    Destroy(visualItems[i]);
+                if (visualItems.Count > i)
+                    visualItems.RemoveAt(i);
+                carriedItems.RemoveAt(i);
+                deposited = true;
+            }
+        }
+        return deposited;
+    }
+
+    public bool DepositFuelItems(CarPotionsSystem carPotionsSystem) // Specific method to deposit fuel items
+    {
+        return DepositItemsByType(CollectibleData.ItemType.Diesel,
+            (value, data) => carPotionsSystem.AddFuel(value, data));
+    }
+
+    public void DropItems()
+    {
+        if (carriedItems.Count == 0)
+        {
+            Debug.Log("[PlayerInventory] No items to drop!");
+            return;
+        }
+
+        Vector3 dropPosition = transform.position + transform.forward * 1.5f;
+
+        for (int i = 0; i < carriedItems.Count; i++)
+        {
+            CollectibleData item = carriedItems[i];
+
+            if (item.itemPrefab != null)
+            {
+                Vector3 randomOffset = new Vector3(
+                    Random.Range(-0.8f, 0.8f),
+                    0.1f,
+                    Random.Range(-0.8f, 0.8f)
+                );
+
+                GameObject droppedItem = Instantiate(item.itemPrefab, dropPosition + randomOffset, Quaternion.identity);
+
+                // Activar física al soltar
+                Rigidbody rb = droppedItem.GetComponent<Rigidbody>();
+                if (rb)
+                {
+                    rb.isKinematic = false;
+                    rb.useGravity = true;
+                }
+
+                WorldCollectible worldCollectible = droppedItem.GetComponent<WorldCollectible>();
+                if (worldCollectible == null)
+                {
+                    worldCollectible = droppedItem.AddComponent<WorldCollectible>();
+                }
+                worldCollectible.collectibleData = item;
+
+                Collider itemCollider = droppedItem.GetComponent<Collider>();
+                if (itemCollider) itemCollider.enabled = true;
+            }
+
+            if (i < visualItems.Count && visualItems[i] != null)
+            {
+                Destroy(visualItems[i]);
+            }
+        }
+
+        carriedItems.Clear();
+        visualItems.Clear();
+
+            // Desactivar HasItem si ya no quedan ítems
+            if (animator != null)
+                animator.SetBool("HasItem", false);
+
+    }
+
+    public void ClearInventory() // Method to clear the inventory (used on player death or similar) (NEED TO CHANGE THIS)
+    {
+        carriedItems.Clear();
+        foreach (var visualItem in visualItems)
+        {
+            if (visualItem) Destroy(visualItem);
+        }
+        visualItems.Clear();
+
+            // Desactivar HasItem si se limpia el inventario
+            if (animator != null)
+                animator.SetBool("HasItem", false);
+    }
+
+
+    public int GetCarriedItemCount() => carriedItems.Count; // Get the number of carried items
+    public bool HasItems() => carriedItems.Count > 0; // Check if the player has any items
+    public CollectibleData.ItemType GetFirstItemType() // Get the type of the first item (all items are the same type)
+    {
+        return carriedItems.Count > 0 ? carriedItems[0].type : CollectibleData.ItemType.Diesel;
+    }
+
+
+    public bool AddPotion(PotionData potion) // Method to add a potion
+    {
+        if (potions.Count < maxPotions)
+        {
+            potions.Add(potion);
+            UpdatePotionUI();
+            Debug.Log($"[PlayerInventory] Potion added: {potion.potionName}");
+            return true;
+        }
+        return false;
+    }
+
+    public bool UsePotion() // Method to use a potion
+    {
+        if (potions.Count == 0) return false;
+
+        PotionData potion = potions[0];
+        potions.RemoveAt(0);
+
+        if (potion.vfxPrefab != null)
+        {
+            var vfxObj = Instantiate(potion.vfxPrefab, transform.position, Quaternion.Euler(90, 0, 0));
+            var pool = vfxObj.GetComponent<PotionPool>();
+            if (pool != null)
+                pool.Setup(potion);
+        }
+
+        ApplyPotionEffect(potion);
+        UpdatePotionUI();
+        return true;
+    }
+
+    // Aplica el efecto de la poción
+    private void ApplyPotionEffect(PotionData potion)
+    {
+
+        // Otros efectos directos (por ejemplo, DamageBoost)
+        if (potion.effectType == PotionEffectType.DamageBoost)
+            StartCoroutine(entityStats.DamageBoost(potion.effectAmount, potion.duration));
+        if (potion.effectType2 == PotionEffectType.DamageBoost)
+            StartCoroutine(entityStats.DamageBoost(potion.effectAmount2, potion.duration));
+    }
+
+    public void UpdatePotionUI()
+    {
+        // Actualiza la interfaz según potions.Count
+    }
+
+    // Método para depositar varios tipos de ítems a la vez (por ejemplo, todas las plantas)
+    private bool DepositItemsByTypes(CollectibleData.ItemType[] itemTypes, System.Action<int> onDeposit)
+    {
+        if (carriedItems.Count == 0) return false;
+        int totalValue = 0;
+        for (int i = carriedItems.Count - 1; i >= 0; i--)
+        {
+            foreach (var type in itemTypes)
+            {
+                if (carriedItems[i].type == type)
+                {
+                    totalValue += GetItemValue(carriedItems[i]);
+                    if (visualItems.Count > i && visualItems[i] != null)
+                        Destroy(visualItems[i]);
+                    if (visualItems.Count > i)
+                        visualItems.RemoveAt(i);
+                    carriedItems.RemoveAt(i);
+                    break; // Sale del foreach para evitar doble eliminación
+                }
+            }
+        }
+        if (totalValue > 0)
+        {
+            onDeposit(totalValue);
+            return true;
+        }
+        return false;
+    }
+
+    public void ApplyUpgrade(UpgradeItemSO upgrade)
+    {
+        if (upgrade == null) return;
+        var stats = GetComponent<EntityStats>();
+        if (stats != null)
+        {
+            stats.maxHP += upgrade.healthModifier;
+            stats.attackDamage += upgrade.damageModifier;
+            stats.speed += upgrade.speedModifier;
+            Debug.Log($"[PlayerInventory] Applied upgrade: {upgrade.itemName}");
+        }
+    }
+}
