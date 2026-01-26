@@ -3,6 +3,21 @@ using UnityEngine.Serialization;
 
 public class IA_Enemy : MonoBehaviour
 {
+    [System.Serializable]
+    public enum TipoEnemigo
+    {
+        Melee,  // Enemigo cuerpo a cuerpo
+        Ranged  // Enemigo a rango
+    }
+
+    [Header("Tipo de Enemigo")]
+    [Tooltip("Define si es un enemigo cuerpo a cuerpo o a rango")]
+    public TipoEnemigo tipoEnemigo = TipoEnemigo.Melee;
+
+    [Header("Configuración de Rango (solo para Ranged)")]
+    [Tooltip("Distancia a la que se detiene para atacar (solo enemigos ranged)")]
+    public float distanciaOptimaAtaque = 5f;
+
     [Header("Configuración de Movimiento")]
     [Tooltip("Velocidad cuando va hacia el camión")]
     public float velocidadBase = 2f;
@@ -85,6 +100,10 @@ public class IA_Enemy : MonoBehaviour
     private Vector3 ultimaDireccionEsquive;
     private float tiempoUltimaEsquive;
     
+    // Sistema de distancia (ranged)
+    private bool estaRetrocediendo = false;
+    private Vector3 posicionRetroceso;
+    
     // Componentes opcionales
     private Animator animator;
     private EnemyAttack enemyAttack; // Componente de ataque
@@ -166,7 +185,42 @@ public class IA_Enemy : MonoBehaviour
         // Moverse hacia el camión
         if (camion != null)
         {
-            MoverHacia(ultimaPosicionCamion, velocidadBase);
+            float distanciaAlCamion = Vector3.Distance(transform.position, ultimaPosicionCamion);
+            
+            // Lógica diferente según tipo de enemigo
+            if (tipoEnemigo == TipoEnemigo.Ranged)
+            {
+                // COMPORTAMIENTO PARA ENEMIGOS A RANGO
+                // Si está dentro del rango de ataque, quedarse quieto y atacar al camión
+                if (distanciaAlCamion <= distanciaOptimaAtaque)
+                {
+                    // Detener movimiento
+                    if (rb != null)
+                        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+                    
+                    // Rotar hacia el camión
+                    Vector3 direccionHaciaCamion = (ultimaPosicionCamion - transform.position).normalized;
+                    if (direccionHaciaCamion.magnitude > 0.1f)
+                    {
+                        Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionHaciaCamion);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * velocidadRotacion);
+                    }
+                    
+                    if (mostrarDebug && Time.frameCount % 120 == 0);
+                        //Debug.Log($"[{name}] En posición de ataque al camión. Distancia: {distanciaAlCamion:F2}");
+                }
+                // Si está lejos, acercarse
+                else
+                {
+                    MoverDirecto(ultimaPosicionCamion, velocidadBase);
+                }
+            }
+            else
+            {
+                // COMPORTAMIENTO PARA ENEMIGOS MELEE
+                // Perseguir directamente el camión
+                MoverHacia(ultimaPosicionCamion, velocidadBase);
+            }
         }
         else
         {
@@ -211,18 +265,69 @@ public class IA_Enemy : MonoBehaviour
             return;
         }
         
-        // Intentar atacar si está en rango
+        // Lógica diferente según tipo de enemigo
+        if (tipoEnemigo == TipoEnemigo.Ranged)
+        {
+            // COMPORTAMIENTO PARA ENEMIGOS A RANGO (SIMPLIFICADO)
+            
+            // Si está dentro del rango de ataque, quedarse quieto y atacar
+            if (distanciaAJugador <= distanciaOptimaAtaque)
+            {
+                // Detener movimiento
+                if (rb != null)
+                    rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+                
+                // Rotar hacia el jugador
+                Vector3 direccionHaciaJugador = (jugadorObjetivo.position - transform.position).normalized;
+                if (direccionHaciaJugador.magnitude > 0.1f)
+                {
+                    Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionHaciaJugador);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * velocidadRotacion);
+                }
+                
+                if (mostrarDebug && Time.frameCount % 120 == 0);
+                    //Debug.Log($"[{name}] En posición de ataque. Distancia: {distanciaAJugador:F2}");
+            }
+            // Si está lejos, acercarse
+            else
+            {
+                MoverDirecto(jugadorObjetivo.position, velocidadPersecucion);
+            }
+        }
+        else
+        {
+            // COMPORTAMIENTO PARA ENEMIGOS MELEE
+            // Perseguir directamente al jugador
+            estaRetrocediendo = false;
+            MoverHacia(jugadorObjetivo.position, velocidadPersecucion);
+        }
+        
+        // Intentar atacar si está en rango (funciona para ambos tipos)
         if (enemyAttack != null && enemyAttack.CanAttack())
         {
-            bool atacoExitosamente = enemyAttack.TryAttack(jugadorObjetivo);
-            if (atacoExitosamente && mostrarDebug)
+            bool debeAtacar = false;
+            
+            if (tipoEnemigo == TipoEnemigo.Melee)
             {
-                Debug.Log($"[{name}] Atacó al jugador: {jugadorObjetivo.name}");
+                // Melee: atacar si está muy cerca
+                debeAtacar = distanciaAJugador < distanciaMinima + 1f;
+            }
+            else // Ranged
+            {
+                // Ranged: atacar si está dentro del rango de ataque
+                debeAtacar = distanciaAJugador <= distanciaOptimaAtaque;
+            }
+            
+            if (debeAtacar)
+            {
+                bool atacoExitosamente = enemyAttack.TryAttack(jugadorObjetivo);
+                if (atacoExitosamente && mostrarDebug)
+                {
+                    Debug.Log($"[{name}] Atacó al jugador: {jugadorObjetivo.name}");
+                }
             }
         }
         
-        // Perseguir al jugador
-        MoverHacia(jugadorObjetivo.position, velocidadPersecucion);
         tiempoUltimaDeteccion = Time.time;
     }
     
@@ -268,47 +373,12 @@ public class IA_Enemy : MonoBehaviour
             return;
         }
         
-        // Detectar si está atascado
-        float distanciaMovida = Vector3.Distance(transform.position, posicionAnterior);
-        if (distanciaMovida < distanciaMinMovimiento)
-        {
-            tiempoEnMismaPosicion += Time.deltaTime;
-            
-            // Si lleva mucho tiempo atascado, buscar dirección alternativa
-            if (tiempoEnMismaPosicion > tiempoDeteccionAtasco)
-            {
-                if (tiempoUsandoDireccionAlternativa <= 0)
-                {
-                    // Calcular nueva dirección alternativa (perpendicular + hacia objetivo)
-                    Vector3 perpendicular = new Vector3(-direccionDeseada.z, 0, direccionDeseada.x);
-                    if (Random.value > 0.5f) perpendicular = -perpendicular;
-                    
-                    direccionAlternativa = (perpendicular + direccionDeseada * 0.3f).normalized;
-                    tiempoUsandoDireccionAlternativa = 2f; // Usar durante 2 segundos
-                    
-                    if (mostrarDebug)
-                        Debug.Log($"[{name}] ¡Atascado! Usando dirección alternativa");
-                }
-            }
-        }
-        else
-        {
-            // Se está moviendo correctamente
-            tiempoEnMismaPosicion = 0;
-        }
-        
         posicionAnterior = transform.position;
         
         Vector3 direccionFinal = direccionDeseada;
         
-        // Usar dirección alternativa si está activa
-        if (tiempoUsandoDireccionAlternativa > 0)
-        {
-            direccionFinal = direccionAlternativa;
-            tiempoUsandoDireccionAlternativa -= Time.deltaTime;
-        }
         // Aplicar evitación de obstáculos si está activado
-        else if (evitarObstaculos)
+        if (evitarObstaculos)
         {
             Vector3 direccionEsquive = DetectarYEvitarObstaculos(direccionDeseada);
             Vector3 direccionRepulsion = Vector3.zero;
@@ -368,6 +438,41 @@ public class IA_Enemy : MonoBehaviour
         if (direccionActual.magnitude > 0.1f)
         {
             Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionActual);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * velocidadRotacion);
+        }
+    }
+    
+    // Movimiento directo sin evitación (para enemigos a rango)
+    void MoverDirecto(Vector3 objetivo, float velocidad)
+    {
+        Vector3 direccionDeseada = (objetivo - transform.position).normalized;
+        float distancia = Vector3.Distance(transform.position, objetivo);
+        
+        // No moverse si está muy cerca
+        if (distancia < distanciaMinima)
+        {
+            if (rb != null)
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            return;
+        }
+        
+        // Movimiento directo sin evitación
+        if (rb != null)
+        {
+            Vector3 velocidadDeseada = direccionDeseada * velocidad;
+            velocidadDeseada.y = rb.linearVelocity.y; // Mantener gravedad
+            rb.linearVelocity = velocidadDeseada;
+        }
+        else
+        {
+            Vector3 movimiento = direccionDeseada * velocidad * Time.deltaTime;
+            transform.position += movimiento;
+        }
+        
+        // Rotar hacia la dirección de movimiento
+        if (direccionDeseada.magnitude > 0.1f)
+        {
+            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionDeseada);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * velocidadRotacion);
         }
     }
