@@ -17,6 +17,7 @@ public class EnemyMortar : EnemyAttack
     private int lastKnownHealth; // Para trackear cambios de salud
     
     [Header("Configuración de Mortero")]
+    [SerializeField] private float attackDelayBeforeFire = 4f; // Tiempo de espera antes de disparar
     [SerializeField] private int mortarProjectileCount = 3;
     [SerializeField] private float mortarDispersionRadius = 2f; // Radio de dispersión alrededor del objetivo
     [SerializeField] private float mortarFallDuration = 2f; // Tiempo que tarda en caer el mortero
@@ -34,10 +35,18 @@ public class EnemyMortar : EnemyAttack
     private bool isAttacking = false;
     private bool isFirstAttack = true;
     private Coroutine currentAttackCoroutine;
+    private IA_Enemy iaEnemy; // Referencia al componente de IA
     
     private void Start()
     {
         FindCar();
+        
+        // Obtener referencia al componente IA_Enemy
+        iaEnemy = GetComponent<IA_Enemy>();
+        if (iaEnemy == null)
+        {
+            Debug.LogWarning($"[{name}] No se encontró componente IA_Enemy. El enemigo no se detendrá al atacar.");
+        }
         
         // Inicializar tracking de salud
         if (enemyStats != null)
@@ -116,6 +125,12 @@ public class EnemyMortar : EnemyAttack
             StopCoroutine(currentAttackCoroutine);
             currentAttackCoroutine = null;
             isAttacking = false;
+            
+            // Reactivar movimiento si fue cancelado
+            if (iaEnemy != null)
+            {
+                iaEnemy.enabled = true;
+            }
             
             if (showDebugLogs)
                 Debug.Log($"[{name}] ❌ Ataque cancelado por daño");
@@ -344,9 +359,32 @@ public class EnemyMortar : EnemyAttack
     {
         isAttacking = true;
         
+        // Detener el movimiento del enemigo
+        if (iaEnemy != null)
+        {
+            iaEnemy.enabled = false;
+            if (showDebugLogs)
+                Debug.Log($"[{name}] 🛑 Movimiento detenido para atacar");
+        }
+        
+        // Detener la velocidad del rigidbody si existe
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+        }
+        
         if (showDebugLogs)
         {
             Debug.Log($"[{name}] 💣 Ataque de mortero iniciado!");
+            Debug.Log($"[{name}] ⏱️ Esperando {attackDelayBeforeFire}s antes de disparar...");
+        }
+        
+        // Esperar el delay configurado antes de disparar
+        yield return new WaitForSeconds(attackDelayBeforeFire);
+        
+        if (showDebugLogs)
+        {
             Debug.Log($"[{name}] 🎯 Target: {target.name} en posición {target.position}");
         }
         
@@ -362,6 +400,14 @@ public class EnemyMortar : EnemyAttack
             SpawnMortarProjectile(targetPosition);
             
             yield return new WaitForSeconds(delayBetweenProjectiles);
+        }
+        
+        // Reactivar el movimiento del enemigo
+        if (iaEnemy != null)
+        {
+            iaEnemy.enabled = true;
+            if (showDebugLogs)
+                Debug.Log($"[{name}] ✅ Movimiento reactivado");
         }
         
         isAttacking = false;

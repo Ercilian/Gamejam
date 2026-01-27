@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Serialization;
+using Game.Enemies;
 
 public class IA_Enemy : MonoBehaviour
 {
@@ -19,13 +20,13 @@ public class IA_Enemy : MonoBehaviour
     public float distanciaOptimaAtaque = 5f;
 
     [Header("Configuración de Movimiento")]
-    [Tooltip("Velocidad cuando va hacia el camión")]
+    [Tooltip("Velocidad cuando va hacia el camión (se sobrescribe con ScriptableObject si existe)")]
     public float velocidadBase = 2f;
-    [Tooltip("Velocidad cuando persigue al jugador")]
+    [Tooltip("Velocidad cuando persigue al jugador (se sobrescribe con ScriptableObject si existe)")]
     public float velocidadPersecucion = 5f;
-    [Tooltip("Distancia para detectar al jugador")]
+    [Tooltip("Distancia para detectar al jugador (se sobrescribe con ScriptableObject si existe)")]
     public float rangoDeteccion = 8f;
-    [Tooltip("Distancia para perder al jugador y volver al camión")]
+    [Tooltip("Distancia para perder al jugador y volver al camión (se sobrescribe con ScriptableObject si existe)")]
     public float rangoPerdida = 12f;
     [Tooltip("Distancia mínima al objetivo antes de detenerse")]
     public float distanciaMinima = 1f;
@@ -113,6 +114,28 @@ public class IA_Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         enemyAttack = GetComponent<EnemyAttack>();
+
+        // Cargar velocidades desde el ScriptableObject si existe
+        Enemy enemy = GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            // Intentar obtener el EnemyStatsData mediante reflexión o buscar directamente en el campo serializado
+            var enemyStatsField = typeof(EntityStats).GetField("enemyStatsData", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (enemyStatsField != null)
+            {
+                EnemyStatsData enemyData = enemyStatsField.GetValue(enemy) as EnemyStatsData;
+                if (enemyData != null)
+                {
+                    velocidadBase = enemyData.VelocidadBase;
+                    velocidadPersecucion = enemyData.VelocidadPersecucion;
+                    rangoDeteccion = enemyData.RangoDeteccion;
+                    rangoPerdida = enemyData.RangoPerdida;
+                    
+                    if (mostrarDebug)
+                        Debug.Log($"[{name}] Velocidades cargadas desde ScriptableObject: Base={velocidadBase}, Persecución={velocidadPersecucion}");
+                }
+            }
+        }
 
         // Encontrar camión por tag seleccionado
         if (!string.IsNullOrEmpty(camionTag))
@@ -206,8 +229,10 @@ public class IA_Enemy : MonoBehaviour
                         transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * velocidadRotacion);
                     }
                     
-                    if (mostrarDebug && Time.frameCount % 120 == 0);
+                    if (mostrarDebug && Time.frameCount % 120 == 0)
+                    {
                         //Debug.Log($"[{name}] En posición de ataque al camión. Distancia: {distanciaAlCamion:F2}");
+                    }
                 }
                 // Si está lejos, acercarse
                 else

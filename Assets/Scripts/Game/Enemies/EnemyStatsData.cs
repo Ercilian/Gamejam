@@ -11,9 +11,10 @@ public class EnemyStatsData : ScriptableObject
 
     [Header("Core Stats")]
     [SerializeField] int maxHealth = 100;
+    [SerializeField] float velocidadBase = 2f; // Velocidad normal hacia el camión
+    [SerializeField] float velocidadPersecucion = 5f; // Velocidad al perseguir jugador
     [SerializeField] float moveSpeed = 3f;
     [SerializeField] int maxShield = 50;
-    [SerializeField] float velocidadPersecucion = 5f;
     [SerializeField] float rangoDeteccion = 10f;
     [SerializeField] float rangoPerdida = 12f;
 
@@ -35,6 +36,8 @@ public class EnemyStatsData : ScriptableObject
     public string Description => description;
     public Sprite EnemyIcon => enemyIcon;
     public int MaxHealth => maxHealth;
+    public float VelocidadBase => velocidadBase;
+    public float VelocidadPersecucion => velocidadPersecucion;
     public float MoveSpeed => moveSpeed;
     public int MaxShield => maxShield;
     public int AttackDamage => attackDamage;
@@ -44,7 +47,6 @@ public class EnemyStatsData : ScriptableObject
     public AudioClip AttackSound => attackSound;
     public AudioClip HurtSound => hurtSound;
     public AudioClip DeathSound => deathSound;
-    public float VelocidadPersecucion => velocidadPersecucion;
     public float RangoDeteccion => rangoDeteccion;
     public float RangoPerdida => rangoPerdida;
     public float MaxKnockback => maxKnockback;

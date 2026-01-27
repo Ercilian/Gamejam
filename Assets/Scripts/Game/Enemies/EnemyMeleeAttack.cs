@@ -22,6 +22,12 @@ public class EnemyMeleeAttack : EnemyAttack
     [Tooltip("Retraso en segundos antes de aplicar el daño (para sincronizar con la animación)")]
     public float attackDamageDelay = 0.3f;
 
+    [Header("Sistema de Camión")]
+    [Tooltip("Tag del camión para buscar automáticamente")]
+    [SerializeField] private string carTag = "Car";
+    
+    private GameObject carGameObject;
+
     [Header("Effects")]
     [Tooltip("Efecto de partículas al golpear (opcional)")]
     public GameObject hitEffectPrefab;
@@ -30,6 +36,69 @@ public class EnemyMeleeAttack : EnemyAttack
     public AudioClip hitSound;
 
     public enum MeleeShape { Sphere, Box, Cone }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        FindCar();
+    }
+    
+    private void FindCar()
+    {
+        GameObject carByTag = GameObject.FindGameObjectWithTag(carTag);
+        if (carByTag != null)
+        {
+            carGameObject = carByTag;
+            if (showDebugLogs)
+                Debug.Log($"[{gameObject.name}] Camión encontrado por tag '{carTag}': {carGameObject.name}");
+            return;
+        }
+        
+        MovCar movCar = FindFirstObjectByType<MovCar>();
+        if (movCar != null)
+        {
+            carGameObject = movCar.gameObject;
+            if (showDebugLogs)
+                Debug.Log($"[{gameObject.name}] Camión encontrado por componente MovCar: {carGameObject.name}");
+            return;
+        }
+        
+        if (showDebugLogs)
+            Debug.LogWarning($"[{gameObject.name}] No se encontró el camión.");
+    }
+    
+    private void Update()
+    {
+        // Si puede atacar, buscar objetivo
+        if (CanAttack())
+        {
+            // Buscar jugadores en rango
+            GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+            bool hayJugadoresEnRango = false;
+            
+            foreach (GameObject player in allPlayers)
+            {
+                float distance = Vector3.Distance(transform.position, player.transform.position);
+                if (distance <= attackRange)
+                {
+                    hayJugadoresEnRango = true;
+                    break;
+                }
+            }
+            
+            // Si no hay jugadores en rango y hay camión, atacar al camión
+            if (!hayJugadoresEnRango && carGameObject != null)
+            {
+                float distanceToCar = Vector3.Distance(transform.position, carGameObject.transform.position);
+                if (distanceToCar <= attackRange)
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"[{gameObject.name}] No hay jugadores en rango, atacando al camión");
+                    TryAttack(carGameObject.transform);
+                }
+            }
+        }
+    }
 
     protected override void ExecuteAttack(Transform target)
     {
@@ -46,58 +115,74 @@ public class EnemyMeleeAttack : EnemyAttack
     {
         yield return new WaitForSeconds(attackDamageDelay);
         
-        // Detectar todos los jugadores en el área de ataque
-        Collider[] hitPlayers = DetectPlayersInAttackArea();
+        // Detectar todos los jugadores y el camión en el área de ataque
+        Collider[] hitTargets = DetectTargetsInAttackArea();
 
-        if (hitPlayers.Length == 0)
+        if (hitTargets.Length == 0)
         {
-            if (showDebugLogs) Debug.Log($"[{gameObject.name}] Ataque melee falló, no hay jugadores en el área.");
+            if (showDebugLogs) Debug.Log($"[{gameObject.name}] Ataque melee falló, no hay objetivos en el área.");
             yield break;
         }
 
-        // Aplicar daño a todos los jugadores detectados
-        foreach (var playerCollider in hitPlayers)
+        // Aplicar daño a todos los objetivos detectados
+        foreach (var targetCollider in hitTargets)
         {
-            ApplyDamageToTarget(playerCollider.transform, baseDamage);
+            ApplyDamageToTarget(targetCollider.transform, baseDamage);
             
             // Efectos visuales/sonoros
-            SpawnHitEffect(playerCollider.transform.position);
+            SpawnHitEffect(targetCollider.transform.position);
             PlayHitSound();
         }
 
-        if (showDebugLogs) Debug.Log($"[{gameObject.name}] Ataque melee golpeó a {hitPlayers.Length} jugador(es).");
+        if (showDebugLogs) Debug.Log($"[{gameObject.name}] Ataque melee golpeó a {hitTargets.Length} objetivo(s).");
     }
 
     /// <summary>
-    /// Detecta jugadores en el área de ataque según la forma configurada
+    /// Detecta jugadores y camión en el área de ataque según la forma configurada
     /// </summary>
-    private Collider[] DetectPlayersInAttackArea()
+    private Collider[] DetectTargetsInAttackArea()
     {
         Vector3 attackPosition = transform.position + transform.TransformDirection(attackOffset);
+        Collider[] allColliders;
 
         switch (attackShape)
         {
             case MeleeShape.Sphere:
-                return Physics.OverlapSphere(attackPosition, attackRange, playerLayer, QueryTriggerInteraction.Collide);
+                allColliders = Physics.OverlapSphere(attackPosition, attackRange, ~0, QueryTriggerInteraction.Collide);
+                break;
 
             case MeleeShape.Box:
                 Quaternion rotation = transform.rotation;
-                return Physics.OverlapBox(attackPosition, attackBoxSize * 0.5f, rotation, playerLayer, QueryTriggerInteraction.Collide);
+                allColliders = Physics.OverlapBox(attackPosition, attackBoxSize * 0.5f, rotation, ~0, QueryTriggerInteraction.Collide);
+                break;
 
             case MeleeShape.Cone:
-                return DetectPlayersInCone(attackPosition);
+                allColliders = DetectTargetsInCone(attackPosition);
+                break;
 
             default:
                 return new Collider[0];
         }
+        
+        // Filtrar solo jugadores y camión
+        System.Collections.Generic.List<Collider> validTargets = new System.Collections.Generic.List<Collider>();
+        foreach (var collider in allColliders)
+        {
+            if (collider.CompareTag("Player") || collider.CompareTag("Car"))
+            {
+                validTargets.Add(collider);
+            }
+        }
+        
+        return validTargets.ToArray();
     }
 
     /// <summary>
-    /// Detecta jugadores en un cono delante del enemigo
+    /// Detecta jugadores y camión en un cono delante del enemigo
     /// </summary>
-    private Collider[] DetectPlayersInCone(Vector3 position)
+    private Collider[] DetectTargetsInCone(Vector3 position)
     {
-        Collider[] candidates = Physics.OverlapSphere(position, attackRange, playerLayer, QueryTriggerInteraction.Collide);
+        Collider[] candidates = Physics.OverlapSphere(position, attackRange, ~0, QueryTriggerInteraction.Collide);
         System.Collections.Generic.List<Collider> validTargets = new System.Collections.Generic.List<Collider>();
 
         Vector3 forward = transform.forward;
@@ -105,6 +190,10 @@ public class EnemyMeleeAttack : EnemyAttack
 
         foreach (var candidate in candidates)
         {
+            // Solo considerar jugadores y camión
+            if (!candidate.CompareTag("Player") && !candidate.CompareTag("Car"))
+                continue;
+                
             Vector3 directionToTarget = (candidate.transform.position - position).normalized;
             float angle = Vector3.Angle(forward, directionToTarget);
             

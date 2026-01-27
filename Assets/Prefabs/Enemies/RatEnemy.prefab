@@ -124,8 +124,8 @@ MonoBehaviour:
   curShield: 0
   maxShield: 50
   attackDamage: 20
-  statsData: {fileID: 11400000, guid: ea8b9535648ed024096dfc6d6b6d746c, type: 2}
-  enemyStatsData: {fileID: 0}
+  statsData: {fileID: 0}
+  enemyStatsData: {fileID: 11400000, guid: 6bcaa846869a79246a0f05c38ed09773, type: 2}
   showDebugLogs: 1
   isElite: 0
   canTakeKnockback: 1

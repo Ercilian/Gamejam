@@ -16,6 +16,11 @@ public class RangedEnemyAttack : EnemyAttack
     [Tooltip("Duración de la animación del impacto")]
     public float duracionEfectoRaycast = 0.3f;
 
+    [Header("Sistema de Camión")]
+    [Tooltip("Tag del camión para buscar automáticamente")]
+    [SerializeField] private string carTag = "Car";
+    
+    private GameObject carGameObject;
     private LineRenderer lineRenderer;
     private Transform objetivoActual;
     private bool mostrandoAviso = false;
@@ -28,6 +33,8 @@ public class RangedEnemyAttack : EnemyAttack
     {
         base.Awake();
         
+        FindCar();
+        
         if (puntoDisparo == null)
             puntoDisparo = transform;
         
@@ -36,14 +43,72 @@ public class RangedEnemyAttack : EnemyAttack
             lineRenderer = gameObject.AddComponent<LineRenderer>();
         
         lineRenderer.material = new Material(Shader.Find("Standard"));
-        lineRenderer.startWidth = 0.2f;
-        lineRenderer.endWidth = 0.2f;
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.widthMultiplier = 1f;
+        lineRenderer.alignment = LineAlignment.View; // Alineado con la cámara para consistencia
         lineRenderer.positionCount = 2;
         lineRenderer.enabled = false;
+    }
+    
+    private void FindCar()
+    {
+        // Método 1: Buscar por tag
+        GameObject carByTag = GameObject.FindGameObjectWithTag(carTag);
+        if (carByTag != null)
+        {
+            carGameObject = carByTag;
+            if (showDebugLogs)
+                Debug.Log($"[{gameObject.name}] Camión encontrado por tag '{carTag}': {carGameObject.name}");
+            return;
+        }
+        
+        // Método 2: Buscar por componente MovCar
+        MovCar movCar = FindFirstObjectByType<MovCar>();
+        if (movCar != null)
+        {
+            carGameObject = movCar.gameObject;
+            if (showDebugLogs)
+                Debug.Log($"[{gameObject.name}] Camión encontrado por componente MovCar: {carGameObject.name}");
+            return;
+        }
+        
+        if (showDebugLogs)
+            Debug.LogWarning($"[{gameObject.name}] No se encontró el camión. Intenta asignar el tag '{carTag}' al camión.");
     }
 
     void Update()
     {
+        // Si no está mostrando aviso y puede atacar, buscar objetivo
+        if (!mostrandoAviso && CanAttack())
+        {
+            // Buscar jugadores en rango
+            GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+            bool hayJugadoresEnRango = false;
+            
+            foreach (GameObject player in allPlayers)
+            {
+                float distance = Vector3.Distance(transform.position, player.transform.position);
+                if (distance <= attackRange)
+                {
+                    hayJugadoresEnRango = true;
+                    break;
+                }
+            }
+            
+            // Si no hay jugadores en rango y hay camión, atacar al camión
+            if (!hayJugadoresEnRango && carGameObject != null)
+            {
+                float distanceToCar = Vector3.Distance(transform.position, carGameObject.transform.position);
+                if (distanceToCar <= attackRange)
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"[{gameObject.name}] No hay jugadores en rango, atacando al camión");
+                    TryAttack(carGameObject.transform);
+                }
+            }
+        }
+        
         // Actualizar la línea de aviso durante la fase de advertencia
         if (mostrandoAviso && objetivoActual != null)
         {

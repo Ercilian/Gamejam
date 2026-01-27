@@ -57,7 +57,7 @@ public class MortarImpactArea : MonoBehaviour
     {
         hasDealtDamage = true;
         
-        // Detectar al jugador en el área
+        // Detectar al jugador y al camión en el área
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, damageRadius);
         
         foreach (Collider collider in hitColliders)
@@ -70,6 +70,16 @@ public class MortarImpactArea : MonoBehaviour
                 {
                     playerStats.TakeDamage(damageAmount);
                     Debug.Log($"[MortarImpactArea] ¡Mortero impactó al jugador! Daño: {damageAmount}");
+                }
+            }
+            // Verificar si es el camión
+            else if (collider.CompareTag("Car"))
+            {
+                EntityStats carStats = collider.GetComponent<EntityStats>();
+                if (carStats != null)
+                {
+                    carStats.TakeDamage(damageAmount);
+                    Debug.Log($"[MortarImpactArea] ¡Mortero impactó al camión! Daño: {damageAmount}");
                 }
             }
         }
