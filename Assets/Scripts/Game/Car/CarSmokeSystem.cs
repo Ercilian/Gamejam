@@ -360,11 +360,6 @@ public class CarSmokeSystem : MonoBehaviour
         currentSputterOffTime = Random.Range(sputterOffTimeRange.x, sputterOffTimeRange.y);
         currentLowFuelIntensity = Random.Range(lowFuelIntensityRange.x, lowFuelIntensityRange.y);
         
-        // Debug opcional
-        if (Time.frameCount % 300 == 0) // Solo ocasionalmente para no spam
-        {
-            Debug.Log($"🎲 Nuevos valores aleatorios - On: {currentSputterOnTime:F2}s, Off: {currentSputterOffTime:F2}s, Intensidad: {currentLowFuelIntensity:F2}");
-        }
     }
     
     void UpdateSmokeBasedOnMovement()

@@ -6381,38 +6381,92 @@ MonoBehaviour:
   iconImage: {fileID: 230436874}
   nameText: {fileID: 90989042}
   dialogueText: {fileID: 356906821}
-  dialogueDuration: 2.5
+  dialogueDuration: 1
   dialogueSequences:
-  - combinationKey: Pasillo_1_1_2
+  - combinationKey: Pasillo_1_0_1_2
     lines:
-    - characterIndex: 1
-      text: "(Ah\xED viene de nuevo)"
     - characterIndex: 2
       text: Veo veo...
     - characterIndex: 1
-      text: "Ten los cojones met\xE1licos de decir bomba Eugene\u2026"
+      text: ...
+    - characterIndex: 0
+      text: "*Suspira* \xBFQu\xE9 ves?"
+    - characterIndex: 2
+      text: Una cosita.
+    - characterIndex: 1
+      text: "\xBFVas en serio Raven?"
+    - characterIndex: 0
+      text: "Es m\xE1s divertido que escucharte a t\xED. \xBFQu\xE9 cosita es?"
+    - characterIndex: 2
+      text: "\xA1Una bomba!"
+    - characterIndex: 0
+      text: "Se supone que ten\xEDas que decirme la let- \xBFEso es una bomba?"
+    - characterIndex: 1
+      text: "\xA1\xBF?!"
+    - characterIndex: 2
+      text: "Ah no, es solo una bater\xEDa"
+    - characterIndex: 1
+      text: ...
+    - characterIndex: 0
+      text: ...
+    - characterIndex: 1
+      text: "Cuando esta mierda se pare voy a usarte a t\xED de se\xF1al de tr\xE1fico."
+  - combinationKey: Pasillo_1_0_2
+    lines:
+    - characterIndex: 2
+      text: Veo veo...
+    - characterIndex: 0
+      text: "\xBFOtra vez...?"
+    - characterIndex: 0
+      text: "Agh vale,\xBFqu\xE9 ves?"
+    - characterIndex: 2
+      text: Una cosita.
+    - characterIndex: 1
+      text: "\xBFY qu\xE9 cosita es?"
+    - characterIndex: 2
+      text: "Empieza por la letrita... \xA1B!"
+    - characterIndex: 0
+      text: "Guau, d\xE9jame adivinar, \xBFuna bomba?"
+    - characterIndex: 2
+      text: "\xBFC\xF3mo lo has sabido?"
+    - characterIndex: 0
+      text: "Es la \xFAnica cosa que has dicho cada vez que hemos jugado a esto."
+    - characterIndex: 2
+      text: "Ya veo, y pensaba que esta era la buena porque es peque\xF1ita..."
+    - characterIndex: 0
+      text: "\xBFC\xF3mo que es peque\xF1ita?"
+    - characterIndex: 2
+      text: "No te preocupes, ya le hemos pasado por encima, suerte que no se activ\xF3..."
+    - characterIndex: 0
+      text: ...
+  - combinationKey: Pasillo_1_0_1
+    lines:
+    - characterIndex: 1
+      text: "(Ah\xED viene de nuevo...)"
+    - characterIndex: 2
+      text: Veo veo...
+    - characterIndex: 1
+      text: "Ten los cojones met\xE1licos de decir bomba Eugene..."
     - characterIndex: 2
       text: ...
     - characterIndex: 1
       text: "Eso cre\xEDa..."
-  - combinationKey: Pasillo_2_0_1
-    lines:
-    - characterIndex: 1
-      text: Esta tiene q ser pasillo 2, raven y zofy
-    - characterIndex: 1
-      text: "Zofy est\xE1 hablando"
-  - combinationKey: Pasillo_1_0_2
-    lines:
     - characterIndex: 2
-      text: Esta tiene q ser pasillo 2, raven y eugene
+      text: "\xBFSabes Zofy? Creo que te vendr\xEDa bien tomarte algo."
     - characterIndex: 1
-      text: "Zofy est\xE1 hablando"
-  - combinationKey: Pasillo_2_0_2
-    lines:
-    - characterIndex: 0
-      text: Esta tiene q ser pasillo 2, raven y eugene
+      text: "Y a t\xED te vendr\xEDa bien tomar menos, puto pirado..."
+    - characterIndex: 2
+      text: Yo solo bebo agua y diesel.
     - characterIndex: 1
-      text: "Zofy est\xE1 hablando"
+      text: ...
+    - characterIndex: 2
+      text: Especialmente diesel.
+    - characterIndex: 1
+      text: Eso...
+    - characterIndex: 2
+      text: "\xBFMhm?"
+    - characterIndex: 1
+      text: Eso explica muchas cosas.
 --- !u!1 &480257324
 GameObject:
   m_ObjectHideFlags: 0

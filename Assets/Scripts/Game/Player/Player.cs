@@ -15,7 +15,9 @@ public class Player : EntityStats
 
     private float rotationSpeed = 10f; // Velocidad de rotación del jugador
     private Vector2 movementInput;
+
     [HideInInspector] public bool activeControl = true; // Allow external scripts (like PlayerInputEmpuje) to enable/disable control
+    [HideInInspector] public bool isCinematicRun = false; // Forzar animación de correr en cinemática
 
     private Animator animator;
     private Rigidbody rb; // o CharacterController, según tu sistema
@@ -83,12 +85,30 @@ public class Player : EntityStats
 
         // Calcular velocidad para el blend tree (0 = idle, 1 = caminando)
         float movementMagnitude = movementInput.magnitude;
-        animator.SetFloat("Speed", movementMagnitude);
+        if (isCinematicRun)
+        {
+            animator.SetFloat("Speed", 1f);
+        }
+        else
+        {
+            animator.SetFloat("Speed", movementMagnitude);
+        }
 
         if (playerInputPush != null)
             animator.SetBool("IsPushing", playerInputPush.ImPushing());
         else
             animator.SetBool("IsPushing", false);
+    }
+    /// <summary>
+    /// Habilita o deshabilita el input del jugador
+    /// </summary>
+    public void SetInputEnabled(bool enabled)
+    {
+        activeControl = enabled;
+        if (!enabled)
+        {
+            movementInput = Vector2.zero;
+        }
     }
 
     public void OnMove(InputAction.CallbackContext ctx) => movementInput = ctx.ReadValue<Vector2>(); // Called by Input System
