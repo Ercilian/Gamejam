@@ -16,9 +16,9 @@ MonoBehaviour:
   description: 
   enemyIcon: {fileID: 0}
   maxHealth: 100
-  moveSpeed: 3
+  moveSpeed: 20
   maxShield: 50
-  velocidadPersecucion: 5
+  velocidadPersecucion: 20
   rangoDeteccion: 10
   rangoPerdida: 12
   attackDamage: 15
