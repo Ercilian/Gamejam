@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyName: 
   description: 
   enemyIcon: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 2000
   moveSpeed: 0
   maxShield: 0
   velocidadPersecucion: 0

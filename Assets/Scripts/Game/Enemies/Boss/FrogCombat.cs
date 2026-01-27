@@ -192,22 +192,22 @@ public class FrogCombat : Enemy
     private float lastSpawnTime = 0f;
     private float lastAdvancedBulletHellTime = 0f;
     
-    private Rigidbody rb;
     private Animator animator;
+    private Rigidbody bossRb; // Rigidbody específico del boss para evitar conflicto con la clase base
     #endregion
 
     #region Initialization
     protected override void Awake()
     {
         base.Awake(); // Llamar a Enemy.Awake() que llama a EntityStats.Awake()
-        rb = GetComponent<Rigidbody>();
+        bossRb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         
         // Configurar Rigidbody para que el boss sea estático pero pueda moverse con scripts
-        if (rb != null)
+        if (bossRb != null)
         {
-            rb.isKinematic = true;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
+            bossRb.isKinematic = true;
+            bossRb.constraints = RigidbodyConstraints.FreezeAll;
         }
     }
     
@@ -257,10 +257,10 @@ public class FrogCombat : Enemy
     {
         // El boss es estático, no se mueve horizontalmente
         // Durante los saltos, la posición se controla manualmente en el coroutine
-        if (!isJumping && rb != null)
+        if (!isJumping && bossRb != null)
         {
             // Para un Rigidbody kinematic, usar MovePosition en lugar de linearVelocity
-            rb.MovePosition(transform.position);
+            bossRb.MovePosition(transform.position);
         }
     }
 
@@ -426,12 +426,12 @@ public class FrogCombat : Enemy
         isJumping = true;
         
         // Desactivar restricciones temporalmente para el salto
-        if (rb != null)
+        if (bossRb != null)
         {
-            rb.isKinematic = false;
-            rb.constraints = RigidbodyConstraints.None;
+            bossRb.isKinematic = false;
+            bossRb.constraints = RigidbodyConstraints.None;
         }
-        rb.linearVelocity = Vector3.zero;
+        bossRb.linearVelocity = Vector3.zero;
         
         Vector3 bossStartPosition = transform.position;
         Vector3 jumpTargetPosition = targetTransform != null ? targetTransform.position : bossStartPosition;
@@ -511,14 +511,14 @@ public class FrogCombat : Enemy
         
         // Asegurar que vuelve a la posición original
         transform.position = bossStartPosition;
-        rb.linearVelocity = Vector3.zero;
+        bossRb.linearVelocity = Vector3.zero;
         isJumping = false;
         
         // Restaurar restricciones de física
-        if (rb != null)
+        if (bossRb != null)
         {
-            rb.isKinematic = true;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
+            bossRb.isKinematic = true;
+            bossRb.constraints = RigidbodyConstraints.FreezeAll;
         }
         
         Debug.Log("[FrogBoss] Volvió a posición fija!");
@@ -603,7 +603,7 @@ public class FrogCombat : Enemy
         Vector3 spawnPos = transform.position + bulletHellSpawnOffset;
         GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         
-        // Desactivar Rigidbody si existe
+        // Desactivar Rigidbody del proyectil si existe
         Rigidbody projRb = projectile.GetComponent<Rigidbody>();
         if (projRb != null)
         {
@@ -803,10 +803,10 @@ public class FrogCombat : Enemy
         
         isDefeated = true;
         
-        if (rb != null)
+        if (bossRb != null)
         {
-            rb.linearVelocity = Vector3.zero;
-            rb.isKinematic = true;
+            bossRb.linearVelocity = Vector3.zero;
+            bossRb.isKinematic = true;
         }
         
         Debug.Log("[FrogBoss] ¡EL BOSS HA SIDO DERROTADO!");

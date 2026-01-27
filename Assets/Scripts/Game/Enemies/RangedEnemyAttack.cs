@@ -68,7 +68,9 @@ public class RangedEnemyAttack : EnemyAttack
             // Si queda menos tiempo que tiempoCongelacion, congelar la dirección
             if (tiempoRestante <= tiempoCongelacion && !direccionEstaCongelada)
             {
-                direccionCongelada = (objetivoActual.position - puntoDisparo.position).normalized;
+                Vector3 direccionHorizontal = objetivoActual.position - puntoDisparo.position;
+                direccionHorizontal.y = 0; // Ignorar diferencia de altura
+                direccionCongelada = direccionHorizontal.normalized;
                 puntoFinalCongelado = puntoDisparo.position + direccionCongelada * attackRange;
                 direccionEstaCongelada = true;
                 Debug.Log($"[{gameObject.name}] 🔒 DIRECCIÓN CONGELADA - Tiempo restante: {tiempoRestante:F2}s, Dirección: {direccionCongelada}");
@@ -82,7 +84,9 @@ public class RangedEnemyAttack : EnemyAttack
             }
             else
             {
-                Vector3 direccion = (objetivoActual.position - puntoDisparo.position).normalized;
+                Vector3 direccionHorizontal = objetivoActual.position - puntoDisparo.position;
+                direccionHorizontal.y = 0; // Ignorar diferencia de altura
+                Vector3 direccion = direccionHorizontal.normalized;
                 puntoFinal = puntoDisparo.position + direccion * attackRange;
             }
             
@@ -130,8 +134,10 @@ public class RangedEnemyAttack : EnemyAttack
         tiempoInicioAviso = Time.time;
         direccionEstaCongelada = false; // Reset congelación
         
-        // Mostrar línea de aviso
-        Vector3 direccion = (target.position - puntoDisparo.position).normalized;
+        // Mostrar línea de aviso - dirección horizontal sin inclinación
+        Vector3 direccionHorizontal = target.position - puntoDisparo.position;
+        direccionHorizontal.y = 0; // Ignorar diferencia de altura
+        Vector3 direccion = direccionHorizontal.normalized;
         Vector3 puntoFinal = puntoDisparo.position + direccion * attackRange;
         
         lineRenderer.enabled = true;
@@ -161,8 +167,18 @@ public class RangedEnemyAttack : EnemyAttack
         
         Debug.Log($"[{gameObject.name}] 🔫 DISPARANDO");
         
-        // Usar la dirección congelada si existe, si no recalcular
-        Vector3 direccion = direccionEstaCongelada ? direccionCongelada : (objetivoActual.position - puntoDisparo.position).normalized;
+        // Usar la dirección congelada si existe, si no recalcular horizontalmente
+        Vector3 direccion;
+        if (direccionEstaCongelada)
+        {
+            direccion = direccionCongelada;
+        }
+        else
+        {
+            Vector3 direccionHorizontal = objetivoActual.position - puntoDisparo.position;
+            direccionHorizontal.y = 0; // Ignorar diferencia de altura
+            direccion = direccionHorizontal.normalized;
+        }
         
         Debug.Log($"[{gameObject.name}] Raycast desde {puntoDisparo.position} dirección {direccion} rango {attackRange}");
         Debug.Log($"[{gameObject.name}] Usando dirección congelada: {direccionEstaCongelada}");
