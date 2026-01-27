@@ -1371,8 +1371,46 @@ MonoBehaviour:
   bulletHellBaseDirection: 180
   bulletHellArcHeight: 0.1
   bulletHellPhaseConfig:
-    enableInPhase1: 1
+    enableInPhase1: 0
     enableInPhase2: 0
+  advancedPattern: 3
+  advancedWaveCount: 5
+  advancedWaveDelay: 0.3
+  advancedBulletSpeed: 6
+  advancedCooldown: 5
+  spiralConfig:
+    helixSegments: 8
+    projectilesPerSegment: 2
+    spreadAngle: 8
+    rotationSpeed: 5
+    bridgeCount: 1
+    bridgeProjectiles: 1
+    bridgeSpread: 1
+  waveConfig:
+    petalCount: 6
+    bulletsPerPetal: 3
+    petalWidth: 45
+    curveFactor: 4
+    centerRingBullets: 0
+    centerRingSpeed: 0.6
+  starConfig:
+    starArms: 5
+    bulletsPerArm: 4
+    armSpread: 8
+    speedIncrement: 0.4
+    rotationSpeed: 20
+  sunburstConfig:
+    mainRays: 3
+    projectilesPerRay: 1
+    raySpread: 3
+    waveCircles: 3
+    baseCircleBullets: 1
+    secondaryRays: 1
+    secondaryRayOffset: 30
+    rotationSpeed: 20
+  advancedBulletHellPhaseConfig:
+    enableInPhase1: 1
+    enableInPhase2: 1
   jumpHeight: 20
   jumpDuration: 1.5
   jumpCooldown: 4
@@ -1386,8 +1424,8 @@ MonoBehaviour:
   pushCooldown: 4.5
   pushChargeDuration: 1.7
   pushAttackPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   mortarProjectileCount: 5
   mortarCooldown: 4
   mortarRandomRadius: 14
@@ -1396,8 +1434,8 @@ MonoBehaviour:
   mortarMaxHeight: 25
   mortarDamageRadius: 5
   mortarAttackPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
   enemiesToSpawn: 10
   enemySpawnPoints:
@@ -1410,7 +1448,7 @@ MonoBehaviour:
   spawnCooldown: 22.5
   delayBetweenEnemySpawns: 0.5
   spawnEnemiesPhaseConfig:
-    enableInPhase1: 1
+    enableInPhase1: 0
     enableInPhase2: 0
   projectilePrefab: {fileID: 42299429}
   mortarProjectilePrefab: {fileID: 42299429}

@@ -10,6 +10,9 @@ public class BossProjectile : MonoBehaviour
     [Header("Hitbox Configuration")]
     [SerializeField] [Range(0.1f, 1.0f)] private float hitboxScale = 0.6f;
     [SerializeField] private bool showHitboxGizmo = true;
+    [Header("Rotation Configuration")]
+    [SerializeField] private bool enableRotation = true;
+    [SerializeField] private Vector3 rotationSpeed = new Vector3(0, 360f, 0); // Grados por segundo
     #endregion
 
     #region State
@@ -89,6 +92,17 @@ public class BossProjectile : MonoBehaviour
         
         // Destruir el proyectil después de un tiempo si no impacta nada
         Destroy(gameObject, lifetime);
+    }
+    #endregion
+
+    #region Update Loop
+    private void Update()
+    {
+        // Rotar el proyectil sobre sí mismo
+        if (enableRotation)
+        {
+            transform.Rotate(rotationSpeed * Time.deltaTime, Space.Self);
+        }
     }
     #endregion
 

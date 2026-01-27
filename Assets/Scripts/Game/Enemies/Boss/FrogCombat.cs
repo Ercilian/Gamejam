@@ -9,6 +9,56 @@ public class AttackPhaseConfig
     public bool enableInPhase2 = true;
 }
 
+[System.Serializable]
+public class SpiralPatternConfig
+{
+    [Header("DNA Hélice Doble")]
+    public int helixSegments = 8;
+    public int projectilesPerSegment = 2;
+    public float spreadAngle = 10f;
+    public float rotationSpeed = 30f;
+    public int bridgeCount = 4;
+    public int bridgeProjectiles = 3;
+    public float bridgeSpread = 8f;
+}
+
+[System.Serializable]
+public class WavePatternConfig
+{
+    [Header("Pétalos de Flor")]
+    public int petalCount = 6;
+    public int bulletsPerPetal = 8;
+    public float petalWidth = 45f;
+    public float curveFactor = 2f;
+    public int centerRingBullets = 12;
+    public float centerRingSpeed = 0.6f;
+}
+
+[System.Serializable]
+public class RotatingStarConfig
+{
+    [Header("Estrella Rotante")]
+    public int starArms = 5;
+    public int bulletsPerArm = 4;
+    public float armSpread = 5f;
+    public float speedIncrement = 0.5f;
+    public float rotationSpeed = 30f;
+}
+
+[System.Serializable]
+public class SunburstConfig
+{
+    [Header("Ráfaga Solar")]
+    public int mainRays = 12;
+    public int projectilesPerRay = 3;
+    public float raySpread = 3f;
+    public int waveCircles = 3;
+    public int baseCircleBullets = 16;
+    public int secondaryRays = 6;
+    public float secondaryRayOffset = 30f;
+    public float rotationSpeed = 20f;
+}
+
 public class FrogCombat : MonoBehaviour
 {
     #region Enumerations
@@ -24,7 +74,16 @@ public class FrogCombat : MonoBehaviour
         JumpAttack,
         MortarAttack,
         SpawnEnemies,
-        PushAttack
+        PushAttack,
+        AdvancedBulletHell
+    }
+    
+    private enum AdvancedPattern
+    {
+        Spiral,
+        Wave,
+        RotatingStar,
+        Cross
     }
     #endregion
 
@@ -44,10 +103,26 @@ public class FrogCombat : MonoBehaviour
     [SerializeField] private float delayBetweenBursts = 0.5f; // Delay entre ráfagas
     [SerializeField] private float bulletHellCooldown = 3f;
     [SerializeField] private float bulletHellBaseDirection = 0f; // 0 = hacia adelante, 90 = arriba, etc
-    [SerializeField] private float bulletHellArcHeight = 2f; // Altura del arco de los proyectiles
+    [SerializeField] private float bulletHellArcHeight = 2f; // Altura del arco de los proyectiles.
     [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Bullet Hell")]
     [SerializeField] private AttackPhaseConfig bulletHellPhaseConfig = new AttackPhaseConfig();
+    
+    [Header("Advanced Bullet Hell Settings")]
+    [SerializeField] private AdvancedPattern advancedPattern = AdvancedPattern.Spiral;
+    [SerializeField] private int advancedWaveCount = 5;
+    [SerializeField] private float advancedWaveDelay = 0.15f;
+    [SerializeField] private float advancedBulletSpeed = 6f;
+    [SerializeField] private float advancedCooldown = 5f;
+    [Space(10)]
+    [Tooltip("Configuración individual para cada patrón avanzado")]
+    [SerializeField] private SpiralPatternConfig spiralConfig = new SpiralPatternConfig();
+    [SerializeField] private WavePatternConfig waveConfig = new WavePatternConfig();
+    [SerializeField] private RotatingStarConfig starConfig = new RotatingStarConfig();
+    [SerializeField] private SunburstConfig sunburstConfig = new SunburstConfig();
+    [Space(10)]
+    [Tooltip("Configurar en qué fases está disponible Advanced Bullet Hell")]
+    [SerializeField] private AttackPhaseConfig advancedBulletHellPhaseConfig = new AttackPhaseConfig();
     
     [Header("Jump Attack Settings")]
     [SerializeField] private float jumpHeight = 20f;
@@ -114,6 +189,7 @@ public class FrogCombat : MonoBehaviour
     private float lastBulletHellTime = 0f;
     private float lastMortarTime = 0f;
     private float lastSpawnTime = 0f;
+    private float lastAdvancedBulletHellTime = 0f;
     
     private Rigidbody rb;
     private Animator animator;
@@ -228,6 +304,10 @@ public class FrogCombat : MonoBehaviour
         if (IsAttackEnabledInCurrentPhase(spawnEnemiesPhaseConfig) && Time.time - lastSpawnTime > spawnCooldown)
             attacks.Add(AttackType.SpawnEnemies);
         
+        // Advanced Bullet Hell
+        if (IsAttackEnabledInCurrentPhase(advancedBulletHellPhaseConfig) && Time.time - lastAdvancedBulletHellTime > advancedCooldown)
+            attacks.Add(AttackType.AdvancedBulletHell);
+        
         return attacks;
     }
     
@@ -262,6 +342,9 @@ public class FrogCombat : MonoBehaviour
                 break;
             case AttackType.SpawnEnemies:
                 StartCoroutine(SpawnEnemies());
+                break;
+            case AttackType.AdvancedBulletHell:
+                StartCoroutine(AdvancedBulletHellAttack());
                 break;
         }
     }
@@ -550,11 +633,20 @@ public class FrogCombat : MonoBehaviour
             float arcY = Mathf.Sin(t * Mathf.PI) * arcHeight;
             
             // Posición final
-            projectile.transform.position = horizontalPos + Vector3.up * arcY;
+            Vector3 newPosition = horizontalPos + Vector3.up * arcY;
+            projectile.transform.position = newPosition;
             
-            // Rotar hacia la dirección de movimiento
+            // Calcular dirección de movimiento considerando el arco
             if (dir3D != Vector3.zero)
-                projectile.transform.rotation = Quaternion.LookRotation(dir3D);
+            {
+                // Calcular la derivada de la altura para obtener la pendiente del arco
+                float arcDerivative = Mathf.Cos(t * Mathf.PI) * arcHeight;
+                Vector3 movementDirection = dir3D + Vector3.up * arcDerivative / travelDistance;
+                movementDirection.Normalize();
+                
+                // Rotar hacia la dirección de movimiento actual (incluyendo componente vertical del arco)
+                projectile.transform.rotation = Quaternion.LookRotation(movementDirection);
+            }
             
             // Detectar colisión con el jugador por distancia
             if (targetTransform != null && !hasDamagedPlayer)
@@ -799,6 +891,230 @@ public class FrogCombat : MonoBehaviour
         Destroy(areaVisual);
     }
 
+    private IEnumerator AdvancedBulletHellAttack()
+    {
+        lastAdvancedBulletHellTime = Time.time;
+        animator?.SetTrigger("BulletHellAttack");
+        yield return new WaitForSeconds(0.5f);
+        
+        PlayAttackEffect();
+        PlayAttackSFX();
+        
+        Debug.Log($"[FrogBoss] Advanced Bullet Hell - Pattern: {advancedPattern}");
+        
+        yield return new WaitForSeconds(0.3f);
+        
+        switch (advancedPattern)
+        {
+            case AdvancedPattern.Spiral:
+                yield return StartCoroutine(SpiralPattern());
+                break;
+            case AdvancedPattern.Wave:
+                yield return StartCoroutine(WavePattern());
+                break;
+            case AdvancedPattern.RotatingStar:
+                yield return StartCoroutine(RotatingStarPattern());
+                break;
+            case AdvancedPattern.Cross:
+                yield return StartCoroutine(CrossPattern());
+                break;
+        }
+    }
+    
+    private IEnumerator SpiralPattern()
+    {
+        Debug.Log("[FrogBoss] Ejecutando patrón DNA Hélice Doble");
+        float currentRotation = 0f;
+        
+        for (int wave = 0; wave < advancedWaveCount; wave++)
+        {
+            // Crear dos hélices entrelazadas
+            for (int helix = 0; helix < 2; helix++)
+            {
+                float helixDirection = helix == 0 ? 1f : -1f; // Una horaria, otra antihoraria
+                float helixOffset = helix * 180f; // Offset inicial de 180 grados
+                
+                for (int i = 0; i < spiralConfig.helixSegments; i++)
+                {
+                    float t = (float)i / spiralConfig.helixSegments;
+                    
+                    // Ángulo que sigue una trayectoria helicoidal
+                    float angle = helixOffset + (currentRotation + t * 360f) * helixDirection;
+                    
+                    // Disparar múltiples proyectiles por segmento para densidad
+                    for (int j = 0; j < spiralConfig.projectilesPerSegment; j++)
+                    {
+                        float spreadAngle = angle + (j - spiralConfig.projectilesPerSegment / 2f) * spiralConfig.spreadAngle;
+                        Vector2 direction = GetDirectionFromAngle(spreadAngle);
+                        
+                        // Velocidad ondulatoria basada en la posición en la hélice
+                        float speedWave = Mathf.Sin(t * Mathf.PI * 2f) * 0.2f + 1f;
+                        SpawnProjectile(direction, advancedBulletSpeed * speedWave, false);
+                    }
+                }
+            }
+            
+            // Puentes conectores entre las dos hélices (cada 2 olas)
+            if (wave % 2 == 0)
+            {
+                for (int i = 0; i < spiralConfig.bridgeCount; i++)
+                {
+                    float bridgeAngle = (360f / spiralConfig.bridgeCount) * i + currentRotation * 0.5f;
+                    
+                    // Disparar línea de proyectiles como "puente"
+                    for (int j = 0; j < spiralConfig.bridgeProjectiles; j++)
+                    {
+                        float angle = bridgeAngle + (j - spiralConfig.bridgeProjectiles / 2f) * spiralConfig.bridgeSpread;
+                        Vector2 direction = GetDirectionFromAngle(angle);
+                        SpawnProjectile(direction, advancedBulletSpeed * 0.75f, false);
+                    }
+                }
+            }
+            
+            currentRotation += spiralConfig.rotationSpeed * 0.8f;
+            yield return new WaitForSeconds(advancedWaveDelay);
+        }
+    }
+    
+    private IEnumerator WavePattern()
+    {
+        Debug.Log("[FrogBoss] Ejecutando patrón Pétalos de Flor");
+        
+        for (int wave = 0; wave < advancedWaveCount; wave++)
+        {
+            float waveRotation = wave * (360f / advancedWaveCount);
+            
+            // Crear pétalos usando funciones trigonométricas
+            for (int petal = 0; petal < waveConfig.petalCount; petal++)
+            {
+                float petalAngle = (360f / waveConfig.petalCount) * petal + waveRotation;
+                
+                // Cada pétalo tiene múltiples proyectiles formando una curva
+                for (int i = 0; i < waveConfig.bulletsPerPetal; i++)
+                {
+                    float t = (float)i / (waveConfig.bulletsPerPetal - 1); // Normalizado 0-1
+                    
+                    // Función de rosa polar para crear pétalos: r = sin(k * θ)
+                    float curveAngle = t * 90f; // Ángulo dentro del pétalo (0-90 grados)
+                    float radius = Mathf.Sin(curveAngle * Mathf.Deg2Rad * waveConfig.curveFactor); // Factor de curvatura
+                    
+                    // Calcular desplazamiento lateral basado en la curva
+                    float lateralOffset = radius * waveConfig.petalWidth; // Ancho del pétalo
+                    float finalAngle = petalAngle + lateralOffset - waveConfig.petalWidth / 2f; // Centrar el pétalo
+                    
+                    Vector2 direction = GetDirectionFromAngle(finalAngle);
+                    
+                    // Velocidad variable: más lento al inicio y final del pétalo, más rápido en el medio
+                    float speedMultiplier = Mathf.Sin(t * Mathf.PI) * 0.5f + 0.75f;
+                    SpawnProjectile(direction, advancedBulletSpeed * speedMultiplier, false);
+                }
+            }
+            
+            // Anillo central para dar más densidad
+            if (wave % 2 == 1)
+            {
+                for (int i = 0; i < waveConfig.centerRingBullets; i++)
+                {
+                    float angle = (360f / waveConfig.centerRingBullets) * i + waveRotation * 0.5f;
+                    Vector2 direction = GetDirectionFromAngle(angle);
+                    SpawnProjectile(direction, advancedBulletSpeed * waveConfig.centerRingSpeed, false);
+                }
+            }
+            
+            yield return new WaitForSeconds(advancedWaveDelay);
+        }
+    }
+    
+    private IEnumerator RotatingStarPattern()
+    {
+        Debug.Log("[FrogBoss] Ejecutando patrón Estrella Rotante");
+        float currentRotation = 0f;
+        
+        for (int wave = 0; wave < advancedWaveCount; wave++)
+        {
+            for (int arm = 0; arm < starConfig.starArms; arm++)
+            {
+                float armAngle = (360f / starConfig.starArms) * arm + currentRotation;
+                
+                for (int i = 0; i < starConfig.bulletsPerArm; i++)
+                {
+                    float spreadAngle = armAngle + (i - starConfig.bulletsPerArm / 2) * starConfig.armSpread;
+                    Vector2 direction = GetDirectionFromAngle(spreadAngle);
+                    SpawnProjectile(direction, advancedBulletSpeed + i * starConfig.speedIncrement, false);
+                }
+            }
+            
+            currentRotation += starConfig.rotationSpeed;
+            yield return new WaitForSeconds(advancedWaveDelay);
+        }
+    }
+    
+    private IEnumerator CrossPattern()
+    {
+        Debug.Log("[FrogBoss] Ejecutando patrón Ráfaga Solar");
+        float currentRotation = 0f;
+        
+        for (int wave = 0; wave < advancedWaveCount; wave++)
+        {
+            // Calcular intensidad pulsante (oscila entre 0.6 y 1.0)
+            float pulseIntensity = Mathf.Sin(wave * Mathf.PI / 2f) * 0.4f + 0.6f;
+            
+            // Rayos principales del sol
+            for (int ray = 0; ray < sunburstConfig.mainRays; ray++)
+            {
+                float rayAngle = (360f / sunburstConfig.mainRays) * ray + currentRotation;
+                
+                // Disparar proyectiles a lo largo del rayo con velocidades incrementales
+                for (int i = 0; i < sunburstConfig.projectilesPerRay; i++)
+                {
+                    float t = (float)i / sunburstConfig.projectilesPerRay;
+                    
+                    // Crear efecto de rayo con ligero spread
+                    for (int spread = -1; spread <= 1; spread++)
+                    {
+                        float finalAngle = rayAngle + spread * sunburstConfig.raySpread;
+                        Vector2 direction = GetDirectionFromAngle(finalAngle);
+                        
+                        // Velocidad aumenta con la distancia, modulada por el pulso
+                        float speed = advancedBulletSpeed * (0.6f + t * 0.7f) * pulseIntensity;
+                        SpawnProjectile(direction, speed, false);
+                    }
+                }
+            }
+            
+            // Ondas expansivas circulares (cada 2 olas)
+            if (wave % 2 == 1)
+            {
+                for (int circle = 0; circle < sunburstConfig.waveCircles; circle++)
+                {
+                    int bulletsInCircle = sunburstConfig.baseCircleBullets + circle * 4;
+                    float circleRotation = currentRotation * (1f + circle * 0.2f);
+                    
+                    for (int i = 0; i < bulletsInCircle; i++)
+                    {
+                        float angle = (360f / bulletsInCircle) * i + circleRotation;
+                        Vector2 direction = GetDirectionFromAngle(angle);
+                        
+                        // Velocidad decrece en círculos externos (simula expansión de onda)
+                        float speed = advancedBulletSpeed * (1f - circle * 0.15f) * pulseIntensity;
+                        SpawnProjectile(direction, speed, false);
+                    }
+                }
+            }
+            
+            // Rayos secundarios más finos entre los principales
+            for (int ray = 0; ray < sunburstConfig.secondaryRays; ray++)
+            {
+                float rayAngle = (360f / sunburstConfig.secondaryRays) * ray + currentRotation + sunburstConfig.secondaryRayOffset;
+                Vector2 direction = GetDirectionFromAngle(rayAngle);
+                SpawnProjectile(direction, advancedBulletSpeed * 0.9f * pulseIntensity, false);
+            }
+            
+            currentRotation += sunburstConfig.rotationSpeed * 0.6f;
+            yield return new WaitForSeconds(advancedWaveDelay);
+        }
+    }
+    
     private IEnumerator SpawnEnemies()
     {
         lastSpawnTime = Time.time;
