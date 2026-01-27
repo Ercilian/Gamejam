@@ -189,7 +189,7 @@ PrefabInstance:
       addedObject: {fileID: 919458806847341477}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aecfbe994299f70429d381446193e8f2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5819575260465959399}
+      addedObject: {fileID: 443927856900100418}
   m_SourcePrefab: {fileID: 100100000, guid: aecfbe994299f70429d381446193e8f2, type: 3}
 --- !u!1 &7264200887829943935 stripped
 GameObject:
@@ -208,8 +208,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b76973802e497904d817d275785da927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FrogCombat
-  maxHealth: 200
-  phaseTransitionHealth: 80
+  curHP: 0
+  maxHP: 100
+  speed: 5
+  curShield: 0
+  maxShield: 0
+  attackDamage: 10
+  statsData: {fileID: 0}
+  enemyStatsData: {fileID: 11400000, guid: b6088da8f1b9325478f16cbd426c4386, type: 2}
+  showDebugLogs: 1
+  isElite: 0
+  canTakeKnockback: 1
+  stunDuration: 0.5
+  phaseTransitionPercentage: 0.4
   targetTransform: {fileID: 0}
   attackCooldown: 3
   bulletSpeed: 8.5
@@ -259,8 +270,8 @@ MonoBehaviour:
     secondaryRayOffset: 30
     rotationSpeed: 20
   advancedBulletHellPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   jumpHeight: 20
   jumpDuration: 1.5
   jumpCooldown: 4
@@ -300,8 +311,8 @@ MonoBehaviour:
   spawnEnemiesPhaseConfig:
     enableInPhase1: 0
     enableInPhase2: 0
-  projectilePrefab: {fileID: 0}
-  mortarProjectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 8114323310556695630, guid: 643d951769025e7419eda2b8c7aaafa1, type: 3}
+  mortarProjectilePrefab: {fileID: 8114323310556695630, guid: 643d951769025e7419eda2b8c7aaafa1, type: 3}
   bulletHellSpawnOffset: {x: -1, y: 0.75, z: 0}
   projectileSpawnOffset: {x: 0, y: 0, z: 0}
   attackEffectPrefab: {fileID: 0}
@@ -334,7 +345,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &5819575260465959399
+--- !u!65 &443927856900100418
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -353,8 +364,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.11, y: 0.11, z: 0.13136229}
-  m_Center: {x: 0, y: 0, z: 0.01}
+  m_Size: {x: 7, y: 7, z: 7}
+  m_Center: {x: 0, y: 3.59, z: 0}
 --- !u!4 &8035671419358416069 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}

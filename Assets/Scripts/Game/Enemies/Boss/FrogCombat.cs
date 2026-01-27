@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Enemies;
 
 [System.Serializable]
 public class AttackPhaseConfig
@@ -59,7 +60,7 @@ public class SunburstConfig
     public float rotationSpeed = 20f;
 }
 
-public class FrogCombat : MonoBehaviour
+public class FrogCombat : Enemy
 {
     #region Enumerations
     private enum BossPhase
@@ -88,8 +89,9 @@ public class FrogCombat : MonoBehaviour
     #endregion
 
     #region Boss Configuration
-    [SerializeField] private float maxHealth = 200f;
-    [SerializeField] private float phaseTransitionHealth = 80f;
+    [Header("Boss Phase")]
+    [Tooltip("Porcentaje de vida restante para cambiar a fase 2 (ej: 0.4 = 40% de vida)")]
+    [SerializeField] private float phaseTransitionPercentage = 0.4f;
     
     [Header("Attack Configuration")]
     [SerializeField] private Transform targetTransform;
@@ -178,7 +180,6 @@ public class FrogCombat : MonoBehaviour
     #endregion
 
     #region State Variables
-    private float currentHealth;
     private BossPhase currentPhase = BossPhase.Phase1;
     private bool isDefeated = false;
     private bool isJumping = false;
@@ -196,19 +197,11 @@ public class FrogCombat : MonoBehaviour
     #endregion
 
     #region Initialization
-    private void Start()
+    protected override void Awake()
     {
-        InitializeBoss();
-        animator = GetComponentInChildren<Animator>();
-    }
-
-    private void InitializeBoss()
-    {
+        base.Awake(); // Llamar a Enemy.Awake() que llama a EntityStats.Awake()
         rb = GetComponent<Rigidbody>();
-        currentHealth = maxHealth;
-        
-        // Proteger el boss de ser destruido entre escenas
-        DontDestroyOnLoad(gameObject);
+        animator = GetComponentInChildren<Animator>();
         
         // Configurar Rigidbody para que el boss sea estático pero pueda moverse con scripts
         if (rb != null)
@@ -216,6 +209,17 @@ public class FrogCombat : MonoBehaviour
             rb.isKinematic = true;
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
+    }
+    
+    private void Start()
+    {
+        InitializeBoss();
+    }
+
+    private void InitializeBoss()
+    {
+        // Proteger el boss de ser destruido entre escenas
+        DontDestroyOnLoad(gameObject);
         
         if (targetTransform == null)
         {
@@ -224,7 +228,7 @@ public class FrogCombat : MonoBehaviour
                 targetTransform = player.transform;
         }
         
-        Debug.Log($"[FrogBoss] Boss initialized with {maxHealth} HP");
+        Debug.Log($"[FrogBoss] Boss initialized with {curHP}/{maxHP} HP");
     }
     #endregion
 
@@ -241,7 +245,9 @@ public class FrogCombat : MonoBehaviour
 
     private void UpdateBossPhase()
     {
-        if (currentPhase == BossPhase.Phase1 && currentHealth <= phaseTransitionHealth)
+        float healthPercentage = (float)curHP / maxHP;
+        
+        if (currentPhase == BossPhase.Phase1 && healthPercentage <= phaseTransitionPercentage)
         {
             TransitionToPhase2();
         }
@@ -790,29 +796,18 @@ public class FrogCombat : MonoBehaviour
     #endregion
 
     #region Damage & Health
-    public void TakeDamage(float damage)
-    {
-        if (isDefeated)
-            return; // Ignorar daño si el boss ya fue derrotado
-        
-        currentHealth -= damage;
-        
-        Debug.Log($"[FrogBoss] Damage taken: {damage}. HP: {currentHealth}/{maxHealth}");
-        
-        if (currentHealth <= 0)
-        {
-            DefeatedBoss();
-        }
-    }
-
-    private void DefeatedBoss()
+    public override void OnEntityDeath()
     {
         if (isDefeated)
             return; // Prevenir múltiples llamadas
         
         isDefeated = true;
-        rb.linearVelocity = Vector3.zero;
-        rb.isKinematic = true;
+        
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
         
         Debug.Log("[FrogBoss] ¡EL BOSS HA SIDO DERROTADO!");
         
@@ -823,7 +818,10 @@ public class FrogCombat : MonoBehaviour
             Destroy(effect.gameObject, 3f);
         }
         
-        gameObject.SetActive(false);
+        // No llamar a base.OnEntityDeath() para no dropear items como enemigo normal
+        // El boss debe tener su propio sistema de recompensas aquí si lo deseas
+        
+        Destroy(gameObject, 3f); // Destruir después de 3 segundos para mostrar el efecto
     }
     #endregion
 

@@ -18,6 +18,9 @@ public class EnemyMeleeAttack : EnemyAttack
     
     [Tooltip("Ángulo del cono de ataque (solo para Cone)")]
     public float coneAngle = 90f;
+    
+    [Tooltip("Retraso en segundos antes de aplicar el daño (para sincronizar con la animación)")]
+    public float attackDamageDelay = 0.3f;
 
     [Header("Effects")]
     [Tooltip("Efecto de partículas al golpear (opcional)")]
@@ -31,13 +34,25 @@ public class EnemyMeleeAttack : EnemyAttack
     protected override void ExecuteAttack(Transform target)
     {
         animator.SetTrigger("Attack");
+        
+        // Aplicar el daño después del retraso configurado para sincronizar con la animación
+        StartCoroutine(DelayedAttack());
+    }
+
+    /// <summary>
+    /// Ejecuta el ataque después del retraso configurado
+    /// </summary>
+    private System.Collections.IEnumerator DelayedAttack()
+    {
+        yield return new WaitForSeconds(attackDamageDelay);
+        
         // Detectar todos los jugadores en el área de ataque
         Collider[] hitPlayers = DetectPlayersInAttackArea();
 
         if (hitPlayers.Length == 0)
         {
             if (showDebugLogs) Debug.Log($"[{gameObject.name}] Ataque melee falló, no hay jugadores en el área.");
-            return;
+            yield break;
         }
 
         // Aplicar daño a todos los jugadores detectados

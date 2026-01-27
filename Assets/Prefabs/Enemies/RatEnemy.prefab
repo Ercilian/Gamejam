@@ -101,11 +101,11 @@ MonoBehaviour:
   distanciaMinMovimiento: 0.01
   suavidadDireccion: 0.15
   velocidadRotacion: 8
-  tiempoPersistenciaEsquive: 0.3
+  tiempoPersistenciaEsquive: 1
   camionTag: Car
   tagJugador: Player
-  mostrarDebug: 1
-  mostrarGizmos: 1
+  mostrarDebug: 0
+  mostrarGizmos: 0
 --- !u!114 &6466181651961212369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +155,7 @@ MonoBehaviour:
   attackBoxSize: {x: 1.5, y: 1.5, z: 2}
   attackOffset: {x: 0, y: 0, z: 1}
   coneAngle: 90
+  attackDamageDelay: 0.8
   hitEffectPrefab: {fileID: 0}
   hitSound: {fileID: 0}
 --- !u!54 &6769849156830466866
