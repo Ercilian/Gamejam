@@ -6249,7 +6249,7 @@ MonoBehaviour:
   ratEliteSpawnChance: 0
   chickenSpawnChance: 25
   chickenEliteSpawnChance: 0
-  turtleSpawnChance: 25
+  turtleSpawnChance: 86.2
   turtleEliteSpawnChance: 0
   carTransform: {fileID: 2070441881}
   difficultyConfigs:

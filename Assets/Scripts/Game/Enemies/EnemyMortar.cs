@@ -319,6 +319,8 @@ public class EnemyMortar : EnemyAttack
     
     protected override void ExecuteAttack(Transform target)
     {
+        animator.SetTrigger("Attack");
+
         // Marcar que ya no es el primer ataque SOLO después de que inicie el ataque
         if (showDebugLogs)
         {
