@@ -11,11 +11,13 @@ public class CameraTrigger : MonoBehaviour
     public bool disableFuelConsumption = false;
     [Header("Zona de pasillo (activa diálogo)")]
     public bool isPasillo = false;
+    private EnemySpawner enemySpawner;
 
 
     private void Awake() // Search for CameraMovement in the scene
     {
         cameraMovement = FindFirstObjectByType<CameraMovement>();
+        enemySpawner = FindFirstObjectByType<EnemySpawner>();
     }
 
     private void OnTriggerEnter(Collider other) // Detect when the car enters the trigger zone and change camera offset
@@ -42,6 +44,7 @@ public class CameraTrigger : MonoBehaviour
 
             if (isPasillo)
             {
+                enemySpawner.isSpawning = false;
                 UIManager.Instance.DialogueSetup();
                 var dialogueSystem = FindFirstObjectByType<DialogueSystem>();
                 if (dialogueSystem != null)
@@ -52,6 +55,7 @@ public class CameraTrigger : MonoBehaviour
             }
             else
             {
+                enemySpawner.isSpawning = true;
                 UIManager.Instance.GameUISetup();
             }
         }

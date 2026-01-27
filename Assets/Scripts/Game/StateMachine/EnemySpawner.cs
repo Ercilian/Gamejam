@@ -62,7 +62,7 @@ public class EnemySpawner : MonoBehaviour
     [Header("Runtime Info")]
     [SerializeField] private int currentDifficulty = 0;
     [SerializeField] private float nextSpawnTime = 0f;
-    [SerializeField] private bool isSpawning = false;
+    [SerializeField] public bool isSpawning = false;
     
     private DifficultySettings currentSettings;
     
