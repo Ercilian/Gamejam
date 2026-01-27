@@ -6,11 +6,13 @@ public class CameraTrigger : MonoBehaviour
 // Script to change camera offset when the car enters the trigger zone (cinematic camera).
 {
     public Vector3 newOffset = new Vector3(0f, 5f, -5f);
+    
     public float delaySeconds = 2f;
     [SerializeField] private CameraMovement cameraMovement;
     public bool disableFuelConsumption = false;
     [Header("Zona de pasillo (activa diálogo)")]
     public bool isPasillo = false;
+    public bool isBossRoom = false;
     private EnemySpawner enemySpawner;
     private Player player;
 

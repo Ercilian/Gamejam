@@ -8,16 +8,23 @@ public class SpawnBoss : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		Debug.Log($"[SpawnBoss] Trigger enter by: {other.name} (tag: {other.tag})");
 		if (other.CompareTag("Car"))
 		{
+			Debug.Log("[SpawnBoss] Car detected in trigger.");
 			if (bossPrefab != null && spawnPoint != null)
 			{
+				Debug.Log("[SpawnBoss] Instantiating boss at spawn point.");
 				Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
 			}
 			else
 			{
-				Debug.LogWarning("Boss prefab o spawn point no asignado en SpawnBoss");
+				Debug.LogWarning($"[SpawnBoss] Boss prefab o spawn point no asignado. bossPrefab: {(bossPrefab != null)}, spawnPoint: {(spawnPoint != null)}");
 			}
+		}
+		else
+		{
+			Debug.Log("[SpawnBoss] Triggered by non-car object.");
 		}
 	}
 }
