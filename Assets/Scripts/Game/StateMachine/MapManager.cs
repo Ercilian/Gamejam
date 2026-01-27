@@ -118,7 +118,7 @@ public class MapManager : MonoBehaviour
         if (finalMapList[index] != null && mapInstances[index] == null)
         {
             // Instanciar el primer mapa en (35, -0.5, 0), el resto igual que antes
-            Vector3 spawnPos = (index == 0) ? new Vector3(54f, -0.5f, -14f) : new Vector3(0f, -0.5f, 0f);
+            Vector3 spawnPos = (index == 0) ? new Vector3(41f, -0.5f, 0f) : new Vector3(0f, -0.5f, 0f);
             GameObject newMap = Instantiate(finalMapList[index], spawnPos, Quaternion.identity);
 
             // Calcular la posición correcta
