@@ -52,6 +52,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: FrogEnemyBoss
       objectReference: {fileID: 0}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[5]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[7]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[8]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 7844415258954830280, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      propertyPath: 'm_Materials.Array.data[9]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -277,6 +317,8 @@ MonoBehaviour:
   jumpCooldown: 4
   jumpImpactRadius: 6
   jumpImpactDamage: 30
+  jumpImpactPushForce: 15
+  jumpLandingWarningTime: 1
   jumpAttackPhaseConfig:
     enableInPhase1: 0
     enableInPhase2: 0
@@ -297,8 +339,13 @@ MonoBehaviour:
   mortarAttackPhaseConfig:
     enableInPhase1: 1
     enableInPhase2: 1
-  enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
-  enemiesToSpawn: 10
+  enemyTypes:
+  - enemyPrefab: {fileID: 0}
+    cantidad: 1
+  - enemyPrefab: {fileID: 0}
+    cantidad: 1
+  - enemyPrefab: {fileID: 0}
+    cantidad: 1
   enemySpawnPoints:
   - {fileID: 0}
   - {fileID: 0}
