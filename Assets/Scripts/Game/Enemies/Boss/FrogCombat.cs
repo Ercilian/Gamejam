@@ -60,6 +60,14 @@ public class SunburstConfig
     public float rotationSpeed = 20f;
 }
 
+[System.Serializable]
+public class EnemySpawnConfig
+{
+    public GameObject enemyPrefab;
+    [Tooltip("Cantidad de este tipo de enemigo a spawnear")]
+    public int cantidad = 1;
+}
+
 public class FrogCombat : Enemy
 {
     #region Enumerations
@@ -158,8 +166,8 @@ public class FrogCombat : Enemy
     [SerializeField] private AttackPhaseConfig mortarAttackPhaseConfig = new AttackPhaseConfig();
     
     [Header("Enemy Spawning")]
-    [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private int enemiesToSpawn = 3;
+    [Tooltip("Configuración de los 3 tipos de enemigos a spawnear")]
+    [SerializeField] private EnemySpawnConfig[] enemyTypes = new EnemySpawnConfig[3];
     [SerializeField] private Transform[] enemySpawnPoints; // Puntos de spawn de enemigos
     [SerializeField] private float spawnCooldown = 5f;
     [SerializeField] private float delayBetweenEnemySpawns = 0.5f; // Delay entre spawns de enemigos
@@ -1119,14 +1127,6 @@ public class FrogCombat : Enemy
         PlayAttackEffect();
         PlayAttackSFX();
         
-        Debug.Log($"[FrogBoss] Spawning {enemiesToSpawn} enemies!");
-        
-        if (enemyPrefab == null)
-        {
-            Debug.LogWarning("[FrogBoss] Enemy prefab not assigned!");
-            yield break;
-        }
-        
         // Verificar si hay puntos de spawn definidos
         if (enemySpawnPoints == null || enemySpawnPoints.Length == 0)
         {
@@ -1134,19 +1134,54 @@ public class FrogCombat : Enemy
             yield break;
         }
         
-        for (int i = 0; i < enemiesToSpawn; i++)
+        // Verificar si hay tipos de enemigos configurados
+        if (enemyTypes == null || enemyTypes.Length == 0)
         {
-            // Seleccionar un punto de spawn aleatorio
-            Transform randomSpawnPoint = enemySpawnPoints[Random.Range(0, enemySpawnPoints.Length)];
-            Vector3 spawnPosition = randomSpawnPoint.position;
-            
-            GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            Debug.Log($"[FrogBoss] Enemy {i + 1} spawned at {spawnPosition}");
-            
-            // Esperar antes de spawnear el siguiente enemigo
-            if (i < enemiesToSpawn - 1)
+            Debug.LogWarning("[FrogBoss] No enemy types configured!");
+            yield break;
+        }
+        
+        // Contar el total de enemigos a spawnear
+        int totalEnemies = 0;
+        foreach (var enemyType in enemyTypes)
+        {
+            if (enemyType != null && enemyType.enemyPrefab != null)
             {
-                yield return new WaitForSeconds(delayBetweenEnemySpawns);
+                totalEnemies += enemyType.cantidad;
+            }
+        }
+        
+        Debug.Log($"[FrogBoss] Spawning {totalEnemies} enemies total!");
+        
+        int spawnedCount = 0;
+        
+        // Spawnear cada tipo de enemigo según su configuración
+        for (int typeIndex = 0; typeIndex < enemyTypes.Length; typeIndex++)
+        {
+            EnemySpawnConfig enemyConfig = enemyTypes[typeIndex];
+            
+            // Validar que el tipo está configurado correctamente
+            if (enemyConfig == null || enemyConfig.enemyPrefab == null || enemyConfig.cantidad <= 0)
+            {
+                continue;
+            }
+            
+            // Spawnear la cantidad especificada de este tipo
+            for (int i = 0; i < enemyConfig.cantidad; i++)
+            {
+                // Seleccionar un punto de spawn aleatorio
+                Transform randomSpawnPoint = enemySpawnPoints[Random.Range(0, enemySpawnPoints.Length)];
+                Vector3 spawnPosition = randomSpawnPoint.position;
+                
+                GameObject enemy = Instantiate(enemyConfig.enemyPrefab, spawnPosition, Quaternion.identity);
+                spawnedCount++;
+                Debug.Log($"[FrogBoss] Enemy {spawnedCount}/{totalEnemies} (Type {typeIndex + 1}) spawned at {spawnPosition}");
+                
+                // Esperar antes de spawnear el siguiente enemigo
+                if (spawnedCount < totalEnemies)
+                {
+                    yield return new WaitForSeconds(delayBetweenEnemySpawns);
+                }
             }
         }
     }
