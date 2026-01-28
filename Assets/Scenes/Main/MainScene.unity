@@ -801,6 +801,8 @@ MonoBehaviour:
   offsetXBossCombat: 0
   offsetYBossCombat: 0
   offsetZBossCombat: 0
+  fixedBossCombatPosition: {x: 208.5, y: 21, z: -51}
+  bossCombatLookAtPoint: {x: 221, y: 0.3, z: 0.2}
   smoothSpeed: 5
   currentMode: 0
   yawSmoothSpeed: 10
@@ -6365,15 +6367,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   randomMapPool:
-  - {fileID: 4906936881903153471, guid: 3781f62a7b6f57143b8f0168bdd346ca, type: 3}
-  - {fileID: 8684991815642709520, guid: eb483f94042fe574e8f3ed5b72c0eaba, type: 3}
+  - {fileID: 8242368813756451260, guid: d08388796dd5a2f459d82676796aca60, type: 3}
   fixedMaps:
   - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 2985120443330566491, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffff04000000
+  mapSequence: ffffffff03000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342

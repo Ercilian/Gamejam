@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -28,6 +27,8 @@ public class CameraMovement : MonoBehaviour
     public float offsetXBossCombat = 0f;
     public float offsetYBossCombat = 0f;
     public float offsetZBossCombat = 0f;
+    public Vector3 fixedBossCombatPosition;
+    public Vector3 bossCombatLookAtPoint;
 
     
     
@@ -101,10 +102,9 @@ public class CameraMovement : MonoBehaviour
                 transform.rotation = Quaternion.Euler(bossCinePitch, yaw, 0f);
                 break;
             case CameraMode.BossCombat:
-                offsetX = offsetXBossCombat;
-                Vector3 desiredPosBossCombat = target.position + new Vector3(offsetX, 0, 0);
-                transform.position = Vector3.Lerp(transform.position, desiredPosBossCombat, smoothSpeed * Time.deltaTime);
-                transform.LookAt(target);
+                // Cámara fija en una posición específica y mirando a un punto concreto
+                transform.position = Vector3.Lerp(transform.position, fixedBossCombatPosition, smoothSpeed * Time.deltaTime);
+                transform.LookAt(bossCombatLookAtPoint);
                 break;
         }
     }
@@ -115,6 +115,12 @@ public class CameraMovement : MonoBehaviour
         // Guardar el modo anterior
         CameraMode previousMode = currentMode;
         currentMode = mode;
+
+        if (mode == CameraMode.BossCinematic)
+        {
+            StartCoroutine(BossCinematicToCombatCoroutine());
+        }
+        
         if (mode == CameraMode.Normal && previousMode != CameraMode.Normal)
         {
             // Al cambiar a normal desde otro modo, hacer transición suave
@@ -188,6 +194,13 @@ public class CameraMovement : MonoBehaviour
         yield return new WaitForSeconds(delaySeconds);
         offsetX = newOffsetX;
     }
+
+    private System.Collections.IEnumerator BossCinematicToCombatCoroutine()
+    {
+        yield return new WaitForSeconds(5f);
+        SetCameraMode(CameraMode.BossCombat);
+    }
+
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;

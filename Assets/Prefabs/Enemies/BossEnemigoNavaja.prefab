@@ -76,8 +76,8 @@ MonoBehaviour:
   curShield: 0
   maxShield: 50
   attackDamage: 20
-  statsData: {fileID: 11400000, guid: 2a60db4f8c8249740befaf086d36aac9, type: 2}
-  enemyStatsData: {fileID: 0}
+  statsData: {fileID: 0}
+  enemyStatsData: {fileID: 11400000, guid: 2b7b1d7026d7e4249a2ddca4faeba215, type: 2}
   showDebugLogs: 1
   isElite: 0
   canTakeKnockback: 1
@@ -213,10 +213,40 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 51375504cd3dce640b9eafd4a0e91065, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1667081548505534517}
   m_SourcePrefab: {fileID: 100100000, guid: 51375504cd3dce640b9eafd4a0e91065, type: 3}
 --- !u!4 &1253609521899300083 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 51375504cd3dce640b9eafd4a0e91065, type: 3}
   m_PrefabInstance: {fileID: 1652555301966545688}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1886559210497031753 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 51375504cd3dce640b9eafd4a0e91065, type: 3}
+  m_PrefabInstance: {fileID: 1652555301966545688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1667081548505534517
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886559210497031753}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5bfc79836c758fe47ba442927eaf5aea, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
