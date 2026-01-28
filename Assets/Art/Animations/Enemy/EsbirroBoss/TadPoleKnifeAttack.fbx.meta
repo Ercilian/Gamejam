@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8b873d5655ceb42499d3a18ca225aa2e
+guid: 51375504cd3dce640b9eafd4a0e91065
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ArmatureAction
+      name: TadPoleKnifeAttack
       takeName: ArmatureAction
       internalID: -3880581976594992817
       firstFrame: 0
-      lastFrame: 14
+      lastFrame: 16
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 729c5555d0755bb47a7ddc8740c814f6
+guid: 8b873d5655ceb42499d3a18ca225aa2e
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,18 +31,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ArmatureAction
+      name: TadpoleHammerRun
       takeName: ArmatureAction
       internalID: -3880581976594992817
       firstFrame: 0
-      lastFrame: 36
+      lastFrame: 14
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
