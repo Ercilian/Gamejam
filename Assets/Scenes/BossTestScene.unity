@@ -1561,9 +1561,37 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpHeight
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpCooldown
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpDuration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: canTakeKnockback
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpImpactDamage
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpImpactRadius
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 42299429}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpLandingWarningTime
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: mortarProjectilePrefab
       value: 
@@ -1592,6 +1620,46 @@ PrefabInstance:
       propertyPath: 'enemySpawnPoints.Array.data[5]'
       value: 
       objectReference: {fileID: 1427972056}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: bulletHellPhaseConfig.enableInPhase1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: bulletHellPhaseConfig.enableInPhase2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpAttackPhaseConfig.enableInPhase1
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpAttackPhaseConfig.enableInPhase2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: pushAttackPhaseConfig.enableInPhase1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: pushAttackPhaseConfig.enableInPhase2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: mortarAttackPhaseConfig.enableInPhase1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: mortarAttackPhaseConfig.enableInPhase2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: advancedBulletHellPhaseConfig.enableInPhase1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: advancedBulletHellPhaseConfig.enableInPhase2
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

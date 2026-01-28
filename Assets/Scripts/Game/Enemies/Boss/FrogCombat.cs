@@ -140,6 +140,8 @@ public class FrogCombat : Enemy
     [SerializeField] private float jumpCooldown = 4f;
     [SerializeField] private float jumpImpactRadius = 6f;
     [SerializeField] private float jumpImpactDamage = 30f;
+    [SerializeField] private float jumpImpactPushForce = 15f; // Fuerza de empuje al impactar
+    [SerializeField] private float jumpLandingWarningTime = 1f; // Tiempo antes de aterrizar que se muestra el área
     [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Jump Attack")]
     [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig = new AttackPhaseConfig();
@@ -442,7 +444,22 @@ public class FrogCombat : Enemy
         bossRb.linearVelocity = Vector3.zero;
         
         Vector3 bossStartPosition = transform.position;
-        Vector3 jumpTargetPosition = targetTransform != null ? targetTransform.position : bossStartPosition;
+        
+        // Calcular posición de destino del jugador
+        Vector3 jumpTargetPosition = bossStartPosition;
+        Transform targetPlayer = null;
+        
+        if (targetTransform != null)
+        {
+            jumpTargetPosition = targetTransform.position;
+            targetPlayer = targetTransform;
+        }
+        
+        // Ajustar la altura del destino al suelo
+        jumpTargetPosition.y = bossStartPosition.y;
+        
+        // Crear el área de aterrizaje visual antes de saltar
+        GameObject landingAreaMarker = CreateJumpLandingArea(jumpTargetPosition);
         
         Vector3 midPoint = (bossStartPosition + jumpTargetPosition) * 0.5f;
         Vector3 peakPosition = midPoint + Vector3.up * jumpHeight;
@@ -459,15 +476,71 @@ public class FrogCombat : Enemy
         
         // Fase de caída hacia el jugador
         elapsedTime = 0f;
+        bool hasPrePushed = false; // Flag para evitar empujes múltiples
+        List<GameObject> prePushedPlayers = new List<GameObject>(); // Lista de jugadores ya empujados
+        
         while (elapsedTime < jumpDuration * 0.5f)
         {
             float t = elapsedTime / (jumpDuration * 0.5f);
             transform.position = Vector3.Lerp(peakPosition, jumpTargetPosition, t);
+            
+            // Cuando está cerca del suelo (80% de caída), empujar a los jugadores hacia arriba anticipadamente UNA SOLA VEZ
+            if (t >= 0.8f && !hasPrePushed)
+            {
+                hasPrePushed = true;
+                Collider[] preHitColliders = Physics.OverlapSphere(jumpTargetPosition, jumpImpactRadius);
+                foreach (Collider collider in preHitColliders)
+                {
+                    if (collider.gameObject != gameObject)
+                    {
+                        if (collider.CompareTag("Player") || collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                        {
+                            Rigidbody playerRb = collider.GetComponent<Rigidbody>();
+                            if (playerRb != null)
+                            {
+                                // Empujar fuertemente hacia arriba antes del impacto
+                                Vector3 horizontalDirection = (collider.transform.position - jumpTargetPosition);
+                                horizontalDirection.y = 0;
+                                
+                                if (horizontalDirection.magnitude < 0.5f)
+                                {
+                                    // Si está en el centro, empujar en dirección aleatoria
+                                    float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+                                    horizontalDirection = new Vector3(Mathf.Cos(randomAngle), 0, Mathf.Sin(randomAngle)) * 2f;
+                                }
+                                else
+                                {
+                                    horizontalDirection = horizontalDirection.normalized * 2f;
+                                }
+                                
+                                // Empuje solo horizontal, sin componente vertical
+                                Vector3 prePushForce = horizontalDirection;
+                                playerRb.AddForce(prePushForce * jumpImpactPushForce * 0.7f, ForceMode.Impulse);
+                                
+                                // Registrar que este jugador fue pre-empujado
+                                prePushedPlayers.Add(collider.gameObject);
+                                Debug.Log($"[FrogBoss] Pre-empuje a {collider.gameObject.name} para evitar aplastamiento!");
+                            }
+                        }
+                    }
+                }
+            }
+            
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         
-        // Aplicar daño en área sin cambiar la posición del boss
+        // Asegurar posición final ligeramente por encima del suelo
+        jumpTargetPosition.y += 0.1f;
+        transform.position = jumpTargetPosition;
+        
+        // Destruir el marcador de área
+        if (landingAreaMarker != null)
+        {
+            Destroy(landingAreaMarker);
+        }
+        
+        // Aplicar daño y empuje en área al aterrizar
         Collider[] hitColliders = Physics.OverlapSphere(jumpTargetPosition, jumpImpactRadius);
         foreach (Collider collider in hitColliders)
         {
@@ -475,61 +548,82 @@ public class FrogCombat : Enemy
             {
                 if (collider.CompareTag("Player") || collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    // Aplicar daño
                     EntityStats entityStats = collider.GetComponent<EntityStats>();
                     if (entityStats != null)
                     {
                         entityStats.TakeDamage((int)jumpImpactDamage);
                         Debug.Log($"[FrogBoss] Jump impact hit {collider.gameObject.name} for {jumpImpactDamage} damage!");
                     }
+                    
+                    // Aplicar empuje SOLO si el jugador NO fue pre-empujado
+                    if (!prePushedPlayers.Contains(collider.gameObject))
+                    {
+                        Rigidbody playerRb = collider.GetComponent<Rigidbody>();
+                        if (playerRb != null)
+                        {
+                            // Calcular dirección horizontal
+                            Vector3 horizontalDirection = (collider.transform.position - transform.position);
+                            horizontalDirection.y = 0; // Ignorar diferencia vertical
+                            
+                            float horizontalDistance = horizontalDirection.magnitude;
+                            
+                            // Si el jugador está muy cerca del centro, empujar en dirección aleatoria
+                            if (horizontalDistance < 0.5f)
+                            {
+                                float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+                                horizontalDirection = new Vector3(Mathf.Cos(randomAngle), 0, Mathf.Sin(randomAngle));
+                            }
+                            else
+                            {
+                                horizontalDirection = horizontalDirection.normalized;
+                            }
+                            
+                            // Empuje solo horizontal, sin componente vertical
+                            Vector3 pushDirection = horizontalDirection;
+                            
+                            playerRb.AddForce(pushDirection * jumpImpactPushForce, ForceMode.Impulse);
+                            Debug.Log($"[FrogBoss] Empujando a {collider.gameObject.name}! (Distancia: {horizontalDistance:F2})");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"[FrogBoss] {collider.gameObject.name} ya fue pre-empujado, saltando empuje secundario.");
+                    }
                 }
             }
         }
         
-        // Impacto al aterrizar - efecto en la posición del salto, pero boss permanece en el aire
+        // Rotar hacia el jugador objetivo
+        if (targetPlayer != null)
+        {
+            Vector3 directionToPlayer = (targetPlayer.position - transform.position);
+            directionToPlayer.y = 0; // Mantener rotación solo en el plano horizontal
+            
+            if (directionToPlayer != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+                transform.rotation = targetRotation;
+                Debug.Log($"[FrogBoss] Rotando hacia el jugador!");
+            }
+        }
+        
+        // Impacto al aterrizar - efectos
         PlayAttackEffect();
         PlayAttackSFX();
         
-        // Pausa después del impacto
-        yield return new WaitForSeconds(0.5f);
-        
-        Debug.Log("[FrogBoss] Saltando de vuelta a posición original!");
-        
-        // Posición intermedia para el regreso
-        Vector3 returnPeakPosition = (jumpTargetPosition + bossStartPosition) * 0.5f + Vector3.up * (jumpHeight * 0.8f);
-        
-        // Subida de regreso
-        elapsedTime = 0f;
-        while (elapsedTime < jumpDuration * 0.5f)
-        {
-            float t = elapsedTime / (jumpDuration * 0.5f);
-            transform.position = Vector3.Lerp(jumpTargetPosition, returnPeakPosition, t);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        
-        // Caída de regreso
-        elapsedTime = 0f;
-        while (elapsedTime < jumpDuration * 0.5f)
-        {
-            float t = elapsedTime / (jumpDuration * 0.5f);
-            transform.position = Vector3.Lerp(returnPeakPosition, bossStartPosition, t);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        
-        // Asegurar que vuelve a la posición original
-        transform.position = bossStartPosition;
+        // El boss se queda en esta nueva posición
         bossRb.linearVelocity = Vector3.zero;
         isJumping = false;
         
-        // Restaurar restricciones de física
+        // Restaurar restricciones de física para mantener la nueva posición
         if (bossRb != null)
         {
             bossRb.isKinematic = true;
             bossRb.constraints = RigidbodyConstraints.FreezeAll;
         }
         
-        Debug.Log("[FrogBoss] Volvió a posición fija!");
+        Debug.Log($"[FrogBoss] Boss aterrizó en nueva posición: {transform.position}. El combate continúa desde aquí!");
     }
 
     private IEnumerator MortarAttack()
@@ -751,6 +845,41 @@ public class FrogCombat : Enemy
         {
             Destroy(projectile);
         }
+    }
+    
+    private GameObject CreateJumpLandingArea(Vector3 landingPosition)
+    {
+        // Crear un GameObject para el área de aterrizaje
+        GameObject landingArea = new GameObject("JumpLandingArea");
+        landingArea.transform.position = landingPosition;
+        
+        // Visualizar el área con LineRenderer
+        LineRenderer lineRenderer = landingArea.AddComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = new Color(1f, 0f, 0f, 0.9f); // Rojo para el salto
+        lineRenderer.endColor = new Color(1f, 0f, 0f, 0.9f);
+        lineRenderer.startWidth = 0.3f;
+        lineRenderer.endWidth = 0.3f;
+        lineRenderer.useWorldSpace = false;
+        
+        // Dibujar círculo en el suelo
+        int segments = 40;
+        Vector3[] positions = new Vector3[segments + 1];
+        
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = (i / (float)segments) * Mathf.PI * 2f;
+            float x = Mathf.Cos(angle) * jumpImpactRadius;
+            float z = Mathf.Sin(angle) * jumpImpactRadius;
+            positions[i] = new Vector3(x, 0.1f, z);
+        }
+        
+        lineRenderer.positionCount = positions.Length;
+        lineRenderer.SetPositions(positions);
+        
+        Debug.Log($"[FrogBoss] Área de aterrizaje marcada en {landingPosition}");
+        
+        return landingArea;
     }
     
     private void CreateMortarImpactArea(Vector3 impactPosition)
