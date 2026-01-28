@@ -117,26 +117,47 @@ public class MapManager : MonoBehaviour
     {
         if (finalMapList[index] != null && mapInstances[index] == null)
         {
-            // Instanciar el primer mapa en (35, -0.5, 0), el resto igual que antes
-            Vector3 spawnPos = (index == 0) ? new Vector3(41f, -0.5f, 0f) : new Vector3(0f, -0.5f, 0f);
-            GameObject newMap = Instantiate(finalMapList[index], spawnPos, Quaternion.identity);
-
-            // Calcular la posición correcta
-            if (index > 0 && mapInstances[index - 1] != null)
+            GameObject newMap;
+            if (index == 0)
             {
-                // Buscar el Exit del mapa anterior
-                Transform prevExit = mapInstances[index - 1].transform.Find("Exit");
-                // Buscar el Entry del nuevo mapa
-                Transform newEntry = newMap.transform.Find("Entry");
-                if (prevExit != null && newEntry != null)
+                // Instanciar el primer mapa en una posición provisional
+                Vector3 provisionalPos = new Vector3(0f, -0.5f, 0f);
+                newMap = Instantiate(finalMapList[index], provisionalPos, Quaternion.identity);
+                // Buscar el Entry del primer mapa
+                Transform entry = newMap.transform.Find("Entry");
+                if (entry != null)
                 {
-                    // Offset necesario para alinear Entry con Exit
-                    Vector3 offset = prevExit.position - newEntry.position;
+                    // Queremos que el Entry esté en (10, -0.5, 0)
+                    Vector3 desiredEntryPos = new Vector3(-10f, -0.5f, 0f);
+                    Vector3 offset = desiredEntryPos - entry.position;
                     newMap.transform.position += offset;
                 }
                 else
                 {
-                    Debug.LogWarning($"No se encontró 'Entry' o 'Exit' en los mapas al instanciar el índice {index}");
+                    Debug.LogWarning($"No se encontró 'Entry' en el primer mapa al instanciar");
+                }
+            }
+            else
+            {
+                Vector3 spawnPos = new Vector3(0f, -0.5f, 0f);
+                newMap = Instantiate(finalMapList[index], spawnPos, Quaternion.identity);
+                // Calcular la posición correcta
+                if (mapInstances[index - 1] != null)
+                {
+                    // Buscar el Exit del mapa anterior
+                    Transform prevExit = mapInstances[index - 1].transform.Find("Exit");
+                    // Buscar el Entry del nuevo mapa
+                    Transform newEntry = newMap.transform.Find("Entry");
+                    if (prevExit != null && newEntry != null)
+                    {
+                        // Offset necesario para alinear Entry con Exit
+                        Vector3 offset = prevExit.position - newEntry.position;
+                        newMap.transform.position += offset;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"No se encontró 'Entry' o 'Exit' en los mapas al instanciar el índice {index}");
+                    }
                 }
             }
             // Guardar referencia
