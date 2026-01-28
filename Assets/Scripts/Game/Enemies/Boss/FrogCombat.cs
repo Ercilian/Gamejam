@@ -61,6 +61,18 @@ public class SunburstConfig
 }
 
 [System.Serializable]
+public class ZigzagConfig
+{
+    [Header("Patrón Zigzag")]
+    public int zigzagLines = 4;
+    public int bulletsPerLine = 10;
+    public float zigzagAmplitude = 3f;
+    public float zigzagFrequency = 2f;
+    public float spreadAngle = 60f;
+    public float speedVariation = 0.3f;
+}
+
+[System.Serializable]
 public class EnemySpawnConfig
 {
     public GameObject enemyPrefab;
@@ -92,7 +104,7 @@ public class FrogCombat : Enemy
         Spiral,
         Wave,
         RotatingStar,
-        Cross
+        Zigzag
     }
     #endregion
 
@@ -130,6 +142,7 @@ public class FrogCombat : Enemy
     [SerializeField] private WavePatternConfig waveConfig = new WavePatternConfig();
     [SerializeField] private RotatingStarConfig starConfig = new RotatingStarConfig();
     [SerializeField] private SunburstConfig sunburstConfig = new SunburstConfig();
+    [SerializeField] private ZigzagConfig zigzagConfig = new ZigzagConfig();
     [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Advanced Bullet Hell")]
     [SerializeField] private AttackPhaseConfig advancedBulletHellPhaseConfig = new AttackPhaseConfig();
@@ -332,10 +345,14 @@ public class FrogCombat : Enemy
     /// </summary>
     private bool IsAttackEnabledInCurrentPhase(AttackPhaseConfig config)
     {
-        if (currentPhase == BossPhase.Phase1)
-            return config.enableInPhase1;
-        else
-            return config.enableInPhase2;
+        if (config == null)
+        {
+            Debug.LogWarning("[FrogBoss] AttackPhaseConfig es null!");
+            return false;
+        }
+        
+        bool isEnabled = currentPhase == BossPhase.Phase1 ? config.enableInPhase1 : config.enableInPhase2;
+        return isEnabled;
     }
     #endregion
 
@@ -1050,8 +1067,8 @@ public class FrogCombat : Enemy
             case AdvancedPattern.RotatingStar:
                 yield return StartCoroutine(RotatingStarPattern());
                 break;
-            case AdvancedPattern.Cross:
-                yield return StartCoroutine(CrossPattern());
+            case AdvancedPattern.Zigzag:
+                yield return StartCoroutine(ZigzagPattern());
                 break;
         }
     }
@@ -1184,68 +1201,50 @@ public class FrogCombat : Enemy
         }
     }
     
-    private IEnumerator CrossPattern()
+    private IEnumerator ZigzagPattern()
     {
-        Debug.Log("[FrogBoss] Ejecutando patrón Ráfaga Solar");
+        Debug.Log("[FrogBoss] Ejecutando patrón Zigzag");
         float currentRotation = 0f;
         
         for (int wave = 0; wave < advancedWaveCount; wave++)
         {
-            // Calcular intensidad pulsante (oscila entre 0.6 y 1.0)
-            float pulseIntensity = Mathf.Sin(wave * Mathf.PI / 2f) * 0.4f + 0.6f;
-            
-            // Rayos principales del sol
-            for (int ray = 0; ray < sunburstConfig.mainRays; ray++)
+            // Calcular ángulo base hacia el jugador
+            float baseAngle = 0f;
+            if (targetTransform != null)
             {
-                float rayAngle = (360f / sunburstConfig.mainRays) * ray + currentRotation;
+                Vector3 directionToPlayer = targetTransform.position - transform.position;
+                baseAngle = Mathf.Atan2(directionToPlayer.z, directionToPlayer.x) * Mathf.Rad2Deg;
+            }
+            
+            // Crear múltiples líneas zigzag
+            for (int line = 0; line < zigzagConfig.zigzagLines; line++)
+            {
+                // Distribuir las líneas en un cono
+                float lineAngleOffset = (line - (zigzagConfig.zigzagLines - 1) / 2f) * (zigzagConfig.spreadAngle / zigzagConfig.zigzagLines);
+                float lineAngle = baseAngle + lineAngleOffset + currentRotation;
                 
-                // Disparar proyectiles a lo largo del rayo con velocidades incrementales
-                for (int i = 0; i < sunburstConfig.projectilesPerRay; i++)
+                // Crear zigzag a lo largo de esta línea
+                for (int i = 0; i < zigzagConfig.bulletsPerLine; i++)
                 {
-                    float t = (float)i / sunburstConfig.projectilesPerRay;
+                    float t = (float)i / zigzagConfig.bulletsPerLine;
                     
-                    // Crear efecto de rayo con ligero spread
-                    for (int spread = -1; spread <= 1; spread++)
-                    {
-                        float finalAngle = rayAngle + spread * sunburstConfig.raySpread;
-                        Vector2 direction = GetDirectionFromAngle(finalAngle);
-                        
-                        // Velocidad aumenta con la distancia, modulada por el pulso
-                        float speed = advancedBulletSpeed * (0.6f + t * 0.7f) * pulseIntensity;
-                        SpawnProjectile(direction, speed, false);
-                    }
+                    // Calcular desplazamiento zigzag (onda sinusoidal)
+                    float zigzagOffset = Mathf.Sin(t * Mathf.PI * zigzagConfig.zigzagFrequency) * zigzagConfig.zigzagAmplitude;
+                    
+                    // Aplicar el zigzag perpendicular a la dirección de la línea
+                    float finalAngle = lineAngle + zigzagOffset;
+                    Vector2 direction = GetDirectionFromAngle(finalAngle);
+                    
+                    // Variar velocidad ligeramente para crear efecto de onda
+                    float speedVariation = 1f + Mathf.Sin(t * Mathf.PI * 2f) * zigzagConfig.speedVariation;
+                    float speed = advancedBulletSpeed * speedVariation;
+                    
+                    SpawnProjectile(direction, speed, false);
                 }
             }
             
-            // Ondas expansivas circulares (cada 2 olas)
-            if (wave % 2 == 1)
-            {
-                for (int circle = 0; circle < sunburstConfig.waveCircles; circle++)
-                {
-                    int bulletsInCircle = sunburstConfig.baseCircleBullets + circle * 4;
-                    float circleRotation = currentRotation * (1f + circle * 0.2f);
-                    
-                    for (int i = 0; i < bulletsInCircle; i++)
-                    {
-                        float angle = (360f / bulletsInCircle) * i + circleRotation;
-                        Vector2 direction = GetDirectionFromAngle(angle);
-                        
-                        // Velocidad decrece en círculos externos (simula expansión de onda)
-                        float speed = advancedBulletSpeed * (1f - circle * 0.15f) * pulseIntensity;
-                        SpawnProjectile(direction, speed, false);
-                    }
-                }
-            }
-            
-            // Rayos secundarios más finos entre los principales
-            for (int ray = 0; ray < sunburstConfig.secondaryRays; ray++)
-            {
-                float rayAngle = (360f / sunburstConfig.secondaryRays) * ray + currentRotation + sunburstConfig.secondaryRayOffset;
-                Vector2 direction = GetDirectionFromAngle(rayAngle);
-                SpawnProjectile(direction, advancedBulletSpeed * 0.9f * pulseIntensity, false);
-            }
-            
-            currentRotation += sunburstConfig.rotationSpeed * 0.6f;
+            // Rotar ligeramente el patrón completo cada ola
+            currentRotation += 15f;
             yield return new WaitForSeconds(advancedWaveDelay);
         }
     }

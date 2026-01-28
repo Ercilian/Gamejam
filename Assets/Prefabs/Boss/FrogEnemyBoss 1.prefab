@@ -258,22 +258,22 @@ MonoBehaviour:
   enemyStatsData: {fileID: 11400000, guid: b6088da8f1b9325478f16cbd426c4386, type: 2}
   showDebugLogs: 1
   isElite: 0
-  canTakeKnockback: 1
+  canTakeKnockback: 0
   stunDuration: 0.5
   phaseTransitionPercentage: 1
   targetTransform: {fileID: 0}
-  attackCooldown: 3
+  attackCooldown: 4
   bulletSpeed: 8.5
   mortarSpeed: 5
   bulletPatternCount: 12
   bulletHellBurstCount: 3
-  delayBetweenBursts: 1
+  delayBetweenBursts: 1.2
   bulletHellCooldown: 5
   bulletHellBaseDirection: 180
   bulletHellArcHeight: 0.1
   bulletHellPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   advancedPattern: 1
   advancedWaveCount: 5
   advancedWaveDelay: 0.3
@@ -310,8 +310,8 @@ MonoBehaviour:
     secondaryRayOffset: 30
     rotationSpeed: 20
   advancedBulletHellPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   jumpHeight: 20
   jumpDuration: 1.5
   jumpCooldown: 4
@@ -327,8 +327,8 @@ MonoBehaviour:
   pushCooldown: 4.5
   pushChargeDuration: 1.7
   pushAttackPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   mortarProjectileCount: 5
   mortarCooldown: 4
   mortarRandomRadius: 14
@@ -337,14 +337,14 @@ MonoBehaviour:
   mortarMaxHeight: 25
   mortarDamageRadius: 5
   mortarAttackPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   enemyTypes:
-  - enemyPrefab: {fileID: 0}
+  - enemyPrefab: {fileID: 3553444444597907559, guid: c10a2e7e656b2fb4488a3b5b220f1326, type: 3}
     cantidad: 1
-  - enemyPrefab: {fileID: 0}
+  - enemyPrefab: {fileID: 3553444444597907559, guid: d37cc686fea7aed439e65e232e759f47, type: 3}
     cantidad: 1
-  - enemyPrefab: {fileID: 0}
+  - enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
     cantidad: 1
   enemySpawnPoints:
   - {fileID: 0}
