@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 1bacd487560e76f44ab5faa6420a1833, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 857005effc0def04aafcc4338ab23679, type: 2}
     - target: {fileID: 919132149155446097, guid: 1bacd487560e76f44ab5faa6420a1833, type: 3}
       propertyPath: m_Name
       value: Gear15ScenarioAsset

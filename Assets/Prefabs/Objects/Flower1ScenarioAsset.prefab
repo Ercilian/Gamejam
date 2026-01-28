@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: e85b65f772955d34d921d7dcde874b13, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7c35d108250937b4d8a99f22f8630a14, type: 2}
     - target: {fileID: 919132149155446097, guid: e85b65f772955d34d921d7dcde874b13, type: 3}
       propertyPath: m_Name
       value: Flower1ScenarioAsset
