@@ -27,8 +27,8 @@ public class CameraMovement : MonoBehaviour
     public float offsetXBossCombat = 0f;
     public float offsetYBossCombat = 0f;
     public float offsetZBossCombat = 0f;
-    public Vector3 fixedBossCombatPosition;
-    public Vector3 bossCombatLookAtPoint;
+    public Transform cameraBossCombatPosition;
+    public Transform cameraBossCombatLookAt;
 
     
     
@@ -102,9 +102,13 @@ public class CameraMovement : MonoBehaviour
                 transform.rotation = Quaternion.Euler(bossCinePitch, yaw, 0f);
                 break;
             case CameraMode.BossCombat:
-                // Cámara fija en una posición específica y mirando a un punto concreto
-                transform.position = Vector3.Lerp(transform.position, fixedBossCombatPosition, smoothSpeed * Time.deltaTime);
-                transform.LookAt(bossCombatLookAtPoint);
+                if (cameraBossCombatPosition != null)
+                {
+                    Vector3 desiredPosBossCombat = cameraBossCombatPosition.position;
+                    transform.position = Vector3.Lerp(transform.position, desiredPosBossCombat, smoothSpeed * Time.deltaTime);
+                    if (cameraBossCombatLookAt != null)
+                        transform.LookAt(cameraBossCombatLookAt);
+                }
                 break;
         }
     }
