@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3366a087c1d6b114aab8700b2b58361e, type: 3}
-  m_Name: ChickenEnemy
+  m_Name: ChickenEnemy 1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatsData
   enemyName: ChickenEnemy
   description: 
   enemyIcon: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 60
   velocidadBase: 2
   velocidadPersecucion: 3
-  moveSpeed: 0
-  maxShield: 50
+  maxShield: 0
   rangoDeteccion: 10
   rangoPerdida: 12
   attackDamage: 15

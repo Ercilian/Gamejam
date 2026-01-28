@@ -9,25 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bd33cbfb23e7a64eaabce2f966a894d, type: 3}
+  m_Script: {fileID: 11500000, guid: 3366a087c1d6b114aab8700b2b58361e, type: 3}
   m_Name: RatEnemy
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
-  playerName: BaseEnemy
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStatsData
+  enemyName: ChickenEnemy
   description: 
-  playerIcon: {fileID: 0}
-  maxHealth: 10
-  moveSpeed: 5
-  maxShield: 50
-  attackDamage: 20
-  defense: 10
-  inventoryCapacity: 3
-  pushStrength: 1
-  playerPrefab: {fileID: 0}
-  playerColor: {r: 1, g: 1, b: 1, a: 1}
+  enemyIcon: {fileID: 0}
+  maxHealth: 100
+  velocidadBase: 2.5
+  velocidadPersecucion: 3.5
+  maxShield: 0
+  rangoDeteccion: 10
+  rangoPerdida: 12
+  attackDamage: 15
+  defense: 5
+  maxKnockback: 1
+  maxStunDuration: 2
+  enemyPrefab: {fileID: 0}
+  enemyColor: {r: 1, g: 0, b: 0, a: 1}
   attackSound: {fileID: 0}
   hurtSound: {fileID: 0}
   deathSound: {fileID: 0}
-  comboSounds:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}

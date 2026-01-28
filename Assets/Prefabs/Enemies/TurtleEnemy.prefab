@@ -104,7 +104,7 @@ MonoBehaviour:
   maxShield: 0
   attackDamage: 10
   statsData: {fileID: 11400000, guid: 39fef82931b6de34b81834a66691e2b3, type: 2}
-  enemyStatsData: {fileID: 11400000, guid: 6bcaa846869a79246a0f05c38ed09773, type: 2}
+  enemyStatsData: {fileID: 11400000, guid: 1e64244bfe5ce5b49acfefc1ad206c58, type: 2}
   showDebugLogs: 1
   isElite: 0
   canTakeKnockback: 1
