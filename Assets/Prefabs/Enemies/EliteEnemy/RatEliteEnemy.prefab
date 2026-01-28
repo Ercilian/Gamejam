@@ -125,7 +125,7 @@ MonoBehaviour:
   maxShield: 50
   attackDamage: 20
   statsData: {fileID: 11400000, guid: ea8b9535648ed024096dfc6d6b6d746c, type: 2}
-  enemyStatsData: {fileID: 0}
+  enemyStatsData: {fileID: 11400000, guid: 95acd0202ccf3394097ddd1ea24b9b5c, type: 2}
   showDebugLogs: 1
   isElite: 0
   canTakeKnockback: 1
@@ -155,6 +155,8 @@ MonoBehaviour:
   attackBoxSize: {x: 1.5, y: 1.5, z: 2}
   attackOffset: {x: 0, y: 0, z: 1}
   coneAngle: 90
+  attackDamageDelay: 0.3
+  carTag: Car
   hitEffectPrefab: {fileID: 0}
   hitSound: {fileID: 0}
 --- !u!54 &6769849156830466866

@@ -213,6 +213,7 @@ MonoBehaviour:
   tiempoAntesDeDanio: 6
   tiempoCongelacion: 6
   duracionEfectoRaycast: 0.3
+  carTag: Car
 --- !u!1001 &8713588748468775092
 PrefabInstance:
   m_ObjectHideFlags: 0

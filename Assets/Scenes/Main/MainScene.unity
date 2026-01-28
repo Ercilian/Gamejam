@@ -794,14 +794,16 @@ MonoBehaviour:
   offsetXPasillo: 9
   offsetYPasillo: 6.5
   offsetZPasillo: -5.5
-  offsetXBossCinematic: -10
-  offsetYBossCinematic: 0
+  offsetXBossCinematic: -17
+  offsetYBossCinematic: 7
   offsetZBossCinematic: 0
+  offsetPitchBossCinematic: -15
   offsetXBossCombat: 0
   offsetYBossCombat: 0
   offsetZBossCombat: 0
   smoothSpeed: 5
   currentMode: 0
+  yawSmoothSpeed: 10
 --- !u!1 &331187823
 GameObject:
   m_ObjectHideFlags: 0
@@ -6364,6 +6366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   randomMapPool:
   - {fileID: 4906936881903153471, guid: 3781f62a7b6f57143b8f0168bdd346ca, type: 3}
+  - {fileID: 8684991815642709520, guid: eb483f94042fe574e8f3ed5b72c0eaba, type: 3}
   fixedMaps:
   - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
