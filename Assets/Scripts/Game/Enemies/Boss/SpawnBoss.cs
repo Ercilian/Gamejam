@@ -15,7 +15,10 @@ public class SpawnBoss : MonoBehaviour
 			if (bossPrefab != null && spawnPoint != null)
 			{
 				Debug.Log("[SpawnBoss] Instantiating boss at spawn point.");
-				Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
+				GameObject boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
+				// Asignar el target de la cámara al boss
+				CameraMovement cam = FindObjectOfType<CameraMovement>();
+				if (cam != null) cam.SetTarget(boss.transform);
 			}
 			else
 			{

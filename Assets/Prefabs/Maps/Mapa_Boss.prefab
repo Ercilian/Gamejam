@@ -460,6 +460,7 @@ GameObject:
   - component: {fileID: 4663911837379992980}
   - component: {fileID: 8309320188000000388}
   - component: {fileID: 2154378570848476582}
+  - component: {fileID: 7367092062978924478}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -595,6 +596,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnBoss
   bossPrefab: {fileID: 7264200887829943935, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
   spawnPoint: {fileID: 3441239191518918121}
+--- !u!114 &7367092062978924478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6424158083994142851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0b6d1fb94fb1041addd8ce1c6a0156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraTrigger
+  newOffset: {x: 0, y: 5, z: -5}
+  delaySeconds: 2
+  cameraMovement: {fileID: 0}
+  disableFuelConsumption: 0
+  isPasillo: 0
+  isBossRoom: 1
 --- !u!1 &8515953961337123292
 GameObject:
   m_ObjectHideFlags: 0
