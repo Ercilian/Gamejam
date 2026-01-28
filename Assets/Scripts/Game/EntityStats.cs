@@ -66,7 +66,7 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
         else if (enemyStatsData != null)
         {
             maxHP = enemyStatsData.MaxHealth;
-            speed = enemyStatsData.MoveSpeed;
+
             maxShield = enemyStatsData.MaxShield;
             attackDamage = enemyStatsData.AttackDamage;
             defense = enemyStatsData.Defense;
