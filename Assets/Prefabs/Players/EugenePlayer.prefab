@@ -360,6 +360,7 @@ MonoBehaviour:
   statsData: {fileID: 11400000, guid: c1b40d85d72f41141b244857cff73032, type: 2}
   enemyStatsData: {fileID: 0}
   activeControl: 1
+  isCinematicRun: 0
   gracePeriodDuration: 1.5
   isDowned: 0
 --- !u!114 &3199202718284467957
