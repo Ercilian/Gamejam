@@ -441,11 +441,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1150594237}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &196934371 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
-  m_PrefabInstance: {fileID: 1337379788}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &212697893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,11 +1142,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 356906819}
   m_CullTransparentMesh: 1
---- !u!1 &377546511 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
-  m_PrefabInstance: {fileID: 1779619463}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &388437846
 GameObject:
   m_ObjectHideFlags: 0
@@ -6306,15 +6296,15 @@ MonoBehaviour:
     minQuantity: 1
     maxQuantity: 3
   - itemName: HealPlant
-    prefab: {fileID: 377546511}
+    prefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
     minQuantity: 1
     maxQuantity: 3
   - itemName: ShieldPlant
-    prefab: {fileID: 196934371}
+    prefab: {fileID: 5219421215397009677, guid: 568b9070243407747944ff5bdd2c21b0, type: 3}
     minQuantity: 1
     maxQuantity: 3
   - itemName: DamagePlant
-    prefab: {fileID: 2123777018}
+    prefab: {fileID: 5219421215397009677, guid: 2d1ed17da9219844593d0c6e3eba4ecf, type: 3}
     minQuantity: 1
     maxQuantity: 3
   dropTables:
@@ -6370,7 +6360,7 @@ MonoBehaviour:
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 2985120443330566491, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffffffffffffffffffff04000000
+  mapSequence: ffffffff04000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342
@@ -19897,11 +19887,6 @@ MonoBehaviour:
   currentSpeed: 0
   currentProgress: 0
   currentX: 0
---- !u!1 &2123777018 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
-  m_PrefabInstance: {fileID: 1448039141}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2139318379
 GameObject:
   m_ObjectHideFlags: 0
