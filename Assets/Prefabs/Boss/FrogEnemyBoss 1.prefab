@@ -608,6 +608,7 @@ MonoBehaviour:
   jumpImpactRadius: 8
   jumpImpactDamage: 20
   jumpImpactPushForce: 15
+  modelRotationOffset: 90
   jumpAttackPhaseConfig:
     enableInPhase1: 0
     enableInPhase2: 1

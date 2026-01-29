@@ -138,6 +138,9 @@ public class FrogCombat : Enemy
     [SerializeField] private float jumpImpactDamage = 30f;
     [SerializeField] private float jumpImpactPushForce = 15f;
     [Space(10)]
+    [Tooltip("Offset de rotación para corregir el forward del modelo (ej: 90, 180, -90)")]
+    [SerializeField] private float modelRotationOffset = 0f;
+    [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Jump Attack")]
     [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig;
     
@@ -198,6 +201,10 @@ public class FrogCombat : Enemy
     private float lastAdvancedBulletHellTime = 0f;
     private AdvancedPattern lastUsedPattern = AdvancedPattern.Spiral;
     
+    private float bossStartTime = 0f;
+    private bool hasStartedCombat = false;
+    private const float INITIAL_DELAY = 7f; // Delay antes de empezar a atacar
+    
     private Animator animator;
     private Rigidbody bossRb; // Rigidbody específico del boss para evitar conflicto con la clase base
     #endregion
@@ -232,6 +239,9 @@ public class FrogCombat : Enemy
     {
         // NO usar DontDestroyOnLoad para mantener las referencias de la escena correctas
         
+        bossStartTime = Time.time;
+        hasStartedCombat = false;
+        
         if (targetTransform == null)
         {
             Player player = FindFirstObjectByType<Player>();
@@ -241,6 +251,7 @@ public class FrogCombat : Enemy
         
         // Verificar configuración de ataques
         Debug.Log($"[FrogBoss] Boss initialized with {curHP}/{maxHP} HP");
+        Debug.Log($"[FrogBoss] Boss comenzará a atacar en {INITIAL_DELAY} segundos");
         Debug.Log($"[FrogBoss] Jump Attack Config - Phase1: {jumpAttackPhaseConfig.enableInPhase1}, Phase2: {jumpAttackPhaseConfig.enableInPhase2}");
         
         // Verificar spawn points
@@ -297,6 +308,20 @@ public class FrogCombat : Enemy
 
     private void HandleAttackPattern()
     {
+        // Verificar si ha pasado el delay inicial
+        if (!hasStartedCombat)
+        {
+            if (Time.time - bossStartTime >= INITIAL_DELAY)
+            {
+                hasStartedCombat = true;
+                Debug.Log("[FrogBoss] ¡El boss comienza a atacar!");
+            }
+            else
+            {
+                return; // No atacar aún
+            }
+        }
+        
         float timeSinceLastAttack = Time.time - lastAttackTime;
         
         if (timeSinceLastAttack < attackCooldown)
@@ -430,6 +455,45 @@ public class FrogCombat : Enemy
     private IEnumerator JumpAttack()
     {
         lastJumpTime = Time.time;
+        
+        // Determinar el jugador objetivo antes de empezar
+        Transform targetPlayer = null;
+        if (targetTransform != null)
+        {
+            targetPlayer = targetTransform;
+        }
+        
+        // ROTAR HACIA EL JUGADOR ANTES DE SALTAR
+        if (targetPlayer != null)
+        {
+            Vector3 directionToPlayer = (targetPlayer.position - transform.position);
+            directionToPlayer.y = 0;
+            
+            if (directionToPlayer.magnitude > 0.1f)
+            {
+                float angleToPlayer = Mathf.Atan2(directionToPlayer.x, directionToPlayer.z) * Mathf.Rad2Deg;
+                float finalAngle = angleToPlayer + modelRotationOffset;
+                
+                Quaternion targetRotation = Quaternion.Euler(0, finalAngle, 0);
+                float rotationDuration = 0.5f;
+                float elapsedRotationTime = 0f;
+                Quaternion startRotation = transform.rotation;
+                
+                while (elapsedRotationTime < rotationDuration)
+                {
+                    transform.rotation = Quaternion.Lerp(startRotation, targetRotation, elapsedRotationTime / rotationDuration);
+                    elapsedRotationTime += Time.deltaTime;
+                    yield return null;
+                }
+                
+                transform.rotation = targetRotation;
+                Debug.Log($"[FrogBoss] Boss rotado hacia el jugador ANTES de saltar. Ángulo: {finalAngle}°");
+            }
+        }
+        
+        // Pequeña pausa después de rotar
+        yield return new WaitForSeconds(0.2f);
+        
         PlayAttackEffect();
         PlayAttackSFX();
         
@@ -447,12 +511,10 @@ public class FrogCombat : Enemy
         
         // Calcular posición de destino del jugador
         Vector3 jumpTargetPosition = bossStartPosition;
-        Transform targetPlayer = null;
         
-        if (targetTransform != null)
+        if (targetPlayer != null)
         {
-            jumpTargetPosition = targetTransform.position;
-            targetPlayer = targetTransform;
+            jumpTargetPosition = targetPlayer.position;
         }
         
         // Ajustar la altura del destino al suelo
@@ -587,20 +649,6 @@ public class FrogCombat : Enemy
             }
         }
         
-        // Rotar hacia el jugador objetivo
-        if (targetPlayer != null)
-        {
-            Vector3 directionToPlayer = (targetPlayer.position - transform.position);
-            directionToPlayer.y = 0; // Mantener rotación solo en el plano horizontal
-            
-            if (directionToPlayer != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-                transform.rotation = targetRotation;
-                Debug.Log($"[FrogBoss] Rotando hacia el jugador!");
-            }
-        }
-        
         // Impacto al aterrizar - efectos
         PlayAttackEffect();
         PlayAttackSFX();
@@ -617,6 +665,65 @@ public class FrogCombat : Enemy
         }
         
         Debug.Log($"[FrogBoss] Boss aterrizó en nueva posición: {transform.position}. El combate continúa desde aquí!");
+        
+        // Esperar un momento antes de girar hacia el jugador
+        yield return new WaitForSeconds(0.3f);
+        
+        // Rotar hacia el jugador objetivo DESPUÉS de aterrizar y estabilizarse
+        Transform playerToFace = targetPlayer;
+        
+        // Si no hay targetPlayer guardado, buscar al jugador más cercano
+        if (playerToFace == null)
+        {
+            Player nearestPlayer = FindFirstObjectByType<Player>();
+            if (nearestPlayer != null)
+            {
+                playerToFace = nearestPlayer.transform;
+            }
+        }
+        
+        if (playerToFace != null)
+        {
+            Vector3 directionToPlayer = (playerToFace.position - transform.position);
+            directionToPlayer.y = 0; // Mantener rotación solo en el plano horizontal
+            
+            Debug.Log($"[FrogBoss] Boss pos: {transform.position}, Jugador pos: {playerToFace.position}, Dirección: {directionToPlayer}");
+            
+            if (directionToPlayer.magnitude > 0.1f)
+            {
+                // Calcular el ángulo hacia el jugador
+                float angleToPlayer = Mathf.Atan2(directionToPlayer.x, directionToPlayer.z) * Mathf.Rad2Deg;
+                
+                // Aplicar el offset de rotación del modelo
+                float finalAngle = angleToPlayer + modelRotationOffset;
+                
+                // Rotación gradual hacia el jugador
+                Quaternion targetRotation = Quaternion.Euler(0, finalAngle, 0);
+                float rotationDuration = 0.7f; // Duración de la rotación en segundos
+                float elapsedRotationTime = 0f;
+                Quaternion startRotation = transform.rotation;
+                
+                while (elapsedRotationTime < rotationDuration)
+                {
+                    transform.rotation = Quaternion.Lerp(startRotation, targetRotation, elapsedRotationTime / rotationDuration);
+                    elapsedRotationTime += Time.deltaTime;
+                    yield return null;
+                }
+                
+                // Asegurar rotación final exacta
+                transform.rotation = targetRotation;
+                
+                Debug.Log($"[FrogBoss] Boss rotado hacia el jugador. Ángulo calculado: {angleToPlayer}°, Ángulo final con offset: {finalAngle}°");
+            }
+            else
+            {
+                Debug.LogWarning("[FrogBoss] El jugador está muy cerca del boss para calcular dirección");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[FrogBoss] No se encontró jugador para rotar hacia él");
+        }
     }
 
     private IEnumerator MortarAttack()

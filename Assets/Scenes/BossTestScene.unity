@@ -1376,6 +1376,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: modelRotationOffset
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: bulletHellPhaseConfig.enableInPhase1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: jumpAttackPhaseConfig.enableInPhase1
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: pushAttackPhaseConfig.enableInPhase1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: pushAttackPhaseConfig.enableInPhase2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: mortarAttackPhaseConfig.enableInPhase1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: mortarAttackPhaseConfig.enableInPhase2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: advancedBulletHellPhaseConfig.enableInPhase2
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
