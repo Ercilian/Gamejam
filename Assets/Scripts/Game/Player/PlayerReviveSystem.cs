@@ -245,8 +245,22 @@ public class PlayerReviveSystem : MonoBehaviour
         if (showDebugLogs)
             Debug.Log($"[{gameObject.name}] Jugador muerto definitivamente.");
 
-        // Desactivar el GameObject o destruirlo
-        Destroy(gameObject);
+        // Desactivar control del jugador
+        if (player != null)
+            player.activeControl = false;
+
+        // Desactivar colisionadores
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+            col.enabled = false;
+
+        // Desactivar renderers (opcional: para ocultar el modelo)
+        foreach (var rend in renderers)
+            rend.enabled = false;
+
+        // Si hay visual de caído, ocultarlo
+        if (downedVisual != null)
+            downedVisual.SetActive(false);
     }
 
     /// <summary>

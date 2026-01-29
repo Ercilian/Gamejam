@@ -6520,6 +6520,7 @@ GameObject:
   - component: {fileID: 458190340}
   - component: {fileID: 458190341}
   - component: {fileID: 458190342}
+  - component: {fileID: 458190343}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6807,6 +6808,18 @@ MonoBehaviour:
       text: "\xBFMhm?"
     - characterIndex: 1
       text: Eso explica muchas cosas.
+--- !u!114 &458190343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458190336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b0fdc8f0d7c26e449bf282558db5e76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeadManager
 --- !u!1 &480257324
 GameObject:
   m_ObjectHideFlags: 0
@@ -19368,7 +19381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Car
   curHP: 0
-  maxHP: 100
+  maxHP: 10000
   speed: 5
   curShield: 0
   maxShield: 50
