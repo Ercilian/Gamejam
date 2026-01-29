@@ -16,6 +16,7 @@ namespace Game.Enemies
         private bool isStunned = false;
         private float stunTimer = 0f;
         private Rigidbody rb;
+        private AudioSource audioSource;
 
         // Eventos para efectos visuales/sonoros
         //public System.Action<DamageInfo> OnDamageTaken;
@@ -28,6 +29,7 @@ namespace Game.Enemies
         {
             base.Awake(); // Llamar al Awake de EntityStats para aplicar el ScriptableObject
             rb = GetComponent<Rigidbody>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         void Update()
