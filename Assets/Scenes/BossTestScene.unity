@@ -1324,6 +1324,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 006e4729f869b8948b94cffade1744bc, type: 3}
+--- !u!1001 &1720678421
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7264200887829943935, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_Name
+      value: FrogEnemyBoss 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 317.78726
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -37.479256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
 --- !u!1 &1811116269
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,198 +1565,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
---- !u!1001 &4491634310264520056
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 7264200887829943935, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_Name
-      value: FrogEnemyBoss
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 314
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -35
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035671419358416069, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpHeight
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpCooldown
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: advancedPattern
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: canTakeKnockback
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpImpactDamage
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpImpactRadius
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 42299429}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpLandingWarningTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: mortarProjectilePrefab
-      value: 
-      objectReference: {fileID: 42299429}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: zigzagConfig.spreadAngle
-      value: 360
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: zigzagConfig.zigzagLines
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: phaseTransitionPercentage
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: zigzagConfig.bulletsPerLine
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: zigzagConfig.zigzagAmplitude
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: zigzagConfig.zigzagFrequency
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: 'enemySpawnPoints.Array.data[0]'
-      value: 
-      objectReference: {fileID: 111857630}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: 'enemySpawnPoints.Array.data[1]'
-      value: 
-      objectReference: {fileID: 509315963}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: 'enemySpawnPoints.Array.data[2]'
-      value: 
-      objectReference: {fileID: 587586411}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: 'enemySpawnPoints.Array.data[3]'
-      value: 
-      objectReference: {fileID: 996323738}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: 'enemySpawnPoints.Array.data[4]'
-      value: 
-      objectReference: {fileID: 1100693059}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: 'enemySpawnPoints.Array.data[5]'
-      value: 
-      objectReference: {fileID: 1427972056}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: bulletHellPhaseConfig.enableInPhase1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: bulletHellPhaseConfig.enableInPhase2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpAttackPhaseConfig.enableInPhase1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: jumpAttackPhaseConfig.enableInPhase2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: pushAttackPhaseConfig.enableInPhase1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: pushAttackPhaseConfig.enableInPhase2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: mortarAttackPhaseConfig.enableInPhase1
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: mortarAttackPhaseConfig.enableInPhase2
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: advancedBulletHellPhaseConfig.enableInPhase1
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
-      propertyPath: advancedBulletHellPhaseConfig.enableInPhase2
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1098023235}
   - {fileID: 1811116271}
-  - {fileID: 4491634310264520056}
   - {fileID: 722580710}
   - {fileID: 533510582}
   - {fileID: 116874033}
@@ -1715,3 +1586,4 @@ SceneRoots:
   - {fileID: 1427972056}
   - {fileID: 1605102261}
   - {fileID: 1847544187864169563}
+  - {fileID: 1720678421}

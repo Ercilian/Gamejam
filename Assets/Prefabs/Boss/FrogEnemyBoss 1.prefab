@@ -1,5 +1,191 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &916048069393118134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8395618670247171607}
+  m_Layer: 6
+  m_Name: spawnpoint (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8395618670247171607
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916048069393118134}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.45, y: 1.45, z: -10.43}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8035671419358416069}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1079602150990982174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4373629106980212569}
+  m_Layer: 6
+  m_Name: spawnpoint (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4373629106980212569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079602150990982174}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -26.34, y: 1.45, z: -10.43}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8035671419358416069}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2848141418080619542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2559302770326603663}
+  m_Layer: 6
+  m_Name: spawnpoint (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2559302770326603663
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2848141418080619542}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -26.34, y: 1.45, z: 13.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8035671419358416069}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7068331312839608406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5559887652699721472}
+  m_Layer: 6
+  m_Name: spawnpoint (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5559887652699721472
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068331312839608406}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.59, y: 1.45, z: -10.43}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8035671419358416069}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7348180960601297015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4200563434392277832}
+  m_Layer: 6
+  m_Name: spawnpoint (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4200563434392277832
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7348180960601297015}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.59, y: 1.45, z: 13.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8035671419358416069}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8666675561882668559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3312898433788030380}
+  m_Layer: 6
+  m_Name: spawnpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3312898433788030380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8666675561882668559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.45, y: 0, z: 13.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8035671419358416069}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3743769063889291968
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -310,6 +496,24 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3782517214390431019}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3312898433788030380}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8395618670247171607}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4200563434392277832}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5559887652699721472}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2559302770326603663}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: aecfbe994299f70429d381446193e8f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4373629106980212569}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aecfbe994299f70429d381446193e8f2, type: 3}
       insertIndex: -1
@@ -350,11 +554,10 @@ MonoBehaviour:
   isElite: 0
   canTakeKnockback: 0
   stunDuration: 0.5
-  phaseTransitionPercentage: 1
+  phaseTransitionPercentage: 0.5
   targetTransform: {fileID: 0}
   attackCooldown: 4
   bulletSpeed: 8.5
-  mortarSpeed: 5
   bulletPatternCount: 12
   bulletHellBurstCount: 3
   delayBetweenBursts: 1.2
@@ -362,9 +565,8 @@ MonoBehaviour:
   bulletHellBaseDirection: 180
   bulletHellArcHeight: 0.1
   bulletHellPhaseConfig:
-    enableInPhase1: 0
+    enableInPhase1: 1
     enableInPhase2: 0
-  advancedPattern: 1
   advancedWaveCount: 5
   advancedWaveDelay: 0.3
   advancedBulletSpeed: 6
@@ -390,42 +592,32 @@ MonoBehaviour:
     armSpread: 8
     speedIncrement: 0.4
     rotationSpeed: 20
-  sunburstConfig:
-    mainRays: 3
-    projectilesPerRay: 1
-    raySpread: 3
-    waveCircles: 3
-    baseCircleBullets: 1
-    secondaryRays: 1
-    secondaryRayOffset: 30
-    rotationSpeed: 20
   zigzagConfig:
-    zigzagLines: 4
-    bulletsPerLine: 10
-    zigzagAmplitude: 3
-    zigzagFrequency: 2
-    spreadAngle: 60
+    zigzagLines: 8
+    bulletsPerLine: 1
+    zigzagAmplitude: 16
+    zigzagFrequency: 8
+    spreadAngle: 360
     speedVariation: 0.3
   advancedBulletHellPhaseConfig:
     enableInPhase1: 0
-    enableInPhase2: 0
-  jumpHeight: 20
-  jumpDuration: 1.5
-  jumpCooldown: 4
-  jumpImpactRadius: 6
-  jumpImpactDamage: 30
+    enableInPhase2: 1
+  jumpHeight: 40
+  jumpDuration: 3
+  jumpCooldown: 6
+  jumpImpactRadius: 8
+  jumpImpactDamage: 20
   jumpImpactPushForce: 15
-  jumpLandingWarningTime: 1
   jumpAttackPhaseConfig:
     enableInPhase1: 0
-    enableInPhase2: 0
+    enableInPhase2: 1
   pushDetectionRadius: 8.28
   pushForce: 20
   pushCooldown: 4.5
   pushChargeDuration: 1.7
   pushAttackPhaseConfig:
-    enableInPhase1: 0
-    enableInPhase2: 0
+    enableInPhase1: 1
+    enableInPhase2: 1
   mortarProjectileCount: 5
   mortarCooldown: 4
   mortarRandomRadius: 14
@@ -434,26 +626,26 @@ MonoBehaviour:
   mortarMaxHeight: 25
   mortarDamageRadius: 5
   mortarAttackPhaseConfig:
-    enableInPhase1: 0
-    enableInPhase2: 0
+    enableInPhase1: 1
+    enableInPhase2: 1
   enemyTypes:
   - enemyPrefab: {fileID: 3553444444597907559, guid: c10a2e7e656b2fb4488a3b5b220f1326, type: 3}
-    cantidad: 1
+    cantidad: 6
   - enemyPrefab: {fileID: 3553444444597907559, guid: d37cc686fea7aed439e65e232e759f47, type: 3}
-    cantidad: 1
+    cantidad: 6
   - enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
-    cantidad: 1
+    cantidad: 6
   enemySpawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3312898433788030380}
+  - {fileID: 8395618670247171607}
+  - {fileID: 4200563434392277832}
+  - {fileID: 5559887652699721472}
+  - {fileID: 2559302770326603663}
+  - {fileID: 4373629106980212569}
   spawnCooldown: 22.5
   delayBetweenEnemySpawns: 0.5
   spawnEnemiesPhaseConfig:
-    enableInPhase1: 0
+    enableInPhase1: 1
     enableInPhase2: 0
   projectilePrefab: {fileID: 8114323310556695630, guid: 643d951769025e7419eda2b8c7aaafa1, type: 3}
   mortarProjectilePrefab: {fileID: 8114323310556695630, guid: 643d951769025e7419eda2b8c7aaafa1, type: 3}

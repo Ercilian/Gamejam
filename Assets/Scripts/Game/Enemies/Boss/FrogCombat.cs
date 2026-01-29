@@ -6,8 +6,8 @@ using Game.Enemies;
 [System.Serializable]
 public class AttackPhaseConfig
 {
-    public bool enableInPhase1 = true;
-    public bool enableInPhase2 = true;
+    public bool enableInPhase1 = false;
+    public bool enableInPhase2 = false;
 }
 
 [System.Serializable]
@@ -139,7 +139,7 @@ public class FrogCombat : Enemy
     [SerializeField] private float jumpImpactPushForce = 15f;
     [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Jump Attack")]
-    [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig = new AttackPhaseConfig { enableInPhase1 = false, enableInPhase2 = false };
+    [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig;
     
     [Header("Push Attack Settings")]
     [SerializeField] private float pushDetectionRadius = 4f;
@@ -215,6 +215,12 @@ public class FrogCombat : Enemy
             bossRb.isKinematic = true;
             bossRb.constraints = RigidbodyConstraints.FreezeAll;
         }
+        
+        // Inicializar jumpAttackPhaseConfig si es null o para asegurar valores serializados
+        if (jumpAttackPhaseConfig == null)
+        {
+            jumpAttackPhaseConfig = new AttackPhaseConfig { enableInPhase1 = false, enableInPhase2 = false };
+        }
     }
     
     private void Start()
@@ -224,8 +230,7 @@ public class FrogCombat : Enemy
 
     private void InitializeBoss()
     {
-        // Proteger el boss de ser destruido entre escenas
-        DontDestroyOnLoad(gameObject);
+        // NO usar DontDestroyOnLoad para mantener las referencias de la escena correctas
         
         if (targetTransform == null)
         {
@@ -234,7 +239,19 @@ public class FrogCombat : Enemy
                 targetTransform = player.transform;
         }
         
+        // Verificar configuración de ataques
         Debug.Log($"[FrogBoss] Boss initialized with {curHP}/{maxHP} HP");
+        Debug.Log($"[FrogBoss] Jump Attack Config - Phase1: {jumpAttackPhaseConfig.enableInPhase1}, Phase2: {jumpAttackPhaseConfig.enableInPhase2}");
+        
+        // Verificar spawn points
+        if (enemySpawnPoints != null && enemySpawnPoints.Length > 0)
+        {
+            Debug.Log($"[FrogBoss] {enemySpawnPoints.Length} enemy spawn points configurados");
+        }
+        else
+        {
+            Debug.LogWarning("[FrogBoss] No hay enemy spawn points configurados!");
+        }
     }
     
 #if UNITY_EDITOR
@@ -304,8 +321,8 @@ public class FrogCombat : Enemy
         if (IsAttackEnabledInCurrentPhase(bulletHellPhaseConfig) && Time.time - lastBulletHellTime > bulletHellCooldown)
             attacks.Add(AttackType.BulletHell);
         
-        // Jump Attack
-        if (IsAttackEnabledInCurrentPhase(jumpAttackPhaseConfig) && Time.time - lastJumpTime > jumpCooldown)
+        // Jump Attack - Verificación estricta con validación adicional
+        if (jumpAttackPhaseConfig != null && IsAttackEnabledInCurrentPhase(jumpAttackPhaseConfig) && Time.time - lastJumpTime > jumpCooldown)
             attacks.Add(AttackType.JumpAttack);
         
         // Mortar Attack
@@ -331,7 +348,10 @@ public class FrogCombat : Enemy
     /// Verifica si un ataque está habilitado en la fase actual del boss
     /// </summary>
     private bool IsAttackEnabledInCurrentPhase(AttackPhaseConfig config)
-    {       
+    {
+        if (config == null)
+            return false;
+            
         return currentPhase == BossPhase.Phase1 ? config.enableInPhase1 : config.enableInPhase2;
     }
     #endregion
@@ -345,7 +365,15 @@ public class FrogCombat : Enemy
                 StartCoroutine(BulletHellAttack());
                 break;
             case AttackType.JumpAttack:
-                StartCoroutine(JumpAttack());
+                // Verificación adicional de seguridad antes de ejecutar
+                if (IsAttackEnabledInCurrentPhase(jumpAttackPhaseConfig))
+                {
+                    StartCoroutine(JumpAttack());
+                }
+                else
+                {
+                    Debug.LogWarning("[FrogBoss] Jump Attack fue seleccionado pero está deshabilitado en la configuración!");
+                }
                 break;
             case AttackType.MortarAttack:
                 StartCoroutine(MortarAttack());
