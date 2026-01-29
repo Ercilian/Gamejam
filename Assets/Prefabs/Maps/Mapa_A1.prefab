@@ -2084,9 +2084,7 @@ GameObject:
   - component: {fileID: 905827797063741884}
   - component: {fileID: 8347342193416229394}
   - component: {fileID: 3177139094848276035}
-  - component: {fileID: 1442326063951454947}
   - component: {fileID: 7159733438720186783}
-  - component: {fileID: 7566574991551258232}
   m_Layer: 0
   m_Name: Suelo
   m_TagString: Untagged
@@ -2445,27 +2443,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!65 &1442326063951454947
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 156223436001085782}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 100, y: 0.97, z: 30}
-  m_Center: {x: 0, y: 0.09, z: 0}
 --- !u!114 &7159733438720186783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2484,27 +2461,6 @@ MonoBehaviour:
   disableFuelConsumption: 0
   isPasillo: 0
   isBossRoom: 0
---- !u!65 &7566574991551258232
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 156223436001085782}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 100, y: 0, z: 30}
-  m_Center: {x: 0, y: 0.55, z: 0}
 --- !u!1 &175486736279801888
 GameObject:
   m_ObjectHideFlags: 0
@@ -58032,7 +57988,7 @@ Transform:
   m_GameObject: {fileID: 4787166126566937107}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50.65299, y: 0.57107544, z: -5.6578197}
+  m_LocalPosition: {x: 50.999256, y: 0.1791408, z: -5.4096317}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -91427,7 +91383,7 @@ Transform:
   m_GameObject: {fileID: 7794355393067684132}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -48.762856, y: 0.5186739, z: -2.357336}
+  m_LocalPosition: {x: -50.46607, y: 0.40647078, z: -2.4052124}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
