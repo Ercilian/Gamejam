@@ -3,12 +3,16 @@ using Game.Combat;
 
 public class Car : EntityStats
 {
-/*
-    public override void Die(DamageInfo finalDamage)
-    {
-        base.Die(finalDamage);
-    }
+    private Options options;
 
+    public override void OnEntityDeath()
+    {
+        options = FindObjectOfType<Options>();
+        options.GameOver();
+        base.OnEntityDeath();
+
+    }
+    /*
     public override void TakeDamage(DamageInfo damageInfo )
     {
         base.TakeDamage(damageInfo);

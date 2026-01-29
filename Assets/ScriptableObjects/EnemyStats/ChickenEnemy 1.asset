@@ -27,6 +27,6 @@ MonoBehaviour:
   maxStunDuration: 2
   enemyPrefab: {fileID: 0}
   enemyColor: {r: 1, g: 0, b: 0, a: 1}
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: d6d14e9051f898644b00264528e000b6, type: 3}
   hurtSound: {fileID: 0}
   deathSound: {fileID: 0}

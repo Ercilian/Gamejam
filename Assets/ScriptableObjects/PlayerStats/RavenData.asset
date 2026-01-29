@@ -26,8 +26,8 @@ MonoBehaviour:
   playerColor: {r: 1, g: 1, b: 1, a: 1}
   attackSound: {fileID: 8300000, guid: 22ff6e00f3e65224a9ec479e8f3870e0, type: 3}
   hurtSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: 3afb33c4d3442f94e87f275b61e5ccb4, type: 3}
   comboSounds:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: dbe3d4a1bdf8937459e98d06a77d4d2c, type: 3}
+  - {fileID: 8300000, guid: b25aaa30ec49c2b43b4f1a6a337b05ca, type: 3}
+  - {fileID: 8300000, guid: 06e84c142fc131d409a4178faa2de2f7, type: 3}
