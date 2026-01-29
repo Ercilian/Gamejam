@@ -1269,7 +1269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6281773530394150704, guid: 006e4729f869b8948b94cffade1744bc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 289.16586
+      value: 290.35
       objectReference: {fileID: 0}
     - target: {fileID: 6281773530394150704, guid: 006e4729f869b8948b94cffade1744bc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1277,7 +1277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6281773530394150704, guid: 006e4729f869b8948b94cffade1744bc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -32.613396
+      value: -39.06
       objectReference: {fileID: 0}
     - target: {fileID: 6281773530394150704, guid: 006e4729f869b8948b94cffade1744bc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1573,6 +1573,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: advancedPattern
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: canTakeKnockback
       value: 0
       objectReference: {fileID: 0}
@@ -1596,6 +1600,30 @@ PrefabInstance:
       propertyPath: mortarProjectilePrefab
       value: 
       objectReference: {fileID: 42299429}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: zigzagConfig.spreadAngle
+      value: 360
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: zigzagConfig.zigzagLines
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: phaseTransitionPercentage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: zigzagConfig.bulletsPerLine
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: zigzagConfig.zigzagAmplitude
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
+      propertyPath: zigzagConfig.zigzagFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: 'enemySpawnPoints.Array.data[0]'
       value: 
@@ -1630,11 +1658,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: jumpAttackPhaseConfig.enableInPhase1
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: jumpAttackPhaseConfig.enableInPhase2
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: pushAttackPhaseConfig.enableInPhase1
@@ -1654,7 +1682,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: advancedBulletHellPhaseConfig.enableInPhase1
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8754104581320275572, guid: e1a654f347bc4ea4f8789fe6ecc1c22d, type: 3}
       propertyPath: advancedBulletHellPhaseConfig.enableInPhase2

@@ -94,7 +94,10 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4666598896599470463, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5898198349939411430}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
       insertIndex: -1
@@ -132,6 +135,93 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &8302276889930455999 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4666598896599470463, guid: 51434a31d3ac0094da0e79b1e8117583, type: 3}
+  m_PrefabInstance: {fileID: 3743769063889291968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6219512159384268301
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8302276889930455999}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.009999999
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.009999999
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.011522296
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.021583935
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.008826379
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.11159809
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.99375343
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -12.815
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5510674533937747596, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: -1027222598180293744, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 97b473e99e6aab64094cb740f7734a26, type: 2}
+    - target: {fileID: 919132149155446097, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+      propertyPath: m_Name
+      value: pts que faltan
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+--- !u!4 &5898198349939411430 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 655b976727cbd794a985a806d7dd649d, type: 3}
+  m_PrefabInstance: {fileID: 6219512159384268301}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7498152435339455278
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -258,22 +348,22 @@ MonoBehaviour:
   enemyStatsData: {fileID: 11400000, guid: b6088da8f1b9325478f16cbd426c4386, type: 2}
   showDebugLogs: 1
   isElite: 0
-  canTakeKnockback: 1
+  canTakeKnockback: 0
   stunDuration: 0.5
   phaseTransitionPercentage: 1
   targetTransform: {fileID: 0}
-  attackCooldown: 3
+  attackCooldown: 4
   bulletSpeed: 8.5
   mortarSpeed: 5
   bulletPatternCount: 12
   bulletHellBurstCount: 3
-  delayBetweenBursts: 1
+  delayBetweenBursts: 1.2
   bulletHellCooldown: 5
   bulletHellBaseDirection: 180
   bulletHellArcHeight: 0.1
   bulletHellPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   advancedPattern: 1
   advancedWaveCount: 5
   advancedWaveDelay: 0.3
@@ -309,9 +399,16 @@ MonoBehaviour:
     secondaryRays: 1
     secondaryRayOffset: 30
     rotationSpeed: 20
+  zigzagConfig:
+    zigzagLines: 4
+    bulletsPerLine: 10
+    zigzagAmplitude: 3
+    zigzagFrequency: 2
+    spreadAngle: 60
+    speedVariation: 0.3
   advancedBulletHellPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   jumpHeight: 20
   jumpDuration: 1.5
   jumpCooldown: 4
@@ -327,8 +424,8 @@ MonoBehaviour:
   pushCooldown: 4.5
   pushChargeDuration: 1.7
   pushAttackPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   mortarProjectileCount: 5
   mortarCooldown: 4
   mortarRandomRadius: 14
@@ -337,14 +434,14 @@ MonoBehaviour:
   mortarMaxHeight: 25
   mortarDamageRadius: 5
   mortarAttackPhaseConfig:
-    enableInPhase1: 1
-    enableInPhase2: 1
+    enableInPhase1: 0
+    enableInPhase2: 0
   enemyTypes:
-  - enemyPrefab: {fileID: 0}
+  - enemyPrefab: {fileID: 3553444444597907559, guid: c10a2e7e656b2fb4488a3b5b220f1326, type: 3}
     cantidad: 1
-  - enemyPrefab: {fileID: 0}
+  - enemyPrefab: {fileID: 3553444444597907559, guid: d37cc686fea7aed439e65e232e759f47, type: 3}
     cantidad: 1
-  - enemyPrefab: {fileID: 0}
+  - enemyPrefab: {fileID: 3553444444597907559, guid: 7f4a28004ad405943a7131dc0053accb, type: 3}
     cantidad: 1
   enemySpawnPoints:
   - {fileID: 0}
