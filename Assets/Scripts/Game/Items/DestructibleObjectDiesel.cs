@@ -2,8 +2,28 @@ using UnityEngine;
 
 public class DestructibleObjectDiesel : EntityStats
 {
+    public override void TakeDamage(int amount)
+    {
+        base.TakeDamage(amount);
+        StartCoroutine(Shake(0.15f, 0.2f)); // duration, magnitude
+    }
 
-public override void OnEntityDeath()
+    private System.Collections.IEnumerator Shake(float duration, float magnitude)
+    {
+        Vector3 originalPos = transform.localPosition;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+            transform.localPosition = originalPos + new Vector3(x, y, 0f);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.localPosition = originalPos;
+    }
+
+    public override void OnEntityDeath()
     {
         ItemDropSystem.Instance.DropFromDestructibleDiesel(transform.position);
         Destroy(gameObject);

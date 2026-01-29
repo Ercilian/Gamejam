@@ -6248,7 +6248,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458190336}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2327c3126b05e6f478e7b707bf22b2ae, type: 3}
   m_Name: 
@@ -6339,11 +6339,7 @@ MonoBehaviour:
   - sourceName: DestructibleObjectPlant
     possibleDrops:
     - itemIndex: 2
-      dropChance: 25
-    - itemIndex: 3
-      dropChance: 20
-    - itemIndex: 4
-      dropChance: 20
+      dropChance: 100
   probDrop1: 1
   probDrop2: 0.3
   probDrop3: 0.1
@@ -6367,14 +6363,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   randomMapPool:
-  - {fileID: 8242368813756451260, guid: d08388796dd5a2f459d82676796aca60, type: 3}
+  - {fileID: 4906936881903153471, guid: 3781f62a7b6f57143b8f0168bdd346ca, type: 3}
   fixedMaps:
   - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 2985120443330566491, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffff04000000
+  mapSequence: ffffffffffffffffffffffff04000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342

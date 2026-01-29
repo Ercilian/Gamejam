@@ -9,6 +9,7 @@ TagManager:
   - Collectible
   - ShopCamera
   - Projectile
+  - BaseCollectable
   layers:
   - Default
   - TransparentFX
