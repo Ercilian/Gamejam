@@ -99,6 +99,10 @@ public class FrogCombat : Enemy
     [Tooltip("Porcentaje de vida restante para cambiar a fase 2 (ej: 0.4 = 40% de vida)")]
     [SerializeField] private float phaseTransitionPercentage = 0.4f;
     
+    [Header("Combat Start")]
+    [Tooltip("Posiciones donde aparecerán los jugadores al iniciar el combate")]
+    [SerializeField] private Transform[] playerStartPositions;
+    
     [Header("Attack Configuration")]
     [SerializeField] private Transform targetTransform;
     [SerializeField] private float attackCooldown = 3f;
@@ -239,9 +243,6 @@ public class FrogCombat : Enemy
     {
         // NO usar DontDestroyOnLoad para mantener las referencias de la escena correctas
         
-        bossStartTime = Time.time;
-        hasStartedCombat = false;
-        
         if (targetTransform == null)
         {
             Player player = FindFirstObjectByType<Player>();
@@ -263,6 +264,25 @@ public class FrogCombat : Enemy
         {
             Debug.LogWarning("[FrogBoss] No hay enemy spawn points configurados!");
         }
+        
+        // Iniciar corrutina de inicio de combate
+        StartCoroutine(InitializeCombat());
+    }
+    
+    private IEnumerator InitializeCombat()
+    {
+        bossStartTime = Time.time;
+        hasStartedCombat = false;
+        
+        // Teletransportar jugadores inmediatamente al inicio
+        TeleportPlayersToStartPositions();
+        
+        // Esperar el delay inicial antes de comenzar a atacar
+        Debug.Log($"[FrogBoss] Esperando {INITIAL_DELAY} segundos antes de comenzar el combate...");
+        yield return new WaitForSeconds(INITIAL_DELAY);
+        
+        hasStartedCombat = true;
+        Debug.Log("[FrogBoss] ¡El boss comienza a atacar!");
     }
     
 #if UNITY_EDITOR
@@ -308,19 +328,9 @@ public class FrogCombat : Enemy
 
     private void HandleAttackPattern()
     {
-        // Verificar si ha pasado el delay inicial
+        // Verificar si el combate ya ha comenzado
         if (!hasStartedCombat)
-        {
-            if (Time.time - bossStartTime >= INITIAL_DELAY)
-            {
-                hasStartedCombat = true;
-                Debug.Log("[FrogBoss] ¡El boss comienza a atacar!");
-            }
-            else
-            {
-                return; // No atacar aún
-            }
-        }
+            return;
         
         float timeSinceLastAttack = Time.time - lastAttackTime;
         
@@ -1022,6 +1032,50 @@ public class FrogCombat : Enemy
         
         PlayAttackEffect();
         Debug.Log("[FrogBoss] ¡TRANSICIÓN A FASE 2! El boss está más fuerte!");
+    }
+    
+    private void TeleportPlayersToStartPositions()
+    {
+        if (playerStartPositions == null || playerStartPositions.Length == 0)
+        {
+            Debug.LogWarning("[FrogBoss] No hay posiciones de inicio configuradas para los jugadores");
+            return;
+        }
+        
+        // Buscar todos los jugadores en la escena
+        Player[] players = FindObjectsByType<Player>(FindObjectsSortMode.None);
+        
+        if (players.Length == 0)
+        {
+            Debug.LogWarning("[FrogBoss] No se encontraron jugadores para teletransportar");
+            return;
+        }
+        
+        Debug.Log($"[FrogBoss] Teletransportando {players.Length} jugador(es) a posiciones de inicio");
+        
+        for (int i = 0; i < players.Length; i++)
+        {
+            // Usar posiciones cíclicamente si hay más jugadores que posiciones
+            int positionIndex = i % playerStartPositions.Length;
+            Transform startPos = playerStartPositions[positionIndex];
+            
+            if (startPos != null)
+            {
+                // Teletransportar jugador
+                players[i].transform.position = startPos.position;
+                players[i].transform.rotation = startPos.rotation;
+                
+                // Resetear velocidad del Rigidbody si tiene
+                Rigidbody playerRb = players[i].GetComponent<Rigidbody>();
+                if (playerRb != null)
+                {
+                    playerRb.linearVelocity = Vector3.zero;
+                    playerRb.angularVelocity = Vector3.zero;
+                }
+                
+                Debug.Log($"[FrogBoss] Jugador {i + 1} teletransportado a {startPos.position}");
+            }
+        }
     }
     #endregion
 
