@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1c5700c162802e147b36fb06e121ced9
+guid: f3c658e3451888e46825e8b4a6ccbd99
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,40 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: RavenAttack4
-      takeName: ArmatureAction.001
-      internalID: 7001736878801954451
+      name: Armature.002Action
+      takeName: Armature.002Action
+      internalID: 1441041791090075600
       firstFrame: 0
-      lastFrame: 47
+      lastFrame: 32
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature.002|Armature.002Action.001
+      takeName: Armature.002|Armature.002Action.001
+      internalID: 4028146881832135640
+      firstFrame: 0
+      lastFrame: 29
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

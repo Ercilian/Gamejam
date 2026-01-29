@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 57eee4357feb9af43ada50d222179040
+guid: ad8447bd58f293a4daf1ed563a7ed682
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ArmaRavenAtaque4
-      takeName: Armature.002Action.001
-      internalID: 125453756785918064
+      name: ArmatureAction.001
+      takeName: ArmatureAction.001
+      internalID: 7001736878801954451
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 47
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
