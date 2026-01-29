@@ -32,8 +32,8 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: RatEnemyAttack
-      takeName: ArmatureAction
-      internalID: -3880581976594992817
+      takeName: Armature|ArmatureAction
+      internalID: 4781951162920444690
       firstFrame: 0
       lastFrame: 29
       wrapMode: 0
@@ -59,7 +59,7 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
