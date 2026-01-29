@@ -22,8 +22,16 @@ namespace Game.Combat
         [Header("Combo Step Multipliers")]
         [Tooltip("Multiplicador de daño por cada paso del combo. Index 0 = paso 1, etc.")]
         public List<float> stepMultipliers = new List<float>() { 1f, 1.5f, 2f };
-            // Referencia al EntityStats del atacante
-            private EntityStats attackerStats;
+        
+        [Header("Combo Step Knockback")]
+        [Tooltip("Fuerza de knockback por cada paso del combo. Index 0 = paso 1, etc.")]
+        public List<float> stepKnockbackForces = new List<float>() { 3f, 5f, 8f };
+        
+        [Tooltip("Si true, el knockback solo empuja horizontalmente (sin componente Y)")]
+        public bool horizontalKnockbackOnly = true;
+        
+        // Referencia al EntityStats del atacante
+        private EntityStats attackerStats;
         [Header("Combo timing")]
         [Tooltip("Cooldown between attacks (seconds)")]
         public float attackCooldown = 0.25f;
@@ -219,13 +227,25 @@ namespace Game.Combat
             var stats = target.GetComponent<EntityStats>();
             if (stats != null && attackerStats != null)
             {
+                // Calcular y aplicar daño
                 float multiplier = 1f;
                 if (stepMultipliers != null && step >= 0 && step < stepMultipliers.Count)
                     multiplier = stepMultipliers[step];
                 int damage = Mathf.RoundToInt(attackerStats.AttackDamage * multiplier);
                 stats.TakeDamage(damage);
+                
+                // Aplicar knockback
+                float knockbackForce = 0f;
+                if (stepKnockbackForces != null && step >= 0 && step < stepKnockbackForces.Count)
+                    knockbackForce = stepKnockbackForces[step];
+                
+                if (knockbackForce > 0f)
+                {
+                    ApplyKnockback(target, knockbackForce);
+                }
+                
                 if (showDebugLogs)
-                    Debug.Log($"[Combo] {target.name} recibió {damage} de daño por combo step {step} (multiplier={multiplier})");
+                    Debug.Log($"[Combo] {target.name} recibió {damage} de daño y {knockbackForce} de knockback por combo step {step} (multiplier={multiplier})");
             }
         }
         
@@ -234,6 +254,95 @@ namespace Game.Combat
         {
             // Simply invoke StartAttack - StartAttack itself handles cooldowns and boomerang state.
             StartAttack();
+        }
+
+        /// <summary>
+        /// Aplica knockback a un objetivo golpeado
+        /// </summary>
+        private void ApplyKnockback(Collider target, float knockbackForce)
+        {
+            if (target == null || knockbackForce <= 0f)
+            {
+                if (showDebugLogs)
+                    Debug.Log($"[Combo Knockback] Target null o fuerza <= 0: target={target}, force={knockbackForce}");
+                return;
+            }
+            
+            if (showDebugLogs)
+                Debug.Log($"[Combo Knockback] Intentando aplicar knockback a {target.name} con fuerza {knockbackForce}");
+            
+            // Verificar si el enemigo puede recibir knockback
+            var enemy = target.GetComponent<Game.Enemies.Enemy>();
+            if (enemy != null && !enemy.canTakeKnockback)
+            {
+                if (showDebugLogs)
+                    Debug.Log($"[Combo Knockback] {target.name} no puede recibir knockback (canTakeKnockback=false)");
+                return;
+            }
+            
+            // Obtener el Rigidbody del objetivo
+            var rb = target.GetComponent<Rigidbody>();
+            if (rb == null)
+            {
+                rb = target.GetComponentInParent<Rigidbody>();
+                if (showDebugLogs && rb != null)
+                    Debug.Log($"[Combo Knockback] Rigidbody encontrado en el padre de {target.name}");
+            }
+            
+            if (rb == null)
+            {
+                Debug.LogWarning($"[Combo Knockback] {target.name} no tiene Rigidbody, no se puede aplicar knockback");
+                return;
+            }
+            
+            if (showDebugLogs)
+                Debug.Log($"[Combo Knockback] Rigidbody encontrado: isKinematic={rb.isKinematic}, mass={rb.mass}, constraints={rb.constraints}");
+            
+            // Calcular dirección del knockback (desde el atacante hacia el objetivo)
+            Vector3 knockbackDirection = (target.transform.position - transform.position).normalized;
+            
+            // Si solo queremos knockback horizontal, eliminar componente Y
+            if (horizontalKnockbackOnly)
+            {
+                knockbackDirection.y = 0f;
+                knockbackDirection = knockbackDirection.normalized;
+            }
+            
+            // Aplicar límite de knockback según EnemyStatsData si existe
+            float finalKnockbackForce = knockbackForce;
+            var entityStats = target.GetComponent<EntityStats>();
+            if (entityStats != null)
+            {
+                // Acceder al campo enemyStatsData a través de reflexión o directamente si es público
+                var enemyStatsDataField = entityStats.GetType().GetField("enemyStatsData", 
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (enemyStatsDataField != null)
+                {
+                    var enemyStatsData = enemyStatsDataField.GetValue(entityStats) as EnemyStatsData;
+                    if (enemyStatsData != null)
+                    {
+                        finalKnockbackForce = Mathf.Min(knockbackForce, enemyStatsData.MaxKnockback);
+                        if (showDebugLogs && finalKnockbackForce < knockbackForce)
+                            Debug.Log($"[Combo] Knockback limitado de {knockbackForce} a {finalKnockbackForce} por MaxKnockback del enemigo");
+                    }
+                }
+            }
+            
+            // Aplicar la fuerza de knockback
+            if (showDebugLogs)
+                Debug.Log($"[Combo Knockback] Aplicando fuerza: dirección={knockbackDirection}, fuerza final={finalKnockbackForce}, rb.isKinematic={rb.isKinematic}");
+            
+            // Si el Rigidbody es kinematic, no se puede aplicar fuerza
+            if (rb.isKinematic)
+            {
+                Debug.LogWarning($"[Combo Knockback] {target.name} tiene Rigidbody kinematic, no se puede aplicar knockback. Cambia isKinematic a false.");
+                return;
+            }
+            
+            rb.AddForce(knockbackDirection * finalKnockbackForce, ForceMode.Impulse);
+            
+            if (showDebugLogs)
+                Debug.Log($"[Combo Knockback] ✓ Knockback aplicado a {target.name}: dirección={knockbackDirection}, fuerza={finalKnockbackForce}, velocidad resultante={rb.linearVelocity}");
         }
 
         /// <summary>
