@@ -101,7 +101,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _GradientNoiseSize: 5
+    - _GradientNoiseSize: 5.97
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _OutLine1Size: 0.17
@@ -116,10 +116,11 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _VertexSize: 1
     - _VertexTurbulenceSize: 0
     - _VertexVelocity: 1
     - _VoronoiAngle: 2
-    - _VoronoiDensity: 5.83
+    - _VoronoiDensity: 1.89
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
