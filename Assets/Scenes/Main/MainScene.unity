@@ -6243,9 +6243,9 @@ MonoBehaviour:
   TurtleElitePrefab: {fileID: 7519758676284165041, guid: 468a15931c3af654da367b51b2c12bc9, type: 3}
   ratSpawnChance: 80
   ratEliteSpawnChance: 0
-  chickenSpawnChance: 25
+  chickenSpawnChance: 0
   chickenEliteSpawnChance: 0
-  turtleSpawnChance: 5
+  turtleSpawnChance: 15
   turtleEliteSpawnChance: 0
   carTransform: {fileID: 2070441881}
   difficultyConfigs:

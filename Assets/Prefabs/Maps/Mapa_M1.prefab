@@ -988,7 +988,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6236471855522199857}
   - component: {fileID: 7220200006321934372}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Colider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1056,7 +1056,7 @@ Transform:
   m_GameObject: {fileID: 4766660239004508734}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -46.91093, y: -3.88586, z: -9.59083}
+  m_LocalPosition: {x: -47, y: -3.294828, z: -9.204839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1132,7 +1132,7 @@ Transform:
   m_GameObject: {fileID: 4906936881903153471}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.08907, y: 3.88586, z: 4.59083}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -30720,7 +30720,7 @@ Transform:
   m_GameObject: {fileID: 6381093176021855506}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 53.08907, y: -3.88586, z: -9.59083}
+  m_LocalPosition: {x: 52.97668, y: -3.6943235, z: -10.154732}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
