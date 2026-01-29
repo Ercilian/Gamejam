@@ -201,7 +201,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 67238257}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1636468987}
+        m_TargetAssemblyTypeName: Options, Assembly-CSharp
+        m_MethodName: ToMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &67238257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6686,7 +6698,7 @@ MonoBehaviour:
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 2985120443330566491, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffffffffffffffffffff0000000004000000
+  mapSequence: ffffffff04000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342
@@ -13584,6 +13596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Options
   OptionsPanel: {fileID: 1754143047}
+  GameOverPanel: {fileID: 189180023}
 --- !u!114 &1636468988
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -237,6 +237,7 @@ public class PlayerReviveSystem : MonoBehaviour
     /// </summary>
     private void Die()
     {
+        player.isDead = true;
         currentState = ReviveState.Dead;
         
         OnPlayerDead?.Invoke();

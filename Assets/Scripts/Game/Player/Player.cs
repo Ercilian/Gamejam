@@ -32,6 +32,7 @@ public class Player : EntityStats
 
     // ============ Estado de muerte ============
     public bool isDowned = false; // Indica si el jugador está muerto o en estado downed
+    public bool isDead = false;
 
 
 

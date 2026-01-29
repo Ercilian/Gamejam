@@ -19,12 +19,10 @@ public class Options : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && OptionsPanel.activeSelf)
         {
-            Debug.Log("Cerrando opciones");
             CloseSettings();
         }
         else if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Abriendo opciones");
             OpenSettings();
         }
 
@@ -49,6 +47,11 @@ public class Options : MonoBehaviour
         Time.timeScale = 0f; // Pause the game
     }   
 
+    public void ToMainMenu()
+    {
+        Time.timeScale = 1f; // Resume the game before going to main menu
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenuScene");
+    }
 
 
 
