@@ -32,8 +32,8 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: RatEnemyRun
-      takeName: Armature|ArmatureAction
-      internalID: 4781951162920444690
+      takeName: Armature.003|Armature.003|Armature|ArmatureAction
+      internalID: 8923155012535752697
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
