@@ -321,6 +321,11 @@ MonoBehaviour:
   - 1
   - 1.5
   - 2
+  stepKnockbackForces:
+  - 30
+  - 45
+  - 60
+  horizontalKnockbackOnly: 1
   attackCooldown: 0.2
   comboResetTime: 0.6
   steps:
@@ -349,12 +354,12 @@ MonoBehaviour:
     windowDuration: 0.08
     tickInterval: 0.04
   - animationTrigger: Ataque3
-    useTicks: 1
-    isBoomerang: 1
+    useTicks: 0
+    isBoomerang: 0
     shape: 0
-    offset: {x: 0.06, y: 0.18, z: 1}
+    offset: {x: 0.06, y: 0.18, z: 1.97}
     localEuler: {x: 0, y: 0, z: 0}
-    boxSize: {x: 1, y: 0.45, z: 1}
+    boxSize: {x: 1, y: 0.45, z: 3.58}
     sphereRadius: 1
     sectorRadius: 1
     sectorAngle: 90
