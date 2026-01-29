@@ -47,20 +47,6 @@ public class RotatingStarConfig
 }
 
 [System.Serializable]
-public class SunburstConfig
-{
-    [Header("Ráfaga Solar")]
-    public int mainRays = 12;
-    public int projectilesPerRay = 3;
-    public float raySpread = 3f;
-    public int waveCircles = 3;
-    public int baseCircleBullets = 16;
-    public int secondaryRays = 6;
-    public float secondaryRayOffset = 30f;
-    public float rotationSpeed = 20f;
-}
-
-[System.Serializable]
 public class ZigzagConfig
 {
     [Header("Patrón Zigzag")]
@@ -117,7 +103,6 @@ public class FrogCombat : Enemy
     [SerializeField] private Transform targetTransform;
     [SerializeField] private float attackCooldown = 3f;
     [SerializeField] private float bulletSpeed = 8f;
-    [SerializeField] private float mortarSpeed = 5f;
     
     [Header("Bullet Hell Settings")]
     [SerializeField] private int bulletPatternCount = 8;
@@ -131,7 +116,6 @@ public class FrogCombat : Enemy
     [SerializeField] private AttackPhaseConfig bulletHellPhaseConfig = new AttackPhaseConfig();
     
     [Header("Advanced Bullet Hell Settings")]
-    [SerializeField] private AdvancedPattern advancedPattern = AdvancedPattern.Spiral;
     [SerializeField] private int advancedWaveCount = 5;
     [SerializeField] private float advancedWaveDelay = 0.15f;
     [SerializeField] private float advancedBulletSpeed = 6f;
@@ -141,7 +125,6 @@ public class FrogCombat : Enemy
     [SerializeField] private SpiralPatternConfig spiralConfig = new SpiralPatternConfig();
     [SerializeField] private WavePatternConfig waveConfig = new WavePatternConfig();
     [SerializeField] private RotatingStarConfig starConfig = new RotatingStarConfig();
-    [SerializeField] private SunburstConfig sunburstConfig = new SunburstConfig();
     [SerializeField] private ZigzagConfig zigzagConfig = new ZigzagConfig();
     [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Advanced Bullet Hell")]
@@ -153,11 +136,10 @@ public class FrogCombat : Enemy
     [SerializeField] private float jumpCooldown = 4f;
     [SerializeField] private float jumpImpactRadius = 6f;
     [SerializeField] private float jumpImpactDamage = 30f;
-    [SerializeField] private float jumpImpactPushForce = 15f; // Fuerza de empuje al impactar
-    [SerializeField] private float jumpLandingWarningTime = 1f; // Tiempo antes de aterrizar que se muestra el área
+    [SerializeField] private float jumpImpactPushForce = 15f;
     [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Jump Attack")]
-    [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig = new AttackPhaseConfig();
+    [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig = new AttackPhaseConfig { enableInPhase1 = false, enableInPhase2 = false };
     
     [Header("Push Attack Settings")]
     [SerializeField] private float pushDetectionRadius = 4f;
@@ -214,6 +196,7 @@ public class FrogCombat : Enemy
     private float lastMortarTime = 0f;
     private float lastSpawnTime = 0f;
     private float lastAdvancedBulletHellTime = 0f;
+    private AdvancedPattern lastUsedPattern = AdvancedPattern.Spiral;
     
     private Animator animator;
     private Rigidbody bossRb; // Rigidbody específico del boss para evitar conflicto con la clase base
@@ -253,6 +236,14 @@ public class FrogCombat : Enemy
         
         Debug.Log($"[FrogBoss] Boss initialized with {curHP}/{maxHP} HP");
     }
+    
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        // Este método se ejecuta en el Editor cuando cambian valores en el Inspector
+        // Fuerza la sincronización correcta de los valores serializados
+    }
+#endif
     #endregion
 
     #region Update Loop
@@ -309,10 +300,6 @@ public class FrogCombat : Enemy
         List<AttackType> attacks = new List<AttackType>();
         float distanceToPlayer = targetTransform != null ? Vector3.Distance(transform.position, targetTransform.position) : float.MaxValue;
         
-        // Verificar qué ataques están habilitados para la fase actual
-        bool isPhase1 = currentPhase == BossPhase.Phase1;
-        bool isPhase2 = currentPhase == BossPhase.Phase2;
-        
         // Bullet Hell
         if (IsAttackEnabledInCurrentPhase(bulletHellPhaseConfig) && Time.time - lastBulletHellTime > bulletHellCooldown)
             attacks.Add(AttackType.BulletHell);
@@ -344,15 +331,8 @@ public class FrogCombat : Enemy
     /// Verifica si un ataque está habilitado en la fase actual del boss
     /// </summary>
     private bool IsAttackEnabledInCurrentPhase(AttackPhaseConfig config)
-    {
-        if (config == null)
-        {
-            Debug.LogWarning("[FrogBoss] AttackPhaseConfig es null!");
-            return false;
-        }
-        
-        bool isEnabled = currentPhase == BossPhase.Phase1 ? config.enableInPhase1 : config.enableInPhase2;
-        return isEnabled;
+    {       
+        return currentPhase == BossPhase.Phase1 ? config.enableInPhase1 : config.enableInPhase2;
     }
     #endregion
 
@@ -390,14 +370,12 @@ public class FrogCombat : Enemy
         PlayAttackEffect();
         PlayAttackSFX();
         
-        Debug.Log($"[FrogBoss] Bullet Hell Attack - {bulletHellBurstCount} ráfagas!");
-        
         yield return new WaitForSeconds(0.3f);
         
         // Generar múltiples ráfagas según la configuración
         for (int burstIndex = 0; burstIndex < bulletHellBurstCount; burstIndex++)
         {
-            // Patrón de arco (Mega Satan style) - bolas salen en un arco frontal
+            // Patrón de arco 
             float arcWidth = 120f; // Ancho del arco en grados
             float startAngle = bulletHellBaseDirection - arcWidth * 0.5f; // Comienza a la izquierda del arco
             
@@ -405,7 +383,7 @@ public class FrogCombat : Enemy
             {
                 float angle = startAngle + (arcWidth / (bulletPatternCount - 1)) * i;
                 Vector2 direction = GetDirectionFromAngle(angle);
-                SpawnProjectile(direction, bulletSpeed, false);
+                SpawnProjectile(direction, bulletSpeed);
             }
             
             // Esperar antes de la siguiente ráfaga
@@ -418,28 +396,7 @@ public class FrogCombat : Enemy
         yield return new WaitForSeconds(bulletHellCooldown * 0.5f);
         
         // Segunda fase en Phase 2 - arco expandido con múltiples ráfagas
-        if (currentPhase == BossPhase.Phase2)
-        {
-            for (int burstIndex = 0; burstIndex < bulletHellBurstCount; burstIndex++)
-            {
-                float phase2ArcWidth = 150f; // Arco más amplio en fase 2
-                float phase2StartAngle = bulletHellBaseDirection - phase2ArcWidth * 0.5f;
-                
-                for (int i = 0; i < bulletPatternCount; i++)
-                {
-                    float angle = phase2StartAngle + (phase2ArcWidth / (bulletPatternCount - 1)) * i;
-                    Vector2 direction = GetDirectionFromAngle(angle);
-                    
-                    SpawnProjectile(direction, bulletSpeed, false);
-                }
-                
-                // Esperar antes de la siguiente ráfaga
-                if (burstIndex < bulletHellBurstCount - 1)
-                {
-                    yield return new WaitForSeconds(delayBetweenBursts);
-                }
-            }
-        }
+        
     }
 
     private IEnumerator JumpAttack()
@@ -447,8 +404,6 @@ public class FrogCombat : Enemy
         lastJumpTime = Time.time;
         PlayAttackEffect();
         PlayAttackSFX();
-        
-        Debug.Log("[FrogBoss] Jump Attack - Saltando hacia el jugador!");
         
         isJumping = true;
         
@@ -536,7 +491,6 @@ public class FrogCombat : Enemy
                                 
                                 // Registrar que este jugador fue pre-empujado
                                 prePushedPlayers.Add(collider.gameObject);
-                                Debug.Log($"[FrogBoss] Pre-empuje a {collider.gameObject.name} para evitar aplastamiento!");
                             }
                         }
                     }
@@ -570,7 +524,6 @@ public class FrogCombat : Enemy
                     if (entityStats != null)
                     {
                         entityStats.TakeDamage((int)jumpImpactDamage);
-                        Debug.Log($"[FrogBoss] Jump impact hit {collider.gameObject.name} for {jumpImpactDamage} damage!");
                     }
                     
                     // Aplicar empuje SOLO si el jugador NO fue pre-empujado
@@ -600,12 +553,7 @@ public class FrogCombat : Enemy
                             Vector3 pushDirection = horizontalDirection;
                             
                             playerRb.AddForce(pushDirection * jumpImpactPushForce, ForceMode.Impulse);
-                            Debug.Log($"[FrogBoss] Empujando a {collider.gameObject.name}! (Distancia: {horizontalDistance:F2})");
                         }
-                    }
-                    else
-                    {
-                        Debug.Log($"[FrogBoss] {collider.gameObject.name} ya fue pre-empujado, saltando empuje secundario.");
                     }
                 }
             }
@@ -675,8 +623,6 @@ public class FrogCombat : Enemy
         lastPushTime = Time.time;
         PlayAttackSFX();
         
-        Debug.Log("[FrogBoss] Push Attack!");
-        
         // Fase de carga - mostrar área de ataque
         VisualizeAttackArea();
         
@@ -705,8 +651,6 @@ public class FrogCombat : Enemy
                         Vector3 pushDirection = (collider.transform.position - transform.position).normalized;
                         pushDirection.y = 0; // Solo empuje horizontal
                         targetRb.linearVelocity = new Vector3(pushDirection.x * pushForce, targetRb.linearVelocity.y, pushDirection.z * pushForce);
-                        
-                        Debug.Log($"[FrogBoss] Pushed {collider.gameObject.name}!");
                     }
                 }
             }
@@ -715,7 +659,7 @@ public class FrogCombat : Enemy
     #endregion
 
     #region Projectile Management
-    private void SpawnProjectile(Vector2 direction, float speed, bool isMortar)
+    private void SpawnProjectile(Vector2 direction, float speed)
     {
         if (projectilePrefab == null) return;
         
@@ -931,8 +875,6 @@ public class FrogCombat : Enemy
         
         lineRenderer.positionCount = positions.Length;
         lineRenderer.SetPositions(positions);
-        
-        Debug.Log("[FrogBoss] Área de impacto de mortero creada en: " + impactPosition);
     }
     #endregion
 
@@ -941,7 +883,6 @@ public class FrogCombat : Enemy
     {
         currentPhase = BossPhase.Phase2;
         bulletSpeed *= 1.1f;
-        mortarSpeed *= 1.1f;
         attackCooldown *= 0.8f;
         
         PlayAttackEffect();
@@ -1042,6 +983,25 @@ public class FrogCombat : Enemy
         // Destruir el área visual
         Destroy(areaVisual);
     }
+    
+    private AdvancedPattern GetRandomPattern()
+    {
+        // Crear lista de todos los patrones disponibles
+        List<AdvancedPattern> availablePatterns = new List<AdvancedPattern>
+        {
+            AdvancedPattern.Spiral,
+            AdvancedPattern.Wave,
+            AdvancedPattern.RotatingStar,
+            AdvancedPattern.Zigzag
+        };
+        
+        // Remover el último patrón usado para evitar repetición
+        availablePatterns.Remove(lastUsedPattern);
+        
+        // Seleccionar aleatoriamente de los restantes
+        int randomIndex = Random.Range(0, availablePatterns.Count);
+        return availablePatterns[randomIndex];
+    }
 
     private IEnumerator AdvancedBulletHellAttack()
     {
@@ -1052,11 +1012,14 @@ public class FrogCombat : Enemy
         PlayAttackEffect();
         PlayAttackSFX();
         
-        Debug.Log($"[FrogBoss] Advanced Bullet Hell - Pattern: {advancedPattern}");
+        // Seleccionar un patrón aleatorio diferente al último usado
+        AdvancedPattern selectedPattern = GetRandomPattern();
+        
+        Debug.Log($"[FrogBoss] Advanced Bullet Hell - Pattern: {selectedPattern}");
         
         yield return new WaitForSeconds(0.3f);
         
-        switch (advancedPattern)
+        switch (selectedPattern)
         {
             case AdvancedPattern.Spiral:
                 yield return StartCoroutine(SpiralPattern());
@@ -1071,6 +1034,8 @@ public class FrogCombat : Enemy
                 yield return StartCoroutine(ZigzagPattern());
                 break;
         }
+        
+        lastUsedPattern = selectedPattern;
     }
     
     private IEnumerator SpiralPattern()
@@ -1101,7 +1066,7 @@ public class FrogCombat : Enemy
                         
                         // Velocidad ondulatoria basada en la posición en la hélice
                         float speedWave = Mathf.Sin(t * Mathf.PI * 2f) * 0.2f + 1f;
-                        SpawnProjectile(direction, advancedBulletSpeed * speedWave, false);
+                        SpawnProjectile(direction, advancedBulletSpeed * speedWave);
                     }
                 }
             }
@@ -1118,7 +1083,7 @@ public class FrogCombat : Enemy
                     {
                         float angle = bridgeAngle + (j - spiralConfig.bridgeProjectiles / 2f) * spiralConfig.bridgeSpread;
                         Vector2 direction = GetDirectionFromAngle(angle);
-                        SpawnProjectile(direction, advancedBulletSpeed * 0.75f, false);
+                        SpawnProjectile(direction, advancedBulletSpeed * 0.75f);
                     }
                 }
             }
@@ -1158,7 +1123,7 @@ public class FrogCombat : Enemy
                     
                     // Velocidad variable: más lento al inicio y final del pétalo, más rápido en el medio
                     float speedMultiplier = Mathf.Sin(t * Mathf.PI) * 0.5f + 0.75f;
-                    SpawnProjectile(direction, advancedBulletSpeed * speedMultiplier, false);
+                    SpawnProjectile(direction, advancedBulletSpeed * speedMultiplier);
                 }
             }
             
@@ -1169,7 +1134,7 @@ public class FrogCombat : Enemy
                 {
                     float angle = (360f / waveConfig.centerRingBullets) * i + waveRotation * 0.5f;
                     Vector2 direction = GetDirectionFromAngle(angle);
-                    SpawnProjectile(direction, advancedBulletSpeed * waveConfig.centerRingSpeed, false);
+                    SpawnProjectile(direction, advancedBulletSpeed * waveConfig.centerRingSpeed);
                 }
             }
             
@@ -1192,7 +1157,7 @@ public class FrogCombat : Enemy
                 {
                     float spreadAngle = armAngle + (i - starConfig.bulletsPerArm / 2) * starConfig.armSpread;
                     Vector2 direction = GetDirectionFromAngle(spreadAngle);
-                    SpawnProjectile(direction, advancedBulletSpeed + i * starConfig.speedIncrement, false);
+                    SpawnProjectile(direction, advancedBulletSpeed + i * starConfig.speedIncrement);
                 }
             }
             
@@ -1239,7 +1204,7 @@ public class FrogCombat : Enemy
                     float speedVariation = 1f + Mathf.Sin(t * Mathf.PI * 2f) * zigzagConfig.speedVariation;
                     float speed = advancedBulletSpeed * speedVariation;
                     
-                    SpawnProjectile(direction, speed, false);
+                    SpawnProjectile(direction, speed);
                 }
             }
             
