@@ -97,6 +97,7 @@ namespace Game.Combat
     // use -1 to represent idle (no step selected). This lets the first click
     // advance to step 0 predictably when StartAttack increments before use.
     int currentStep = -1;
+        int lastExecutedStep = -1; // Para rastrear el último paso ejecutado y su delay
         float lastAttackTime = -999f;
         float lastComboTime = -999f;
         bool boomerangActive = false;
@@ -140,6 +141,10 @@ namespace Game.Combat
             public float sectorAngle = 90f;
             
             [Header("Timing")]
+            [Tooltip("Delay en segundos después de ejecutar este paso antes de permitir el siguiente ataque. Ajústalo a la duración de la animación.")]
+            public float attackDelay = 0.5f;
+            [Tooltip("Delay en segundos antes de activar el hitbox/daño. Úsalo para sincronizar el daño con el momento del golpe en la animación.")]
+            public float hitboxActivationDelay = 0.1f;
             [Tooltip("Duration in seconds of the detection window. Only used if UseTicks = true.")]
             public float windowDuration = 0.08f;
             [Tooltip("Interval between checks while the window is open (seconds). Only used if UseTicks = true.")]
@@ -186,10 +191,17 @@ namespace Game.Combat
 
         public bool CanAttack()
         {   
-
             // No puede atacar si tiene items en las manos o si está en cooldown o boomerang activo
             bool hasItems = playerInventory != null && playerInventory.HasItems();
-            return Time.time - lastAttackTime >= attackCooldown && !boomerangActive && !hasItems;
+            
+            // Obtener el delay del último paso ejecutado, o usar el cooldown global si no hay paso previo
+            float requiredDelay = attackCooldown;
+            if (lastExecutedStep >= 0 && lastExecutedStep < steps.Count)
+            {
+                requiredDelay = steps[lastExecutedStep].attackDelay;
+            }
+            
+            return Time.time - lastAttackTime >= requiredDelay && !boomerangActive && !hasItems;
         }
 
         void OnEnable()
@@ -216,8 +228,13 @@ namespace Game.Combat
         void OnDisable()
         {
             OnStepHit -= ApplyDamageToTarget;
+            
+            // Desuscribirse del input action para evitar errores si el objeto se destruye
+            if (_attackAction != null)
+            {
+                _attackAction.performed -= OnAttackPerformed;
+            }
         }
-            // Desuscribirse del evento
 
 
         private void ApplyDamageToTarget(Collider target, int step)
@@ -252,6 +269,9 @@ namespace Game.Combat
 
         void OnAttackPerformed(InputAction.CallbackContext ctx)
         {
+            // Verificar que el objeto no ha sido destruido
+            if (this == null || gameObject == null) return;
+            
             // Simply invoke StartAttack - StartAttack itself handles cooldowns and boomerang state.
             StartAttack();
         }
@@ -352,7 +372,11 @@ namespace Game.Combat
         {
             if (!CanAttack())
             {
-                if (showDebugLogs) Debug.Log($"[Combo] StartAttack rejected: canAttack={CanAttack()} timeSinceLastAttack={Time.time - lastAttackTime} boomerangActive={boomerangActive}");
+                if (showDebugLogs)
+                {
+                    float requiredDelay = (lastExecutedStep >= 0 && lastExecutedStep < steps.Count) ? steps[lastExecutedStep].attackDelay : attackCooldown;
+                    Debug.Log($"[Combo] StartAttack rejected: timeSinceLastAttack={Time.time - lastAttackTime:F3}s requiredDelay={requiredDelay:F3}s (from step {lastExecutedStep}) boomerangActive={boomerangActive}");
+                }
                 return -1;
             }
 
@@ -366,6 +390,7 @@ namespace Game.Combat
                 currentStep = (currentStep + 1) % Math.Max(1, steps.Count);
 
             int step = currentStep;
+            lastExecutedStep = step; // Guardar el paso que acabamos de ejecutar
 
             OnAttackStep?.Invoke(step);
             
@@ -410,8 +435,15 @@ namespace Game.Combat
                 }
                 else
                 {
-                    // detection for the step
-                    ExecuteStepDetection(step, cfg);
+                    // detection for the step con delay si está configurado
+                    if (cfg.hitboxActivationDelay > 0f)
+                    {
+                        StartCoroutine(DelayedStepDetection(step, cfg));
+                    }
+                    else
+                    {
+                        ExecuteStepDetection(step, cfg);
+                    }
                 }
             }
 
@@ -424,6 +456,7 @@ namespace Game.Combat
         public void ResetCombo()
         {
             currentStep = -1;
+            lastExecutedStep = -1;
             lastAttackTime = -999f;
             lastComboTime = -999f;
             // stop running step coroutines
@@ -441,6 +474,19 @@ namespace Game.Combat
             }
 
             if (showDebugLogs) Debug.Log("[Combo] ResetCombo called");
+        }
+
+        IEnumerator DelayedStepDetection(int step, StepConfig cfg)
+        {
+            if (showDebugLogs)
+                Debug.Log($"[Combo] Esperando {cfg.hitboxActivationDelay}s antes de activar hitbox para paso {step}");
+            
+            yield return new WaitForSeconds(cfg.hitboxActivationDelay);
+            
+            if (showDebugLogs)
+                Debug.Log($"[Combo] Activando hitbox para paso {step}");
+            
+            ExecuteStepDetection(step, cfg);
         }
 
         void ExecuteStepDetection(int step, StepConfig cfg)
@@ -466,6 +512,9 @@ namespace Game.Combat
 
         void DoDetectOnce(StepConfig cfg, int step)
         {
+            // Verificar que el objeto no ha sido destruido
+            if (this == null || transform == null) return;
+            
             // Rotate the offset around the character according to localEuler, so the hitbox
             // orbits the character rather than rotating around its own center.
             Vector3 rotatedOffset = transform.rotation * Quaternion.Euler(cfg.localEuler) * cfg.offset;

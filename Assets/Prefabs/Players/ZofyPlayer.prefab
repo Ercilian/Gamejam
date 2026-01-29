@@ -784,6 +784,18 @@ PrefabInstance:
       value: 2.68
       objectReference: {fileID: 0}
     - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[0].attackDelay
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[1].attackDelay
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[2].attackDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
       propertyPath: steps.Array.data[2].isBoomerang
       value: 0
       objectReference: {fileID: 0}
@@ -806,6 +818,18 @@ PrefabInstance:
     - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
       propertyPath: steps.Array.data[1].animationTrigger
       value: Ataque2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[0].hitboxActivationDelay
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[1].hitboxActivationDelay
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[2].hitboxActivationDelay
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

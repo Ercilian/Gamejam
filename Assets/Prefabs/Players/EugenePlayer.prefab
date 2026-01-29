@@ -363,6 +363,7 @@ MonoBehaviour:
   isCinematicRun: 0
   gracePeriodDuration: 1.5
   isDowned: 0
+  isDead: 0
 --- !u!114 &3199202718284467957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,6 +399,11 @@ MonoBehaviour:
   - 1
   - 1.5
   - 2
+  stepKnockbackForces:
+  - 3
+  - 5
+  - 8
+  horizontalKnockbackOnly: 1
   attackCooldown: 0.4
   comboResetTime: 1
   steps:
@@ -411,6 +417,8 @@ MonoBehaviour:
     sphereRadius: 1
     sectorRadius: 1.8
     sectorAngle: 97
+    attackDelay: 0.3
+    hitboxActivationDelay: 0.1
     windowDuration: 0.08
     tickInterval: 0.04
   - animationTrigger: Ataque2
@@ -423,6 +431,8 @@ MonoBehaviour:
     sphereRadius: 1
     sectorRadius: 1.8
     sectorAngle: 97
+    attackDelay: 0.3
+    hitboxActivationDelay: 0.1
     windowDuration: 0.08
     tickInterval: 0.04
   - animationTrigger: Ataque3
@@ -435,6 +445,8 @@ MonoBehaviour:
     sphereRadius: 1.29
     sectorRadius: 1
     sectorAngle: 90
+    attackDelay: 0.3
+    hitboxActivationDelay: 0.1
     windowDuration: 0.08
     tickInterval: 0.04
   enemyLayer:
