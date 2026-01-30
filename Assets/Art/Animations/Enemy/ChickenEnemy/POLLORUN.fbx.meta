@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1f91227b26bf20f4d84977e79f066652
+guid: 2e6bcb310e87ab5499fec664b2486e21
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,18 +31,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature.001Action
-      takeName: Armature.001Action
-      internalID: -4386357291700952360
+      name: ChickenEnemyRun
+      takeName: Armature.001|Armature.001Action.003
+      internalID: 1634829878955289628
       firstFrame: 0
-      lastFrame: 24
+      lastFrame: 23
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
