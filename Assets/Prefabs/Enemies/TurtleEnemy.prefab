@@ -123,13 +123,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMortar
   baseDamage: 10
-  attackCooldown: 4
-  attackRange: 20
+  attackCooldown: 6
+  attackRange: 100
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
   showDebugLogs: 1
-  drawGizmos: 0
+  drawGizmos: 1
   animator: {fileID: 0}
   chanceToAttackCar: 0.8
   carTag: Car
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IA_Enemy
   tipoEnemigo: 1
-  distanciaOptimaAtaque: 15
+  distanciaOptimaAtaque: 20
   velocidadBase: 2
   velocidadPersecucion: 5
   rangoDeteccion: 8
