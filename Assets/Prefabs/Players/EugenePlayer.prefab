@@ -522,8 +522,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerReviveSystem
   timeToRevive: 30
-  reviveHoldTime: 4
-  reviveRange: 2
+  reviveHoldTime: 3
+  reviveRange: 3
   reviveHealthPercent: 0.5
   downedVisual: {fileID: 0}
   downedColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.7}
