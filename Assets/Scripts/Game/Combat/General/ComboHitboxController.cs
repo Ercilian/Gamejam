@@ -74,6 +74,13 @@ namespace Game.Combat
         [Header("Animators")]
         [Tooltip("Referencia opcional al arma con su propio Animator. Si no se asigna, solo se usará el animator del personaje.")]
         public Animator weaponAnimator;
+        
+        [Header("Slash VFX System")]
+        [Tooltip("Controlador de efectos visuales de slash. Si no se asigna, se buscará automáticamente en el objeto.")]
+        public SlashVFXController slashVFXController;
+        
+        [Tooltip("Transform del arma donde se instanciarán los slashes. Si no se asigna, se usará el transform del personaje.")]
+        public Transform weaponTransform;
 
         // runtime
         PlayerInput _playerInput;
@@ -149,6 +156,10 @@ namespace Game.Combat
             public float windowDuration = 0.08f;
             [Tooltip("Interval between checks while the window is open (seconds). Only used if UseTicks = true.")]
             public float tickInterval = 0.04f;
+            
+            [Header("VFX - Slash Effect")]
+            [Tooltip("Configuración del slash VFX para este paso del combo")]
+            public SlashVFXController.SlashConfig slashConfig = new SlashVFXController.SlashConfig();
         }
 
     public enum Shape { Box, Sphere, Sector }
@@ -161,6 +172,28 @@ namespace Game.Combat
             attackerStats = GetComponent<EntityStats>();
             audioSource = GetComponent<AudioSource>();
             playerInventory = GetComponent<PlayerInventory>(); // Obtener referencia al inventario
+            
+            // Obtener o crear el SlashVFXController
+            if (slashVFXController == null)
+            {
+                slashVFXController = GetComponent<SlashVFXController>();
+                if (slashVFXController == null)
+                {
+                    slashVFXController = gameObject.AddComponent<SlashVFXController>();
+                }
+            }
+            
+            // Sincronizar el weaponTransform con el SlashVFXController
+            if (slashVFXController != null && weaponTransform != null)
+            {
+                slashVFXController.weaponTransform = weaponTransform;
+            }
+            
+            // Sincronizar showDebugLogs
+            if (slashVFXController != null)
+            {
+                slashVFXController.showDebugLogs = showDebugLogs;
+            }
 
             
             // Obtener el Animator del personaje (primero busca en este GameObject, luego en hijos)
@@ -422,6 +455,9 @@ namespace Game.Combat
             {
                 // Activar la animación para este paso del combo
                 PlayStepAnimation(cfg);
+                
+                // Instanciar el slash VFX si está configurado
+                SpawnSlashVFX(cfg, step);
             }
             
             if (cfg != null)
@@ -474,6 +510,61 @@ namespace Game.Combat
             }
 
             if (showDebugLogs) Debug.Log("[Combo] ResetCombo called");
+        }
+
+        /// <summary>
+        /// Instancia el efecto visual de slash para un paso del combo
+        /// </summary>
+        void SpawnSlashVFX(StepConfig cfg, int step)
+        {
+            if (showDebugLogs)
+                Debug.Log($"[Combo] === SPAWNING SLASH VFX PARA PASO {step} ===");
+            
+            if (slashVFXController == null)
+            {
+                Debug.LogError($"[Combo] SlashVFXController es NULL! No se puede instanciar el slash.");
+                return;
+            }
+            
+            if (cfg == null)
+            {
+                Debug.LogError($"[Combo] StepConfig es NULL!");
+                return;
+            }
+            
+            if (cfg.slashConfig == null)
+            {
+                Debug.LogError($"[Combo] slashConfig es NULL en el paso {step}!");
+                return;
+            }
+            
+            if (cfg.slashConfig.slashVFXPrefab == null)
+            {
+                if (showDebugLogs)
+                    Debug.LogWarning($"[Combo] No hay prefab de slash asignado para el paso {step}");
+                return;
+            }
+            
+            if (showDebugLogs)
+            {
+                Debug.Log($"[Combo] Prefab asignado: {cfg.slashConfig.slashVFXPrefab.name}");
+                Debug.Log($"[Combo] AttachToWeapon: {cfg.slashConfig.attachToWeapon}");
+                Debug.Log($"[Combo] WeaponTransform: {(weaponTransform != null ? weaponTransform.name : "NULL")}");
+                Debug.Log($"[Combo] Offset: {cfg.slashConfig.slashOffset}");
+                Debug.Log($"[Combo] Scale: {cfg.slashConfig.slashScale}");
+            }
+            
+            GameObject spawnedSlash = slashVFXController.SpawnSlash(cfg.slashConfig, transform, step);
+            
+            if (spawnedSlash != null)
+            {
+                if (showDebugLogs)
+                    Debug.Log($"[Combo] ✓ Slash instanciado exitosamente: {spawnedSlash.name} en posición {spawnedSlash.transform.position}");
+            }
+            else
+            {
+                Debug.LogError($"[Combo] ✗ Fallo al instanciar el slash para el paso {step}");
+            }
         }
 
         IEnumerator DelayedStepDetection(int step, StepConfig cfg)

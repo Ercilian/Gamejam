@@ -831,6 +831,22 @@ PrefabInstance:
       propertyPath: steps.Array.data[2].hitboxActivationDelay
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[0].slashConfig.slashScale.x
+      value: 430
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[0].slashConfig.slashScale.y
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[0].slashConfig.slashScale.z
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 8577440922694416064, guid: 0674b31648968d144873881aec2c1a04, type: 3}
+      propertyPath: steps.Array.data[0].slashConfig.slashOffset.z
+      value: 1.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2926565219215943530, guid: 0674b31648968d144873881aec2c1a04, type: 3}

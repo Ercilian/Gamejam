@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 8577440922694416064}
   - component: {fileID: 1941673929811933340}
   - component: {fileID: 8915861508662521356}
+  - component: {fileID: 5306414466924244988}
   m_Layer: 7
   m_Name: RavenPlayer
   m_TagString: Player
@@ -344,6 +345,79 @@ MonoBehaviour:
     hitboxActivationDelay: 0.15
     windowDuration: 0.08
     tickInterval: 0.04
+    slashConfig:
+      slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      attachToWeapon: 1
+      slashOffset: {x: 0, y: 0, z: 1}
+      slashRotation: {x: 0, y: 0, z: 0}
+      slashScale: {x: 370, y: 250, z: 356}
+      slashLifetime: 0.4
+      materialProperties:
+      - propertyName: _Scroll
+        type: 0
+        floatValue: 1
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        vectorValue: {x: 0, y: 0, z: 0, w: 0}
+        textureValue: {fileID: 0}
+      animatedProperties:
+      - propertyName: _Scroll
+        animationType: 0
+        floatCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: -1.3147303
+            outSlope: -1.3147303
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.7551575
+            value: 0.007171631
+            inSlope: -1.3147303
+            outSlope: -1.3147303
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        floatMultiplier: 1
+        colorGradient:
+          serializedVersion: 2
+          key0: {r: 0, g: 0, b: 0, a: 1}
+          key1: {r: 1, g: 1, b: 1, a: 1}
+          key2: {r: 0, g: 0, b: 0, a: 0}
+          key3: {r: 0, g: 0, b: 0, a: 0}
+          key4: {r: 0, g: 0, b: 0, a: 0}
+          key5: {r: 0, g: 0, b: 0, a: 0}
+          key6: {r: 0, g: 0, b: 0, a: 0}
+          key7: {r: 0, g: 0, b: 0, a: 0}
+          ctime0: 0
+          ctime1: 65535
+          ctime2: 0
+          ctime3: 0
+          ctime4: 0
+          ctime5: 0
+          ctime6: 0
+          ctime7: 0
+          atime0: 0
+          atime1: 65535
+          atime2: 0
+          atime3: 0
+          atime4: 0
+          atime5: 0
+          atime6: 0
+          atime7: 0
+          m_Mode: 0
+          m_ColorSpace: -1
+          m_NumColorKeys: 2
+          m_NumAlphaKeys: 2
+        enableEmissionKeyword: 0
   - animationTrigger: Ataque2
     useTicks: 0
     isBoomerang: 0
@@ -358,6 +432,85 @@ MonoBehaviour:
     hitboxActivationDelay: 0.15
     windowDuration: 0.08
     tickInterval: 0.04
+    slashConfig:
+      slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      attachToWeapon: 1
+      slashOffset: {x: 0, y: 0, z: 1}
+      slashRotation: {x: 0, y: 0, z: 0}
+      slashScale: {x: 370, y: 250, z: 356}
+      slashLifetime: 0.4
+      materialProperties:
+      - propertyName: _Scroll
+        type: 0
+        floatValue: 1
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        vectorValue: {x: 0, y: 0, z: 0, w: 0}
+        textureValue: {fileID: 0}
+      - propertyName: _IZQyDER
+        type: 0
+        floatValue: -90
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        vectorValue: {x: 0, y: 0, z: 0, w: 0}
+        textureValue: {fileID: 0}
+      animatedProperties:
+      - propertyName: _Scroll
+        animationType: 0
+        floatCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0.003578186
+            value: 0.91448975
+            inSlope: -1.0664098
+            outSlope: -1.0664098
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.8588867
+            value: 0.002380371
+            inSlope: -1.0664098
+            outSlope: -1.0664098
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        floatMultiplier: 1
+        colorGradient:
+          serializedVersion: 2
+          key0: {r: 0, g: 0, b: 0, a: 1}
+          key1: {r: 1, g: 1, b: 1, a: 1}
+          key2: {r: 0, g: 0, b: 0, a: 0}
+          key3: {r: 0, g: 0, b: 0, a: 0}
+          key4: {r: 0, g: 0, b: 0, a: 0}
+          key5: {r: 0, g: 0, b: 0, a: 0}
+          key6: {r: 0, g: 0, b: 0, a: 0}
+          key7: {r: 0, g: 0, b: 0, a: 0}
+          ctime0: 0
+          ctime1: 65535
+          ctime2: 0
+          ctime3: 0
+          ctime4: 0
+          ctime5: 0
+          ctime6: 0
+          ctime7: 0
+          atime0: 0
+          atime1: 65535
+          atime2: 0
+          atime3: 0
+          atime4: 0
+          atime5: 0
+          atime6: 0
+          atime7: 0
+          m_Mode: 0
+          m_ColorSpace: -1
+          m_NumColorKeys: 2
+          m_NumAlphaKeys: 2
+        enableEmissionKeyword: 0
   - animationTrigger: Ataque3
     useTicks: 0
     isBoomerang: 0
@@ -372,6 +525,15 @@ MonoBehaviour:
     hitboxActivationDelay: 1.2
     windowDuration: 0.08
     tickInterval: 0.04
+    slashConfig:
+      slashVFXPrefab: {fileID: 0}
+      attachToWeapon: 1
+      slashOffset: {x: 0, y: 0, z: 0.5}
+      slashRotation: {x: 0, y: 0, z: 0}
+      slashScale: {x: 1, y: 1, z: 1}
+      slashLifetime: 1
+      materialProperties: []
+      animatedProperties: []
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -386,6 +548,8 @@ MonoBehaviour:
   showDebugLogs: 1
   attackActionRef: {fileID: 0}
   weaponAnimator: {fileID: 7613736857563757424}
+  slashVFXController: {fileID: 5306414466924244988}
+  weaponTransform: {fileID: 0}
   playerStatsData: {fileID: 11400000, guid: 45bc7567054e03344b1d2ef8296eea8b, type: 2}
 --- !u!114 &1941673929811933340
 MonoBehaviour:
@@ -529,6 +693,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5306414466924244988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e3873db252ee044a5b2d8df95c9f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Combat.SlashVFXController
+  weaponTransform: {fileID: 3559229165855641145}
+  showDebugLogs: 1
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
