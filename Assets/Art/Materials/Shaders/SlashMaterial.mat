@@ -38,28 +38,29 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Core_Height: 4.3
-    - _Core_Width: 0.52
-    - _Distorsion: 1
-    - _Distorsion_Scale: 24.59
-    - _Height: 3.57
-    - _Mask_Size: 1
-    - _Outer_Height: 0.22
-    - _Outer_Width: 6.15
+    - _Core_Height: 0.47
+    - _Core_Width: 0.74
+    - _Distorsion: 0.25
+    - _Distorsion_Scale: 25
+    - _Height: 0.6
+    - _IZQyDER: 90
+    - _Mask_Size: 0.673
+    - _Outer_Height: 0.82
+    - _Outer_Width: 6.34
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Roundness: 2.02
-    - _Scroll: 0.216
+    - _Roundness: 1
+    - _Scroll: 0
     - _Star_Color_Lerp: 0
     - _UV_Color_Lerp_2: 0
     - _UV_Scroll_W: 0
-    - _Width: 0.23
+    - _Width: 0.46
     m_Colors:
-    - _Core_Color: {r: 1, g: 0.8511707, b: 0.1650943, a: 0}
-    - _Distorsion_Speed: {r: 0.1, g: 0.18, b: 0, a: 0}
-    - _Distorsion_Tiling: {r: 0.3, g: 1, b: 0, a: 0}
-    - _Outer_Color: {r: 0.9150943, g: 0.082013145, b: 0.082013145, a: 0}
-    - _Start_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Core_Color: {r: 4, g: 0, b: 0, a: 0}
+    - _Distorsion_Speed: {r: -1, g: 0, b: 0, a: 0}
+    - _Distorsion_Tiling: {r: 0.4, g: 5.5, b: 0, a: 0}
+    - _Outer_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Start_Color: {r: 2, g: 0.8396226, b: 0.8396226, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3144684494077150823
