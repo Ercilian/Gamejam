@@ -421,6 +421,15 @@ MonoBehaviour:
     hitboxActivationDelay: 0.1
     windowDuration: 0.08
     tickInterval: 0.04
+    slashConfig:
+      slashVFXPrefab: {fileID: 0}
+      attachToWeapon: 1
+      slashOffset: {x: 0, y: 0, z: 0.5}
+      slashRotation: {x: 0, y: 0, z: 0}
+      slashScale: {x: 1, y: 1, z: 1}
+      slashLifetime: 1
+      materialProperties: []
+      animatedProperties: []
   - animationTrigger: Ataque2
     useTicks: 0
     isBoomerang: 0
@@ -435,6 +444,15 @@ MonoBehaviour:
     hitboxActivationDelay: 0.1
     windowDuration: 0.08
     tickInterval: 0.04
+    slashConfig:
+      slashVFXPrefab: {fileID: 0}
+      attachToWeapon: 1
+      slashOffset: {x: 0, y: 0, z: 0.5}
+      slashRotation: {x: 0, y: 0, z: 0}
+      slashScale: {x: 1, y: 1, z: 1}
+      slashLifetime: 1
+      materialProperties: []
+      animatedProperties: []
   - animationTrigger: Ataque3
     useTicks: 0
     isBoomerang: 0
@@ -449,6 +467,15 @@ MonoBehaviour:
     hitboxActivationDelay: 0.1
     windowDuration: 0.08
     tickInterval: 0.04
+    slashConfig:
+      slashVFXPrefab: {fileID: 0}
+      attachToWeapon: 1
+      slashOffset: {x: 0, y: 0, z: 0.5}
+      slashRotation: {x: 0, y: 0, z: 0}
+      slashScale: {x: 1, y: 1, z: 1}
+      slashLifetime: 1
+      materialProperties: []
+      animatedProperties: []
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -460,9 +487,11 @@ MonoBehaviour:
   previewOnly: 0
   previewStep: 0
   previewInPlayMode: 1
-  showDebugLogs: 1
+  showDebugLogs: 0
   attackActionRef: {fileID: 0}
   weaponAnimator: {fileID: 0}
+  slashVFXController: {fileID: 0}
+  weaponTransform: {fileID: 0}
   playerStatsData: {fileID: 11400000, guid: c1b40d85d72f41141b244857cff73032, type: 2}
 --- !u!114 &1118129386369167385
 MonoBehaviour:

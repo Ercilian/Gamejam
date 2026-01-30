@@ -221679,11 +221679,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0b6d1fb94fb1041addd8ce1c6a0156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  newOffset: {x: 6, y: 2, z: -6}
+  newOffsetX: 0
   delaySeconds: 2
   cameraMovement: {fileID: 0}
   disableFuelConsumption: 1
   isPasillo: 1
+  isBossRoom: 0
 --- !u!1 &6540120780592400911
 GameObject:
   m_ObjectHideFlags: 0

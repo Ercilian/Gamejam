@@ -1030,10 +1030,11 @@ Transform:
   m_GameObject: {fileID: 3192354980408217338}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -29.150362, y: 3.88586, z: 4.59083}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3899648882547503860}
   - {fileID: 8545663256552684373}
   - {fileID: 6689753543142501179}
   - {fileID: 5907687936974932311}
@@ -31793,6 +31794,37 @@ Transform:
   - {fileID: 6237929215022350742}
   - {fileID: 5352921816811756787}
   m_Father: {fileID: 1055801348010011353}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8150738325654068610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3899648882547503860}
+  m_Layer: 0
+  m_Name: CameraAnchor_M2
+  m_TagString: CameraZAnchor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3899648882547503860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8150738325654068610}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -37.55502, y: 17.906412, z: -20.604658}
+  m_LocalScale: {x: 4.82, y: 3.32, z: 6.32}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5580197062706443876}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8151809997272169996
 GameObject:

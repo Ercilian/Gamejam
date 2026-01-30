@@ -1052,7 +1052,7 @@ MonoBehaviour:
   previewOnly: 0
   previewStep: 0
   previewInPlayMode: 1
-  showDebugLogs: 1
+  showDebugLogs: 0
   attackActionRef: {fileID: 0}
   weaponAnimator: {fileID: 2531379617225395249}
   slashVFXController: {fileID: 4275694734916578690}

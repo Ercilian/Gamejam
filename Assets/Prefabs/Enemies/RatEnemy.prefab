@@ -127,7 +127,7 @@ MonoBehaviour:
   attackDamage: 20
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 11400000, guid: 2b7b1d7026d7e4249a2ddca4faeba215, type: 2}
-  showDebugLogs: 1
+  showDebugLogs: 0
   isElite: 0
   canTakeKnockback: 1
   stunDuration: 0.5
@@ -354,7 +354,7 @@ PrefabInstance:
     - target: {fileID: -1387881916362842082, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: 2100000, guid: 12233e2d31430eb4fbb1fa63248ef850, type: 2}
+      objectReference: {fileID: 2100000, guid: faeae2a0f3d14e140b1667b2d12e27af, type: 2}
     - target: {fileID: 919132149155446097, guid: d5c6e27d08bf694419a0b09d6a3c2a0c, type: 3}
       propertyPath: m_Name
       value: RataAttack

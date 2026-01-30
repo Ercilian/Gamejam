@@ -48,12 +48,35 @@ public class CameraMovement : MonoBehaviour
     private float currentYaw = 8f;
     public float yawSmoothSpeed = 5f;
 
+    [Header("Z Anchor System (Modo Normal)")]
+    [Tooltip("Si se deja vacío, se buscarán automáticamente por tag 'CameraZAnchor'.")]
+    public Transform[] zAnchors; // GameObjects que marcan la altura Z objetivo
+    public float zAnchorDetectionRange = 10f; // Rango para detectar el anchor más cercano
+    public float zAnchorTransitionSpeed = 2f; // Velocidad de transición de Z
+    private Transform currentZAnchor = null; // Anchor actual al que se está ajustando
+    private bool isTransitioningZ = false;
+    public bool isDebugMode = true;
+
     void Start()
     {
         offsetX = offsetXNormal;
         fixedYValue = target != null ? target.position.y + offsetYNormal : 0f;
         fixedZValue = target != null ? target.position.z + offsetZNormal : 0f;
         currentYaw = 8f;
+        RefreshZAnchors();
+    }
+
+    // Método público para refrescar anchors por tag
+    public void RefreshZAnchors()
+    {
+        GameObject[] found = GameObject.FindGameObjectsWithTag("CameraZAnchor");
+        zAnchors = new Transform[found.Length];
+        for (int i = 0; i < found.Length; i++)
+        {
+            zAnchors[i] = found[i].transform;
+        }
+        if (isDebugMode)
+        Debug.Log($"[CameraMovement] Z Anchors actualizados. Total encontrados: {zAnchors.Length}");
     }
 
     void LateUpdate()
@@ -61,6 +84,36 @@ public class CameraMovement : MonoBehaviour
         switch (currentMode)
         {
             case CameraMode.Normal:
+                // --- Z Anchor Detection ---
+                if (zAnchors != null && zAnchors.Length > 0)
+                {
+                    Transform closestAnchor = null;
+                    float closestDist = float.MaxValue;
+                    foreach (var anchor in zAnchors)
+                    {
+                        if (anchor == null) continue;
+                        float dist = Mathf.Abs(transform.position.x - anchor.position.x); // Detección por eje X
+                        if (dist < zAnchorDetectionRange && dist < closestDist)
+                        {
+                            closestDist = dist;
+                            closestAnchor = anchor;
+                        }
+                    }
+                    if (closestAnchor != null && closestAnchor != currentZAnchor)
+                    {
+                        currentZAnchor = closestAnchor;
+                        if (isDebugMode)
+                        Debug.Log($"[CameraMovement] Nuevo Z Anchor detectado: {currentZAnchor.name} en Z={currentZAnchor.position.z}");
+                        if (!isTransitioningZ)
+                        {
+                            if (isDebugMode)
+                            Debug.Log($"[CameraMovement] Empieza transición Z hacia {currentZAnchor.name} (Z={currentZAnchor.position.z})");
+                            StartCoroutine(TransitionZAnchorCoroutine(currentZAnchor.position.z));
+                        }
+                    }
+                }
+                // --- Fin Z Anchor Detection ---
+
                 offsetX = offsetXNormal;
                 float offsetYNorm = offsetYNormal;
                 float offsetZNorm = offsetZNormal;
@@ -208,5 +261,28 @@ public class CameraMovement : MonoBehaviour
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
+    }
+
+    private System.Collections.IEnumerator TransitionZAnchorCoroutine(float targetZ)
+    {
+        isTransitioningZ = true;
+        freezeZ = false;
+        if (isDebugMode)
+        Debug.Log($"[CameraMovement] freezeZ DESFIJADO para transición Z");
+        float threshold = 0.05f;
+        if (isDebugMode)
+        Debug.Log($"[CameraMovement] INICIO transición: fixedZValue={fixedZValue}, targetZ={targetZ}, diferencia={Mathf.Abs(fixedZValue - targetZ)}");
+        while (Mathf.Abs(fixedZValue - targetZ) > threshold)
+        {
+            Debug.Log($"[CameraMovement] Transicionando: fixedZValue={fixedZValue}, targetZ={targetZ}, diferencia={Mathf.Abs(fixedZValue - targetZ)}");
+            fixedZValue = Mathf.MoveTowards(fixedZValue, targetZ, zAnchorTransitionSpeed * Time.deltaTime);
+            yield return null;
+        }
+        fixedZValue = targetZ;
+        freezeZ = true;
+        isTransitioningZ = false;
+        if (isDebugMode)
+        Debug.Log($"[CameraMovement] freezeZ FIJADO en Z={fixedZValue}");
+        Debug.Log($"[CameraMovement] Transición Z Anchor completada. Z={fixedZValue}");
     }
 }

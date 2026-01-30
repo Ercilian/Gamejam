@@ -178,6 +178,11 @@ public class MapManager : MonoBehaviour
                     globalCheckpoints.Add(checkpointsParent.GetChild(i));
                 }
             }
+
+            // Refrescar anchors de cámara tras instanciar el mapa
+            CameraMovement cam = FindObjectOfType<CameraMovement>();
+            cam.RefreshZAnchors();
+            
         }
     }
 

@@ -138,6 +138,7 @@ public class RangedEnemyAttack : EnemyAttack
                 direccionCongelada = direccionHorizontal.normalized;
                 puntoFinalCongelado = puntoDisparo.position + direccionCongelada * attackRange;
                 direccionEstaCongelada = true;
+                if (showDebugLogs)
                 Debug.Log($"[{gameObject.name}] 🔒 DIRECCIÓN CONGELADA - Tiempo restante: {tiempoRestante:F2}s, Dirección: {direccionCongelada}");
             }
             

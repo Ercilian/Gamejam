@@ -104,9 +104,9 @@ MonoBehaviour:
   curShield: 0
   maxShield: 0
   attackDamage: 10
-  statsData: {fileID: 11400000, guid: 39fef82931b6de34b81834a66691e2b3, type: 2}
+  statsData: {fileID: 0}
   enemyStatsData: {fileID: 11400000, guid: 1e64244bfe5ce5b49acfefc1ad206c58, type: 2}
-  showDebugLogs: 1
+  showDebugLogs: 0
   isElite: 0
   canTakeKnockback: 1
   stunDuration: 0.5

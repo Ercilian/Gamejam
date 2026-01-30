@@ -115,7 +115,6 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
         if (remainingDamage > 0)
         {
             curHP -= remainingDamage;
-            Debug.Log($"[{gameObject.name}] Recibió {remainingDamage} de daño a la vida. HP restante: {curHP}");
         }
 
         IsAlive();
