@@ -39,14 +39,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _Core_Height: 0.47
-    - _Core_Width: 0.74
-    - _Distorsion: 0.25
-    - _Distorsion_Scale: 25
-    - _Height: 0.6
+    - _Core_Width: 0.52
+    - _Distorsion: 0.358
+    - _Distorsion_Scale: 41.2
+    - _Height: 1.42
     - _IZQyDER: 90
     - _Mask_Size: 0.673
     - _Outer_Height: 0.82
-    - _Outer_Width: 6.34
+    - _Outer_Width: 8.15
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Roundness: 1
@@ -54,7 +54,7 @@ Material:
     - _Star_Color_Lerp: 0
     - _UV_Color_Lerp_2: 0
     - _UV_Scroll_W: 0
-    - _Width: 0.46
+    - _Width: 0.37
     m_Colors:
     - _Core_Color: {r: 4, g: 0, b: 0, a: 0}
     - _Distorsion_Speed: {r: -1, g: 0, b: 0, a: 0}

@@ -154,18 +154,18 @@ namespace Game.Combat
             }
             else
             {
-                // Instanciar en el mundo
-                Vector3 worldOffset = parentTransform.position + parentTransform.rotation * config.slashOffset;
-                Quaternion worldRotation = parentTransform.rotation * Quaternion.Euler(config.slashRotation);
-                slashInstance = Instantiate(config.slashVFXPrefab, worldOffset, worldRotation);
+                // Instanciar como hijo del player para que siga su movimiento
+                slashInstance = Instantiate(config.slashVFXPrefab, parentTransform);
+                slashInstance.transform.localPosition = config.slashOffset;
+                slashInstance.transform.localRotation = Quaternion.Euler(config.slashRotation);
                 slashInstance.transform.localScale = config.slashScale;
                 slashInstance.name = $"Slash_Step{stepIndex}_{config.slashVFXPrefab.name}";
                 
                 if (showDebugLogs)
                 {
-                    Debug.Log($"[SlashVFX] ✓ Slash instanciado en el mundo");
-                    Debug.Log($"[SlashVFX]   - Posición: {slashInstance.transform.position}");
-                    Debug.Log($"[SlashVFX]   - Rotación: {slashInstance.transform.rotation.eulerAngles}");
+                    Debug.Log($"[SlashVFX] ✓ Slash instanciado como hijo del player: {parentTransform.name}");
+                    Debug.Log($"[SlashVFX]   - Posición local: {slashInstance.transform.localPosition}");
+                    Debug.Log($"[SlashVFX]   - Posición mundo: {slashInstance.transform.position}");
                     Debug.Log($"[SlashVFX]   - Escala: {slashInstance.transform.localScale}");
                 }
             }

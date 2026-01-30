@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1061087720743127132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5024731782725464199}
+  m_Layer: 0
+  m_Name: TransformArma
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5024731782725464199
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061087720743127132}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.37, y: 1.507, z: 0.855}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3913608360992112125}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1813536838263918369
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,14 +372,14 @@ MonoBehaviour:
     sphereRadius: 1
     sectorRadius: 2
     sectorAngle: 110
-    attackDelay: 0.25
+    attackDelay: 0.35
     hitboxActivationDelay: 0.15
     windowDuration: 0.08
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
       attachToWeapon: 1
-      slashOffset: {x: 0, y: 0, z: 1}
+      slashOffset: {x: 0, y: -0.22, z: 1.15}
       slashRotation: {x: 0, y: 0, z: 0}
       slashScale: {x: 370, y: 250, z: 356}
       slashLifetime: 0.4
@@ -366,19 +397,19 @@ MonoBehaviour:
           serializedVersion: 2
           m_Curve:
           - serializedVersion: 3
-            time: 0
-            value: 1
-            inSlope: -1.3147303
-            outSlope: -1.3147303
+            time: -0.0054628253
+            value: 1.0055289
+            inSlope: -0.9969597
+            outSlope: -0.9969597
             tangentMode: 34
             weightedMode: 0
             inWeight: 0
             outWeight: 0.33333334
           - serializedVersion: 3
-            time: 0.7551575
-            value: 0.007171631
-            inSlope: -1.3147303
-            outSlope: -1.3147303
+            time: 1.0016804
+            value: 0.0014477251
+            inSlope: -0.9969597
+            outSlope: -0.9969597
             tangentMode: 34
             weightedMode: 0
             inWeight: 0.33333334
@@ -386,7 +417,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        floatMultiplier: 1
+        floatMultiplier: 1.3
         colorGradient:
           serializedVersion: 2
           key0: {r: 0, g: 0, b: 0, a: 1}
@@ -428,14 +459,14 @@ MonoBehaviour:
     sphereRadius: 1
     sectorRadius: 2
     sectorAngle: 110
-    attackDelay: 0.25
+    attackDelay: 0.35
     hitboxActivationDelay: 0.15
     windowDuration: 0.08
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
-      attachToWeapon: 1
-      slashOffset: {x: 0, y: 0, z: 1}
+      attachToWeapon: 0
+      slashOffset: {x: 0, y: -0.22, z: 1.15}
       slashRotation: {x: 0, y: 0, z: 0}
       slashScale: {x: 370, y: 250, z: 356}
       slashLifetime: 0.4
@@ -459,19 +490,19 @@ MonoBehaviour:
           serializedVersion: 2
           m_Curve:
           - serializedVersion: 3
-            time: 0.003578186
-            value: 0.91448975
-            inSlope: -1.0664098
-            outSlope: -1.0664098
+            time: -0.0054628253
+            value: 1.0055289
+            inSlope: -0.9969597
+            outSlope: -0.9969597
             tangentMode: 34
             weightedMode: 0
             inWeight: 0
             outWeight: 0.33333334
           - serializedVersion: 3
-            time: 0.8588867
-            value: 0.002380371
-            inSlope: -1.0664098
-            outSlope: -1.0664098
+            time: 1.0016804
+            value: 0.0014477251
+            inSlope: -0.9969597
+            outSlope: -0.9969597
             tangentMode: 34
             weightedMode: 0
             inWeight: 0.33333334
@@ -479,7 +510,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        floatMultiplier: 1
+        floatMultiplier: 1.3
         colorGradient:
           serializedVersion: 2
           key0: {r: 0, g: 0, b: 0, a: 1}
@@ -521,7 +552,7 @@ MonoBehaviour:
     sphereRadius: 1
     sectorRadius: 1
     sectorAngle: 90
-    attackDelay: 1.5
+    attackDelay: 1.8
     hitboxActivationDelay: 1.2
     windowDuration: 0.08
     tickInterval: 0.04
@@ -705,7 +736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e3873db252ee044a5b2d8df95c9f9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Combat.SlashVFXController
-  weaponTransform: {fileID: 3559229165855641145}
+  weaponTransform: {fileID: 0}
   showDebugLogs: 1
 --- !u!1 &8175856393020372792
 GameObject:
@@ -804,7 +835,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: cd451988b8047ce4c90422ad3c94129a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5024731782725464199}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cd451988b8047ce4c90422ad3c94129a, type: 3}
       insertIndex: -1
