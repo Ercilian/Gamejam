@@ -6699,7 +6699,7 @@ MonoBehaviour:
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 2985120443330566491, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffff04000000
+  mapSequence: ffffffff00000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342
@@ -6722,7 +6722,7 @@ MonoBehaviour:
   iconImage: {fileID: 230436874}
   nameText: {fileID: 90989042}
   dialogueText: {fileID: 356906821}
-  dialogueDuration: 1
+  dialogueDuration: 2.5
   dialogueSequences:
   - combinationKey: Pasillo_1_0_1_2
     lines:
@@ -7719,7 +7719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f613465d97d982498eba1f4d9f9d5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarFuelSystem
-  cur_Diesel: 10
+  cur_Diesel: 100
   max_Diesel: 100
   depositPoint: {fileID: 1316442590}
   depositPrompt: Presiona F para depositar madera
