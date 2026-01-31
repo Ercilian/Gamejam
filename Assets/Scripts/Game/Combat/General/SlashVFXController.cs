@@ -27,6 +27,8 @@ namespace Game.Combat
             [Header("VFX - Slash Effect")]
             [Tooltip("Prefab del efecto visual de slash para este paso. Se instancia cuando se ejecuta el ataque.")]
             public GameObject slashVFXPrefab;
+            [Tooltip("Tiempo de retraso (en segundos) antes de que aparezca el VFX después de ejecutar el ataque")]
+            public float spawnDelayOffset = 0f;
             [Tooltip("Si está activo, el slash será hijo del arma y la seguirá. Si es false, se instancia en el mundo.")]
             public bool attachToWeapon = true;
             [Tooltip("Offset local donde aparece el slash (relativo al arma o personaje)")]
@@ -108,6 +110,34 @@ namespace Game.Combat
         /// <param name="stepIndex">Índice del paso del combo (para debugging)</param>
         /// <returns>GameObject instanciado del slash, o null si no se pudo crear</returns>
         public GameObject SpawnSlash(SlashConfig config, Transform parentTransform, int stepIndex = -1)
+        {
+            // Si hay delay, usar corutina
+            if (config.spawnDelayOffset > 0f)
+            {
+                StartCoroutine(SpawnSlashDelayed(config, parentTransform, stepIndex));
+                return null; // No retorna el objeto inmediatamente debido al delay
+            }
+            
+            return InstantiateSlash(config, parentTransform, stepIndex);
+        }
+        
+        /// <summary>
+        /// Corutina que espera el delay antes de instanciar el slash
+        /// </summary>
+        System.Collections.IEnumerator SpawnSlashDelayed(SlashConfig config, Transform parentTransform, int stepIndex)
+        {
+            if (showDebugLogs)
+                Debug.Log($"[SlashVFX] Esperando {config.spawnDelayOffset}s antes de instanciar el slash...");
+            
+            yield return new UnityEngine.WaitForSeconds(config.spawnDelayOffset);
+            
+            InstantiateSlash(config, parentTransform, stepIndex);
+        }
+        
+        /// <summary>
+        /// Instancia físicamente el slash VFX (método interno)
+        /// </summary>
+        GameObject InstantiateSlash(SlashConfig config, Transform parentTransform, int stepIndex)
         {
             if (showDebugLogs)
                 Debug.Log($"[SlashVFX] === INTENTANDO INSTANCIAR SLASH (Paso {stepIndex}) ===");
