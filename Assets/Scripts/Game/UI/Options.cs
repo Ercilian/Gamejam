@@ -9,7 +9,7 @@ public class Options : MonoBehaviour
     public GameObject OptionsPanel; // panel for options menu
     public GameObject GameOverPanel; // panel for game over menu
     public Button mainmenubutton; // button to return to main menu from game over
-
+    public Button returnbutton; // button to return from options menu
 
     private void Start()
     {
@@ -34,6 +34,7 @@ public class Options : MonoBehaviour
     public void OpenSettings()
     {
         OptionsPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(returnbutton.gameObject);
         Time.timeScale = 0f; // Pause the game
     }
 
@@ -56,6 +57,7 @@ public class Options : MonoBehaviour
         Time.timeScale = 1f; // Resume the game before going to main menu
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenuScene");
     }
+    
 
 
 

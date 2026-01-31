@@ -4,7 +4,9 @@ using UnityEngine.UI;
 public class CarFuelBarUI : MonoBehaviour
 {
     [Header("Referencias de velocidad (opcional)")]
-    public MovCar movCar; // Referencia al script que tiene la velocidad
+    public MovCar movCar;
+    [Header("Referencia manual al coche")]
+    public Car car;
 
     [Header("Luces encendidas")]
     public GameObject lightOnLowSpeed;
@@ -23,7 +25,8 @@ public class CarFuelBarUI : MonoBehaviour
 
     [Header("References")]
     public CarFuelSystem carFuelSystem;
-    public Image fuelBarImage; // Debe ser tipo Filled (Fill Method Horizontal)
+    public Image fuelBarImage;
+    public Image hpCarBar;
 
     void Start()
     {
@@ -35,7 +38,11 @@ public class CarFuelBarUI : MonoBehaviour
         {
             Debug.LogError("[CarFuelBarUI] Falta referencia a Image de la barra de combustible");
         }
-        // Ya no se llama a UpdateFuelBar();
+        // La referencia a 'car' debe asignarse manualmente desde el inspector.
+        if (car == null)
+        {
+            Debug.LogError("[CarFuelBarUI] Falta referencia al componente Car. Asigna la referencia manualmente en el inspector.");
+        }
     }
 
     [Header("Animación")]
@@ -45,10 +52,18 @@ public class CarFuelBarUI : MonoBehaviour
 
     void Update()
     {
+
         if (carFuelSystem != null && fuelBarImage != null)
         {
             targetFill = carFuelSystem.GetDieselPercentage();
             fuelBarImage.fillAmount = Mathf.Lerp(fuelBarImage.fillAmount, targetFill, Time.deltaTime * fillSpeed);
+        }
+
+        // ----- Actualiza la barra de vida del coche -----
+        if (car != null && hpCarBar != null)
+        {
+            float hpPercent = (float)car.CurrentHP / car.MaxHP;
+            hpCarBar.fillAmount = Mathf.Lerp(hpCarBar.fillAmount, hpPercent, Time.deltaTime * fillSpeed);
         }
 
         // ----- Lógica de luces de velocidad -----
