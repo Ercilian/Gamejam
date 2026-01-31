@@ -6603,6 +6603,7 @@ MonoBehaviour:
   randomMapPool:
   - {fileID: 4937800196258597293, guid: 510a5b917ae7d2046a38ed427642c89d, type: 3}
   - {fileID: 3433495517364249440, guid: 0ea260928ab56e748bfe7e3a38e20c0b, type: 3}
+  - {fileID: 3192354980408217338, guid: b01bd7eacfb067c41a80ca12e311b2ca, type: 3}
   fixedMaps:
   - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}

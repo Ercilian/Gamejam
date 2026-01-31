@@ -104,8 +104,9 @@ public class MovCar : MonoBehaviour
 
         UpdateMotorPitch(currentActualSpeed); // Update motor sound pitch based on speed
 
-        float normalizedSpeed = Mathf.Clamp01(cur_speed / fastspeed);
-        truckAnimator.SetFloat("Speed", normalizedSpeed);
+        // Ahora la velocidad de la animación será igual a la velocidad real del tren (hasta fastspeed)
+        float animSpeed = Mathf.Clamp(cur_speed, 0f, fastspeed);
+        truckAnimator.SetFloat("Speed", animSpeed);
     }
 
 
