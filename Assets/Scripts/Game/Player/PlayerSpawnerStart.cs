@@ -33,6 +33,17 @@ public class PlayerSpawnerStart : MonoBehaviour
                 }
             }
         }
+
+        // Actualiza la UI tras crear los jugadores
+        var inGameUI = FindObjectOfType<InGameUI>();
+        if (inGameUI != null)
+        {
+            inGameUI.UpdatePlayerPanels();
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró InGameUI en la escena.");
+        }
     }
 
     // Update is called once per frame

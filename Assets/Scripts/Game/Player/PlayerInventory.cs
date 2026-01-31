@@ -59,14 +59,14 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        if (potions.Count == 0 && defaultHealPotion != null)
-        {
-            for (int i = 0; i < maxPotions; i++)
+            if (potions.Count == 0 && defaultHealPotion != null)
             {
-                potions.Add(defaultHealPotion);
+                for (int i = 0; i < maxPotions; i++)
+                {
+                    potions.Add(defaultHealPotion);
+                }
+                OnPotionsChanged?.Invoke(potions.Count);
             }
-            UpdatePotionUI();
-        }
     }
 
     void OnDestroy()
@@ -327,12 +327,12 @@ public class PlayerInventory : MonoBehaviour
         if (potions.Count < maxPotions)
         {
             potions.Add(potion);
-            UpdatePotionUI();
             Debug.Log($"[PlayerInventory] Potion added: {potion.potionName}");
             return true;
         }
         return false;
     }
+        public System.Action<int> OnPotionsChanged; // Evento para notificar cambios en el número de pociones
 
     public bool UsePotion() // Method to use a potion
     {
@@ -350,8 +350,8 @@ public class PlayerInventory : MonoBehaviour
         }
 
         ApplyPotionEffect(potion);
-        UpdatePotionUI();
-        return true;
+            OnPotionsChanged?.Invoke(potions.Count);
+            return true;
     }
 
     // Aplica el efecto de la poción
@@ -363,11 +363,6 @@ public class PlayerInventory : MonoBehaviour
             StartCoroutine(entityStats.DamageBoost(potion.effectAmount, potion.duration));
         if (potion.effectType2 == PotionEffectType.DamageBoost)
             StartCoroutine(entityStats.DamageBoost(potion.effectAmount2, potion.duration));
-    }
-
-    public void UpdatePotionUI()
-    {
-        // Actualiza la interfaz según potions.Count
     }
 
     // Método para depositar varios tipos de ítems a la vez (por ejemplo, todas las plantas)

@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 46776759486489288}
   - component: {fileID: 4275694734916578690}
   m_Layer: 7
-  m_Name: ZofyPlayer
+  m_Name: Zofy
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

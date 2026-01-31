@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 8915861508662521356}
   - component: {fileID: 5306414466924244988}
   m_Layer: 7
-  m_Name: RavenPlayer
+  m_Name: Raven
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Combat.SlashVFXController
   weaponTransform: {fileID: 0}
-  showDebugLogs: 1
+  showDebugLogs: 0
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0

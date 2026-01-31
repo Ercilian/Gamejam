@@ -25,14 +25,14 @@ RectTransform:
   m_GameObject: {fileID: 1447227508250314147}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27521, y: 0.27521, z: 0.27521}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4006628005122426049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.4, y: -25.5}
+  m_AnchoredPosition: {x: 6.4, y: -21.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1498451973313550374
@@ -419,8 +419,8 @@ MonoBehaviour:
   playerNameText: {fileID: 8531252417641262985}
   healthBar: {fileID: 1703842912410029538}
   healthText: {fileID: 4643816980808811984}
-  potionIconParent: {fileID: 3091606692838879103}
-  potionIconPrefab: {fileID: 3276330540671283038, guid: 5baea96ecc337e044996ca8b91420e44, type: 3}
+  potionsParent: {fileID: 3091606692838879103}
+  potionIconPrefab: {fileID: 4141623870525319961, guid: cd954eb0a49edde48b6025e6a0f58f3e, type: 3}
 --- !u!1 &4985495063348111868
 GameObject:
   m_ObjectHideFlags: 0
