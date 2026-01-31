@@ -6486,7 +6486,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458190336}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2327c3126b05e6f478e7b707bf22b2ae, type: 3}
   m_Name: 
@@ -6501,9 +6501,9 @@ MonoBehaviour:
   TurtleElitePrefab: {fileID: 7519758676284165041, guid: 468a15931c3af654da367b51b2c12bc9, type: 3}
   ratSpawnChance: 80
   ratEliteSpawnChance: 0
-  chickenSpawnChance: 100
+  chickenSpawnChance: 10
   chickenEliteSpawnChance: 0
-  turtleSpawnChance: 15
+  turtleSpawnChance: 100
   turtleEliteSpawnChance: 0
   carTransform: {fileID: 2070441881}
   difficultyConfigs:
@@ -6601,7 +6601,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   randomMapPool:
-  - {fileID: 3192354980408217338, guid: b01bd7eacfb067c41a80ca12e311b2ca, type: 3}
+  - {fileID: 3433495517364249440, guid: 0ea260928ab56e748bfe7e3a38e20c0b, type: 3}
   - {fileID: 4548217557689129615, guid: 73d0fcbd1031b8f49ba129f21157fa87, type: 3}
   fixedMaps:
   - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
