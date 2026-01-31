@@ -22,32 +22,13 @@ public class InGameUI : MonoBehaviour
 
             // Buscar el PlayerInventory correspondiente en la escena
             PlayerInventory[] inventories = FindObjectsOfType<PlayerInventory>();
-            Debug.Log($"[InGameUI] Hay {inventories.Length} PlayerInventory en escena");
             bool foundInventory = false;
             foreach (var inv in inventories)
             {
-                if (inv == null)
-                {
-                    Debug.LogWarning($"[InGameUI] PlayerInventory es null");
-                    continue;
-                }
-                if (inv.entityStats == null)
-                {
-                    Debug.LogWarning($"[InGameUI] entityStats es null en un PlayerInventory");
-                    continue;
-                }
-                if (inv.entityStats.StatsData == null)
-                {
-                    Debug.LogWarning($"[InGameUI] StatsData es null en entityStats de {inv.entityStats}");
-                    continue;
-                }
                 string invName = inv.entityStats.StatsData.PlayerName;
-                Debug.Log($"[InGameUI] Comparando panel {stats.PlayerName} con inventario {invName}");
                 if (stats.PlayerName == invName)
                 {
-                    Debug.Log($"[InGameUI] Asociando panel de {stats.PlayerName} con inventario de {invName}, pociones iniciales: {inv.potions.Count}");
                     inv.OnPotionsChanged += (count) => {
-                        Debug.Log($"[InGameUI] Evento OnPotionsChanged recibido para {stats.PlayerName}: {count}");
                         panelUI.UpdatePotionIcons(count);
                     };
                     // Forzar actualización inicial tras la suscripción
@@ -55,10 +36,6 @@ public class InGameUI : MonoBehaviour
                     foundInventory = true;
                     break;
                 }
-            }
-            if (!foundInventory)
-            {
-                Debug.LogWarning($"[InGameUI] No se encontró PlayerInventory para el panel de {stats.PlayerName}");
             }
         }
     }
