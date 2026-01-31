@@ -378,6 +378,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: -0.22, z: 1.15}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -465,6 +466,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      spawnDelayOffset: 0
       attachToWeapon: 0
       slashOffset: {x: 0, y: -0.22, z: 1.15}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -557,12 +559,13 @@ MonoBehaviour:
     windowDuration: 0.08
     tickInterval: 0.04
     slashConfig:
-      slashVFXPrefab: {fileID: 0}
+      slashVFXPrefab: {fileID: 7877624987472766653, guid: 63f7adfaead631841bcbc5becd18add3, type: 3}
+      spawnDelayOffset: 0.9
       attachToWeapon: 1
-      slashOffset: {x: 0, y: 0, z: 0.5}
+      slashOffset: {x: 1.15, y: 0, z: 5.5}
       slashRotation: {x: 0, y: 0, z: 0}
-      slashScale: {x: 1, y: 1, z: 1}
-      slashLifetime: 1
+      slashScale: {x: 2, y: 2, z: 2}
+      slashLifetime: 0.6
       materialProperties: []
       animatedProperties: []
   enemyLayer:
