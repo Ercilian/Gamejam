@@ -165,6 +165,8 @@ public class FrogCombat : Enemy
     [SerializeField] private float mortarFallDuration = 2f; // Tiempo que tarda en caer el mortero
     [SerializeField] private float mortarMaxHeight = 25f; // Altura máxima del mortero en el aire
     [SerializeField] private float mortarDamageRadius = 3f; // Radio del área de daño del mortero
+    [Tooltip("Sistema de partículas de humo al impactar el mortero")]
+    [SerializeField] private GameObject mortarImpactSmokePrefab;
     [Space(10)]
     [Tooltip("Configurar en qué fases está disponible Mortar Attack")]
     [SerializeField] private AttackPhaseConfig mortarAttackPhaseConfig = new AttackPhaseConfig();
@@ -944,6 +946,23 @@ public class FrogCombat : Enemy
             
             elapsedTime += Time.deltaTime;
             yield return null;
+        }
+        
+        // Instanciar partículas de humo al impactar
+        if (mortarImpactSmokePrefab != null)
+        {
+            GameObject smoke = Instantiate(mortarImpactSmokePrefab, endPos, Quaternion.identity);
+            
+            // Auto-destruir partículas después de su duración
+            ParticleSystem ps = smoke.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                Destroy(smoke, ps.main.duration + ps.main.startLifetime.constantMax);
+            }
+            else
+            {
+                Destroy(smoke, 3f); // Fallback: destruir después de 3 segundos
+            }
         }
         
         // Destruir el proyectil al terminar la trayectoria
