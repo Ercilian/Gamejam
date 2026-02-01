@@ -764,8 +764,8 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   jumpLandingSFX: {fileID: 0}
   mortarLaunchSFX: {fileID: 0}
-  mortarImpactSFX: {fileID: 0}
-  pushImpactSFX: {fileID: 0}
+  mortarImpactSFX: {fileID: 8300000, guid: 20801a6968f94bd4e8c09d1b5da3d27b, type: 3}
+  pushImpactSFX: {fileID: 8300000, guid: 9a658c386ca4d5e4ebdd16291b3fd5fc, type: 3}
   jumpLandingShakeIntensity: 0.6
   jumpLandingShakeDuration: 0.8
   mortarShakeIntensity: 0.3

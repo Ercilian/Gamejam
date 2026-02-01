@@ -31,6 +31,9 @@ public class Dash : MonoBehaviour
 
     [Header("Dash VFX")]
     public GameObject dashSmokeVFXPrefab; // Asigna el prefab en el inspector
+    
+    [Header("Dash Sound")]
+    public AudioClip dashSFX;
 
     [Header("Collision Detection")]
     public LayerMask collisionLayers = -1; // Capas a detectar (por defecto todas)
