@@ -23,7 +23,7 @@ MonoBehaviour:
   rangoPerdida: 12
   attackDamage: 15
   defense: 5
-  maxKnockback: 1
+  maxKnockback: 100
   maxStunDuration: 2
   enemyPrefab: {fileID: 0}
   enemyColor: {r: 1, g: 0, b: 0, a: 1}
