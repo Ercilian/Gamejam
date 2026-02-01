@@ -15,7 +15,7 @@ MonoBehaviour:
   playerName: Zofy
   description: Zofy es una serpiente
   playerIcon: {fileID: 21300000, guid: 724a16ae6ef5ec14ba562661efd4cf2a, type: 3}
-  maxHealth: 100
+  maxHealth: 200
   moveSpeed: 6.5
   maxShield: 0
   attackDamage: 35

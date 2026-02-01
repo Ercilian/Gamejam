@@ -831,8 +831,8 @@ MonoBehaviour:
   - 1.5
   - 2
   stepKnockbackForces:
-  - 50
-  - 50
+  - 30
+  - 40
   - 50
   horizontalKnockbackOnly: 1
   attackCooldown: 0.2
@@ -842,9 +842,9 @@ MonoBehaviour:
     useTicks: 0
     isBoomerang: 0
     shape: 0
-    offset: {x: 0.04, y: 0.46, z: 1.39}
+    offset: {x: 0.04, y: 0.46, z: 1.75}
     localEuler: {x: 0, y: 0, z: 0}
-    boxSize: {x: 0.76, y: 1, z: 2.68}
+    boxSize: {x: 1.12, y: 1, z: 3.18}
     sphereRadius: 1
     sectorRadius: 2
     sectorAngle: 110
@@ -853,7 +853,7 @@ MonoBehaviour:
     windowDuration: 0.08
     tickInterval: 0.04
     slashConfig:
-      slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      slashVFXPrefab: {fileID: 0}
       spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 1.4}
@@ -930,9 +930,9 @@ MonoBehaviour:
     useTicks: 0
     isBoomerang: 0
     shape: 0
-    offset: {x: 0.04, y: 0.46, z: 1.39}
+    offset: {x: 0.04, y: 0.46, z: 1.75}
     localEuler: {x: 0, y: 0, z: 0}
-    boxSize: {x: 0.76, y: 1, z: 2.68}
+    boxSize: {x: 1.12, y: 1, z: 3.18}
     sphereRadius: 1
     sectorRadius: 2
     sectorAngle: 110
@@ -941,7 +941,7 @@ MonoBehaviour:
     windowDuration: 0.08
     tickInterval: 0.04
     slashConfig:
-      slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      slashVFXPrefab: {fileID: 0}
       spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 1}
@@ -1053,7 +1053,7 @@ MonoBehaviour:
   boomerangPauseTime: 0.6
   drawGizmos: 1
   previewOnly: 0
-  previewStep: 0
+  previewStep: 2
   previewInPlayMode: 1
   showDebugLogs: 0
   attackActionRef: {fileID: 0}

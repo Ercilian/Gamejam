@@ -299,7 +299,7 @@ public class CameraMovement : MonoBehaviour
         while (Mathf.Abs(fixedZValue - targetZ) > threshold)
         {
             if (isDebugMode)
-            Debug.Log($"[CameraMovement] Transicionando: fixedZValue={fixedZValue}, targetZ={targetZ}, diferencia={Mathf.Abs(fixedZValue - targetZ)}");
+            //Debug.Log($"[CameraMovement] Transicionando: fixedZValue={fixedZValue}, targetZ={targetZ}, diferencia={Mathf.Abs(fixedZValue - targetZ)}");
             fixedZValue = Mathf.MoveTowards(fixedZValue, targetZ, zAnchorTransitionSpeed * Time.deltaTime);
             yield return null;
         }

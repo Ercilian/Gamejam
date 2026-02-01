@@ -353,7 +353,7 @@ MonoBehaviour:
   stepMultipliers:
   - 1
   - 1.5
-  - 2
+  - 2.5
   stepKnockbackForces:
   - 30
   - 45
@@ -370,8 +370,8 @@ MonoBehaviour:
     localEuler: {x: 0, y: 0, z: 0}
     boxSize: {x: 1, y: 1, z: 1}
     sphereRadius: 1
-    sectorRadius: 2
-    sectorAngle: 110
+    sectorRadius: 2.6
+    sectorAngle: 160
     attackDelay: 0.35
     hitboxActivationDelay: 0.15
     windowDuration: 0.08
@@ -458,8 +458,8 @@ MonoBehaviour:
     localEuler: {x: 0, y: 0, z: 0}
     boxSize: {x: 1, y: 1, z: 1}
     sphereRadius: 1
-    sectorRadius: 2
-    sectorAngle: 110
+    sectorRadius: 2.6
+    sectorAngle: 160
     attackDelay: 0.35
     hitboxActivationDelay: 0.15
     windowDuration: 0.08
@@ -548,9 +548,9 @@ MonoBehaviour:
     useTicks: 0
     isBoomerang: 0
     shape: 0
-    offset: {x: 0.06, y: 0.18, z: 1.97}
+    offset: {x: 0.06, y: 0.18, z: 2.17}
     localEuler: {x: 0, y: 0, z: 0}
-    boxSize: {x: 1, y: 0.45, z: 3.58}
+    boxSize: {x: 1.92, y: 0.45, z: 4.41}
     sphereRadius: 1
     sectorRadius: 1
     sectorAngle: 90
@@ -577,7 +577,7 @@ MonoBehaviour:
   boomerangPauseTime: 0.6
   drawGizmos: 1
   previewOnly: 0
-  previewStep: 2
+  previewStep: 0
   previewInPlayMode: 1
   showDebugLogs: 0
   attackActionRef: {fileID: 0}
