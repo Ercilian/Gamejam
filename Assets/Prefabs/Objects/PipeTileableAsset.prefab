@@ -49,9 +49,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 234ae5865cffc1b44b7b9ad1bdaced13, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 234ae5865cffc1b44b7b9ad1bdaced13, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 78cbc421c2c97024d805f1a4faab703b, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 234ae5865cffc1b44b7b9ad1bdaced13, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ad5af9e0c8a038c42898dbef1a79f808, type: 2}
     - target: {fileID: 919132149155446097, guid: 234ae5865cffc1b44b7b9ad1bdaced13, type: 3}
       propertyPath: m_Name
       value: PipeTileableAsset

@@ -49,9 +49,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3ac7476f30522184598d757d9613c5e1, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3ac7476f30522184598d757d9613c5e1, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 857005effc0def04aafcc4338ab23679, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 3ac7476f30522184598d757d9613c5e1, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ad5af9e0c8a038c42898dbef1a79f808, type: 2}
     - target: {fileID: 919132149155446097, guid: 3ac7476f30522184598d757d9613c5e1, type: 3}
       propertyPath: m_Name
       value: HugePipe1TileableAsset
