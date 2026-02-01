@@ -173,6 +173,12 @@ public class Dash : MonoBehaviour
         dashTimer = 0f;
         isDashing = true;
         cooldownTimer = dashCooldown;
+        
+        // Reproducir sonido del dash
+        if (dashSFX != null)
+        {
+            AudioSource.PlayClipAtPoint(dashSFX, transform.position);
+        }
 
             if (dashSmokeVFXPrefab != null)
             {
