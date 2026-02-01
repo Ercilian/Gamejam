@@ -307,7 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &1241939623852018560
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &1571655160403777754
 GameObject:
   m_ObjectHideFlags: 0
@@ -1769,7 +1769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &5455679058156318619
 GameObject:
   m_ObjectHideFlags: 0
@@ -1899,7 +1899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &5843328105927908369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,7 +1975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &5958350247275993323
 GameObject:
   m_ObjectHideFlags: 0
@@ -2020,7 +2020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &6056243795527450117
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,7 +2238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &6677281803788306183
 GameObject:
   m_ObjectHideFlags: 0
@@ -2492,7 +2492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &7434552989457131440
 GameObject:
   m_ObjectHideFlags: 0
@@ -2590,7 +2590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 15
+  activationRange: 25
 --- !u!1 &7727072971399834572
 GameObject:
   m_ObjectHideFlags: 0

@@ -186,7 +186,22 @@ public class CameraMovement : MonoBehaviour
         {
             StartCoroutine(BossCinematicToCombatCoroutine());
         }
-        
+
+        if (mode == CameraMode.BossCombat)
+        {
+            // Si no están asignados, buscar por nombre en la escena
+            if (cameraBossCombatPosition == null)
+            {
+                GameObject posObj = GameObject.Find("CameraPosition");
+                if (posObj != null) cameraBossCombatPosition = posObj.transform;
+            }
+            if (cameraBossCombatLookAt == null)
+            {
+                GameObject lookAtObj = GameObject.Find("CameraTarget");
+                if (lookAtObj != null) cameraBossCombatLookAt = lookAtObj.transform;
+            }
+        }
+
         if (mode == CameraMode.Normal && previousMode != CameraMode.Normal)
         {
             // Al cambiar a normal desde otro modo, hacer transición suave
