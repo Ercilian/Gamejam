@@ -80,17 +80,6 @@ public class MovCar : MonoBehaviour
         float targetSpeed = 0f;
         Vector3 moveDirection = GetMovementDirection(); // Get direction towards current target
 
-        // Si ya llegó al último checkpoint, no moverse ni rotar
-        if (currentPathIndex >= pathPoints.Count)
-        {
-            ismoving = false;
-            cur_speed = 0f;
-            currentActualSpeed = 0f;
-            UpdateMotorPitch(0f);
-            truckAnimator.SetFloat("Speed", 0f);
-            return;
-        }
-
         if (!fuelSystem.HasFuel()) // Stop if no fuel
         {
             ismoving = false;
@@ -169,10 +158,7 @@ public class MovCar : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("[MovCarro] Reached final waypoint! Car will stop.");
-                    ismoving = false;
-                    cur_speed = 0f;
-                    currentActualSpeed = 0f;
+                    Debug.Log("[MovCarro] Reached final waypoint!");
                 }
             }
         }
