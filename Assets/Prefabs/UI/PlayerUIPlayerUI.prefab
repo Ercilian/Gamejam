@@ -144,8 +144,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3942353, y: 0.757143}
   m_AnchorMax: {x: 1, y: 0.957143}
-  m_AnchoredPosition: {x: -0.000015258789, y: -10.7}
-  m_SizeDelta: {x: 0, y: 0.031200409}
+  m_AnchoredPosition: {x: 6.5148, y: -11.057799}
+  m_SizeDelta: {x: -13.03, y: -0.6844}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5589909312439608900
 CanvasRenderer:
@@ -177,8 +177,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1043636e1a2379946904dbced0e25493, type: 2}
+  m_sharedMaterial: {fileID: 4762177883148510124, guid: 1043636e1a2379946904dbced0e25493, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.8
+  m_fontSize: 14.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -417,7 +417,6 @@ MonoBehaviour:
   characterImage: {fileID: 8496745514673960499}
   playerNameText: {fileID: 8531252417641262985}
   healthBar: {fileID: 1703842912410029538}
-  healthText: {fileID: 0}
   potionsParent: {fileID: 3091606692838879103}
   potionIconPrefab: {fileID: 4141623870525319961, guid: cd954eb0a49edde48b6025e6a0f58f3e, type: 3}
 --- !u!1 &4985495063348111868

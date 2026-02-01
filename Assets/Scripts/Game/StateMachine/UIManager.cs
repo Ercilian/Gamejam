@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public GameObject difficultyPanel;
     public GameObject charactersPanel;
     public GameObject resourcesPanel;
+    public GameObject bossFightPanel;
 
     public static UIManager Instance { get; private set; }
 
@@ -22,17 +23,35 @@ public class UIManager : MonoBehaviour
 
     public void DialogueSetup()
     {
-        if (dialoguePanel != null) dialoguePanel.SetActive(true);
-        if (difficultyPanel != null) difficultyPanel.SetActive(false);
-        if (charactersPanel != null) charactersPanel.SetActive(false);
-        if (resourcesPanel != null) resourcesPanel.SetActive(false);
+        dialoguePanel.SetActive(true);
+        difficultyPanel.SetActive(false);
+        charactersPanel.SetActive(false);
+        resourcesPanel.SetActive(false);
     }
 
     public void GameUISetup()
     {
-        if (dialoguePanel != null) dialoguePanel.SetActive(false);
-        if (difficultyPanel != null) difficultyPanel.SetActive(true);
-        if (charactersPanel != null) charactersPanel.SetActive(true);
-        if (resourcesPanel != null) resourcesPanel.SetActive(true);
+        dialoguePanel.SetActive(false);
+        difficultyPanel.SetActive(true);
+        charactersPanel.SetActive(true);
+        resourcesPanel.SetActive(true);
+    }
+
+    public void BossDialogueSetup()
+    {
+        bossFightPanel.SetActive(false);
+        dialoguePanel.SetActive(true);
+        difficultyPanel.SetActive(false);
+        charactersPanel.SetActive(false);
+        resourcesPanel.SetActive(false);
+    }
+    
+    public void BossFightSetup()
+    {
+        bossFightPanel.SetActive(true);
+        dialoguePanel.SetActive(false);
+        difficultyPanel.SetActive(false);
+        charactersPanel.SetActive(true);
+        resourcesPanel.SetActive(false);
     }
 }
