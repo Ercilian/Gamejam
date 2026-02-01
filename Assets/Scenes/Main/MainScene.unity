@@ -6752,7 +6752,7 @@ MonoBehaviour:
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 579658698538323340, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 6100118547817037488, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffff04000000ffffffff00000000ffffffffffffffff00000000ffffffff0000000004000000
+  mapSequence: 0400000004000000ffffffff00000000ffffffffffffffff00000000ffffffff0000000004000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342
@@ -20133,7 +20133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Car
   curHP: 0
-  maxHP: 100
+  maxHP: 1000
   speed: 5
   curShield: 0
   maxShield: 50
