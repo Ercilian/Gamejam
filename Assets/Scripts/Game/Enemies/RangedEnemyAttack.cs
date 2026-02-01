@@ -42,12 +42,31 @@ public class RangedEnemyAttack : EnemyAttack
         if (lineRenderer == null)
             lineRenderer = gameObject.AddComponent<LineRenderer>();
         
-        lineRenderer.material = new Material(Shader.Find("Standard"));
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
-        lineRenderer.widthMultiplier = 1f;
-        lineRenderer.alignment = LineAlignment.View; // Alineado con la cámara para consistencia
+        // Configurar material con shader simple
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.material.color = Color.white;
+        
+        // Configuración básica
+        lineRenderer.useWorldSpace = true;
         lineRenderer.positionCount = 2;
+        
+        // FORZAR ancho con AnimationCurve (esto sí funciona en build)
+        AnimationCurve widthCurve = new AnimationCurve();
+        widthCurve.AddKey(0f, 0.05f);  // Inicio: ancho fino
+        widthCurve.AddKey(1f, 0.05f);  // Final: mismo ancho
+        lineRenderer.widthCurve = widthCurve;
+        lineRenderer.widthMultiplier = 1f;
+        
+        // Desactivar vértices extras
+        lineRenderer.numCornerVertices = 0;
+        lineRenderer.numCapVertices = 0;
+        
+        // Configuración adicional para mejor rendimiento
+        lineRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        lineRenderer.receiveShadows = false;
+        lineRenderer.alignment = LineAlignment.View;
+        lineRenderer.textureMode = LineTextureMode.Stretch;
+        
         lineRenderer.enabled = false;
     }
     
