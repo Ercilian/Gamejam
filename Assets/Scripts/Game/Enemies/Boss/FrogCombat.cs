@@ -191,6 +191,26 @@ public class FrogCombat : Enemy
     [SerializeField] private ParticleSystem attackEffectPrefab;
     [SerializeField] private AudioClip attackSFX;
     [SerializeField] private AudioSource audioSource;
+    
+    [Header("Sonidos Específicos")]
+    [Tooltip("Sonido cuando el boss aterriza después del salto")]
+    [SerializeField] private AudioClip jumpLandingSFX;
+    [Tooltip("Sonido cuando el mortero es lanzado")]
+    [SerializeField] private AudioClip mortarLaunchSFX;
+    [Tooltip("Sonido cuando el mortero impacta en el suelo")]
+    [SerializeField] private AudioClip mortarImpactSFX;
+    [Tooltip("Sonido cuando el push attack impacta")]
+    [SerializeField] private AudioClip pushImpactSFX;
+    
+    [Header("Camera Shake")]
+    [Tooltip("Intensidad del shake cuando el boss aterriza")]
+    [SerializeField] private float jumpLandingShakeIntensity = 0.5f;
+    [Tooltip("Duración del shake cuando el boss aterriza")]
+    [SerializeField] private float jumpLandingShakeDuration = 0.4f;
+    [Tooltip("Intensidad del shake cuando impacta un mortero")]
+    [SerializeField] private float mortarShakeIntensity = 0.3f;
+    [Tooltip("Duración del shake cuando impacta un mortero")]
+    [SerializeField] private float mortarShakeDuration = 0.3f;
     #endregion
 
     #region State Variables
@@ -665,6 +685,19 @@ public class FrogCombat : Enemy
         PlayAttackEffect();
         PlayAttackSFX();
         
+        // Reproducir sonido de aterrizaje del salto
+        if (jumpLandingSFX != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(jumpLandingSFX);
+        }
+        
+        // Camera shake al aterrizar
+        UnityEngine.Camera mainCamera = UnityEngine.Camera.main;
+        if (mainCamera != null)
+        {
+            StartCoroutine(CameraShake(mainCamera.transform, jumpLandingShakeDuration, jumpLandingShakeIntensity));
+        }
+        
         // El boss se queda en esta nueva posición
         bossRb.linearVelocity = Vector3.zero;
         isJumping = false;
@@ -757,7 +790,7 @@ public class FrogCombat : Enemy
             Vector2 randomOffset = Random.insideUnitCircle * mortarRandomRadius;
             Vector3 randomPosition = areaCenter + new Vector3(randomOffset.x, 0, randomOffset.y);
             
-            SpawnMortarProjectile(randomPosition);
+            SpawnMortarProjectile(randomPosition, i == 0); // Solo el primero hace shake
             
             yield return new WaitForSeconds(0.1f);
         }
@@ -783,6 +816,12 @@ public class FrogCombat : Enemy
         // Ejecutar el empuje
         PlayAttackEffect();
         PlayAttackSFX();
+        
+        // Reproducir sonido de impacto del push attack
+        if (pushImpactSFX != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(pushImpactSFX);
+        }
         
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, pushDetectionRadius);
         foreach (Collider collider in hitColliders)
@@ -902,10 +941,16 @@ public class FrogCombat : Enemy
         Destroy(projectile);
     }
 
-    private void SpawnMortarProjectile(Vector3 impactPosition)
+    private void SpawnMortarProjectile(Vector3 impactPosition, bool shouldShake = false)
     {
         if (mortarProjectilePrefab == null)
             return;
+        
+        // Reproducir sonido de lanzamiento del mortero
+        if (mortarLaunchSFX != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(mortarLaunchSFX);
+        }
         
         Vector3 spawnPos = transform.position + projectileSpawnOffset;
         GameObject projectile = Instantiate(mortarProjectilePrefab, spawnPos, Quaternion.identity);
@@ -917,7 +962,7 @@ public class FrogCombat : Enemy
         StartCoroutine(AnimateMortarProjectile(projectile, spawnPos, impactPosition));
         
         // Crear el área de impacto en el suelo
-        CreateMortarImpactArea(impactPosition);
+        CreateMortarImpactArea(impactPosition, shouldShake);
     }
     
     private IEnumerator AnimateMortarProjectile(GameObject projectile, Vector3 startPos, Vector3 endPos)
@@ -1007,7 +1052,7 @@ public class FrogCombat : Enemy
         return landingArea;
     }
     
-    private void CreateMortarImpactArea(Vector3 impactPosition)
+    private void CreateMortarImpactArea(Vector3 impactPosition, bool shouldShake = false)
     {
         // Crear un GameObject para el área de impacto
         GameObject impactArea = new GameObject("MortarImpactArea");
@@ -1017,6 +1062,9 @@ public class FrogCombat : Enemy
         MortarImpactArea mortarArea = impactArea.AddComponent<MortarImpactArea>();
         mortarArea.SetDamageRadius(mortarDamageRadius);
         mortarArea.SetDelayBeforeDamage(mortarFallDuration);
+        mortarArea.SetImpactSound(mortarImpactSFX, audioSource);
+        mortarArea.SetShakeParameters(mortarShakeIntensity, mortarShakeDuration);
+        mortarArea.SetShouldShake(shouldShake);
         
         // Visualizar el área con LineRenderer
         LineRenderer lineRenderer = impactArea.AddComponent<LineRenderer>();
@@ -1485,6 +1533,27 @@ public class FrogCombat : Enemy
                 }
             }
         }
+    }
+    #endregion
+
+    #region Camera Shake
+    private IEnumerator CameraShake(Transform cameraTransform, float duration, float magnitude)
+    {
+        Vector3 originalPos = cameraTransform.localPosition;
+        float elapsed = 0f;
+        
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+            
+            cameraTransform.localPosition = originalPos + new Vector3(x, y, 0f);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        cameraTransform.localPosition = originalPos;
     }
     #endregion
 

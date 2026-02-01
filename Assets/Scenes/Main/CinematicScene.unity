@@ -277,7 +277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.UI.IntroVideoPlayer
   videoClip: {fileID: 32900000, guid: ab4fd82159e675143b772d2f57457cd4, type: 3}
   nombreEscenaMenu: MainMenuScene
-  tiempoParaSaltar: 3
+  tiempoParaSaltar: 2
   textoSaltar: {fileID: 1749533612}
   rawImageDestino: {fileID: 0}
 --- !u!4 &418419646
@@ -602,7 +602,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 780, y: -483}
+  m_AnchoredPosition: {x: 817, y: -483}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1749533612
@@ -690,7 +690,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -319.04922, y: 0, z: 0, w: 0}
+  m_margin: {x: -380.64764, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

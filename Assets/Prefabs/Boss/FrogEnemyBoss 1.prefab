@@ -732,6 +732,7 @@ MonoBehaviour:
   mortarFallDuration: 2
   mortarMaxHeight: 25
   mortarDamageRadius: 5
+  mortarImpactSmokePrefab: {fileID: 104091395477980541, guid: 9ff4a109b3a8ebe4da9ffafdacc9e33a, type: 3}
   mortarAttackPhaseConfig:
     enableInPhase1: 1
     enableInPhase2: 1
@@ -761,6 +762,14 @@ MonoBehaviour:
   attackEffectPrefab: {fileID: 0}
   attackSFX: {fileID: 0}
   audioSource: {fileID: 0}
+  jumpLandingSFX: {fileID: 0}
+  mortarLaunchSFX: {fileID: 0}
+  mortarImpactSFX: {fileID: 0}
+  pushImpactSFX: {fileID: 0}
+  jumpLandingShakeIntensity: 0.6
+  jumpLandingShakeDuration: 0.8
+  mortarShakeIntensity: 0.3
+  mortarShakeDuration: 0.8
 --- !u!54 &919458806847341477
 Rigidbody:
   m_ObjectHideFlags: 0
