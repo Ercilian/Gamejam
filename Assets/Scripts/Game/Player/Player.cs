@@ -52,7 +52,6 @@ public class Player : EntityStats
             healAction = playerInput.actions["Heal"];
 
         // Buscar el UI en la escena (puedes cambiar esto si tienes varios jugadores)
-        playerPanelUI = FindObjectOfType<PlayerPanelUI>();
         comboHitboxController = GetComponent<ComboHitboxController>();
     }
 
@@ -60,6 +59,10 @@ public class Player : EntityStats
     {
         animator = GetComponentInChildren<Animator>(); // Busca en hijos (armature)
         rb = GetComponent<Rigidbody>(); // o el componente que uses para mover
+
+        playerPanelUI = FindObjectOfType<PlayerPanelUI>();
+
+
     }
 
     private void Update()
@@ -127,7 +130,6 @@ public class Player : EntityStats
         // Si está en tiempo de gracia, ignorar el daño
         if (isInGracePeriod)
         {
-            Debug.Log($"[{gameObject.name}] ¡Tiempo de gracia activo! Daño esquivado.");
             return;
         }
 
@@ -136,7 +138,14 @@ public class Player : EntityStats
 
         // Actualizar la barra de vida en el UI
         if (playerPanelUI != null)
+        {
+            Debug.Log($"[{gameObject.name}] Llamando a SetHealth({curHP}) en PlayerPanelUI");
             playerPanelUI.SetHealth(curHP); // curHP es de EntityStats
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] playerPanelUI es null al intentar actualizar la vida");
+        }
 
         // Iniciar el tiempo de gracia
         StartCoroutine(GracePeriodCoroutine());
@@ -148,7 +157,6 @@ public class Player : EntityStats
     private IEnumerator GracePeriodCoroutine()
     {
         isInGracePeriod = true;
-        Debug.Log($"[{gameObject.name}] Tiempo de gracia iniciado por {gracePeriodDuration} segundos");
 
         // Aquí puedes añadir feedback visual (parpadeo, cambio de color, etc.)
         // Por ejemplo, cambiar el color del player o hacerlo semitransparente
@@ -158,7 +166,6 @@ public class Player : EntityStats
 
         isInGracePeriod = false;
         VisualGracePeriodFeedback(false);
-        Debug.Log($"[{gameObject.name}] Tiempo de gracia finalizado. Vulnerable nuevamente.");
     }
 
     /// <summary>

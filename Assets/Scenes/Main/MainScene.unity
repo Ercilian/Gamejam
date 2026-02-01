@@ -1083,7 +1083,7 @@ MonoBehaviour:
   zAnchors: []
   zAnchorDetectionRange: 20
   zAnchorTransitionSpeed: 1
-  isDebugMode: 1
+  isDebugMode: 0
 --- !u!1 &349664123
 GameObject:
   m_ObjectHideFlags: 0

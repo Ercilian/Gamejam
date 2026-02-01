@@ -128,7 +128,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  showDebugLogs: 1
+  showDebugLogs: 0
   drawGizmos: 1
   animator: {fileID: 0}
   chanceToAttackCar: 0.8

@@ -7,7 +7,6 @@ public class PlayerPanelUI : MonoBehaviour
     public Image characterImage;
     public TMP_Text playerNameText;
     public Image healthBar;
-    public TMP_Text healthText;
     public Transform potionsParent;
     public GameObject potionIconPrefab;
     private int maxHealth;
@@ -19,7 +18,6 @@ public class PlayerPanelUI : MonoBehaviour
             characterImage.sprite = stats.PlayerIcon;
             playerNameText.text = stats.PlayerName;
             maxHealth = stats.MaxHealth;
-            healthText.text = $"{maxHealth} / {maxHealth}";
             SetHealth(maxHealth);
         }
         else
@@ -32,6 +30,7 @@ public class PlayerPanelUI : MonoBehaviour
 
     public void SetHealth(int currentHealth)
     {
+        Debug.Log($"[PlayerPanelUI] Actualizando salud: {currentHealth}/{maxHealth}");
         if (maxHealth > 0)
             healthBar.fillAmount = Mathf.Clamp01((float)currentHealth / maxHealth);
     }
