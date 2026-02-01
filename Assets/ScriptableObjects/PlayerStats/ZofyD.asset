@@ -28,6 +28,6 @@ MonoBehaviour:
   hurtSound: {fileID: 0}
   deathSound: {fileID: 8300000, guid: ff8f260962a115746bb815e598ed5924, type: 3}
   comboSounds:
-  - {fileID: 8300000, guid: f2b8c7b2dc3a0564c9f08a8379c7ba96, type: 3}
-  - {fileID: 8300000, guid: a6312ed8c0798a448b44c98ea4959639, type: 3}
-  - {fileID: 8300000, guid: 168c47f68c760e5498aa2d226c15d323, type: 3}
+  - {fileID: 8300000, guid: 9a113a708bc05914ca2bec8e431ecb22, type: 3}
+  - {fileID: 8300000, guid: 9a113a708bc05914ca2bec8e431ecb22, type: 3}
+  - {fileID: 8300000, guid: b8dcb14ba6f4c1e43a23bcabf31936a6, type: 3}
