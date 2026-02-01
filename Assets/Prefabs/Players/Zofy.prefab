@@ -854,6 +854,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 1.4}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -941,6 +942,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 1284851449096456733, guid: 7f1de5b8a78eefa4f99fbddee1a3b312, type: 3}
+      spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 1}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -1034,6 +1036,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 0}
+      spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 0.5}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -1213,7 +1216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Combat.SlashVFXController
   weaponTransform: {fileID: 4177164475684858231}
-  showDebugLogs: 1
+  showDebugLogs: 0
 --- !u!1 &2057377407863927707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,7 +1600,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3846018093981099296, guid: 17b71061cdfd3534192aafbbf565faf8, type: 3}
+  - {fileID: 2100000, guid: af182bbdf98025f4290648f1d73576fe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1790,7 +1793,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3846018093981099296, guid: 4a2d4d04f618d464da72bdb5dd75b533, type: 3}
+  - {fileID: 2100000, guid: af182bbdf98025f4290648f1d73576fe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

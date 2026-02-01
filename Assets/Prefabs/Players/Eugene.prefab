@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 8577440922694416064}
   - component: {fileID: 1118129386369167385}
   - component: {fileID: -3534234024151943136}
+  - component: {fileID: 5678071850187200299}
   m_Layer: 7
   m_Name: Eugene
   m_TagString: Player
@@ -423,6 +424,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 0}
+      spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 0.5}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -446,6 +448,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 0}
+      spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 0.5}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -469,6 +472,7 @@ MonoBehaviour:
     tickInterval: 0.04
     slashConfig:
       slashVFXPrefab: {fileID: 0}
+      spawnDelayOffset: 0
       attachToWeapon: 1
       slashOffset: {x: 0, y: 0, z: 0.5}
       slashRotation: {x: 0, y: 0, z: 0}
@@ -490,7 +494,7 @@ MonoBehaviour:
   showDebugLogs: 0
   attackActionRef: {fileID: 0}
   weaponAnimator: {fileID: 0}
-  slashVFXController: {fileID: 0}
+  slashVFXController: {fileID: 5678071850187200299}
   weaponTransform: {fileID: 0}
   playerStatsData: {fileID: 11400000, guid: c1b40d85d72f41141b244857cff73032, type: 2}
 --- !u!114 &1118129386369167385
@@ -558,6 +562,20 @@ MonoBehaviour:
   downedColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.7}
   showDebugLogs: 0
   drawGizmos: 1
+--- !u!114 &5678071850187200299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813536838263918369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e3873db252ee044a5b2d8df95c9f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Combat.SlashVFXController
+  weaponTransform: {fileID: 0}
+  showDebugLogs: 0
 --- !u!1 &8175856393020372792
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,6 +655,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8035504390736164319, guid: 56649ca4687b4224aaa3e12200875bbe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: af182bbdf98025f4290648f1d73576fe, type: 2}
+    - target: {fileID: -8035504390736164319, guid: 56649ca4687b4224aaa3e12200875bbe, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: af182bbdf98025f4290648f1d73576fe, type: 2}
+    - target: {fileID: -8035504390736164319, guid: 56649ca4687b4224aaa3e12200875bbe, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: af182bbdf98025f4290648f1d73576fe, type: 2}
     - target: {fileID: -7445580829916465686, guid: 56649ca4687b4224aaa3e12200875bbe, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.92361665
