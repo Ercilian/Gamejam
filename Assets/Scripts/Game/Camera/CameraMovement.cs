@@ -55,6 +55,7 @@ public class CameraMovement : MonoBehaviour
     public float zAnchorTransitionSpeed = 2f; // Velocidad de transición de Z
     private Transform currentZAnchor = null; // Anchor actual al que se está ajustando
     private bool isTransitioningZ = false;
+    private bool isTransitioningY = false;
     public bool isDebugMode = true;
 
     void Start()
@@ -103,12 +104,18 @@ public class CameraMovement : MonoBehaviour
                     {
                         currentZAnchor = closestAnchor;
                         if (isDebugMode)
-                        Debug.Log($"[CameraMovement] Nuevo Z Anchor detectado: {currentZAnchor.name} en Z={currentZAnchor.position.z}");
+                        Debug.Log($"[CameraMovement] Nuevo Z/Y Anchor detectado: {currentZAnchor.name} en Z={currentZAnchor.position.z}, Y={currentZAnchor.position.y}");
                         if (!isTransitioningZ)
                         {
                             if (isDebugMode)
                             Debug.Log($"[CameraMovement] Empieza transición Z hacia {currentZAnchor.name} (Z={currentZAnchor.position.z})");
                             StartCoroutine(TransitionZAnchorCoroutine(currentZAnchor.position.z));
+                        }
+                        if (!isTransitioningY)
+                        {
+                            if (isDebugMode)
+                            Debug.Log($"[CameraMovement] Empieza transición Y hacia {currentZAnchor.name} (Y={currentZAnchor.position.y})");
+                            StartCoroutine(TransitionYAnchorCoroutine(currentZAnchor.position.y));
                         }
                     }
                 }
@@ -131,6 +138,7 @@ public class CameraMovement : MonoBehaviour
                 float dz = target.position.z - transform.position.z;
                 float distance = Mathf.Sqrt(dx * dx + dz * dz);
                 float pitch = -Mathf.Atan2(dy, distance) * Mathf.Rad2Deg;
+                pitch = Mathf.Clamp(pitch, -55f, 55f); // Limita el pitch entre -55 y 55 grados
                 transform.rotation = Quaternion.Euler(pitch, currentYaw, 0f);
                 break;
             case CameraMode.Pasillo:
@@ -151,6 +159,7 @@ public class CameraMovement : MonoBehaviour
                 Vector3 dir = target.position - transform.position;
                 float bossCineDistance = Mathf.Sqrt(dir.x * dir.x + dir.z * dir.z);
                 float bossCinePitch = -Mathf.Atan2(dir.y, bossCineDistance) * Mathf.Rad2Deg + offsetPitchBossCinematic;
+                bossCinePitch = Mathf.Clamp(bossCinePitch, -55f, 55f); // Limita el pitch entre -55 y 55 grados
                 float yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(bossCinePitch, yaw, 0f);
                 break;
@@ -285,5 +294,31 @@ public class CameraMovement : MonoBehaviour
         if (isDebugMode)
         Debug.Log($"[CameraMovement] freezeZ FIJADO en Z={fixedZValue}");
         Debug.Log($"[CameraMovement] Transición Z Anchor completada. Z={fixedZValue}");
+
+    }
+
+    // Transición suave en Y hacia el anchor
+    private System.Collections.IEnumerator TransitionYAnchorCoroutine(float targetY)
+    {
+        isTransitioningY = true;
+        freezeY = false;
+        if (isDebugMode)
+        Debug.Log($"[CameraMovement] freezeY DESFIJADO para transición Y");
+        float threshold = 0.05f;
+        if (isDebugMode)
+        Debug.Log($"[CameraMovement] INICIO transición: fixedYValue={fixedYValue}, targetY={targetY}, diferencia={Mathf.Abs(fixedYValue - targetY)}");
+        while (Mathf.Abs(fixedYValue - targetY) > threshold)
+        {
+            if (isDebugMode)
+            Debug.Log($"[CameraMovement] Transicionando: fixedYValue={fixedYValue}, targetY={targetY}, diferencia={Mathf.Abs(fixedYValue - targetY)}");
+            fixedYValue = Mathf.MoveTowards(fixedYValue, targetY, zAnchorTransitionSpeed * Time.deltaTime);
+            yield return null;
+        }
+        fixedYValue = targetY;
+        freezeY = true;
+        isTransitioningY = false;
+        if (isDebugMode)
+        Debug.Log($"[CameraMovement] freezeY FIJADO en Y={fixedYValue}");
+        Debug.Log($"[CameraMovement] Transición Y Anchor completada. Y={fixedYValue}");
     }
 }
