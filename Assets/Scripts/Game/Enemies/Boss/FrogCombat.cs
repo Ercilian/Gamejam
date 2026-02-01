@@ -1169,10 +1169,21 @@ public class FrogCombat : Enemy
             Destroy(effect.gameObject, 3f);
         }
         
-        // No llamar a base.OnEntityDeath() para no dropear items como enemigo normal
-        // El boss debe tener su propio sistema de recompensas aquí si lo deseas
+        // Pausar el juego
+        Time.timeScale = 0f;
         
-        Destroy(gameObject, 3f); // Destruir después de 3 segundos para mostrar el efecto
+        // Mostrar panel de victoria usando el UIManager
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowWinPanel();
+        }
+        else
+        {
+            Debug.LogWarning("[FrogBoss] No se encontró UIManager en la escena!");
+        }
+        
+        // No llamar a base.OnEntityDeath() para no dropear items como enemigo normal
+        // No destruir el gameObject inmediatamente para mantener la escena
     }
     #endregion
 

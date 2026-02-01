@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     public GameObject charactersPanel;
     public GameObject resourcesPanel;
     public GameObject bossFightPanel;
+    public GameObject winPanel;
 
     public static UIManager Instance { get; private set; }
 
@@ -53,5 +54,14 @@ public class UIManager : MonoBehaviour
         difficultyPanel.SetActive(false);
         charactersPanel.SetActive(true);
         resourcesPanel.SetActive(false);
+    }
+    public void ShowWinPanel()
+    {
+        winPanel.SetActive(true);
+        dialoguePanel.SetActive(false);
+        difficultyPanel.SetActive(false);
+        charactersPanel.SetActive(false);
+        resourcesPanel.SetActive(false);
+        bossFightPanel.SetActive(false);
     }
 }
