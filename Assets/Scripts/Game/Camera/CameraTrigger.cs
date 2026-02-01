@@ -32,6 +32,13 @@ public class CameraTrigger : MonoBehaviour
             {
                 cameraMovement.SetCameraMode(CameraMovement.CameraMode.BossCinematic);
                 cameraMovement.ChangeOffsetWithDelay(newOffsetX, delaySeconds);
+                enemySpawner.enabled = false;
+                // Eliminar todos los enemigos con el tag "Enemy"
+                var bossRoomEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+                foreach (var enemy in bossRoomEnemies)
+                {
+                    Destroy(enemy);
+                }
                 return;
             }
             else if (isPasillo)

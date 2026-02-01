@@ -173,6 +173,10 @@ public class MovCar : MonoBehaviour
                     ismoving = false;
                     cur_speed = 0f;
                     currentActualSpeed = 0f;
+                    // Desactiva el componente MovCar y Car para evitar movimiento y daño
+                    this.enabled = false; // Desactiva MovCar
+                    Car carComponent = GetComponent<Car>();
+                    carComponent.enabled = false;
                 }
             }
         }
