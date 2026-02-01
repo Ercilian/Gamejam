@@ -13859,6 +13859,7 @@ MonoBehaviour:
   difficultyPanel: {fileID: 2072344557}
   charactersPanel: {fileID: 1407882886}
   resourcesPanel: {fileID: 1922835808}
+  bossFightPanel: {fileID: 0}
 --- !u!1 &1754143047
 GameObject:
   m_ObjectHideFlags: 0
@@ -19735,6 +19736,8 @@ MonoBehaviour:
   attackDamage: 20
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 0}
+  explosionVFXPrefab: {fileID: 104091395477980541, guid: 9ff4a109b3a8ebe4da9ffafdacc9e33a, type: 3}
+  delayBeforeGameOver: 1.5
 --- !u!82 &2070441886
 AudioSource:
   m_ObjectHideFlags: 0

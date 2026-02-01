@@ -19934,6 +19934,8 @@ MonoBehaviour:
   attackDamage: 20
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 0}
+  explosionVFXPrefab: {fileID: 104091395477980541, guid: 9ff4a109b3a8ebe4da9ffafdacc9e33a, type: 3}
+  delayBeforeGameOver: 1
 --- !u!82 &2070441886
 AudioSource:
   m_ObjectHideFlags: 0
