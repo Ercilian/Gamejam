@@ -86,6 +86,7 @@ public class MainMenu : MonoBehaviour
     public void Back()
     {
         mainMenuPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
         settingsPanel.SetActive(false);
         selectCharacterPanel.SetActive(false);
     }
