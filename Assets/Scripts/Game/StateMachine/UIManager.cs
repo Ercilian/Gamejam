@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     public void BossDialogueSetup()
     {
         bossFightPanel.SetActive(false);
-        dialoguePanel.SetActive(true);
+        dialoguePanel.SetActive(false);
         difficultyPanel.SetActive(false);
         charactersPanel.SetActive(false);
         resourcesPanel.SetActive(false);

@@ -150,6 +150,9 @@ public class CameraMovement : MonoBehaviour
                 transform.LookAt(target);
                 break;
             case CameraMode.BossCinematic:
+                // Activar UI de diálogo de boss
+                if (UIManager.Instance != null)
+                    UIManager.Instance.BossDialogueSetup();
                 offsetX = offsetXBossCinematic;
                 float offsetYBossCine = offsetYBossCinematic;
                 float offsetZBossCine = offsetZBossCinematic;
@@ -164,6 +167,9 @@ public class CameraMovement : MonoBehaviour
                 transform.rotation = Quaternion.Euler(bossCinePitch, yaw, 0f);
                 break;
             case CameraMode.BossCombat:
+                // Activar UI de combate de boss
+                if (UIManager.Instance != null)
+                    UIManager.Instance.BossFightSetup();
                 if (cameraBossCombatPosition != null)
                 {
                     Vector3 desiredPosBossCombat = cameraBossCombatPosition.position;
