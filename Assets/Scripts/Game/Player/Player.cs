@@ -151,6 +151,16 @@ public class Player : EntityStats
         StartCoroutine(GracePeriodCoroutine());
     }
 
+    public override void Heal(int amount)
+    {
+        base.Heal(amount);
+
+        // Actualizar la barra de vida en el UI
+        if (playerPanelUI != null)
+        {
+            playerPanelUI.SetHealth(curHP); // curHP es de EntityStats
+        }
+    }
     /// <summary>
     /// Corrutina que gestiona el tiempo de gracia (invulnerabilidad temporal)
     /// </summary>

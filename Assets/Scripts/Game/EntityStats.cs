@@ -150,7 +150,7 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
   //      Destroy(gameObject);
   //  }
 
-    public void Heal(int amount)
+    public virtual void Heal(int amount)
     {
         curHP = Mathf.Min(curHP + amount, maxHP);
         // Actualiza la UI de vida si tienes
