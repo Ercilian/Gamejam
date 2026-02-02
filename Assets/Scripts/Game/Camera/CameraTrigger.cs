@@ -39,6 +39,13 @@ public class CameraTrigger : MonoBehaviour
                 {
                     Destroy(enemy);
                 }
+                // Reactivar Dash en BossRoom
+                var allPlayersBoss = FindObjectsOfType<Player>();
+                foreach (var p in allPlayersBoss)
+                {
+                    var dash = p.GetComponent<Dash>();
+                    if (dash != null) dash.enabled = true;
+                }
                 return;
             }
             else if (isPasillo)
@@ -60,9 +67,9 @@ public class CameraTrigger : MonoBehaviour
             var carFuelSystem = other.GetComponentInChildren<CarFuelSystem>();
             carFuelSystem.SetFuelConsumptionEnabled(!disableFuelConsumption);
             // ...existing code for pasillo and input management...
+            var players = FindObjectsOfType<Player>();
             if (isPasillo)
             {
-                var players = FindObjectsOfType<Player>();
                 Vector3[] offsets;
                 if (players.Length == 1) offsets = new Vector3[] { new Vector3(5.5f, 0, 0f) };
                 else if (players.Length == 2) offsets = new Vector3[] { new Vector3(3f, 0, -4.5f), new Vector3(3f, 0, 5f) };
@@ -77,6 +84,9 @@ public class CameraTrigger : MonoBehaviour
                     players[i].transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
                     var animator = players[i].GetComponentInChildren<Animator>();
                     if (animator != null) animator.SetFloat("Speed", 1f);
+                    // Desactivar Dash en pasillo
+                    var dash = players[i].GetComponent<Dash>();
+                    if (dash != null) dash.enabled = false;
                 }
                 enemySpawner.isSpawning = false;
                 UIManager.Instance.DialogueSetup();
@@ -85,12 +95,14 @@ public class CameraTrigger : MonoBehaviour
             }
             else
             {
-                var players = FindObjectsOfType<Player>();
                 foreach (var player in players)
                 {
                     player.SetInputEnabled(true);
                     player.isCinematicRun = false;
                     player.transform.SetParent(null);
+                    // Reactivar Dash fuera de pasillo
+                    var dash = player.GetComponent<Dash>();
+                    if (dash != null) dash.enabled = true;
                 }
                 enemySpawner.isSpawning = true;
                 UIManager.Instance.GameUISetup();
