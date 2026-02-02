@@ -20250,8 +20250,10 @@ Transform:
   m_Children:
   - {fileID: 4648832347285880392}
   - {fileID: 2621797888305345107}
+  - {fileID: 1443030029736904595}
   - {fileID: 1671780754618227699}
   - {fileID: 7470309406241601410}
+  - {fileID: 172248610766048323}
   - {fileID: 9177383412073760789}
   m_Father: {fileID: 5339200297334700220}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -38616,7 +38618,7 @@ Transform:
   m_GameObject: {fileID: 1710598216484650598}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50.99, y: 0, z: -19.53}
+  m_LocalPosition: {x: 49.3, y: 0, z: -16.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -38634,7 +38636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 25
+  activationRange: 35
 --- !u!1 &1711034721330076720
 GameObject:
   m_ObjectHideFlags: 0
@@ -58497,6 +58499,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2549570428287707232
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 172248610766048323}
+  - component: {fileID: 4983279222760039457}
+  m_Layer: 0
+  m_Name: Spawnpoints (7)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &172248610766048323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2549570428287707232}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 69.95, y: 0, z: 25.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1417893519392762633}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4983279222760039457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2549570428287707232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+  activationRange: 35
 --- !u!1 &2549793256347192938
 GameObject:
   m_ObjectHideFlags: 0
@@ -113820,7 +113867,7 @@ Transform:
   m_GameObject: {fileID: 4875525200989494114}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 73.23, y: 0, z: -18.94}
+  m_LocalPosition: {x: 73.81, y: 0, z: -14.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -113838,7 +113885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 25
+  activationRange: 35
 --- !u!1 &4877245553620334911
 GameObject:
   m_ObjectHideFlags: 0
@@ -175000,7 +175047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 25
+  activationRange: 35
 --- !u!1 &7377812026443976958
 GameObject:
   m_ObjectHideFlags: 0
@@ -181414,7 +181461,7 @@ Transform:
   m_GameObject: {fileID: 7652866235280850571}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 109.28, y: 0, z: 23.76}
+  m_LocalPosition: {x: 114.04, y: 0, z: 20.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -181432,7 +181479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 25
+  activationRange: 35
 --- !u!1 &7653257974555444760
 GameObject:
   m_ObjectHideFlags: 0
@@ -205351,7 +205398,7 @@ Transform:
   m_GameObject: {fileID: 8781778798937925277}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 54.71, y: 0, z: 26.01}
+  m_LocalPosition: {x: 61.36, y: 0, z: 25.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -205369,7 +205416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  activationRange: 25
+  activationRange: 35
 --- !u!1 &8781813709594817726
 GameObject:
   m_ObjectHideFlags: 0
@@ -214544,6 +214591,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &9179471983198774060
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1443030029736904595}
+  - component: {fileID: 9025961314859107513}
+  m_Layer: 0
+  m_Name: Spawnpoints (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1443030029736904595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179471983198774060}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 18.73, y: 0, z: -15.07}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1417893519392762633}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9025961314859107513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179471983198774060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0f24952ccac8a4d8bd7e2566a53d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+  activationRange: 35
 --- !u!1 &9181997471792632998
 GameObject:
   m_ObjectHideFlags: 0

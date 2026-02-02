@@ -6666,12 +6666,12 @@ MonoBehaviour:
   - {fileID: 4032029534612359075, guid: 0b5ee51586154f3419dd1375fe368b13, type: 3}
   - {fileID: 4548217557689129615, guid: 73d0fcbd1031b8f49ba129f21157fa87, type: 3}
   fixedMaps:
-  - {fileID: 6540120780592400911, guid: 28b95406aee134a4a96c20186da3d8c0, type: 3}
+  - {fileID: 8682027492195202869, guid: 29ec72ecaa5727f4d94781daa46ccd19, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 358248212900244837, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 6100118547817037488, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffffffffffffffffffffffffffffffffffff04000000
+  mapSequence: ffffffff00000000ffffffffffffffffffffffff04000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342
@@ -6954,6 +6954,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2070441881}
     m_Modifications:
+    - target: {fileID: 538980784757140164, guid: dea92ab84dc907b4a977a3ef6f8b2ea2, type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 538980784757140164, guid: dea92ab84dc907b4a977a3ef6f8b2ea2, type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
       value: 0.23529412
