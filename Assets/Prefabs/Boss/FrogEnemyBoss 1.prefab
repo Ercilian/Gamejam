@@ -786,6 +786,8 @@ MonoBehaviour:
   mortarLaunchSFX: {fileID: 8300000, guid: d2015bcc326cfd34a892da7a98f80539, type: 3}
   mortarImpactSFX: {fileID: 8300000, guid: 20801a6968f94bd4e8c09d1b5da3d27b, type: 3}
   pushImpactSFX: {fileID: 8300000, guid: 03afcc3d98103164bb33ed8f6ec3a749, type: 3}
+  mainGameMusicObject: {fileID: 6213435856714241811, guid: 44ed6025e80f42640af6bd8cfeca2d79, type: 3}
+  bossMusicObject: {fileID: 3194566208913627001, guid: f7c09bb87829bea49bbdf83c8f9f5849, type: 3}
   jumpLandingShakeIntensity: 0.6
   jumpLandingShakeDuration: 0.8
   mortarShakeIntensity: 0.3

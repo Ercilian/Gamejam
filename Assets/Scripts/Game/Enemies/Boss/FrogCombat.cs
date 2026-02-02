@@ -205,10 +205,10 @@ public class FrogCombat : Enemy
     public AudioClip pushImpactSFX;
     
     [Header("Música de Boss")]
-    [Tooltip("AudioSource con la música del juego principal (se desactivará al iniciar combate)")]
-    public AudioSource mainGameMusicSource;
-    [Tooltip("AudioSource con la música del boss (se activará al iniciar combate)")]
-    public AudioSource bossMusicSource;
+    [Tooltip("GameObject con AudioSource de la música del juego principal (se desactivará al iniciar combate)")]
+    public GameObject mainGameMusicObject;
+    [Tooltip("GameObject con AudioSource de la música del boss (se activará al iniciar combate)")]
+    public GameObject bossMusicObject;
     
     [Header("Camera Shake")]
     [Tooltip("Intensidad del shake cuando el boss aterriza")]
@@ -312,15 +312,15 @@ public class FrogCombat : Enemy
         yield return new WaitForSeconds(INITIAL_DELAY);
         
         // Cambiar música al iniciar el combate
-        if (mainGameMusicSource != null)
+        if (mainGameMusicObject != null)
         {
-            mainGameMusicSource.Stop();
+            mainGameMusicObject.SetActive(false);
             Debug.Log("[FrogBoss] Música principal desactivada");
         }
         
-        if (bossMusicSource != null)
+        if (bossMusicObject != null)
         {
-            bossMusicSource.Play();
+            bossMusicObject.SetActive(true);
             Debug.Log("[FrogBoss] Música del boss activada");
         }
         
