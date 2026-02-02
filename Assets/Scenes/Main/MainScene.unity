@@ -1205,9 +1205,9 @@ MonoBehaviour:
   offsetXNormal: -2
   offsetYNormal: 21
   offsetZNormal: -18
-  offsetXPasillo: 9
-  offsetYPasillo: 6.5
-  offsetZPasillo: -5.5
+  offsetXPasillo: 8
+  offsetYPasillo: 4
+  offsetZPasillo: -6.5
   offsetXBossCinematic: -15
   offsetYBossCinematic: 4
   offsetZBossCinematic: 0
@@ -6660,7 +6660,8 @@ MonoBehaviour:
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 358248212900244837, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 6100118547817037488, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffff00000000ffffffffffffffffffffffff04000000
+  - {fileID: 8684991815642709520, guid: eb483f94042fe574e8f3ed5b72c0eaba, type: 3}
+  mapSequence: 0500000000000000ffffffffffffffffffffffff04000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342
