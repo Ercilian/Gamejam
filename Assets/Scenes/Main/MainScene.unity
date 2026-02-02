@@ -6627,7 +6627,7 @@ MonoBehaviour:
     - itemIndex: 2
       dropChance: 100
   probDrop1: 1
-  probDrop2: 0.15
+  probDrop2: 0.1
   probDrop3: 0.05
   dropForce: 1.5
   dropRadius: 2
@@ -6649,10 +6649,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   randomMapPool:
-  - {fileID: 4032029534612359075, guid: 0b5ee51586154f3419dd1375fe368b13, type: 3}
+  - {fileID: 8684991815642709520, guid: eb483f94042fe574e8f3ed5b72c0eaba, type: 3}
   - {fileID: 4548217557689129615, guid: 73d0fcbd1031b8f49ba129f21157fa87, type: 3}
+  - {fileID: 4937800196258597293, guid: 510a5b917ae7d2046a38ed427642c89d, type: 3}
+  - {fileID: 3192354980408217338, guid: b01bd7eacfb067c41a80ca12e311b2ca, type: 3}
+  - {fileID: 3433495517364249440, guid: 0ea260928ab56e748bfe7e3a38e20c0b, type: 3}
   fixedMaps:
-  - {fileID: 8682027492195202869, guid: 29ec72ecaa5727f4d94781daa46ccd19, type: 3}
+  - {fileID: 160644436595108402, guid: ca364efb22cc8474bbd5df2ede107438, type: 3}
   - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
   - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
   - {fileID: 358248212900244837, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
