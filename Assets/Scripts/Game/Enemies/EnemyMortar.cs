@@ -28,6 +28,7 @@ public class EnemyMortar : EnemyAttack
     
     [Header("Prefabs")]
     [SerializeField] private GameObject mortarProjectilePrefab;
+    [SerializeField] private GameObject mortarSmokeVFXPrefab;
     
     [Header("Efectos")]
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0, 2f, 0);
@@ -450,6 +451,12 @@ public class EnemyMortar : EnemyAttack
         // Usar el daño del ScriptableObject si está disponible, sino usar baseDamage
         int damage = (enemyStats != null) ? enemyStats.AttackDamage : baseDamage;
         mortarArea.SetDamageAmount(damage);
+        
+        // Asignar prefab de humo si está disponible
+        if (mortarSmokeVFXPrefab != null)
+        {
+            mortarArea.SetSmokeVFX(mortarSmokeVFXPrefab);
+        }
         
         // Visualizar el área con LineRenderer
         LineRenderer lineRenderer = impactArea.AddComponent<LineRenderer>();

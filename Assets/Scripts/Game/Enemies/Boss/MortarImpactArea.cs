@@ -13,6 +13,7 @@ public class MortarImpactArea : MonoBehaviour
     [SerializeField] private float shakeIntensity = 0.3f;
     [SerializeField] private float shakeDuration = 0.3f;
     private bool shouldShake = false;
+    private GameObject smokeVFXPrefab;
     #endregion
 
     #region State
@@ -61,6 +62,11 @@ public class MortarImpactArea : MonoBehaviour
     {
         shouldShake = shake;
     }
+    
+    public void SetSmokeVFX(GameObject vfxPrefab)
+    {
+        smokeVFXPrefab = vfxPrefab;
+    }
     #endregion
 
     #region Damage Logic
@@ -83,6 +89,22 @@ public class MortarImpactArea : MonoBehaviour
         if (impactSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(impactSound);
+        }
+        
+        // Instanciar partículas de humo
+        if (smokeVFXPrefab != null)
+        {
+            GameObject smokeInstance = Instantiate(smokeVFXPrefab, transform.position, Quaternion.identity);
+            ParticleSystem particleSystem = smokeInstance.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                float duration = particleSystem.main.duration + particleSystem.main.startLifetime.constantMax;
+                Destroy(smokeInstance, duration);
+            }
+            else
+            {
+                Destroy(smokeInstance, 5f); // Fallback: destruir después de 5 segundos
+            }
         }
         
         // Camera shake al impactar (solo si está activado)
@@ -129,6 +151,22 @@ public class MortarImpactArea : MonoBehaviour
     
     private IEnumerator ShakeAndDestroy(Transform cameraTransform)
     {
+        // Instanciar partículas de humo
+        if (smokeVFXPrefab != null)
+        {
+            GameObject smokeInstance = Instantiate(smokeVFXPrefab, transform.position, Quaternion.identity);
+            ParticleSystem particleSystem = smokeInstance.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                float duration = particleSystem.main.duration + particleSystem.main.startLifetime.constantMax;
+                Destroy(smokeInstance, duration);
+            }
+            else
+            {
+                Destroy(smokeInstance, 5f); // Fallback: destruir después de 5 segundos
+            }
+        }
+        
         // Aplicar daño primero
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, damageRadius);
         

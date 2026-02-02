@@ -110,6 +110,10 @@ MonoBehaviour:
   isElite: 0
   canTakeKnockback: 1
   stunDuration: 0.5
+  outlinerMaterial: {fileID: 2100000, guid: f89d35ecf46d70147926208b80b3eaae, type: 2}
+  damageOutlinerColor: {r: 2.1185474, g: 0, b: 0, a: 1}
+  outlinerFlashDuration: 0.25
+  colorPropertyName: _OutlinerColor
 --- !u!114 &7784328434514426453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +148,7 @@ MonoBehaviour:
   delayBetweenProjectiles: 0.2
   impactGroundHeight: 0
   mortarProjectilePrefab: {fileID: 8114323310556695630, guid: 643d951769025e7419eda2b8c7aaafa1, type: 3}
+  mortarSmokeVFXPrefab: {fileID: 104091395477980541, guid: 9ff4a109b3a8ebe4da9ffafdacc9e33a, type: 3}
   projectileSpawnOffset: {x: 0, y: 2, z: 0}
 --- !u!114 &4054494973640483355
 MonoBehaviour:
