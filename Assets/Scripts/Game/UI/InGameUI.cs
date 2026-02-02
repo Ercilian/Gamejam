@@ -13,6 +13,8 @@ public class InGameUI : MonoBehaviour
     }
     public void UpdatePlayerPanels() // Method to update player panels based on selected players
     {
+        // Buscar todos los Player en la escena
+        Player[] players = FindObjectsOfType<Player>();
         foreach (var playerInfo in playerSelectionDataSO.selectedPlayers)
         {
             GameObject panel = Instantiate(playerPanelPrefab, panelParent); // Create a new panel for each selected player
@@ -20,9 +22,18 @@ public class InGameUI : MonoBehaviour
             var panelUI = panel.GetComponent<PlayerPanelUI>();
             panelUI.Setup(playerInfo, stats); // Setup the panel with player info and stats
 
+            // Buscar el Player correspondiente en la escena por nombre
+            foreach (var player in players)
+            {
+                if (player.StatsData != null && player.StatsData.PlayerName == stats.PlayerName)
+                {
+                    player.SetPlayerPanelUI(panelUI);
+                    break;
+                }
+            }
+
             // Buscar el PlayerInventory correspondiente en la escena
             PlayerInventory[] inventories = FindObjectsOfType<PlayerInventory>();
-            bool foundInventory = false;
             foreach (var inv in inventories)
             {
                 string invName = inv.entityStats.StatsData.PlayerName;
@@ -33,7 +44,6 @@ public class InGameUI : MonoBehaviour
                     };
                     // Forzar actualización inicial tras la suscripción
                     panelUI.UpdatePotionIcons(inv.potions.Count);
-                    foundInventory = true;
                     break;
                 }
             }

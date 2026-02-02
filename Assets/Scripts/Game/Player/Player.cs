@@ -7,6 +7,15 @@ public class Player : EntityStats
 {
     private PlayerPanelUI playerPanelUI;
 
+    // Permite asignar el panel de UI correcto desde fuera
+    public void SetPlayerPanelUI(PlayerPanelUI panel)
+    {
+        playerPanelUI = panel;
+        // Actualiza la barra de vida al valor actual al asignar el panel
+        if (playerPanelUI != null)
+            playerPanelUI.SetHealth(curHP);
+    }
+
     private PlayerInventory playerInventory;
     private PlayerInput playerInput;
     private InputAction healAction;
@@ -60,7 +69,7 @@ public class Player : EntityStats
         animator = GetComponentInChildren<Animator>(); // Busca en hijos (armature)
         rb = GetComponent<Rigidbody>(); // o el componente que uses para mover
 
-        playerPanelUI = FindObjectOfType<PlayerPanelUI>();
+        // playerPanelUI se asigna ahora desde InGameUI, no aquí
 
 
     }
