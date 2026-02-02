@@ -6600,7 +6600,7 @@ MonoBehaviour:
   - itemName: Scrap
     prefab: {fileID: 5219421215397009677, guid: 3df252fd5914c414cbd1b785305c6696, type: 3}
     minQuantity: 1
-    maxQuantity: 3
+    maxQuantity: 2
   - itemName: Diesel
     prefab: {fileID: 5219421215397009677, guid: 93c524a2c72611749b474dff8449254f, type: 3}
     minQuantity: 1
@@ -6608,22 +6608,16 @@ MonoBehaviour:
   - itemName: HealPlant
     prefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
     minQuantity: 1
-    maxQuantity: 3
+    maxQuantity: 2
   dropTables:
   - sourceName: NormalEnemy
     possibleDrops:
     - itemIndex: 0
-      dropChance: 10
-    - itemIndex: 1
-      dropChance: 5
+      dropChance: 20
   - sourceName: EliteEnemy
     possibleDrops:
     - itemIndex: 0
       dropChance: 80
-    - itemIndex: 1
-      dropChance: 40
-    - itemIndex: 2
-      dropChance: 20
   - sourceName: DestructibleObjectDiesel
     possibleDrops:
     - itemIndex: 1
@@ -6633,8 +6627,8 @@ MonoBehaviour:
     - itemIndex: 2
       dropChance: 100
   probDrop1: 1
-  probDrop2: 0.3
-  probDrop3: 0.1
+  probDrop2: 0.15
+  probDrop3: 0.05
   dropForce: 1.5
   dropRadius: 2
   upwardForce: 1.5
