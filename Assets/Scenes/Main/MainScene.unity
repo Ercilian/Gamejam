@@ -8173,6 +8173,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4823640024372518579, guid: 28e5758b7aa57bf49b82b05a1cfc7db2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 7fbd83bd058de2a41bee9a00f54e381b, type: 3}
+    - target: {fileID: -4823640024372518579, guid: 28e5758b7aa57bf49b82b05a1cfc7db2, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 7fbd83bd058de2a41bee9a00f54e381b, type: 3}
+    - target: {fileID: -4823640024372518579, guid: 28e5758b7aa57bf49b82b05a1cfc7db2, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 7fbd83bd058de2a41bee9a00f54e381b, type: 3}
     - target: {fileID: 919132149155446097, guid: 28e5758b7aa57bf49b82b05a1cfc7db2, type: 3}
       propertyPath: m_Name
       value: SwapZone
@@ -13685,6 +13697,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Truck
       objectReference: {fileID: 0}
+    - target: {fileID: 1290649723785769705, guid: c5a089c3ce74e4844ac83c74c593cfec, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 7fbd83bd058de2a41bee9a00f54e381b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19499,6 +19515,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeverTruck
       objectReference: {fileID: 0}
+    - target: {fileID: 6589892325366952163, guid: 583fc543314ed4240b8b6b0347bb338f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 7fbd83bd058de2a41bee9a00f54e381b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

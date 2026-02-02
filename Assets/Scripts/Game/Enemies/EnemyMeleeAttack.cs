@@ -29,6 +29,9 @@ public class EnemyMeleeAttack : EnemyAttack
     private GameObject carGameObject;
 
     [Header("Effects")]
+    [Tooltip("Sonido cuando se ejecuta el ataque")]
+    public AudioClip attackSound;
+    
     [Tooltip("Efecto de partículas al golpear (opcional)")]
     public GameObject hitEffectPrefab;
     
@@ -104,6 +107,12 @@ public class EnemyMeleeAttack : EnemyAttack
     {
         animator.SetTrigger("Attack");
         
+        // Reproducir sonido de ataque
+        if (attackSound != null)
+        {
+            AudioSource.PlayClipAtPoint(attackSound, transform.position);
+        }
+        
         // Aplicar el daño después del retraso configurado para sincronizar con la animación
         StartCoroutine(DelayedAttack());
     }
@@ -115,6 +124,8 @@ public class EnemyMeleeAttack : EnemyAttack
     {
         yield return new WaitForSeconds(attackDamageDelay);
         
+        // Reproducir sonido de impacto SIEMPRE (independiente de si hay objetivos)
+        PlayHitSound();
         
         // Detectar todos los jugadores y el camión en el área de ataque
         Collider[] hitTargets = DetectTargetsInAttackArea();
@@ -130,9 +141,8 @@ public class EnemyMeleeAttack : EnemyAttack
         {
             ApplyDamageToTarget(targetCollider.transform, baseDamage);
             
-            // Efectos visuales/sonoros
+            // Efectos visuales
             SpawnHitEffect(targetCollider.transform.position);
-            PlayHitSound();
         }
 
         if (showDebugLogs) Debug.Log($"[{gameObject.name}] Ataque melee golpeó a {hitTargets.Length} objetivo(s).");

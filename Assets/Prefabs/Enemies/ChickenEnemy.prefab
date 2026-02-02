@@ -219,6 +219,8 @@ MonoBehaviour:
   tiempoAntesDeDanio: 6
   tiempoCongelacion: 6
   duracionEfectoRaycast: 0.3
+  sonidoDisparo: {fileID: 0}
+  sonidoImpacto: {fileID: 8300000, guid: 2d3cae2974b5b9646a3f87ba11d46c5e, type: 3}
   carTag: Car
 --- !u!82 &1262160064433386618
 AudioSource:

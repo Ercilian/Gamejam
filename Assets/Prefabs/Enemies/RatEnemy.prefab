@@ -162,8 +162,9 @@ MonoBehaviour:
   coneAngle: 90
   attackDamageDelay: 0.8
   carTag: Car
+  attackSound: {fileID: 0}
   hitEffectPrefab: {fileID: 0}
-  hitSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 716175219ef2b8245b7eab9892755d2a, type: 3}
 --- !u!54 &6769849156830466866
 Rigidbody:
   m_ObjectHideFlags: 0
