@@ -65,8 +65,8 @@ public class CameraTrigger : MonoBehaviour
                 var players = FindObjectsOfType<Player>();
                 Vector3[] offsets;
                 if (players.Length == 1) offsets = new Vector3[] { new Vector3(5.5f, 0, 0f) };
-                else if (players.Length == 2) offsets = new Vector3[] { new Vector3(0f, 0, -4.5f), new Vector3(0f, 0, 5f) };
-                else offsets = new Vector3[] { new Vector3(5.5f, 0, 0f), new Vector3(0f, 0, -4.5f), new Vector3(0f, 0, 5f) };
+                else if (players.Length == 2) offsets = new Vector3[] { new Vector3(3f, 0, -4.5f), new Vector3(3f, 0, 5f) };
+                else offsets = new Vector3[] { new Vector3(5.5f, 0, 0f), new Vector3(3f, 0, -4.5f), new Vector3(3f, 0, 5f) };
                 for (int i = 0; i < players.Length; i++)
                 {
                     players[i].SetInputEnabled(false);
