@@ -5996,7 +5996,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2810153847718935655}
   m_Layer: 0
-  m_Name: Mapa3
+  m_Name: Mapa_A3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
