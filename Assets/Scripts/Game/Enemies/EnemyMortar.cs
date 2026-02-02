@@ -33,6 +33,13 @@ public class EnemyMortar : EnemyAttack
     [Header("Efectos")]
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0, 2f, 0);
     
+    [Header("Sonidos")]
+    [Tooltip("Sonido cuando el mortero sale del enemigo")]
+    public AudioClip sonidoDisparo;
+    
+    [Tooltip("Sonido de impacto del mortero")]
+    public AudioClip sonidoImpacto;
+    
     private bool isAttacking = false;
     private bool isFirstAttack = true;
     private Coroutine currentAttackCoroutine;
@@ -425,6 +432,13 @@ public class EnemyMortar : EnemyAttack
         }
         
         Vector3 spawnPos = transform.position + projectileSpawnOffset;
+        
+        // Reproducir sonido de disparo
+        if (sonidoDisparo != null)
+        {
+            AudioSource.PlayClipAtPoint(sonidoDisparo, spawnPos);
+        }
+        
         GameObject projectile = Instantiate(mortarProjectilePrefab, spawnPos, Quaternion.identity);
         
         // Asegurar que el impacto sea en el suelo
@@ -456,6 +470,12 @@ public class EnemyMortar : EnemyAttack
         if (mortarSmokeVFXPrefab != null)
         {
             mortarArea.SetSmokeVFX(mortarSmokeVFXPrefab);
+        }
+        
+        // Asignar sonido de impacto
+        if (sonidoImpacto != null)
+        {
+            mortarArea.SetImpactSound(sonidoImpacto);
         }
         
         // Visualizar el área con LineRenderer

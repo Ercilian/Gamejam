@@ -193,14 +193,16 @@ public class FrogCombat : Enemy
     [SerializeField] private AudioSource audioSource;
     
     [Header("Sonidos Específicos")]
+    [Tooltip("Sonido cuando el boss salta")]
+    public AudioClip jumpStartSFX;
     [Tooltip("Sonido cuando el boss aterriza después del salto")]
-    [SerializeField] private AudioClip jumpLandingSFX;
+    public AudioClip jumpLandingSFX;
     [Tooltip("Sonido cuando el mortero es lanzado")]
-    [SerializeField] private AudioClip mortarLaunchSFX;
+    public AudioClip mortarLaunchSFX;
     [Tooltip("Sonido cuando el mortero impacta en el suelo")]
-    [SerializeField] private AudioClip mortarImpactSFX;
+    public AudioClip mortarImpactSFX;
     [Tooltip("Sonido cuando el push attack impacta")]
-    [SerializeField] private AudioClip pushImpactSFX;
+    public AudioClip pushImpactSFX;
     
     [Header("Camera Shake")]
     [Tooltip("Intensidad del shake cuando el boss aterriza")]
@@ -528,6 +530,12 @@ public class FrogCombat : Enemy
         
         PlayAttackEffect();
         PlayAttackSFX();
+        
+        // Reproducir sonido de inicio de salto
+        if (jumpStartSFX != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(jumpStartSFX);
+        }
         
         isJumping = true;
         
@@ -1062,7 +1070,7 @@ public class FrogCombat : Enemy
         MortarImpactArea mortarArea = impactArea.AddComponent<MortarImpactArea>();
         mortarArea.SetDamageRadius(mortarDamageRadius);
         mortarArea.SetDelayBeforeDamage(mortarFallDuration);
-        mortarArea.SetImpactSound(mortarImpactSFX, audioSource);
+        mortarArea.SetImpactSound(mortarImpactSFX);
         mortarArea.SetShakeParameters(mortarShakeIntensity, mortarShakeDuration);
         mortarArea.SetShouldShake(shouldShake);
         

@@ -656,6 +656,10 @@ MonoBehaviour:
   isElite: 0
   canTakeKnockback: 0
   stunDuration: 0.5
+  outlinerMaterial: {fileID: 0}
+  damageOutlinerColor: {r: 1, g: 0, b: 0, a: 1}
+  outlinerFlashDuration: 0.15
+  colorPropertyName: _Color
   phaseTransitionPercentage: 0.5
   playerStartPositions:
   - {fileID: 3778354803122404103}
@@ -762,8 +766,9 @@ MonoBehaviour:
   attackEffectPrefab: {fileID: 0}
   attackSFX: {fileID: 0}
   audioSource: {fileID: 0}
-  jumpLandingSFX: {fileID: 0}
-  mortarLaunchSFX: {fileID: 0}
+  jumpStartSFX: {fileID: 8300000, guid: 4f88ec3bb7f23164f8e34a08cf007d7e, type: 3}
+  jumpLandingSFX: {fileID: 8300000, guid: 0d7c4753dd8fc5442997f27f2a5cafdc, type: 3}
+  mortarLaunchSFX: {fileID: 8300000, guid: d2015bcc326cfd34a892da7a98f80539, type: 3}
   mortarImpactSFX: {fileID: 8300000, guid: 20801a6968f94bd4e8c09d1b5da3d27b, type: 3}
   pushImpactSFX: {fileID: 8300000, guid: 9a658c386ca4d5e4ebdd16291b3fd5fc, type: 3}
   jumpLandingShakeIntensity: 0.6

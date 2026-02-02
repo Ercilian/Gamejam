@@ -15,6 +15,13 @@ public class RangedEnemyAttack : EnemyAttack
     
     [Tooltip("Duración de la animación del impacto")]
     public float duracionEfectoRaycast = 0.3f;
+    
+    [Header("Sonido")]
+    [Tooltip("Sonido cuando el mortero sale del enemigo")]
+    public AudioClip sonidoDisparo;
+    
+    [Tooltip("Sonido de impacto del mortero")]
+    public AudioClip sonidoImpacto;
 
     [Header("Sistema de Camión")]
     [Tooltip("Tag del camión para buscar automáticamente")]
@@ -268,8 +275,21 @@ public class RangedEnemyAttack : EnemyAttack
         Debug.Log($"[{gameObject.name}] Raycast desde {puntoDisparo.position} dirección {direccion} rango {attackRange}");
         Debug.Log($"[{gameObject.name}] Usando dirección congelada: {direccionEstaCongelada}");
         
+        // Reproducir sonido justo cuando se ejecuta el raycast
+        if (sonidoDisparo != null)
+        {
+            AudioSource.PlayClipAtPoint(sonidoDisparo, puntoDisparo.position);
+        }
+        
         bool hit = Physics.Raycast(puntoDisparo.position, direccion, out RaycastHit hitInfo, attackRange);
         Debug.Log($"[{gameObject.name}] Raycast result: {hit}");
+        
+        // Reproducir sonido de impacto SIEMPRE (independiente de si impacta o no)
+        Vector3 impactPosition = hit ? hitInfo.point : (puntoDisparo.position + direccion * attackRange);
+        if (sonidoImpacto != null)
+        {
+            AudioSource.PlayClipAtPoint(sonidoImpacto, impactPosition);
+        }
         
         if (hit)
         {

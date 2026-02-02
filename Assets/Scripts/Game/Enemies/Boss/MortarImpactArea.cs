@@ -46,10 +46,9 @@ public class MortarImpactArea : MonoBehaviour
         damageAmount = damage;
     }
     
-    public void SetImpactSound(AudioClip sound, AudioSource source)
+    public void SetImpactSound(AudioClip sound)
     {
         impactSound = sound;
-        audioSource = source;
     }
     
     public void SetShakeParameters(float intensity, float duration)
@@ -85,10 +84,17 @@ public class MortarImpactArea : MonoBehaviour
     {
         hasDealtDamage = true;
         
-        // Reproducir sonido de impacto del mortero
-        if (impactSound != null && audioSource != null)
+        Debug.Log($"[MortarImpactArea] Reproduciendo sonido de impacto. impactSound = {impactSound}");
+        
+        // Reproducir sonido de impacto del mortero SIEMPRE
+        if (impactSound != null)
         {
-            audioSource.PlayOneShot(impactSound);
+            AudioSource.PlayClipAtPoint(impactSound, transform.position);
+            Debug.Log("[MortarImpactArea] Sonido de impacto reproducido");
+        }
+        else
+        {
+            Debug.LogWarning("[MortarImpactArea] impactSound es null, no se puede reproducir");
         }
         
         // Instanciar partículas de humo
