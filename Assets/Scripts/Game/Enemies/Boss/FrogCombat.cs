@@ -204,6 +204,12 @@ public class FrogCombat : Enemy
     [Tooltip("Sonido cuando el push attack impacta")]
     public AudioClip pushImpactSFX;
     
+    [Header("Música de Boss")]
+    [Tooltip("AudioSource con la música del juego principal (se desactivará al iniciar combate)")]
+    public AudioSource mainGameMusicSource;
+    [Tooltip("AudioSource con la música del boss (se activará al iniciar combate)")]
+    public AudioSource bossMusicSource;
+    
     [Header("Camera Shake")]
     [Tooltip("Intensidad del shake cuando el boss aterriza")]
     [SerializeField] private float jumpLandingShakeIntensity = 0.5f;
@@ -304,6 +310,19 @@ public class FrogCombat : Enemy
         // Esperar el delay inicial antes de comenzar a atacar
         Debug.Log($"[FrogBoss] Esperando {INITIAL_DELAY} segundos antes de comenzar el combate...");
         yield return new WaitForSeconds(INITIAL_DELAY);
+        
+        // Cambiar música al iniciar el combate
+        if (mainGameMusicSource != null)
+        {
+            mainGameMusicSource.Stop();
+            Debug.Log("[FrogBoss] Música principal desactivada");
+        }
+        
+        if (bossMusicSource != null)
+        {
+            bossMusicSource.Play();
+            Debug.Log("[FrogBoss] Música del boss activada");
+        }
         
         hasStartedCombat = true;
         Debug.Log("[FrogBoss] ¡El boss comienza a atacar!");
@@ -825,13 +844,19 @@ public class FrogCombat : Enemy
         PlayAttackEffect();
         PlayAttackSFX();
         
-        // Reproducir sonido de impacto del push attack
-        if (pushImpactSFX != null && audioSource != null)
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, pushDetectionRadius);
+        
+        // Reproducir sonido de impacto del push attack justo cuando se hace el empuje
+        if (pushImpactSFX != null)
         {
-            audioSource.PlayOneShot(pushImpactSFX);
+            AudioSource.PlayClipAtPoint(pushImpactSFX, transform.position);
+            Debug.Log($"[FrogBoss] Push attack sonido reproducido. pushImpactSFX = {pushImpactSFX}");
+        }
+        else
+        {
+            Debug.LogWarning("[FrogBoss] pushImpactSFX es null, no se puede reproducir");
         }
         
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, pushDetectionRadius);
         foreach (Collider collider in hitColliders)
         {
             if (collider.gameObject != gameObject)
