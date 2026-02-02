@@ -6598,7 +6598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemDropSystem
   listOfDroppableItems:
   - itemName: Scrap
-    prefab: {fileID: 0}
+    prefab: {fileID: 5219421215397009677, guid: 3df252fd5914c414cbd1b785305c6696, type: 3}
     minQuantity: 1
     maxQuantity: 3
   - itemName: Diesel
@@ -6607,14 +6607,6 @@ MonoBehaviour:
     maxQuantity: 3
   - itemName: HealPlant
     prefab: {fileID: 5219421215397009677, guid: 011fe9611f0fc764baa72eff0837a0b2, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
-  - itemName: ShieldPlant
-    prefab: {fileID: 5219421215397009677, guid: 568b9070243407747944ff5bdd2c21b0, type: 3}
-    minQuantity: 1
-    maxQuantity: 3
-  - itemName: DamagePlant
-    prefab: {fileID: 5219421215397009677, guid: 2d1ed17da9219844593d0c6e3eba4ecf, type: 3}
     minQuantity: 1
     maxQuantity: 3
   dropTables:
