@@ -24,7 +24,6 @@ public class MovCar : MonoBehaviour
     // Referencia al MapManager para obtener los checkpoints
     private MapManager mapManager;
     private List<Transform> pathPoints = new List<Transform>();
-    private TutorialPathManager tutorialPathManager;
 
     [Header("Combustible Consumption")]
     public float fuelConsumptionPerSecond = 1f;
@@ -135,34 +134,23 @@ public class MovCar : MonoBehaviour
 
     private void InitializePathFollowing() // Setup initial target for path following
     {
-        // Buscar primero el TutorialPathManager en la escena
-        tutorialPathManager = FindFirstObjectByType<TutorialPathManager>();
-        if (tutorialPathManager != null && tutorialPathManager.tutorialCheckpoints.Count > 0)
+        // Buscar el MapManager en la escena
+        mapManager = FindFirstObjectByType<MapManager>();
+        if (mapManager != null && mapManager.globalCheckpoints.Count > 0)
         {
-            pathPoints = tutorialPathManager.tutorialCheckpoints;
-            Debug.Log("[MovCar] Usando checkpoints del TutorialPathManager.");
+            pathPoints = mapManager.globalCheckpoints;
+            currentPathIndex = 0;
+            currentTarget = pathPoints[0].position;
         }
         else
         {
-            // Si no hay tutorial, usar los del MapManager
-            mapManager = FindFirstObjectByType<MapManager>();
-            if (mapManager != null && mapManager.globalCheckpoints.Count > 0)
-            {
-                pathPoints = mapManager.globalCheckpoints;
-                Debug.Log("[MovCar] Usando checkpoints globales del MapManager.");
-            }
-            else
-            {
-                Debug.LogError("[MovCar] No se encontraron checkpoints en TutorialPathManager ni en MapManager.");
-            }
+            Debug.LogError("[MovCar] No se encontraron checkpoints globales en MapManager.");
         }
-        currentPathIndex = 0;
-        if (pathPoints.Count > 0)
-            currentTarget = pathPoints[0].position;
     }
 
     private Vector3 GetMovementDirection() // Calculate movement direction towards current target
     {
+        UpdateWaypointProgress(); // Call to update waypoint if reached
         return CalculateSmoothDirection(); // Return smoothed direction
     }
 
