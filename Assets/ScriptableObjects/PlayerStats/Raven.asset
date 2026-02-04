@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Raven
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
   playerName: Raven
-  description: Raven es un pajaro
+  description: 'HP: 215
+
+    Speed: 5
+
+    Damage: 30'
   playerIcon: {fileID: 21300000, guid: 9fe5cc16d16c1c84793a957f3ae01989, type: 3}
   maxHealth: 215
   moveSpeed: 5
