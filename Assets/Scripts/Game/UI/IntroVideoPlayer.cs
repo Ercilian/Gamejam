@@ -26,6 +26,8 @@ namespace Game.UI
         [Header("Opcional")]
         [Tooltip("RawImage donde mostrar el video (opcional, si no se asigna se reproduce a pantalla completa)")]
         public UnityEngine.UI.RawImage rawImageDestino;
+
+        public UnityEngine.UI.Image blackPanel;
         
         private VideoPlayer videoPlayer;
         private bool videoTerminado = false;
@@ -34,13 +36,22 @@ namespace Game.UI
         void Start()
         {
             ConfigurarVideoPlayer();
-            ReproducirVideo();
-            
+
+            // Mostrar panel negro al inicio
+            if (blackPanel != null)
+            {
+                blackPanel.gameObject.SetActive(true);
+            }
+
             // Ocultar texto al inicio
             if (textoSaltar != null)
             {
                 textoSaltar.gameObject.SetActive(false);
             }
+
+            // Preparar el video antes de reproducir
+            videoPlayer.Prepare();
+            videoPlayer.prepareCompleted += OnVideoPreparado;
         }
         
         void Update()
@@ -131,8 +142,19 @@ namespace Game.UI
                 CargarMenuPrincipal();
                 return;
             }
-            
             videoPlayer.Play();
+        }
+
+        private void OnVideoPreparado(VideoPlayer vp)
+        {
+            // Ocultar panel negro justo cuando el video está listo
+            if (blackPanel != null)
+            {
+                blackPanel.gameObject.SetActive(false);
+            }
+            ReproducirVideo();
+            // Ya no necesitamos el evento
+            videoPlayer.prepareCompleted -= OnVideoPreparado;
         }
         
         private void OnVideoTerminado(VideoPlayer vp)
@@ -158,6 +180,7 @@ namespace Game.UI
             if (videoPlayer != null)
             {
                 videoPlayer.loopPointReached -= OnVideoTerminado;
+                videoPlayer.prepareCompleted -= OnVideoPreparado;
             }
         }
     }
