@@ -4274,9 +4274,10 @@ MonoBehaviour:
   newOffsetX: 0
   delaySeconds: 2
   cameraMovement: {fileID: 0}
-  disableFuelConsumption: 0
+  disableFuelConsumption: 1
   isPasillo: 0
   isBossRoom: 0
+  isShopRoom: 1
 --- !u!1 &310341536129665485
 GameObject:
   m_ObjectHideFlags: 0

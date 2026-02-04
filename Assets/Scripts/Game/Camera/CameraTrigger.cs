@@ -12,6 +12,7 @@ public class CameraTrigger : MonoBehaviour
     [Header("Zona de pasillo (activa diálogo)")]
     public bool isPasillo = false;
     public bool isBossRoom = false;
+    public bool isShopRoom = false;
     private EnemySpawner enemySpawner;
     private Player player;
 
@@ -52,11 +53,19 @@ public class CameraTrigger : MonoBehaviour
             {
                 cameraMovement.SetCameraMode(CameraMovement.CameraMode.Pasillo);
                 cameraMovement.ChangeOffsetWithDelay(newOffsetX, delaySeconds);
+                enemySpawner.enabled = false;
+            }
+            else if (isShopRoom)
+            {
+                cameraMovement.SetCameraMode(CameraMovement.CameraMode.Normal);
+                cameraMovement.ChangeOffsetWithDelay(newOffsetX, delaySeconds);
+                enemySpawner.enabled = false;
             }
             else
             {
                 cameraMovement.SetCameraMode(CameraMovement.CameraMode.Normal);
                 cameraMovement.ChangeOffsetWithDelay(newOffsetX, delaySeconds);
+                enemySpawner.enabled = true;
             }
 
             // ...existing code...
