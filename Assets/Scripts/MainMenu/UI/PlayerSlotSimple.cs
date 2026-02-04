@@ -13,6 +13,10 @@ public class PlayerSlotSimple : MonoBehaviour
     public Button leftArrowButton;
     public Button rightArrowButton;
 
+    [Header("Player Title")]
+    public TMP_Text playerTitleText;
+    public Color[] characterColors;
+
     [Header("Character Preview")]
     public GameObject defaultCharacterPrefab;
     public Transform worldPreviewAnchor;
@@ -22,7 +26,7 @@ public class PlayerSlotSimple : MonoBehaviour
     public TMP_Text characterInfo;
 
     [Header("Player Stats Data")]
-    public PlayerStatsData[] playerStatsDataArray; // Debe asignarse en el inspector, mismo orden que characterPrefabs
+    public PlayerStatsData[] playerStatsDataArray;
 
     [Header("Slot Management")]
     public int selectedCharacterIndex = 0;
@@ -54,6 +58,7 @@ public class PlayerSlotSimple : MonoBehaviour
     {
         slotIndex = index;
         SetJoinedState(false);
+        UpdatePlayerTitleColor(0);
     }
 
 
@@ -92,11 +97,13 @@ public class PlayerSlotSimple : MonoBehaviour
             }
             SpawnPreview();
             UpdateCharacterDescription(selectedCharacterIndex);
+            UpdatePlayerTitleColor(selectedCharacterIndex);
         }
         else
         {
             DespawnPreview();
             if (characterInfo) characterInfo.text = "";
+            UpdatePlayerTitleColor(0); // Reset color to default (first character)
         }
 
     }
@@ -160,6 +167,7 @@ public class PlayerSlotSimple : MonoBehaviour
                 }
             }
             UpdateCharacterDescription(index);
+            UpdatePlayerTitleColor(index);
         }
         else
         {
@@ -175,6 +183,14 @@ public class PlayerSlotSimple : MonoBehaviour
         selectedCharacterIndex = (selectedCharacterIndex + direction + characterPrefabs.Length) % characterPrefabs.Length;
         Debug.Log($"[Slot {slotIndex}] Cambiando a índice {selectedCharacterIndex}: {characterPrefabs[selectedCharacterIndex]?.name}");
         ShowCharacterPreview(characterPrefabs[selectedCharacterIndex]);
+        UpdatePlayerTitleColor(selectedCharacterIndex);
+    }
+    private void UpdatePlayerTitleColor(int characterIndex)
+    {
+        if (playerTitleText != null && characterColors != null && characterIndex >= 0 && characterIndex < characterColors.Length)
+        {
+            playerTitleText.color = characterColors[characterIndex];
+        }
     }
 
     private void UpdateCharacterDescription(int index)

@@ -1093,6 +1093,11 @@ MonoBehaviour:
   confirmButton: {fileID: 7905232823485709692}
   leftArrowButton: {fileID: 6357216828828269893}
   rightArrowButton: {fileID: 8909010214889552790}
+  playerTitleText: {fileID: 627766564772388469}
+  characterColors:
+  - {r: 0, g: 0.051671028, b: 1, a: 1}
+  - {r: 0.08167672, g: 1, b: 0, a: 1}
+  - {r: 0.9433962, g: 0.5560136, b: 0, a: 1}
   defaultCharacterPrefab: {fileID: 0}
   worldPreviewAnchor: {fileID: 0}
   previewLocalPosition: {x: -2.5, y: 10, z: 0}
@@ -1384,7 +1389,7 @@ GameObject:
   - component: {fileID: 2192528647247111700}
   - component: {fileID: 627766564772388469}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: InputText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
