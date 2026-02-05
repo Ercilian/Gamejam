@@ -40,6 +40,14 @@ public class EnemyMortar : EnemyAttack
     [Tooltip("Sonido de impacto del mortero")]
     public AudioClip sonidoImpacto;
     
+    [Header("Camera Shake")]
+    [Tooltip("Intensidad del shake cuando impacta un mortero")]
+    [SerializeField] private float mortarShakeIntensity = 0.3f;
+    [Tooltip("Duración del shake cuando impacta un mortero")]
+    [SerializeField] private float mortarShakeDuration = 0.3f;
+    [Tooltip("Activar camera shake en todos los impactos de mortero")]
+    [SerializeField] private bool enableCameraShake = true;
+    
     private bool isAttacking = false;
     private bool isFirstAttack = true;
     private Coroutine currentAttackCoroutine;
@@ -477,6 +485,10 @@ public class EnemyMortar : EnemyAttack
         {
             mortarArea.SetImpactSound(sonidoImpacto);
         }
+        
+        // Configurar camera shake
+        mortarArea.SetShakeParameters(mortarShakeIntensity, mortarShakeDuration);
+        mortarArea.SetShouldShake(enableCameraShake);
         
         // Visualizar el área con LineRenderer
         LineRenderer lineRenderer = impactArea.AddComponent<LineRenderer>();
