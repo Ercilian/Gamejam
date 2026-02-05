@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: FogShader_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: b2ba81f4d8a99b04194638dcee8cf19e, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DepthOnly
+  - MOTIONVECTORS
+  - SHADOWCASTER
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _FogNoise:
+        m_Texture: {fileID: 2800000, guid: d0ef0ec4d6a5d4e429e25233f6e9a9d5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FogNoise_Secondary:
+        m_Texture: {fileID: 2800000, guid: fa078fb7b0f272d40995c819c7054817, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexture:
+        m_Texture: {fileID: 2800000, guid: 815997782d998a54284e91a96d146d8e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ramp:
+        m_Texture: {fileID: 2800000, guid: 0eb3bc4e6a95c4c4897f41eb23c90dd2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaClip: 1
+    - _AlphaToMask: 0
+    - _Blend: 0
+    - _CastShadows: 0
+    - _ColorPower: 1.5
+    - _Cull: 0
+    - _DepthFade: 10
+    - _DstBlend: 10
+    - _DstBlendAlpha: 10
+    - _Height: 7
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
+    - _Surface: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
+    m_Colors:
+    - _MaskOffsetSpeed: {r: 0.01, g: 0.01, b: 0, a: 0}
+    - _MaskTile: {r: 0.8, g: 0.8, b: 0, a: 0}
+    - _OffsetSpeed_1: {r: 0.015, g: 0.015, b: 0, a: 0}
+    - _Tile_1: {r: 1, g: 1, b: 0, a: 0}
+    - _Tile_2: {r: 0.5, g: 0.5, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &511374557240937944
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
