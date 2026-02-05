@@ -129922,10 +129922,10 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 0
-  m_Color: {r: 1, g: 0.827451, b: 0, a: 1}
+  m_Color: {r: 0.990566, g: 0.9123615, b: 0.53733534, a: 1}
   m_Intensity: 2478
-  m_Range: 75.76792
-  m_SpotAngle: 17.13852
+  m_Range: 83.656845
+  m_SpotAngle: 31.052639
   m_InnerSpotAngle: 13.234864
   m_CookieSize: 10
   m_Shadows:
