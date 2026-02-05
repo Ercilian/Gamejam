@@ -11,9 +11,11 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject settingsPanel;
     public GameObject selectCharacterPanel;
+    public GameObject backGroundImage;
     public Button firstSelectedButton;
     public Slider masterVolumeSlider;
-
+    [Header("Animación nube")]
+    public MainMenuAnimation nubeAnimacion;
     [Header("Other")]
     public CharacterSelectionManager characterSelectionManager;
     public InputActionAsset inputActions;
@@ -28,11 +30,11 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        // Initialize UI
-        mainMenuPanel.SetActive(true);
+        // Solo mostrar el fondo animado al inicio
+        backGroundImage.SetActive(true);
+        mainMenuPanel.SetActive(false);
         settingsPanel.SetActive(false);
         selectCharacterPanel.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -42,6 +44,27 @@ public class MainMenu : MonoBehaviour
         cancelAction = uiMap.FindAction("Cancel", true);
         cancelAction.Enable();
         cancelAction.performed += ctx => OnCancel();
+
+        // Si la nube ya se animó, forzar estado final y mostrar menú sin esperar
+        if (MainMenuAnimation.nubeAnimada)
+        {
+            if (nubeAnimacion != null)
+                nubeAnimacion.ForzarEstadoFinal();
+            mainMenuPanel.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
+        }
+        else
+        {
+            // Iniciar corrutina para mostrar el menú tras la animación
+            StartCoroutine(ShowMenuAfterAnimation());
+        }
+    }
+
+    private System.Collections.IEnumerator ShowMenuAfterAnimation()
+    {
+        yield return new WaitForSeconds(2f); // Espera la duración de la animación
+        mainMenuPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
     }
 
     void Update()
@@ -58,6 +81,7 @@ public class MainMenu : MonoBehaviour
     {
         characterSelectionManager.ResetSelection();
         mainMenuPanel.SetActive(false);
+        backGroundImage.SetActive(false);
         selectCharacterPanel.SetActive(true);
     }
 
@@ -89,6 +113,9 @@ public class MainMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstSelectedButton.gameObject);
         settingsPanel.SetActive(false);
         selectCharacterPanel.SetActive(false);
+        backGroundImage.SetActive(true);
+        if (nubeAnimacion != null && MainMenuAnimation.nubeAnimada)
+            nubeAnimacion.ForzarEstadoFinal();
     }
 
     void OnDestroy()

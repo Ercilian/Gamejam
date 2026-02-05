@@ -27,6 +27,8 @@ namespace Game.UI
         [Tooltip("RawImage donde mostrar el video (opcional, si no se asigna se reproduce a pantalla completa)")]
         public UnityEngine.UI.RawImage rawImageDestino;
 
+        [Tooltip("Panel que se muestra al saltar la intro (puede ser diferente al negro)")]
+        public UnityEngine.UI.Image skipTransitionPanel;
         public UnityEngine.UI.Image blackPanel;
         
         private VideoPlayer videoPlayer;
@@ -38,9 +40,15 @@ namespace Game.UI
             ConfigurarVideoPlayer();
 
             // Mostrar panel negro al inicio
+            // Mostrar siempre el panel negro al inicio
             if (blackPanel != null)
             {
                 blackPanel.gameObject.SetActive(true);
+            }
+            // Ocultar el skipTransitionPanel al inicio si existe
+            if (skipTransitionPanel != null)
+            {
+                skipTransitionPanel.gameObject.SetActive(false);
             }
 
             // Ocultar texto al inicio
@@ -167,6 +175,17 @@ namespace Game.UI
         {
             videoTerminado = true;
             videoPlayer.Stop();
+            // Al saltar, mostrar solo el skipTransitionPanel (si existe) y ocultar el negro
+            if (skipTransitionPanel != null)
+            {
+                skipTransitionPanel.gameObject.SetActive(true);
+                if (blackPanel != null)
+                    blackPanel.gameObject.SetActive(false);
+            }
+            else if (blackPanel != null)
+            {
+                blackPanel.gameObject.SetActive(true);
+            }
             CargarMenuPrincipal();
         }
         
