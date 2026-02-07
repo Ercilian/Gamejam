@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,14 @@ public class ShopBonfire : MonoBehaviour
     private Dictionary<PlayerInput, Quaternion> originalRotations = new Dictionary<PlayerInput, Quaternion>();
     private HashSet<PlayerInput> playersSeated = new HashSet<PlayerInput>();
     private Dictionary<PlayerInput, bool> playerWasKinematic = new Dictionary<PlayerInput, bool>();
-
+    private CameraMovement cameraMovement;
+    private bool bonfireCinematicActive = false;
+    
+    
+        void Start()
+    {
+        cameraMovement = FindFirstObjectByType<CameraMovement>();
+    }
     void Update()
     {
         // Buscar todos los jugadores en la escena (máximo 3)
@@ -76,6 +84,36 @@ public class ShopBonfire : MonoBehaviour
                     SetPlayerControls(player, true);
                     Debug.Log($"[Bonfire] {player.gameObject.name} ha salido del asiento y recupera controles");
                 }
+            }
+        }
+
+        // Si todos los jugadores de la partida están sentados y la cinemática no está activa, activar modo BonfireCinematic
+        if (!bonfireCinematicActive && playersSeated.Count == totalPlayers && totalPlayers > 0)
+        {
+            bonfireCinematicActive = true;
+            if (cameraMovement != null)
+            {
+                // Buscar el bonfireTarget dinámicamente
+                if (cameraMovement.bonfireTarget == null)
+                {
+                    GameObject bonfireObj = GameObject.FindWithTag("Bonfire");
+                    if (bonfireObj != null)
+                        cameraMovement.bonfireTarget = bonfireObj.transform;
+                    else
+                        Debug.LogWarning("[Bonfire] No se encontró un objeto con el tag 'Bonfire' para asignar como target de la cámara.");
+                }
+                cameraMovement.SetCameraMode(CameraMovement.CameraMode.BonfireCinematic);
+                Debug.Log("[Bonfire] Cinemática de hoguera activada: modo BonfireCinematic en cámara.");
+            }
+        }
+        // Si algún jugador se levanta, desactivar la cinemática
+        if (bonfireCinematicActive && playersSeated.Count < totalPlayers)
+        {
+            bonfireCinematicActive = false;
+            if (cameraMovement != null)
+            {
+                cameraMovement.SetCameraMode(CameraMovement.CameraMode.Normal);
+                Debug.Log("[Bonfire] Cinemática de hoguera desactivada: modo Normal en cámara.");
             }
         }
 
