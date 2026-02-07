@@ -1248,12 +1248,14 @@ MonoBehaviour:
   - {fileID: 4605989410389788580, guid: ddd4ba6e7f1817146b903e554a087c49, type: 3}
   countdownText: {fileID: 1253864910}
   selectionDataSO: {fileID: 11400000, guid: ad9a01878997d7a41840fead73e5b0e2, type: 2}
+  audioSource: {fileID: 0}
   joinSound: {fileID: 8300000, guid: 62c41bd52e9016749b37b243218c404f, type: 3}
   leaveSound: {fileID: 0}
   confirmSound: {fileID: 8300000, guid: 95252fc2a64d9094d9fcc87442d0e759, type: 3}
   unconfirmSound: {fileID: 0}
   countdownBeepSound: {fileID: 8300000, guid: 9ba72ca82f5b8114aa26c30e90752f59, type: 3}
   hoverSound: {fileID: 8300000, guid: 9f31d352e3eb9474b8d993706b18ad83, type: 3}
+  errorSound: {fileID: 8300000, guid: 20d3db25fe6ef8a4c93439f9981752c9, type: 3}
 --- !u!114 &268937671
 MonoBehaviour:
   m_ObjectHideFlags: 0

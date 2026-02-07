@@ -229,6 +229,16 @@ public class PlayerSlotSimple : MonoBehaviour
 
         if (!isConfirmed)
         {
+            // Verificar si el personaje ya está confirmado por otro jugador
+            for (int i = 0; i < manager.playerSlots.Length; i++)
+            {
+                if (i != slotIndex && manager.playerSlots[i].IsConfirmed && manager.playerSlots[i].selectedCharacterIndex == selectedCharacterIndex)
+                {
+                    // Personaje ya confirmado por otro jugador
+                    manager.audioSource.PlayOneShot(manager.errorSound); // Sonido de error
+                    return;
+                }
+            }
             isConfirmed = true;
             confirmButton.interactable = false;
             leftArrowButton.interactable = false;
