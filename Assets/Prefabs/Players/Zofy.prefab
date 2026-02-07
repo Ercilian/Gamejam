@@ -132,6 +132,7 @@ Transform:
   m_Children:
   - {fileID: 4839157312460253970}
   - {fileID: 7964077864587753500}
+  - {fileID: 843151129741166864}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5691666878647536362
@@ -925,6 +926,80 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57250684325b482479af6f253cf54c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+--- !u!1001 &880946313771642619
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4177164475684858231}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.83333325
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.83333325
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.83333325
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.1493669
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.15634018
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+      propertyPath: m_Name
+      value: ZofyAttack1&2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+--- !u!4 &843151129741166864 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 62f58de5b6514e34ea05c17c946155b1, type: 3}
+  m_PrefabInstance: {fileID: 880946313771642619}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1832596270840491424
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1104,6 +1179,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 277e35ac23c65a54abbc6e3158bde0ae, type: 3}
       propertyPath: m_Name
       value: ZofyPrefabs
+      objectReference: {fileID: 0}
+    - target: {fileID: 4163730884033810741, guid: 277e35ac23c65a54abbc6e3158bde0ae, type: 3}
+      propertyPath: m_Name
+      value: Armature.001
       objectReference: {fileID: 0}
     - target: {fileID: 8710124675284272573, guid: 277e35ac23c65a54abbc6e3158bde0ae, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
