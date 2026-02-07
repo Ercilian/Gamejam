@@ -20,6 +20,13 @@ public class CameraMovement : MonoBehaviour
     public float offsetYBossCinematic = 0f;
     public float offsetZBossCinematic = 0f;
 
+    [Header("Modo Bonfire Cinematic")]
+    public float offsetXBonfireCinematic = 0f;
+    public float offsetYBonfireCinematic = 0f;
+    public float offsetZBonfireCinematic = 0f;
+    public float offsetPitchBonfireCinematic = 0f;
+    public Transform bonfireTarget;
+
     [Header("Ajustes Cinemática Boss")]
     public float offsetPitchBossCinematic = 5f;
     
@@ -36,7 +43,7 @@ public class CameraMovement : MonoBehaviour
     private float offsetX; // Offset actual usado internamente
     public float smoothSpeed = 5f;
 
-    public enum CameraMode { Normal, Pasillo, BossCinematic, BossCombat }
+    public enum CameraMode { Normal, Pasillo, BossCinematic, BossCombat, BonfireCinematic }
     public CameraMode currentMode = CameraMode.Normal;
 
     // Freeze flags y valores específicos
@@ -138,7 +145,7 @@ public class CameraMovement : MonoBehaviour
                 float dz = target.position.z - transform.position.z;
                 float distance = Mathf.Sqrt(dx * dx + dz * dz);
                 float pitch = -Mathf.Atan2(dy, distance) * Mathf.Rad2Deg;
-                pitch = Mathf.Clamp(pitch, -55f, 55f); // Limita el pitch entre -55 y 55 grados
+                pitch = Mathf.Clamp(pitch, -55f, 55f);
                 transform.rotation = Quaternion.Euler(pitch, currentYaw, 0f);
                 break;
             case CameraMode.Pasillo:
@@ -150,7 +157,6 @@ public class CameraMovement : MonoBehaviour
                 transform.LookAt(target);
                 break;
             case CameraMode.BossCinematic:
-                // Activar UI de diálogo de boss
                 if (UIManager.Instance != null)
                     UIManager.Instance.BossDialogueSetup();
                 offsetX = offsetXBossCinematic;
@@ -158,16 +164,30 @@ public class CameraMovement : MonoBehaviour
                 float offsetZBossCine = offsetZBossCinematic;
                 Vector3 desiredPosBossCine = target.position + new Vector3(offsetX, offsetYBossCine, offsetZBossCine);
                 transform.position = Vector3.Lerp(transform.position, desiredPosBossCine, smoothSpeed * Time.deltaTime);
-                // Calcular dirección hacia el target
                 Vector3 dir = target.position - transform.position;
                 float bossCineDistance = Mathf.Sqrt(dir.x * dir.x + dir.z * dir.z);
                 float bossCinePitch = -Mathf.Atan2(dir.y, bossCineDistance) * Mathf.Rad2Deg + offsetPitchBossCinematic;
-                bossCinePitch = Mathf.Clamp(bossCinePitch, -55f, 55f); // Limita el pitch entre -55 y 55 grados
+                bossCinePitch = Mathf.Clamp(bossCinePitch, -55f, 55f);
                 float yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(bossCinePitch, yaw, 0f);
                 break;
+            case CameraMode.BonfireCinematic:
+                if (bonfireTarget != null)
+                {
+                    offsetX = offsetXBonfireCinematic;
+                    float offsetYBonfire = offsetYBonfireCinematic;
+                    float offsetZBonfire = offsetZBonfireCinematic;
+                    Vector3 desiredPosBonfire = bonfireTarget.position + new Vector3(offsetX, offsetYBonfire, offsetZBonfire);
+                    transform.position = Vector3.Lerp(transform.position, desiredPosBonfire, smoothSpeed * Time.deltaTime);
+                    Vector3 dirBonfire = bonfireTarget.position - transform.position;
+                    float bonfireDistance = Mathf.Sqrt(dirBonfire.x * dirBonfire.x + dirBonfire.z * dirBonfire.z);
+                    float bonfirePitch = -Mathf.Atan2(dirBonfire.y, bonfireDistance) * Mathf.Rad2Deg + offsetPitchBonfireCinematic;
+                    bonfirePitch = Mathf.Clamp(bonfirePitch, -55f, 55f);
+                    float bonfireYaw = Mathf.Atan2(dirBonfire.x, dirBonfire.z) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(bonfirePitch, bonfireYaw, 0f);
+                }
+                break;
             case CameraMode.BossCombat:
-                // Activar UI de combate de boss
                 if (UIManager.Instance != null)
                     UIManager.Instance.BossFightSetup();
                 if (cameraBossCombatPosition != null)

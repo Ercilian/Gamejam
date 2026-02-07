@@ -1212,6 +1212,11 @@ MonoBehaviour:
   offsetXBossCinematic: -15
   offsetYBossCinematic: 4
   offsetZBossCinematic: 0
+  offsetXBonfireCinematic: -3.5
+  offsetYBonfireCinematic: 1
+  offsetZBonfireCinematic: -8
+  offsetPitchBonfireCinematic: 0
+  bonfireTarget: {fileID: 0}
   offsetPitchBossCinematic: -15
   offsetXBossCombat: 0
   offsetYBossCombat: 0
