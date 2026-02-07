@@ -1,4 +1,5 @@
 
+
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -128,6 +129,13 @@ public class DialogueSystem : MonoBehaviour
     {
         string combinationKey = GetCurrentCombinationKey();
         string fullKey = pasilloId + "_" + combinationKey; // Ejemplo: "Pasillo_1_1_2_3"
+        ActivateDialogueByKey(fullKey);
+    }
+    public void ActivateDialogueForBonfire(string bonfireId)
+    {
+        string combinationKey = GetCurrentCombinationKey();
+        string fullKey = bonfireId + "_" + combinationKey; // Ejemplo: "Bonfire_1_2_3"
+        Debug.Log("[DialogueSystem] Buscando diálogo con clave: " + fullKey);
         ActivateDialogueByKey(fullKey);
     }
 }

@@ -6784,6 +6784,34 @@ MonoBehaviour:
       text: "\xBFMhm?"
     - characterIndex: 1
       text: Eso explica muchas cosas.
+  - combinationKey: BonfireTarget_0_1
+    lines:
+    - characterIndex: 1
+      text: Esto es una hoguera
+    - characterIndex: 0
+      text: Efectivamente, es una hoguera
+    - characterIndex: 1
+      text: "Ten los cojones met\xE1licos de decir bomba Eugene..."
+    - characterIndex: 2
+      text: ...
+    - characterIndex: 1
+      text: "Eso cre\xEDa..."
+    - characterIndex: 2
+      text: "\xBFSabes Zofy? Creo que te vendr\xEDa bien tomarte algo."
+    - characterIndex: 1
+      text: "Y a t\xED te vendr\xEDa bien tomar menos, puto pirado..."
+    - characterIndex: 2
+      text: Yo solo bebo agua y diesel.
+    - characterIndex: 1
+      text: ...
+    - characterIndex: 2
+      text: Especialmente diesel.
+    - characterIndex: 1
+      text: Eso...
+    - characterIndex: 2
+      text: "\xBFMhm?"
+    - characterIndex: 1
+      text: Eso explica muchas cosas.
 --- !u!114 &458190343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19662,7 +19690,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1922835809
 RectTransform:
   m_ObjectHideFlags: 0

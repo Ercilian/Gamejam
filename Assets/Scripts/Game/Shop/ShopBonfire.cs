@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class ShopBonfire : MonoBehaviour
 {
@@ -98,28 +99,24 @@ public class ShopBonfire : MonoBehaviour
         if (!bonfireCinematicActive && playersSeated.Count == totalPlayers && totalPlayers > 0)
         {
             bonfireCinematicActive = true;
-            if (cameraMovement != null)
             {
-                // Buscar el bonfireTarget dinámicamente
-                if (cameraMovement.bonfireTarget == null)
-                {
-                    GameObject bonfireObj = GameObject.FindWithTag("Bonfire");
-                    if (bonfireObj != null)
-                        cameraMovement.bonfireTarget = bonfireObj.transform;
-                    else
-                        Debug.LogWarning("[Bonfire] No se encontró un objeto con el tag 'Bonfire' para asignar como target de la cámara.");
-                }
+                GameObject bonfireObj = GameObject.FindWithTag("Bonfire");
+                cameraMovement.bonfireTarget = bonfireObj.transform;
                 cameraMovement.SetCameraMode(CameraMovement.CameraMode.BonfireCinematic);
-                Debug.Log("[Bonfire] Cinemática de hoguera activada: modo BonfireCinematic en cámara.");
+                UIManager.Instance.DialogueSetup();
+                // Activar diálogo de bonfire igual que en pasillos
+                var dialogueSystem = FindFirstObjectByType<DialogueSystem>();
+                if (dialogueSystem != null)
+                {
+                    dialogueSystem.ActivateDialogueForBonfire(bonfireObj != null ? bonfireObj.name : "Bonfire");
+                }
             }
             StartCoroutine(BonfireCinematicCoroutine());
         }
             // Coroutine simple para la cinemática de la hoguera
             System.Collections.IEnumerator BonfireCinematicCoroutine()
             {
-                Debug.Log($"[Bonfire] Cinemática iniciada. Esperando {bonfireCinematicDuration} segundos...");
                 yield return new WaitForSeconds(bonfireCinematicDuration);
-                Debug.Log("[Bonfire] Cinemática de hoguera completada.");
 
                 // Devolver jugadores a su posición original y reactivar controles
                 foreach (var player in new List<PlayerInput>(playersSeated))
@@ -149,6 +146,8 @@ public class ShopBonfire : MonoBehaviour
                 GameObject carObj = GameObject.FindGameObjectWithTag("Car");
                 MovCar movCar = carObj.GetComponent<MovCar>();
                 movCar.enabled = true;
+                UIManager.Instance.GameUISetup();
+
             }
         // Si algún jugador se levanta, desactivar la cinemática
         if (bonfireCinematicActive && playersSeated.Count < totalPlayers)
@@ -157,7 +156,6 @@ public class ShopBonfire : MonoBehaviour
             if (cameraMovement != null)
             {
                 cameraMovement.SetCameraMode(CameraMovement.CameraMode.Normal);
-                Debug.Log("[Bonfire] Cinemática de hoguera desactivada: modo Normal en cámara.");
             }
         }
 

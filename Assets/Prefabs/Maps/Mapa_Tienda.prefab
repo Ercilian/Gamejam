@@ -13657,13 +13657,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 764834309848296633}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.39780068, z: -0, w: 0.9174718}
+  m_LocalRotation: {x: -0, y: 0.63560206, z: -0, w: 0.7720169}
   m_LocalPosition: {x: 12.661, y: 0.6400697, z: 119.855}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1548081369969082543}
-  m_LocalEulerAnglesHint: {x: 0, y: -46.882, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 78.929, z: 0}
 --- !u!1 &774448382894871248
 GameObject:
   m_ObjectHideFlags: 0
@@ -63946,7 +63946,7 @@ GameObject:
   - component: {fileID: 4172563274816111149}
   - component: {fileID: 2872057056328011632}
   m_Layer: 0
-  m_Name: Bonfire
+  m_Name: Bonfire Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81685,7 +81685,7 @@ GameObject:
   - component: {fileID: 488675971098985513}
   - component: {fileID: 4385879151816042919}
   m_Layer: 0
-  m_Name: Collider Bonfire
+  m_Name: Bonfire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81743,6 +81743,7 @@ MonoBehaviour:
   - {fileID: 2885955318218333988}
   - {fileID: 7349071298359572528}
   - {fileID: 1806422861811261768}
+  bonfireCinematicDuration: 5
 --- !u!1 &5198897330627092208
 GameObject:
   m_ObjectHideFlags: 0

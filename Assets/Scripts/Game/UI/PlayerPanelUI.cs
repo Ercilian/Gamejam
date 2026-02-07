@@ -30,7 +30,6 @@ public class PlayerPanelUI : MonoBehaviour
 
     public void SetHealth(int currentHealth)
     {
-        Debug.Log($"[PlayerPanelUI] Actualizando salud: {currentHealth}/{maxHealth}");
         if (maxHealth > 0)
             healthBar.fillAmount = Mathf.Clamp01((float)currentHealth / maxHealth);
     }
