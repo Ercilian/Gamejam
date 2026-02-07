@@ -530,7 +530,7 @@ MonoBehaviour:
   newOffsetX: 0
   delaySeconds: 2
   cameraMovement: {fileID: 0}
-  disableFuelConsumption: 0
+  disableFuelConsumption: 1
   isPasillo: 1
   isBossRoom: 0
   isShopRoom: 0

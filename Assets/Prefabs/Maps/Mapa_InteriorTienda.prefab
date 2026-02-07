@@ -139603,11 +139603,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0b6d1fb94fb1041addd8ce1c6a0156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  newOffset: {x: 6, y: 2, z: -6}
+  newOffsetX: 0
   delaySeconds: 0
   cameraMovement: {fileID: 0}
   disableFuelConsumption: 1
   isPasillo: 0
+  isBossRoom: 0
+  isShopRoom: 0
 --- !u!1 &699190612395751759
 GameObject:
   m_ObjectHideFlags: 0
@@ -139792,7 +139794,7 @@ Transform:
   m_GameObject: {fileID: 2670061660460573916}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -41.18, y: 41.158623, z: 14.996299}
+  m_LocalPosition: {x: -41.18, y: 41.739998, z: 14.996299}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -139889,7 +139891,7 @@ Transform:
   m_GameObject: {fileID: 3932105743583790260}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -43.523125, y: 41.158623, z: 14.996299}
+  m_LocalPosition: {x: -43.523125, y: 41.74, z: 14.996299}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -139920,7 +139922,7 @@ Transform:
   m_GameObject: {fileID: 4355188020285961856}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -49.28, y: 41.158623, z: 14.996299}
+  m_LocalPosition: {x: -49.28, y: 41.739998, z: 14.996299}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -140042,7 +140044,7 @@ Transform:
   m_GameObject: {fileID: 7714665049074751540}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -46.49, y: 41.158623, z: 14.996299}
+  m_LocalPosition: {x: -46.49, y: 41.739998, z: 14.996299}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

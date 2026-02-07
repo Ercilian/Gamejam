@@ -16,7 +16,6 @@ public class ShopStopTrigger : MonoBehaviour
                 movCar.cur_speed = 0f;
                 movCar.enabled = false; // Opcional: desactiva el script de movimiento
                 unlockShop = true;
-                Debug.Log("Coche parado en la tienda. ¡Entrada desbloqueada!");
             }
         }
     }

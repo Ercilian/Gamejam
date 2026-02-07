@@ -133,7 +133,6 @@ public class CarFuelSystem : MonoBehaviour
     {
         if (!fuelConsumptionEnabled)
         {
-            Debug.Log("[CarFuelSystem] Consumo de combustible DESACTIVADO, no se consume diesel.");
             return;
         }
 
