@@ -15,13 +15,14 @@ public class CharacterSelectionManager : MonoBehaviour
     public PlayerSelectionDataSO selectionDataSO;
 
     [Header("Audio")]
-    private AudioSource audioSource;
+    public AudioSource audioSource;
     public AudioClip joinSound;
     public AudioClip leaveSound;
     public AudioClip confirmSound;
     public AudioClip unconfirmSound;
     public AudioClip countdownBeepSound;
     public AudioClip hoverSound;
+    public AudioClip errorSound;
 
     private Dictionary<int, PlayerInput> activePlayers = new Dictionary<int, PlayerInput>();
     private Coroutine countdownCoroutine;
