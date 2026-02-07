@@ -6665,11 +6665,11 @@ MonoBehaviour:
   - {fileID: 3433495517364249440, guid: 0ea260928ab56e748bfe7e3a38e20c0b, type: 3}
   fixedMaps:
   - {fileID: 160644436595108402, guid: ca364efb22cc8474bbd5df2ede107438, type: 3}
-  - {fileID: 6540120780592400911, guid: 49dbd9634f37662439662a652f99c850, type: 3}
-  - {fileID: 6540120780592400911, guid: 92734d0e3cfd5634baf1f8c6b9a6439a, type: 3}
+  - {fileID: 160644436595108402, guid: 59a0ecd9e95e166499180e380bcba4d8, type: 3}
+  - {fileID: 160644436595108402, guid: 489910a3bf0522840abca601512bf917, type: 3}
   - {fileID: 358248212900244837, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 6100118547817037488, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: ffffffff0300000004000000ffffffffffffffff04000000
+  mapSequence: ffffffff020000000300000004000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342

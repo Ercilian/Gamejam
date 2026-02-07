@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 160644436595108402}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 560.8116, y: -0.45022, z: 30.8263}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -532,6 +532,7 @@ MonoBehaviour:
   disableFuelConsumption: 0
   isPasillo: 1
   isBossRoom: 0
+  isShopRoom: 0
 --- !u!1 &3629209479369912069
 GameObject:
   m_ObjectHideFlags: 0
