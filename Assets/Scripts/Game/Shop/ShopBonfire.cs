@@ -1,0 +1,116 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class ShopBonfire : MonoBehaviour
+{
+    [Header("Bonfire Seats (Assign in Inspector)")]
+    public List<Transform> seatPoints;
+
+    private List<PlayerInput> playersInZone = new List<PlayerInput>();
+    private HashSet<PlayerInput> playersInteracted = new HashSet<PlayerInput>();
+    private Dictionary<PlayerInput, Vector3> originalPositions = new Dictionary<PlayerInput, Vector3>();
+    private Dictionary<PlayerInput, Quaternion> originalRotations = new Dictionary<PlayerInput, Quaternion>();
+    private HashSet<PlayerInput> playersSeated = new HashSet<PlayerInput>();
+    private Dictionary<PlayerInput, bool> playerWasKinematic = new Dictionary<PlayerInput, bool>();
+
+    void Update()
+    {
+        // Buscar todos los jugadores en la escena (máximo 3)
+        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+        int totalPlayers = Mathf.Min(allPlayers.Length, 3);
+
+        // Debug: mostrar jugadores en la zona y total de jugadores
+        string playersInZoneNames = string.Join(", ", playersInZone.ConvertAll(p => p.gameObject.name));
+        string playersInteractedNames = string.Join(", ", new List<PlayerInput>(playersInteracted).ConvertAll(p => p.gameObject.name));
+        Debug.Log($"[Bonfire] Jugadores en la zona: {playersInZoneNames}");
+        Debug.Log($"[Bonfire] Jugadores que han pulsado Interact: {playersInteractedNames}");
+        Debug.Log($"[Bonfire] Total de jugadores en la partida: {totalPlayers}");
+
+        // Teletransportar individualmente al asiento cuando pulsan Interact
+        for (int i = 0; i < playersInZone.Count && i < seatPoints.Count; i++)
+        {
+            var player = playersInZone[i];
+            var interactAction = player.actions["Interact"];
+            if (interactAction != null && interactAction.WasPressedThisFrame())
+            {
+                if (!playersSeated.Contains(player))
+                {
+                    // Guardar posición y rotación original
+                    originalPositions[player] = player.transform.position;
+                    originalRotations[player] = player.transform.rotation;
+                    // Guardar y poner Rigidbody en isKinematic
+                    Rigidbody rb = player.GetComponent<Rigidbody>();
+                    if (rb != null)
+                    {
+                        playerWasKinematic[player] = rb.isKinematic;
+                        rb.isKinematic = true;
+                    }
+                    // Teletransportar y "sentar"
+                    var seat = seatPoints[i];
+                    player.transform.position = seat.position;
+                    player.transform.rotation = seat.rotation;
+                    playersSeated.Add(player);
+                    // Desactivar controles salvo Interact
+                    SetPlayerControls(player, false);
+                    Debug.Log($"[Bonfire] {player.gameObject.name} teletransportado al asiento {i + 1} y controles bloqueados");
+                }
+                else
+                {
+                    // Volver a la posición original y devolver controles
+                    if (originalPositions.ContainsKey(player) && originalRotations.ContainsKey(player))
+                    {
+                        player.transform.position = originalPositions[player];
+                        player.transform.rotation = originalRotations[player];
+                        originalPositions.Remove(player);
+                        originalRotations.Remove(player);
+                    }
+                    // Restaurar Rigidbody isKinematic
+                    Rigidbody rb = player.GetComponent<Rigidbody>();
+                    if (rb != null && playerWasKinematic.ContainsKey(player))
+                    {
+                        rb.isKinematic = playerWasKinematic[player];
+                        playerWasKinematic.Remove(player);
+                    }
+                    playersSeated.Remove(player);
+                    SetPlayerControls(player, true);
+                    Debug.Log($"[Bonfire] {player.gameObject.name} ha salido del asiento y recupera controles");
+                }
+            }
+        }
+
+    // Habilita o deshabilita todos los controles del jugador salvo Interact
+    void SetPlayerControls(PlayerInput player, bool enable)
+    {
+        foreach (var action in player.actions)
+        {
+            if (action.name != "Interact")
+            {
+                if (enable) action.Enable();
+                else action.Disable();
+            }
+        }
+    }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        PlayerInput playerInput = other.GetComponent<PlayerInput>();
+        if (playerInput != null && !playersInZone.Contains(playerInput))
+        {
+            playersInZone.Add(playerInput);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        PlayerInput playerInput = other.GetComponent<PlayerInput>();
+        if (playerInput != null && playersInZone.Contains(playerInput))
+        {
+            playersInZone.Remove(playerInput);
+            playersInteracted.Remove(playerInput);
+        }
+    }
+
+    // La función StartBonfireCinematic ya no es necesaria para el tp individual
+}

@@ -6660,6 +6660,7 @@ MonoBehaviour:
   randomMapPool:
   - {fileID: 8684991815642709520, guid: eb483f94042fe574e8f3ed5b72c0eaba, type: 3}
   - {fileID: 4548217557689129615, guid: 73d0fcbd1031b8f49ba129f21157fa87, type: 3}
+  - {fileID: 4032029534612359075, guid: 0b5ee51586154f3419dd1375fe368b13, type: 3}
   - {fileID: 4937800196258597293, guid: 510a5b917ae7d2046a38ed427642c89d, type: 3}
   - {fileID: 3192354980408217338, guid: b01bd7eacfb067c41a80ca12e311b2ca, type: 3}
   - {fileID: 3433495517364249440, guid: 0ea260928ab56e748bfe7e3a38e20c0b, type: 3}
@@ -20204,8 +20205,8 @@ MonoBehaviour:
   slowspeed: 0.8
   cur_speed: 0
   speedTransitionRate: 0.1
-  pushSpeed: 0.2
-  pushSpeedTwo: 0.4
+  pushSpeed: 0.8
+  pushSpeedTwo: 1
   truckAnimator: {fileID: 1176941284}
   reachDistance: 3
   pathSmoothness: 2
