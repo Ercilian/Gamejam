@@ -4,9 +4,12 @@ using Game.Combat;
 using System.Collections;
 
 public class Player : EntityStats
+
 {
     private PlayerPanelUI playerPanelUI;
-
+    [Header("Identidad de personaje")]
+    public int characterIndex = -1; // Se asigna al instanciar
+    
     // Permite asignar el panel de UI correcto desde fuera
     public void SetPlayerPanelUI(PlayerPanelUI panel)
     {

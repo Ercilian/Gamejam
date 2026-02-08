@@ -1213,7 +1213,7 @@ MonoBehaviour:
   offsetYBossCinematic: 4
   offsetZBossCinematic: 0
   offsetXBonfireCinematic: -3.5
-  offsetYBonfireCinematic: 1
+  offsetYBonfireCinematic: 3.5
   offsetZBonfireCinematic: -8
   offsetPitchBonfireCinematic: 0
   bonfireTarget: {fileID: 0}
@@ -6675,7 +6675,7 @@ MonoBehaviour:
   - {fileID: 160644436595108402, guid: 489910a3bf0522840abca601512bf917, type: 3}
   - {fileID: 358248212900244837, guid: 3caa6b207762b6341872eb23699d31e2, type: 3}
   - {fileID: 6100118547817037488, guid: aa0402f16ef7ee54d99563d06aa6768e, type: 3}
-  mapSequence: 01000000020000000300000004000000
+  mapSequence: 03000000020000000300000004000000
   carTransform: {fileID: 2070441881}
   globalCheckpoints: []
 --- !u!114 &458190342
@@ -20237,7 +20237,7 @@ MonoBehaviour:
   fastspeed: 1.2
   slowspeed: 0.8
   cur_speed: 0
-  speedTransitionRate: 0.1
+  speedTransitionRate: 1
   pushSpeed: 0.8
   pushSpeedTwo: 1
   truckAnimator: {fileID: 1176941284}

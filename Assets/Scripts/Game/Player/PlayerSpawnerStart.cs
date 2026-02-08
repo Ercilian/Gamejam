@@ -19,6 +19,13 @@ public class PlayerSpawnerStart : MonoBehaviour
             // Instancia el jugador
             var playerObj = Instantiate(prefab, spawn.position, spawn.rotation);
 
+            // Asignar el characterIndex al componente Player
+            var playerComponent = playerObj.GetComponent<Player>();
+            if (playerComponent != null)
+            {
+                playerComponent.characterIndex = info.characterIndex;
+            }
+
             // Asigna el input device si usas PlayerInput
             var playerInput = playerObj.GetComponent<PlayerInput>();
             if (playerInput != null && !string.IsNullOrEmpty(info.inputDeviceId))
