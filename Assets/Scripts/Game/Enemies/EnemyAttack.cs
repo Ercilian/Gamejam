@@ -54,6 +54,12 @@ public class EnemyAttack : MonoBehaviour
     /// </summary>
     public virtual bool CanAttack()
     {
+        // No atacar si está stunneado
+        if (enemyStats != null && enemyStats.IsStunned())
+        {
+            return false;
+        }
+        
         return Time.time - lastAttackTime >= attackCooldown;
     }
 

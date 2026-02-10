@@ -108,15 +108,16 @@ public class IA_Enemy : MonoBehaviour
     // Componentes opcionales
     private Animator animator;
     private EnemyAttack enemyAttack; // Componente de ataque
+    private Enemy enemy; // Referencia al componente Enemy para chequear stun
     
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         enemyAttack = GetComponent<EnemyAttack>();
+        enemy = GetComponent<Enemy>();
 
         // Cargar velocidades desde el ScriptableObject si existe
-        Enemy enemy = GetComponent<Enemy>();
         if (enemy != null)
         {
             // Intentar obtener el EnemyStatsData mediante reflexión o buscar directamente en el campo serializado
@@ -387,6 +388,14 @@ public class IA_Enemy : MonoBehaviour
     
     void MoverHacia(Vector3 objetivo, float velocidad)
     {
+        // No moverse si está stunneado
+        if (enemy != null && enemy.IsStunned())
+        {
+            if (rb != null)
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            return;
+        }
+        
         Vector3 direccionDeseada = (objetivo - transform.position).normalized;
         float distancia = Vector3.Distance(transform.position, objetivo);
         
@@ -470,6 +479,14 @@ public class IA_Enemy : MonoBehaviour
     // Movimiento directo sin evitación (para enemigos a rango)
     void MoverDirecto(Vector3 objetivo, float velocidad)
     {
+        // No moverse si está stunneado
+        if (enemy != null && enemy.IsStunned())
+        {
+            if (rb != null)
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            return;
+        }
+        
         Vector3 direccionDeseada = (objetivo - transform.position).normalized;
         float distancia = Vector3.Distance(transform.position, objetivo);
         

@@ -96,6 +96,11 @@ namespace Game.Enemies
         {
             base.TakeDamage(amount);
             
+            // Aplicar stun al recibir daño
+            isStunned = true;
+            stunTimer = stunDuration;
+            if (showDebugLogs) Debug.Log($"[{name}] Stunned por {stunDuration} segundos");
+            
             // Flash del outliner cuando recibe daño
             if (outlinerMaterialInstance != null && !isFlashingOutliner)
             {
