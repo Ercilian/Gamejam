@@ -20291,6 +20291,10 @@ MonoBehaviour:
   attackDamage: 20
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 0}
+  damageTriggerNames:
+  - Hit
+  damageSounds: []
+  damageVolume: 1
   explosionVFXPrefab: {fileID: 104091395477980541, guid: 9ff4a109b3a8ebe4da9ffafdacc9e33a, type: 3}
   delayBeforeGameOver: 1
 --- !u!82 &2070441886
@@ -20788,7 +20792,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  speedMultiplier: 100
+  speedMultiplier: 10
   maxScrollDistance: 4096
   currentSpeed: 0
   currentProgress: 0
