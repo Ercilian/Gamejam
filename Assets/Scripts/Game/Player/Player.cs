@@ -31,7 +31,6 @@ public class Player : EntityStats
     [HideInInspector] public bool activeControl = true; // Allow external scripts (like PlayerInputEmpuje) to enable/disable control
     [HideInInspector] public bool isCinematicRun = false; // Forzar animación de correr en cinemática
 
-    private Animator animator;
     private Rigidbody rb; // o CharacterController, según tu sistema
 
     // ============ Tiempo de Gracia (Invulnerabilidad Temporal) ============
@@ -69,12 +68,9 @@ public class Player : EntityStats
 
     void Start()
     {
-        animator = GetComponentInChildren<Animator>(); // Busca en hijos (armature)
         rb = GetComponent<Rigidbody>(); // o el componente que uses para mover
-
+        // animator ya se obtiene en EntityStats.Awake()
         // playerPanelUI se asigna ahora desde InGameUI, no aquí
-
-
     }
 
     private void Update()

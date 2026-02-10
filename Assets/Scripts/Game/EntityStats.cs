@@ -19,6 +19,20 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
     [Header("Optional Stats Data")]
     [SerializeField] protected PlayerStatsData statsData; // Optional ScriptableObject for stats
     [SerializeField] protected EnemyStatsData enemyStatsData; // Optional ScriptableObject for enemy stats
+    
+    [Header("Animation")]
+    [Tooltip("Nombres de los triggers de animación de daño. Se elegirá uno al azar.")]
+    public string[] damageTriggerNames = new string[] { "Hit" };
+    protected Animator animator;
+    
+    [Header("Audio")]
+    [Tooltip("Sonidos de daño. Se reproducirá uno al azar cuando reciba daño.")]
+    public AudioClip[] damageSounds;
+    [Tooltip("Volumen de los sonidos de daño (0-1)")]
+    [Range(0f, 1f)]
+    public float damageVolume = 1f;
+    protected AudioSource audioSource;
+    
     public int CurrentHP => curHP;
     public int MaxHP
     {
@@ -39,6 +53,17 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
 
     protected virtual void Awake()
     {
+        animator = GetComponentInChildren<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        
+        // Si no hay AudioSource, agregar uno
+        if (audioSource == null && damageSounds != null && damageSounds.Length > 0)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 1f; // 3D sound
+        }
+        
         ApplyStatsData(); // Apply ScriptableObject stats if available
         curHP = maxHP; // Start with full health when created (after applying stats)
         curShield = maxShield; // Start with full shield when created
@@ -115,6 +140,8 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
         if (remainingDamage > 0)
         {
             curHP -= remainingDamage;
+            // Activar animación de daño
+            PlayDamageAnimation();
         }
 
         IsAlive();
@@ -169,5 +196,36 @@ public class EntityStats : MonoBehaviour // Use the interface to ensure it can t
         yield return new WaitForSeconds(duration);
         // Revertir el boost de daño aquí
         // damage -= amount;
+    }
+    
+    /// <summary>
+    /// Activa un trigger de animación de daño aleatorio si existe un animator
+    /// y reproduce un sonido de daño aleatorio si existe
+    /// </summary>
+    protected virtual void PlayDamageAnimation()
+    {
+        // Reproducir animación
+        if (animator != null && damageTriggerNames != null && damageTriggerNames.Length > 0)
+        {
+            // Elegir un trigger aleatorio del array
+            string randomTrigger = damageTriggerNames[Random.Range(0, damageTriggerNames.Length)];
+            
+            if (!string.IsNullOrEmpty(randomTrigger))
+            {
+                animator.SetTrigger(randomTrigger);
+            }
+        }
+        
+        // Reproducir sonido
+        if (audioSource != null && damageSounds != null && damageSounds.Length > 0)
+        {
+            // Elegir un sonido aleatorio del array
+            AudioClip randomClip = damageSounds[Random.Range(0, damageSounds.Length)];
+            
+            if (randomClip != null)
+            {
+                audioSource.PlayOneShot(randomClip, damageVolume);
+            }
+        }
     }
 }

@@ -323,6 +323,12 @@ MonoBehaviour:
   attackDamage: 20
   statsData: {fileID: 11400000, guid: 45bc7567054e03344b1d2ef8296eea8b, type: 2}
   enemyStatsData: {fileID: 0}
+  damageTriggerNames:
+  - Hit
+  damageSounds:
+  - {fileID: 8300000, guid: 1e4a0942e0bc35b4a8e940b53f9505cc, type: 3}
+  damageVolume: 1
+  characterIndex: -1
   activeControl: 1
   isCinematicRun: 0
   gracePeriodDuration: 1.5

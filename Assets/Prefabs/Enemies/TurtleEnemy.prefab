@@ -138,6 +138,11 @@ MonoBehaviour:
   attackDamage: 10
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 11400000, guid: 1e64244bfe5ce5b49acfefc1ad206c58, type: 2}
+  damageTriggerNames:
+  - Hit
+  damageSounds:
+  - {fileID: 8300000, guid: 5800e416657299e409f34d188f4f5f19, type: 3}
+  damageVolume: 1
   showDebugLogs: 0
   isElite: 0
   canTakeKnockback: 1
@@ -160,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMortar
   baseDamage: 10
   attackCooldown: 6
-  attackRange: 100
+  attackRange: 15
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -184,6 +189,9 @@ MonoBehaviour:
   projectileSpawnOffset: {x: 0, y: 2, z: 0}
   sonidoDisparo: {fileID: 8300000, guid: d2015bcc326cfd34a892da7a98f80539, type: 3}
   sonidoImpacto: {fileID: 8300000, guid: 20801a6968f94bd4e8c09d1b5da3d27b, type: 3}
+  mortarShakeIntensity: 0.3
+  mortarShakeDuration: 0.3
+  enableCameraShake: 1
 --- !u!114 &4054494973640483355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IA_Enemy
   tipoEnemigo: 1
-  distanciaOptimaAtaque: 20
+  distanciaOptimaAtaque: 15
   velocidadBase: 2
   velocidadPersecucion: 5
   rangoDeteccion: 8

@@ -32,10 +32,7 @@ namespace Game.Enemies
         private float stunTimer = 0f;
         private Rigidbody rb;
         private AudioSource audioSource;
-
-        // Eventos para efectos visuales/sonoros
-        //public System.Action<DamageInfo> OnDamageTaken;
-        public System.Action<int> OnHealthChanged;
+    // animator ya está definido en EntityStats
         public System.Action OnDeath;
 
 

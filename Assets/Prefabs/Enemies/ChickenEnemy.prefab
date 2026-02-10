@@ -140,6 +140,12 @@ MonoBehaviour:
   attackDamage: 10
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 11400000, guid: 6bcaa846869a79246a0f05c38ed09773, type: 2}
+  damageTriggerNames:
+  - Hit1
+  - Hit2
+  damageSounds:
+  - {fileID: 8300000, guid: 1a555cb08ba465046b7716323e499f38, type: 3}
+  damageVolume: 1
   showDebugLogs: 0
   isElite: 0
   canTakeKnockback: 1
