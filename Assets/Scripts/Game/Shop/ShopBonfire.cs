@@ -174,12 +174,19 @@ public class ShopBonfire : MonoBehaviour
                         playerWasKinematic.Remove(player);
                     }
 
+                    // Trigger BonfireExit animation
+                    Animator animator = player.GetComponentInChildren<Animator>();
+                    if (animator != null)
+                    {
+                        animator.SetTrigger("BonfireExit");
+                    }
+
                     SetPlayerControls(player, true);
                     playersSeated.Remove(player);
                 }
 
                 cameraMovement.SetCameraMode(CameraMovement.CameraMode.Normal);
-                
+
                 // Reactivar movimiento del camión
                 GameObject carObj = GameObject.FindGameObjectWithTag("Car");
                 MovCar movCar = carObj.GetComponent<MovCar>();

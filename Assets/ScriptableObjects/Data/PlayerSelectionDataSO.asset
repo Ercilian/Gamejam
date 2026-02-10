@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSelectionDataSO
   selectedPlayers:
   - slotIndex: 0
-    characterIndex: 2
+    characterIndex: 0
     inputDeviceId: 1
   - slotIndex: 0
     characterIndex: 1
