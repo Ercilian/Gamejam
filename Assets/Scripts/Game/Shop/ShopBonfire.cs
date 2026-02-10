@@ -137,17 +137,24 @@ public class ShopBonfire : MonoBehaviour
         if (!bonfireCinematicActive && playersSeated.Count == totalPlayers && totalPlayers > 0)
         {
             bonfireCinematicActive = true;
+            // Curar a todos los jugadores sentados
+            foreach (var playerInput in playersSeated)
             {
-                GameObject bonfireObj = GameObject.FindWithTag("Bonfire");
-                cameraMovement.bonfireTarget = bonfireObj.transform;
-                cameraMovement.SetCameraMode(CameraMovement.CameraMode.BonfireCinematic);
-                UIManager.Instance.DialogueSetup();
-                // Activar diálogo de bonfire igual que en pasillos
-                var dialogueSystem = FindFirstObjectByType<DialogueSystem>();
-                if (dialogueSystem != null)
+                var playerComponent = playerInput.GetComponent<Player>();
+                if (playerComponent != null)
                 {
-                    dialogueSystem.ActivateDialogueForBonfire(bonfireObj != null ? bonfireObj.name : "Bonfire");
+                    playerComponent.HealToFull();
                 }
+            }
+            GameObject bonfireObj = GameObject.FindWithTag("Bonfire");
+            cameraMovement.bonfireTarget = bonfireObj.transform;
+            cameraMovement.SetCameraMode(CameraMovement.CameraMode.BonfireCinematic);
+            UIManager.Instance.DialogueSetup();
+            // Activar diálogo de bonfire igual que en pasillos
+            var dialogueSystem = FindFirstObjectByType<DialogueSystem>();
+            if (dialogueSystem != null)
+            {
+                dialogueSystem.ActivateDialogueForBonfire(bonfireObj != null ? bonfireObj.name : "Bonfire");
             }
             StartCoroutine(BonfireCinematicCoroutine());
         }

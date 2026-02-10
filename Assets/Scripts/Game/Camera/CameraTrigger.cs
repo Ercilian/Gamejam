@@ -28,6 +28,7 @@ public class CameraTrigger : MonoBehaviour
     {
         if (other.CompareTag("Car"))
         {
+            Debug.Log("Car entered camera trigger: " + gameObject.name);
             // Elegir modo de cámara según el trigger y notificar a CameraMovement
             if (isBossRoom)
             {

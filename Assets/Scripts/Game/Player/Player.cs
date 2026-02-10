@@ -251,4 +251,16 @@ public class Player : EntityStats
         if (playerPanelUI != null)
             playerPanelUI.SetHealth(0);
     }
+    public void HealToFull()
+    {
+        curHP = maxHP;
+        if (playerPanelUI != null)
+        {
+            playerPanelUI.SetHealth(curHP);
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] playerPanelUI es null al intentar curar a full vida");
+        }
+    }
 }

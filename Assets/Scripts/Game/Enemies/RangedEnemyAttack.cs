@@ -213,7 +213,6 @@ public class RangedEnemyAttack : EnemyAttack
     protected override void ExecuteAttack(Transform target)
     {
         animator.SetTrigger("Attack");
-        Debug.Log($"[{gameObject.name}] ========== EXECUTEATACK LLAMADO ==========");
         
         if (target == null)
         {
@@ -238,8 +237,6 @@ public class RangedEnemyAttack : EnemyAttack
         lineRenderer.SetPosition(0, puntoDisparo.position);
         lineRenderer.SetPosition(1, puntoFinal);
         
-        Debug.Log($"[{gameObject.name}] ⚠️ AVISO ACTIVO - Línea habilitada, esperando {tiempoAntesDeDanio}s");
-        Debug.Log($"[{gameObject.name}] Se congelará en {tiempoAntesDeDanio - tiempoCongelacion:F2}s");
         
         // Disparar después del delay
         Invoke(nameof(Disparar), tiempoAntesDeDanio);
