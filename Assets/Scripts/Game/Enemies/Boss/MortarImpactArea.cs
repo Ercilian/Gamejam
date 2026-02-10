@@ -22,9 +22,7 @@ public class MortarImpactArea : MonoBehaviour
 
     #region Initialization
     private void Start()
-    {
-        Debug.Log("[MortarImpactArea] Área de impacto de mortero creada en: " + transform.position);
-        
+    {        
         // Iniciar la secuencia de daño después del delay
         StartCoroutine(DealDamageAfterDelay());
     }

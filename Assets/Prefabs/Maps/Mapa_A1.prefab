@@ -2119,7 +2119,7 @@ GameObject:
   - component: {fileID: 1807237563452267273}
   - component: {fileID: 7159733438720186783}
   m_Layer: 0
-  m_Name: Suelo
+  m_Name: Collider Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -147,7 +147,6 @@ public class Player : EntityStats
         // Actualizar la barra de vida en el UI
         if (playerPanelUI != null)
         {
-            Debug.Log($"[{gameObject.name}] Llamando a SetHealth({curHP}) en PlayerPanelUI");
             playerPanelUI.SetHealth(curHP); // curHP es de EntityStats
         }
         else

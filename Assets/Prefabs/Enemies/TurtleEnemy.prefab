@@ -236,7 +236,7 @@ MonoBehaviour:
   tiempoPersistenciaEsquive: 0.5
   camionTag: Car
   tagJugador: Player
-  mostrarDebug: 1
+  mostrarDebug: 0
   mostrarGizmos: 0
 --- !u!82 &7002562604315293224
 AudioSource:

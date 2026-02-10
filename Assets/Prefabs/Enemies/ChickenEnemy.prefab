@@ -198,7 +198,7 @@ MonoBehaviour:
   tiempoPersistenciaEsquive: 0.5
   camionTag: Car
   tagJugador: Player
-  mostrarDebug: 1
+  mostrarDebug: 0
   mostrarGizmos: 0
 --- !u!114 &5971302895367770438
 MonoBehaviour:
