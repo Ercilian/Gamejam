@@ -56,6 +56,9 @@ public class MapManager : MonoBehaviour
         {
             currentMapIndex = newMapIndex;
             UpdateMapActivation();
+            
+            // Revivir jugadores muertos al cambiar de mapa
+            ReviveDeadPlayers();
         }
     }
 
@@ -230,5 +233,28 @@ public class MapManager : MonoBehaviour
         }
         return indices.ToArray();
     }
+    
+    /// <summary>
+    /// Revive automáticamente a todos los jugadores muertos cuando inicia un nuevo mapa
+    /// </summary>
+    private void ReviveDeadPlayers()
+    {
+        // Buscar todos los jugadores en la escena
+        Player[] allPlayers = FindObjectsByType<Player>(FindObjectsSortMode.None);
+        
+        foreach (Player player in allPlayers)
+        {
+            // Verificar si el jugador está muerto o caído
+            PlayerReviveSystem reviveSystem = player.GetComponent<PlayerReviveSystem>();
+            if (reviveSystem != null)
+            {
+                // Revivir si está caído o muerto
+                if (reviveSystem.IsDowned() || !reviveSystem.IsAlive())
+                {
+                    reviveSystem.Revive();
+                    Debug.Log($"[MapManager] {player.name} revivido al iniciar nuevo mapa");
+                }
+            }
+        }
+    }
 }
-

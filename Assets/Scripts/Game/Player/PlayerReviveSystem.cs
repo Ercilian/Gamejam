@@ -195,12 +195,17 @@ public class PlayerReviveSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Revive al jugador
+    /// Revive al jugador (puede ser llamado desde fuera para revivir automáticamente)
     /// </summary>
-    private void Revive()
+    public void Revive()
     {
+        // Si ya está vivo, no hacer nada
+        if (currentState == ReviveState.Alive) return;
+        
         currentState = ReviveState.Alive;
-        animator.SetTrigger("Revived");
+        
+        if (animator != null)
+            animator.SetTrigger("Revived");
         
         // Restaurar HP
         int reviveHP = Mathf.RoundToInt(entityStats.MaxHP * reviveHealthPercent);
@@ -211,7 +216,20 @@ public class PlayerReviveSystem : MonoBehaviour
         {
             player.activeControl = true;
             player.isDowned = false;
+            player.isDead = false;
+            
+            // Actualizar UI de vida llamando a Heal(0) para forzar actualización
+            player.Heal(0);
         }
+        
+        // Reactivar colisionadores si estaban desactivados
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+            col.enabled = true;
+
+        // Reactivar renderers si estaban desactivados
+        foreach (var rend in renderers)
+            rend.enabled = true;
 
         // Desactivar visual de caído
         if (downedVisual != null)
@@ -221,15 +239,17 @@ public class PlayerReviveSystem : MonoBehaviour
         RestoreModelColor();
 
         reviveProgress = 0f;
+        downedTimer = 0f;
 
         OnPlayerRevived?.Invoke();
 
         if (showDebugLogs)
-            Debug.Log($"[{gameObject.name}] Jugador revivido por {(reviverPlayer != null ? reviverPlayer.name : "desconocido")}");
+            Debug.Log($"[{gameObject.name}] Jugador revivido por {(reviverPlayer != null ? reviverPlayer.name : "sistema")}");
 
         reviverPlayer = null;
-        comboHitboxController.enabled = true;
-
+        
+        if (comboHitboxController != null)
+            comboHitboxController.enabled = true;
     }
 
     /// <summary>

@@ -148,6 +148,16 @@ public class FrogCombat : Enemy
     [Tooltip("Configurar en qué fases está disponible Jump Attack")]
     [SerializeField] private AttackPhaseConfig jumpAttackPhaseConfig;
     
+    [Header("Jump Animation Settings")]
+    [Tooltip("Nombre del trigger de animación cuando empieza el salto")]
+    [SerializeField] private string jumpStartTrigger = "Jump";
+    [Tooltip("Nombre del trigger de animación cuando aterriza")]
+    [SerializeField] private string jumpLandTrigger = "Land";
+    [Tooltip("Parámetro bool para indicar si está en el aire (opcional)")]
+    [SerializeField] private string isJumpingBool = "IsJumping";
+    [Tooltip("Tiempo de anticipación antes de despegar (para ver la animación de preparación)")]
+    [SerializeField] private float jumpAnimationAnticipation = 0.5f;
+    
     [Header("Push Attack Settings")]
     [SerializeField] private float pushDetectionRadius = 4f;
     [SerializeField] private float pushForce = 20f;
@@ -544,8 +554,17 @@ public class FrogCombat : Enemy
             }
         }
         
-        // Pequeña pausa después de rotar
-        yield return new WaitForSeconds(0.2f);
+        // Activar animación de salto ANTES de despegar
+        if (animator != null)
+        {
+            if (!string.IsNullOrEmpty(jumpStartTrigger))
+                animator.SetTrigger(jumpStartTrigger);
+            if (!string.IsNullOrEmpty(isJumpingBool))
+                animator.SetBool(isJumpingBool, true);
+        }
+        
+        // Esperar para que se vea la animación de preparación del salto
+        yield return new WaitForSeconds(jumpAnimationAnticipation);
         
         PlayAttackEffect();
         PlayAttackSFX();
@@ -653,6 +672,15 @@ public class FrogCombat : Enemy
         // Asegurar posición final ligeramente por encima del suelo
         jumpTargetPosition.y += 0.1f;
         transform.position = jumpTargetPosition;
+        
+        // Activar animación de aterrizaje
+        if (animator != null)
+        {
+            if (!string.IsNullOrEmpty(jumpLandTrigger))
+                animator.SetTrigger(jumpLandTrigger);
+            if (!string.IsNullOrEmpty(isJumpingBool))
+                animator.SetBool(isJumpingBool, false);
+        }
         
         // Destruir el marcador de área
         if (landingAreaMarker != null)
