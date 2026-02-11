@@ -6926,28 +6926,24 @@ MonoBehaviour:
       text: Esto es una hoguera
     - characterIndex: 0
       text: Efectivamente, es una hoguera
-    - characterIndex: 1
-      text: "Ten los cojones met\xE1licos de decir bomba Eugene..."
+  - combinationKey: BonfireTarget_0_2
+    lines:
+    - characterIndex: 0
+      text: Esto es una hoguera
     - characterIndex: 2
-      text: ...
+      text: Efectivamente, es una hoguera
+  - combinationKey: BonfireTarget_1_2
+    lines:
     - characterIndex: 1
-      text: "Eso cre\xEDa..."
+      text: Esto es una hoguera
     - characterIndex: 2
-      text: "\xBFSabes Zofy? Creo que te vendr\xEDa bien tomarte algo."
+      text: Efectivamente, es una hoguera
+  - combinationKey: BonfireTarget_0_1_2
+    lines:
     - characterIndex: 1
-      text: "Y a t\xED te vendr\xEDa bien tomar menos, puto pirado..."
+      text: Esto es una hoguera
     - characterIndex: 2
-      text: Yo solo bebo agua y diesel.
-    - characterIndex: 1
-      text: ...
-    - characterIndex: 2
-      text: Especialmente diesel.
-    - characterIndex: 1
-      text: Eso...
-    - characterIndex: 2
-      text: "\xBFMhm?"
-    - characterIndex: 1
-      text: Eso explica muchas cosas.
+      text: Efectivamente, es una hoguera
 --- !u!114 &458190343
 MonoBehaviour:
   m_ObjectHideFlags: 0
