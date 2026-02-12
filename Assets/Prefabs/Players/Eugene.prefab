@@ -887,7 +887,7 @@ PrefabInstance:
     - target: {fileID: -8035504390736164319, guid: 0f02f7d4f14345a4999484dc7a1ce876, type: 3}
       propertyPath: 'm_Materials.Array.data[2]'
       value: 
-      objectReference: {fileID: 2100000, guid: f32071f5cc61f264fad6517055e2f707, type: 2}
+      objectReference: {fileID: 2100000, guid: ef81d7480803f7d4abd3fc66ae997a9b, type: 2}
     - target: {fileID: 919132149155446097, guid: 0f02f7d4f14345a4999484dc7a1ce876, type: 3}
       propertyPath: m_Name
       value: CangrejoIdle
