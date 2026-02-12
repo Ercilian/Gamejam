@@ -75,6 +75,10 @@ MonoBehaviour:
   attackDamage: 0
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 0}
+  damageTriggerNames:
+  - Hit
+  damageSounds: []
+  damageVolume: 1
 --- !u!1001 &8511801402720250104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83,6 +87,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 665143335152148845}
     m_Modifications:
+    - target: {fileID: 426637357766450839, guid: fbb5931c270ea2c4c9894a325cb99301, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 426637357766450839, guid: fbb5931c270ea2c4c9894a325cb99301, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2eecd908f99d9a04d915c5bd83661455, type: 2}
     - target: {fileID: 1558408981306369528, guid: fbb5931c270ea2c4c9894a325cb99301, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

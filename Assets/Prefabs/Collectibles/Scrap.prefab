@@ -185,6 +185,18 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 18cdde28a24d3904cbc6f30b0fe23f9a, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 18cdde28a24d3904cbc6f30b0fe23f9a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ba2c4725e78018c4ba41efb06c45f818, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 18cdde28a24d3904cbc6f30b0fe23f9a, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bfe24bc8e64b44c45bff0195c97596a0, type: 2}
     - target: {fileID: 919132149155446097, guid: 18cdde28a24d3904cbc6f30b0fe23f9a, type: 3}
       propertyPath: m_Name
       value: ScrapCollectableAsset

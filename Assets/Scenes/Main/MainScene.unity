@@ -21202,8 +21202,8 @@ MonoBehaviour:
   reachDistance: 3
   pathSmoothness: 2
   rotationSpeed: 0.5
-  fuelConsumptionPerSecond: 1
-  isFuelConsumed: 1
+  fuelConsumptionPerSecond: 0.01
+  isFuelConsumed: 0
   motorLoopClip: {fileID: 8300000, guid: 130536f91b593e14583aa18fa4224812, type: 3}
   pitchMin: 0.8
   pitchMax: 1.5
