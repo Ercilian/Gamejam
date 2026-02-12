@@ -6711,11 +6711,11 @@ MonoBehaviour:
   ChickenElitePrefab: {fileID: 7519758676284165041, guid: 0a452edbe3af793479fce7b9cb00f2c4, type: 3}
   TurtlePrefab: {fileID: 7519758676284165041, guid: 9c38d2b1de7f17d41b56ad232eae5be2, type: 3}
   TurtleElitePrefab: {fileID: 7519758676284165041, guid: 468a15931c3af654da367b51b2c12bc9, type: 3}
-  ratSpawnChance: 80
+  ratSpawnChance: 85
   ratEliteSpawnChance: 0
-  chickenSpawnChance: 10
+  chickenSpawnChance: 15
   chickenEliteSpawnChance: 0
-  turtleSpawnChance: 100
+  turtleSpawnChance: 0
   turtleEliteSpawnChance: 0
   carTransform: {fileID: 2070441881}
   difficultyConfigs:
@@ -6763,7 +6763,7 @@ MonoBehaviour:
   - sourceName: NormalEnemy
     possibleDrops:
     - itemIndex: 0
-      dropChance: 20
+      dropChance: 10
   - sourceName: EliteEnemy
     possibleDrops:
     - itemIndex: 0
@@ -6776,8 +6776,8 @@ MonoBehaviour:
     possibleDrops:
     - itemIndex: 2
       dropChance: 100
-  probDrop1: 1
-  probDrop2: 0.1
+  probDrop1: 0.2
+  probDrop2: 0.08
   probDrop3: 0.05
   dropForce: 1.5
   dropRadius: 2
@@ -8253,8 +8253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f613465d97d982498eba1f4d9f9d5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarFuelSystem
-  cur_Diesel: 100
-  max_Diesel: 100
+  cur_Diesel: 1e+10
+  max_Diesel: 1e+10
   depositPoint: {fileID: 1316442590}
   depositPrompt: Presiona F para depositar madera
 --- !u!65 &1316442592
@@ -21193,9 +21193,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   fastspeed: 1.2
-  slowspeed: 0.8
+  slowspeed: 1
   cur_speed: 0
-  speedTransitionRate: 1
+  speedTransitionRate: 0.5
   pushSpeed: 0.8
   pushSpeedTwo: 1
   truckAnimator: {fileID: 1176941284}

@@ -61,6 +61,24 @@ public class CameraTrigger : MonoBehaviour
                 cameraMovement.SetCameraMode(CameraMovement.CameraMode.Normal);
                 cameraMovement.ChangeOffsetWithDelay(newOffsetX, delaySeconds);
                 enemySpawner.enabled = false;
+                // Set car speed to 5 when entering shop
+                var movCar = other.GetComponent<MovCar>();
+                if (movCar != null)
+                {
+                    movCar.speed = 5f;
+                    movCar.fastspeed = 5f;
+                    movCar.slowspeed = 5f;
+                }
+                // Revive all dead or downed players
+                var allPlayers = FindObjectsOfType<Player>();
+                foreach (var p in allPlayers)
+                {
+                    var reviveSystem = p.GetComponent<PlayerReviveSystem>();
+                    if (reviveSystem != null && !reviveSystem.IsAlive())
+                    {
+                        reviveSystem.Revive();
+                    }
+                }
             }
             else
             {

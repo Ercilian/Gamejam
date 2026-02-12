@@ -201,15 +201,24 @@ public class PlayerReviveSystem : MonoBehaviour
     {
         // Si ya está vivo, no hacer nada
         if (currentState == ReviveState.Alive) return;
-        
+
         currentState = ReviveState.Alive;
-        
+
         if (animator != null)
             animator.SetTrigger("Revived");
-        
+
         // Restaurar HP
         int reviveHP = Mathf.RoundToInt(entityStats.MaxHP * reviveHealthPercent);
         entityStats.curHP = reviveHP;
+
+        // Mover al lado del coche si existe
+        GameObject carObj = GameObject.FindGameObjectWithTag("Car");
+        if (carObj != null)
+        {
+            // Coloca al jugador a la derecha del coche (puedes ajustar el offset)
+            Vector3 offset = carObj.transform.right * 2f;
+            transform.position = carObj.transform.position + offset;
+        }
 
         // Reactivar control y actualizar estado de downed
         if (player != null)
@@ -217,11 +226,10 @@ public class PlayerReviveSystem : MonoBehaviour
             player.activeControl = true;
             player.isDowned = false;
             player.isDead = false;
-            
             // Actualizar UI de vida llamando a Heal(0) para forzar actualización
             player.Heal(0);
         }
-        
+
         // Reactivar colisionadores si estaban desactivados
         Collider[] colliders = GetComponentsInChildren<Collider>();
         foreach (var col in colliders)
@@ -247,7 +255,7 @@ public class PlayerReviveSystem : MonoBehaviour
             Debug.Log($"[{gameObject.name}] Jugador revivido por {(reviverPlayer != null ? reviverPlayer.name : "sistema")}");
 
         reviverPlayer = null;
-        
+
         if (comboHitboxController != null)
             comboHitboxController.enabled = true;
     }
