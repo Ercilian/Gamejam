@@ -78,6 +78,10 @@ MonoBehaviour:
   attackDamage: 20
   statsData: {fileID: 0}
   enemyStatsData: {fileID: 11400000, guid: 2b7b1d7026d7e4249a2ddca4faeba215, type: 2}
+  damageTriggerNames:
+  - Hit
+  damageSounds: []
+  damageVolume: 1
   showDebugLogs: 0
   isElite: 0
   canTakeKnockback: 1
@@ -113,6 +117,7 @@ MonoBehaviour:
   coneAngle: 90
   attackDamageDelay: 0.3
   carTag: Car
+  attackSound: {fileID: 0}
   hitEffectPrefab: {fileID: 0}
   hitSound: {fileID: 0}
 --- !u!54 &6769849156830466866
@@ -221,7 +226,7 @@ PrefabInstance:
     - target: {fileID: -3893433798983400348, guid: 89232440f79ebe84c843bb438ac15d40, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: 2100000, guid: af182bbdf98025f4290648f1d73576fe, type: 2}
+      objectReference: {fileID: 2100000, guid: b7335dd6abf7e62478f7adce28b59cd1, type: 2}
     - target: {fileID: -3893433798983400348, guid: 89232440f79ebe84c843bb438ac15d40, type: 3}
       propertyPath: 'm_Materials.Array.data[2]'
       value: 
